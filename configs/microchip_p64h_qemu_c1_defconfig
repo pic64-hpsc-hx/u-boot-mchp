@@ -63,6 +63,8 @@ CONFIG_DM_WARN=y
 # CONFIG_I2C is not set
 # CONFIG_INPUT is not set
 # CONFIG_MTD is not set
+# CONFIG_E1000 is not set
+CONFIG_MACB=y
 # CONFIG_SCSI is not set
 # CONFIG_USB is not set
 CONFIG_HEXDUMP=y
