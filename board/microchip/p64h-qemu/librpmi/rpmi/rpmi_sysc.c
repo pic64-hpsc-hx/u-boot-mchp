@@ -1,0 +1,1688 @@
+/* (c) 2025 Microchip Technology Inc. */
+/* SPDX-License-Identifier: MIT */
+
+/**
+ * @file  rpmi_sysc.c
+ * @brief RPMI SysC API implementation
+ * @addtogroup RPMI_SYSC_API
+ * @ingroup rpmi_sysc
+ * @{
+ */
+#include <env/p64h_sysc_os_specific.h>
+
+#include "p64h_sysc.h"
+#include <rpmi/librpmi.h>
+#include <rpmi/librpmi_sysc.h>
+
+/* Private Defines ------------------------------------------------ */
+/**
+ * @brief Transmission timeout duration.
+ *
+ * This macro defines the timeout duration for transmission operations in microseconds.
+ *
+ * @note Value set to 1 second
+ */
+#define TX_TIMEOUT    (uint32_t)(1000000u)
+
+#define LONG_LO_MASK  (0x00000000FFFFFFFFULL) ///< Mask for LSB of 64bit value
+#define LONG_HI_MASK  (0xFFFFFFFF00000000ULL) ///< Mask for MSB of 64bit value
+#define LONG_HI_SHIFT (32UL)                  ///< Shift for MSB of 64bit value
+
+/// Defined optnone to be portable across compilers.
+#if defined(__clang__)
+#define OPTNONE __attribute__((optnone))
+#elif defined(__GNUC__)
+#define OPTNONE __attribute__((optimize("O0")))
+#else
+#define OPTNONE
+#endif
+
+/**
+ * @brief Null pointer check
+ *
+ * This macro checks if a pointer is NULL, returning the appropriate error
+ * in such a case.
+ *
+ */
+#define CHECK_PTR(ptr)                                                                                                                               \
+    do {                                                                                                                                             \
+        if (NULL == ptr)                                                                                                                             \
+            return P64H_ERR_LIB_API_NULL_POINTER;                                                                                                    \
+    } while (0)
+
+/**
+ * @brief Pointer size check
+ *
+ * This macro checks if a pointer is NULL and if a given size if zero.
+ *
+ */
+#define CHECK_PTR_SIZE(ptr, size)                                                                                                                    \
+    do {                                                                                                                                             \
+        if (NULL == ptr)                                                                                                                             \
+            return P64H_ERR_LIB_API_NULL_POINTER;                                                                                                    \
+        if (0 == size)                                                                                                                               \
+            return P64H_ERR_LIB_API_BAD_SIZE;                                                                                                        \
+    } while (0)
+
+/* Private Variables ---------------------------------------------- */
+
+/* Prototypes ----------------------------------------------------- */
+static rpmi_req_message_t* rpmi_common_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                const uint32_t id0, const uint32_t id1, const uint32_t id2, const size_t data_len);
+static rpmi_req_message_t* rpmi_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                         const uint32_t id1, const uint32_t id2, const void* data_ptr, const size_t data_size);
+static rpmi_inbuf_req_message_t*  rpmi_inbuf_req_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                          const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_ptr,
+                                                          size_t req_size, const size_t remaining_buf_size, const size_t data_offset, bool shmem_xfer,
+                                                          void* shmem_ptr);
+static rpmi_outbuf_req_message_t* rpmi_outbuf_req_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                           const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_ptr,
+                                                           size_t req_size, const void* data_ptr, const size_t data_size, const size_t data_offset,
+                                                           const size_t remaining, bool shmem_xfer);
+static p64h_err_t                 rpmi_shmem_send(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr);
+static p64h_err_t                 rpmi_remote_send(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr);
+static rpmi_error_t               rpmi_shmem_recv(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr);
+static rpmi_error_t               rpmi_remote_recv(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr);
+static inline p64h_err_t rpmi_check_ids(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                        const uint32_t id1, const uint32_t id2);
+static inline p64h_err_t rpmi_req_state_check(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id);
+static inline p64h_err_t rpmi_req_info_clean(const p64h_sysc_handle_t* handle_ptr);
+static inline p64h_err_t rpmi_req_resp_internal(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_data_ptr,
+                                                const size_t req_size, void* resp_data_ptr, const size_t resp_size);
+
+/* Private Function Definitions ----------------------------------- */
+
+/**
+ * @brief Converts an RPMI error code to a P64H system controller error code.
+ *
+ * This function takes an error code from the RPMI (Remote Power Management Interface)
+ * and maps it to the corresponding error code used by the P64H system controller.
+ *
+ * @param rpmi_err The error code from the RPMI.
+ * @return The corresponding P64H system controller error code.
+ */
+static inline p64h_err_t rpmi_to_p64h_sysc_err(int rpmi_err)
+{
+    switch (rpmi_err) {
+        case RPMI_SUCCESS:
+            return P64H_ERR_OK;
+        case RPMI_ERR_INVALID_PARAM:
+            return P64H_ERR_LIB_API_INVALID_PARAM;
+        case RPMI_ERR_BAD_RANGE:
+            return P64H_ERR_LIB_API_BAD_RANGE;
+        case RPMI_ERR_INVALID_STATE:
+            return P64H_ERR_LIB_API_INVALID_STATE;
+        case RPMI_ERR_DENIED:
+            return P64H_ERR_LIB_API_DENIED;
+        case RPMI_ERR_INVALID_ADDR:
+            return P64H_ERR_LIB_API_INVALID_PARAM;
+        case RPMI_ERR_HW_FAULT:
+            return P64H_ERR_LIB_API_HW_FAULT;
+        case RPMI_ERR_ALREADY:
+            return P64H_ERR_LIB_API_ALREADY;
+        case RPMI_ERR_BUSY:
+            return P64H_ERR_LIB_API_BUSY;
+        case RPMI_ERR_TIMEOUT:
+            return P64H_ERR_LIB_API_TIMEOUT;
+        case RPMI_ERR_IO:
+            return P64H_ERR_LIB_API_IO;
+        case RPMI_ERR_FAILED:
+            return P64H_ERR_LIB_API_FAILED;
+        case RPMI_ERR_NOTSUPP:
+            return P64H_ERR_LIB_API_NOT_SUPPORTED;
+        case RPMI_ERR_NO_DATA:
+            return P64H_ERR_LIB_API_NO_DATA;
+        case RPMI_ERR_EXTENSION:
+            return P64H_ERR_LIB_API_EXTENSION;
+        default:
+            return P64H_ERR_LIB_API_NOT_SUPPORTED;
+    }
+}
+
+/**
+ * Retrieve lower 32 bits of 64 bit long value
+ * @param[in] value The 64 bit word
+ *
+ * @return Lower 32 bits of input value
+ */
+static inline uint32_t __long_lo(uint64_t value)
+{
+    return (uint32_t)(value & LONG_LO_MASK);
+}
+
+/**
+ * Retrieve higher 32 bits of 64 bit long value
+ * @param[in] value The 64 bit word
+ *
+ * @return higher 32 bits of input value
+ */
+static inline uint32_t __long_hi(uint64_t value)
+{
+    return (uint32_t)((value >> LONG_HI_SHIFT) & LONG_LO_MASK);
+}
+
+/**
+ * Reconstruct 64bit long from MSB and LSB
+ * @param[in] msb MSB of value
+ * @param[in] lsb LSB of value
+ *
+ * @return Reconstructed 64 bit long value
+ */
+static inline uint64_t __long_construct(uint32_t msb, uint32_t lsb)
+{
+    return (uint64_t)((((uint64_t)msb << LONG_HI_SHIFT) & LONG_HI_MASK) | (((uint64_t)lsb) & LONG_LO_MASK));
+}
+
+/**
+ * @brief Packing function for fields that are common to all RPMI request messages.
+ *
+ * This function packs data common to all RPMI request messages returning a pointer to the packed message.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] data_len Length of data being packed
+ *
+ * @return Pointer to the packed RPMI request message
+ */
+static rpmi_req_message_t* rpmi_common_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                const uint32_t id0, const uint32_t id1, const uint32_t id2, const size_t data_len)
+{
+
+    rpmi_req_message_t* msg_ptr;
+    msg_ptr                         = (rpmi_req_message_t*)handle_ptr->req_buf;
+    msg_ptr->header.servicegroup_id = svc_grp_id;
+    msg_ptr->header.service_id      = svc_id;
+    msg_ptr->header.flags           = 0x0u;
+    msg_ptr->header.datalen         = (rpmi_uint16_t)data_len;
+    msg_ptr->header.token           = 0x0u;
+    msg_ptr->req_metadata.id0       = id0;
+    msg_ptr->req_metadata.id1       = id1;
+    msg_ptr->req_metadata.id2       = id2;
+
+    return msg_ptr;
+}
+
+/**
+ * @brief Packing function for outgoing RPMI messages
+ *
+ * This function packs outgoing RPMI messages returning a pointer to the packed message.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] data_ptr Pointer for data to be put in payload of RPMI message
+ * @param[in] data_size Length of data being packed
+ *
+ * @return Pointer to the packed RPMI request message
+ */
+static rpmi_req_message_t* rpmi_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                         const uint32_t id1, const uint32_t id2, const void* data_ptr, const size_t data_size)
+{
+
+    size_t              msg_total_size;
+    size_t              data_len = sizeof(rpmi_req_metadata_t) + data_size;
+    rpmi_req_message_t* msg_ptr;
+    msg_total_size = sizeof(rpmi_message_header_t) + data_len;
+    if (msg_total_size > sizeof(handle_ptr->req_buf)) {
+        return NULL;
+    }
+    msg_ptr = rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+
+    if ((NULL != data_ptr) && (data_size > 0u)) {
+        memcpy(&msg_ptr->data, data_ptr, data_size);
+    }
+    return msg_ptr;
+}
+
+/**
+ * @brief Packing function for log request messages.
+ *
+ * This function packs outgoing RPMI messages with an incoming log.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] req_start_off Requested start offset for data entries in log
+ * @param[in] max_num_entries Maximum number of entries to return for transaction
+ *
+ * @return Pointer to the packed RPMI inbuf request message
+ */
+static rpmi_log_req_message_t* rpmi_log_req_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                     const uint32_t id0, const uint32_t id1, const uint32_t id2, uint64_t req_start_off,
+                                                     uint32_t max_num_entries)
+{
+
+    size_t                  msg_total_size;
+    size_t                  data_len = sizeof(rpmi_log_req_metadata_t);
+    rpmi_log_req_message_t* msg_ptr;
+    msg_total_size = sizeof(rpmi_log_req_message_t) + data_len;
+    if (msg_total_size > sizeof(handle_ptr->req_buf)) {
+        return NULL;
+    }
+    msg_ptr                                = (rpmi_log_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    msg_ptr->log_metadata.req_start_off_lo = __long_lo(req_start_off);
+    msg_ptr->log_metadata.req_start_off_hi = __long_hi(req_start_off);
+    msg_ptr->log_metadata.max_num_entries  = max_num_entries;
+
+    return msg_ptr;
+}
+
+/**
+ * @brief Packing function for request messages with an incoming data buffer.
+ *
+ * This function packs outgoing RPMI messages with an incoming data buffer.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] req_ptr Pointer to requested data buffer
+ * @param[in] req_size Size of requested data buffer
+ * @param[in] remaining_buf_size Number of remaining buffer entries
+ * @param[in] data_offset Offset for current fragment of data
+ * @param[in] shmem_xfer false: the data will be transfered thru RPMI channel
+                         true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
+ * @param[in] shmem_ptr Pointer to shmem buffer for response data (only used if shmem_xfer is true)
+ *
+ * @return Pointer to the packed RPMI inbuf request message
+ */
+static rpmi_inbuf_req_message_t* rpmi_inbuf_req_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                         const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_ptr,
+                                                         size_t req_size, const size_t remaining_buf_size, const size_t data_offset, bool shmem_xfer,
+                                                         void* shmem_ptr)
+{
+    size_t msg_total_size;
+    size_t data_len;
+    if (shmem_xfer) {
+        data_len = sizeof(rpmi_inbuf_req_metadata_t) + req_size + sizeof(uintptr_t);
+    } else {
+        data_len = sizeof(rpmi_inbuf_req_metadata_t) + req_size;
+    }
+
+    rpmi_inbuf_req_message_t* msg_ptr;
+    msg_total_size = sizeof(rpmi_inbuf_req_message_t) + req_size;
+    if (msg_total_size > sizeof(handle_ptr->req_buf)) {
+        return NULL;
+    }
+    msg_ptr                            = (rpmi_inbuf_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    msg_ptr->inbuf_metadata.offset     = (rpmi_uint32_t)data_offset;
+    msg_ptr->inbuf_metadata.remaining  = remaining_buf_size;
+    msg_ptr->inbuf_metadata.shmem_xfer = shmem_xfer;
+    if ((NULL != req_ptr) && (req_size > 0u)) {
+        memcpy(&msg_ptr->data, req_ptr, req_size);
+    }
+
+    if (shmem_xfer) {
+        if (NULL == shmem_ptr) {
+            return NULL;
+        }
+        *(uintptr_t*)((uint64_t)(msg_ptr->data) + req_size) = (uintptr_t)shmem_ptr;
+    }
+
+    return msg_ptr;
+}
+
+/**
+ * @brief Packing function for request messages with an outgoing data buffer.
+ *
+ * This function packs outgoing RPMI messages with an outgoing data buffer.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] req_ptr Pointer to requested data buffer
+ * @param[in] req_size Size of requested data buffer
+ * @param[in] data_ptr Pointer to data in payload of RPMI message
+ * @param[in] data_size Size of data in payload of RPMI message
+ * @param[in] data_offset Offset for current fragment of data
+ * @param[in] remaining Number of remaining fragments
+ * @param[in] shmem_xfer false: the data will be transfered thru RPMI channel
+                         true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
+ *
+ * @return Pointer to the packed RPMI inbuf request message
+ */
+static rpmi_outbuf_req_message_t* rpmi_outbuf_req_msg_pack(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                           const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_ptr,
+                                                           size_t req_size, const void* data_ptr, const size_t data_size, const size_t data_offset,
+                                                           const size_t remaining, bool shmem_xfer)
+{
+    size_t msg_total_size;
+    size_t data_len;
+    if (shmem_xfer) {
+        data_len       = sizeof(rpmi_outbuf_req_metadata_t) + req_size + sizeof(uintptr_t);
+        msg_total_size = sizeof(rpmi_outbuf_req_message_t) + req_size + sizeof(uintptr_t);
+    } else {
+        data_len       = sizeof(rpmi_outbuf_req_metadata_t) + req_size + data_size;
+        msg_total_size = sizeof(rpmi_outbuf_req_message_t) + req_size + data_size;
+    }
+
+    rpmi_outbuf_req_message_t* msg_ptr;
+    if (msg_total_size > sizeof(handle_ptr->req_buf)) {
+        return NULL;
+    }
+    msg_ptr                             = (rpmi_outbuf_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    msg_ptr->outbuf_metadata.offset     = (rpmi_uint32_t)data_offset;
+    msg_ptr->outbuf_metadata.sent       = (rpmi_uint32_t)data_size;
+    msg_ptr->outbuf_metadata.remaining  = (rpmi_uint32_t)remaining;
+    msg_ptr->outbuf_metadata.shmem_xfer = shmem_xfer;
+    if ((NULL != req_ptr) && (req_size > 0u)) {
+        memcpy(msg_ptr->data, req_ptr, req_size);
+    }
+    if (shmem_xfer) {
+        *(uintptr_t*)((uintptr_t)(msg_ptr->data) + req_size) = (uintptr_t)data_ptr;
+    } else {
+        if ((NULL != data_ptr) && (data_size > 0u)) {
+            memcpy((void*)((uint64_t)(msg_ptr->data) + req_size), data_ptr, data_size);
+        }
+    }
+
+    return msg_ptr;
+}
+
+/**
+ * @brief Function for sending an RPMI message across a shared memory region.
+ *
+ * This function sends an RPMI message across a shared memory region.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] msg_ptr Pointer to RPMI message to send across shared memory
+ *
+ * @return p64h_err_t mapped from rpmi_error. P64H_ERR_OK on success, error otherwise
+ */
+static p64h_err_t rpmi_shmem_send(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr)
+{
+    enum rpmi_error rpmi_err;
+    if (NULL == msg_ptr) {
+        return P64H_ERR_LIB_API_NULL_POINTER;
+    }
+    if (false == handle_ptr->init) {
+        return P64H_ERR_LIB_API_RPMI_CLIENT_NOT_INITIALIZED;
+    }
+    rpmi_err = rpmi_transport_enqueue((struct rpmi_transport*)&handle_ptr->trans_shmem.trans_common.trans, RPMI_QUEUE_A2P_REQ, msg_ptr);
+    return rpmi_to_p64h_sysc_err(rpmi_err);
+}
+
+/**
+ * @brief Function for receiving an RPMI message across a shared memory region.
+ *
+ * This function receives an RPMI message across a shared memory region.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[out] msg_ptr Pointer to read RPMI message into.
+ *
+ * @return rpmi_error_t RPMI_SUCCESS on success, error otherwise
+ */
+rpmi_error_t rpmi_shmem_recv(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr)
+{
+    rpmi_error_t rpmi_err = RPMI_SUCCESS;
+    if (false == handle_ptr->init) {
+        return RPMI_ERR_FAILED;
+    } else {
+        rpmi_err = rpmi_transport_dequeue((struct rpmi_transport*)&handle_ptr->trans_shmem.trans_common.trans, RPMI_QUEUE_P2A_ACK, msg_ptr);
+    }
+    return rpmi_err;
+}
+
+/**
+ * @brief Function for sending an RPMI message to a remote host.
+ *
+ * This function sends an RPMI message to a remote host
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] msg_ptr Pointer to RPMI message to send to remote host.
+ *
+ * @return p64h_err_t mapped from rpmi_error. P64H_ERR_OK on success, error otherwise
+ */
+static p64h_err_t rpmi_remote_send(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr)
+{
+    enum rpmi_error rpmi_err;
+    if (NULL == msg_ptr) {
+        return P64H_ERR_LIB_API_NULL_POINTER;
+    }
+    if (false == handle_ptr->init) {
+        return P64H_ERR_LIB_API_RPMI_CLIENT_NOT_INITIALIZED;
+    }
+    rpmi_err = rpmi_transport_enqueue((struct rpmi_transport*)&handle_ptr->trans_io.trans_common.trans, RPMI_QUEUE_A2P_REQ, msg_ptr);
+    return rpmi_to_p64h_sysc_err(rpmi_err);
+}
+
+/**
+ * @brief Function for receiving an RPMI message from a remote host.
+ *
+ * This function receives an RPMI message from a remote host.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[out] msg_ptr Pointer to read RPMI message into.
+ *
+ * @return rpmi_error_t RPMI_SUCCESS on success, error otherwise
+ */
+rpmi_error_t rpmi_remote_recv(const p64h_sysc_handle_t* handle_ptr, rpmi_message_t* msg_ptr)
+{
+    rpmi_error_t rpmi_err = RPMI_SUCCESS;
+    if (false == handle_ptr->init) {
+        return RPMI_ERR_FAILED;
+    } else {
+        rpmi_err = rpmi_transport_dequeue((struct rpmi_transport*)&handle_ptr->trans_io.trans_common.trans, RPMI_QUEUE_P2A_ACK, msg_ptr);
+    }
+    return rpmi_err;
+}
+
+/**
+ * @brief General function for sending an RPMI message.
+ *
+ * This function sends an RPMI message based on the RPMI context ID.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] msg_ptr Pointer to RPMI message to send.
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_req_internal(const p64h_sysc_handle_t* handle_ptr, const rpmi_req_message_t* msg_ptr)
+{
+    p64h_err_t rc  = P64H_ERR_OK;
+    uint32_t   itr = 0u;
+
+    if (NULL == msg_ptr) {
+        // printf("%s:%u Error Creating RPMI message.\n", __FUNCTION__, __LINE__);
+        return P64H_ERR_LIB_API_NULL_POINTER;
+    }
+
+    // send request
+    for (itr = 0u; itr < TX_TIMEOUT; itr++) {
+        if (P64H_SYSC_RPMI_REMOTE(handle_ptr)) {
+            rc = rpmi_remote_send(handle_ptr, (rpmi_message_t*)msg_ptr);
+        } else {
+            rc = rpmi_shmem_send(handle_ptr, (rpmi_message_t*)msg_ptr);
+        }
+
+        if (rc == P64H_ERR_OK) {
+            break;
+        }
+        // sleep(1);
+    }
+    if (itr >= TX_TIMEOUT) {
+        return P64H_ERR_LIB_API_TIMEOUT;
+    }
+    return rc;
+}
+
+/**
+ * @brief General function for receiving an RPMI message.
+ *
+ * This function receives a response from an RPMI message based on the RPMI context ID.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] polling_supported true: support polling mode; false: not support
+ * @param[out] rpmi_resp_msg Pointer to read RPMI message into.
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_resp_internal(const p64h_sysc_handle_t* handle_ptr, bool polling_supported, rpmi_resp_message_t* rpmi_resp_msg)
+{
+    rpmi_error_t rpmi_err = RPMI_SUCCESS;
+    p64h_err_t   rc       = P64H_ERR_OK;
+    uint32_t     itr      = 0u;
+    uint32_t     time_out = (polling_supported && handle_ptr->ctxt.req_posted) ? 1u : TX_TIMEOUT;
+
+    for (itr = 0u; itr < time_out; itr++) {
+        if (P64H_SYSC_RPMI_REMOTE(handle_ptr)) {
+            rpmi_err = rpmi_remote_recv(handle_ptr, (rpmi_message_t*)rpmi_resp_msg);
+        } else {
+            rpmi_err = rpmi_shmem_recv(handle_ptr, (rpmi_message_t*)rpmi_resp_msg);
+        }
+        rc = rpmi_to_p64h_sysc_err(rpmi_err);
+        if (rc == P64H_ERR_OK) {
+            break;
+        }
+        if (rc != P64H_ERR_LIB_API_IO) {
+            return rc;
+        }
+        // sleep(1); // Sleep has different behavior on different targeted OS/platform
+    }
+
+    if (itr >= time_out) {
+        return P64H_ERR_LIB_API_TIMEOUT;
+    }
+
+    rpmi_error_t resp_rpmi_err = (rpmi_error_t)rpmi_resp_msg->resp_metadata.rpmi_rc;
+    if (resp_rpmi_err != RPMI_SUCCESS) {
+        rc = rpmi_to_p64h_sysc_err(resp_rpmi_err);
+    } else {
+        rc = (p64h_err_t)rpmi_resp_msg->resp_metadata.p64h_rc;
+    }
+
+    return rc;
+}
+
+/**
+ * @brief Function for sending RPMI messages using an outgoing data buffer as payloads.
+ *
+ * This function sends and receives a response from an RPMI message carrying a fragment of an output buffer.
+ * Once the outgoing data buffer is empty, it stops transmitting RPMI messages.
+ *
+ * @note An ACK is expected and checked for each message sent.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] req_data_ptr Pointer to a requested data payload
+ * @param[in] req_size Size of a request data payload
+ * @param[in] buf_ptr Pointer to output buffer
+ * @param[in] entry_size Size of entry in output buffer
+ * @param[in] buf_size Size of output buffer
+ * @param[in] shmem_xfer false: the data will be transfered thru RPMI channel
+                         true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_outbuf_internal(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                              const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_data_ptr,
+                                              const size_t req_size, const void* buf_ptr, size_t entry_size, size_t buf_size, bool shmem_xfer)
+{
+    p64h_err_t      rc            = P64H_ERR_OK;
+    rpmi_message_t* msg_ptr       = NULL;
+    bool            tx_complete   = false;
+    size_t          curr_buf_sent = 0UL;
+    size_t          buf_byte_left = (buf_size * entry_size);
+    size_t          max_data_size;
+    if (P64H_SYSC_RPMI_REMOTE(handle_ptr)) {
+        max_data_size = (handle_ptr->trans_io.trans_common.trans.slot_size - sizeof(rpmi_outbuf_req_message_t) - req_size);
+    } else {
+        max_data_size = (handle_ptr->trans_shmem.trans_common.trans.slot_size - sizeof(rpmi_outbuf_req_message_t) - req_size);
+    }
+    size_t      max_num_entries   = max_data_size / entry_size;
+    const void* curr_buf_data_ptr = buf_ptr;
+
+    while (!tx_complete) {
+        size_t next_tx_size = 0;
+        size_t data_offset  = curr_buf_sent / entry_size; // In number of entries
+        if (buf_byte_left <= max_data_size) {
+            next_tx_size = buf_byte_left;
+            tx_complete  = true;
+        } else {
+            next_tx_size = (max_num_entries * entry_size);
+        }
+        buf_byte_left -= next_tx_size;
+
+        msg_ptr = (rpmi_message_t*)rpmi_outbuf_req_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size, curr_buf_data_ptr,
+                                                            next_tx_size, data_offset, buf_byte_left, shmem_xfer);
+        rc      = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)msg_ptr);
+        if (P64H_ERR_OK != rc) {
+            break;
+        }
+
+        msg_ptr = (rpmi_message_t*)&handle_ptr->resp_buf[0];
+        rc      = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)msg_ptr);
+        if (P64H_ERR_OK != rc) {
+            break;
+        }
+
+        curr_buf_sent     += next_tx_size;
+        curr_buf_data_ptr  = (const void*)((uint64_t)(curr_buf_data_ptr) + next_tx_size);
+    }
+
+    // convert resp->status;
+    return rc;
+}
+
+/**
+ * @brief Function for receiving RPMI messages that fill up an incoming data buffer.
+ *
+ * This function receives multiple RPMI messages carrying fragments of data for an input buffer.
+ * Once the buffer is full or all remaining fragments have been recieved, it stops receiving RPMI messages.
+ *
+ *  @note An ACK is sent for each message received successfully.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] req_data_ptr Pointer to a requested data payload
+ * @param[in] req_size Size of a request data payload
+ * @param[in] buf_ptr Pointer to input buffer to read payload data
+ * @param[in] entry_size Size of entry in input buffer
+ * @param[in] buf_size Size of input buffer
+ * @param[in] shmem_xfer false: the data will be transfered thru RPMI channel
+                         true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_inbuf_internal(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                             const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_data_ptr,
+                                             const size_t req_size, void* buf_ptr, size_t entry_size, size_t buf_size, bool shmem_xfer)
+{
+    p64h_err_t rc                = P64H_ERR_OK;
+    bool       rx_complete       = false;
+    size_t     curr_buf_fill     = 0UL;
+    size_t     buf_byte_size     = (buf_size * entry_size);
+    void*      curr_buf_data_ptr = buf_ptr;
+    size_t     mem_tx_size       = 0UL;
+
+    while (!rx_complete) {
+        uint32_t                  data_offset        = (uint32_t)(curr_buf_fill / entry_size);
+        uint32_t                  remaining_buf_size = (uint32_t)(buf_byte_size - curr_buf_fill) / entry_size;
+        rpmi_inbuf_req_message_t* rpmi_req_msg       = rpmi_inbuf_req_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size,
+                                                                               remaining_buf_size, data_offset, shmem_xfer, curr_buf_data_ptr);
+        rc                                           = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)rpmi_req_msg);
+        if (P64H_ERR_OK != rc) {
+            return rc;
+        }
+
+        rpmi_inbuf_resp_message_t* rpmi_resp_msg = (rpmi_inbuf_resp_message_t*)&handle_ptr->resp_buf[0];
+        rc                                       = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)rpmi_resp_msg);
+        if (P64H_ERR_OK != rc) {
+            return rc;
+        }
+
+        // unpack fragment
+        rx_complete = rpmi_resp_msg->inbuf_metadata.remaining == 0UL ? true : false;
+        if ((0UL != buf_size) && ((curr_buf_fill + (entry_size * rpmi_resp_msg->inbuf_metadata.returned)) >= buf_byte_size)) {
+            rx_complete = true;
+            mem_tx_size = (buf_byte_size - curr_buf_fill);
+        } else {
+            mem_tx_size = (entry_size * rpmi_resp_msg->inbuf_metadata.returned);
+        }
+
+        if (!shmem_xfer) {
+            memcpy(curr_buf_data_ptr, rpmi_resp_msg->data, mem_tx_size);
+        }
+        curr_buf_fill     += mem_tx_size;
+        curr_buf_data_ptr  = (void*)((uint64_t)(curr_buf_data_ptr) + mem_tx_size);
+    }
+
+    // convert resp->status;
+    return rc;
+}
+
+/**
+ * @brief Function for sending and receiving a single RPMI message.
+ *
+ * This function sends an RPMI message and receives one in the case the sending was successful.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ * @param[in] req_data_ptr Pointer to request data to be sent
+ * @param[in] req_size Size of request data to be sent
+ * @param[in] resp_data_ptr Pointer to response data
+ * @param[in] resp_size Size of response data
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_req_resp_internal(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_data_ptr,
+                                                const size_t req_size, void* resp_data_ptr, const size_t resp_size)
+{
+    p64h_err_t           rc = P64H_ERR_OK;
+    rpmi_resp_message_t* msg_ptr;
+
+    rpmi_req_message_t*  rpmi_req_msg = rpmi_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size);
+
+    if (handle_ptr->ctxt.req_posted) {
+        rc = rpmi_req_state_check(handle_ptr, svc_grp_id, svc_id);
+    }
+
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_internal(handle_ptr, rpmi_req_msg);
+    }
+
+    if (P64H_ERR_OK == rc || (handle_ptr->ctxt.req_posted && (P64H_ERR_LIB_API_RESP_PENDING == rc))) {
+        msg_ptr = (rpmi_resp_message_t*)&handle_ptr->resp_buf[0];
+        rc      = rpmi_resp_internal(handle_ptr, true, msg_ptr);
+        if (P64H_ERR_LIB_API_TIMEOUT == rc) {
+            if (handle_ptr->ctxt.req_posted) {
+                rc = P64H_ERR_LIB_API_RESP_PENDING;
+            }
+        }
+
+        if (P64H_ERR_OK == rc) {
+            if (msg_ptr->header.datalen != sizeof(rpmi_resp_metadata_t) + resp_size) {
+                rc = P64H_ERR_LIB_API_BAD_SIZE;
+            } else {
+                // unpack response
+                if (0x0u != resp_size) {
+                    memcpy(resp_data_ptr, &msg_ptr->data, resp_size);
+                }
+            }
+        }
+    }
+
+    if (handle_ptr->ctxt.req_posted) {
+        if ((P64H_ERR_OK == rc) || (P64H_ERR_OK != rc && P64H_ERR_LIB_API_RESP_PENDING != rc && P64H_ERR_LIB_API_REQ_BUSY != rc)) {
+            rpmi_req_info_clean(handle_ptr);
+        }
+    }
+
+    // convert resp->status;
+    return rc;
+}
+
+/**
+ * @brief Function for fetching a log stucture through RPMI
+ *
+ * This function is responsible for fetching a log for a specific service
+ * group and service ID.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The service group identifier.
+ * @param svc_id The service identifier.
+ * @param id0 The first identifier for the request.
+ * @param id1 The second identifier for the request.
+ * @param id2 The third identifier for the request.
+ * @param log_cfg_ptr Pointer to the configuration of the log being fetched.
+ * @param resp_start_off Pointer to store the start offset of entries returned.
+ * @param num_returned Number of entries returned.
+ *
+ * @return A status code indicating the result of the logging operation.
+ */
+static p64h_err_t OPTNONE rpmi_req_log_internal(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                const uint32_t id0, const uint32_t id1, const uint32_t id2, p64h_sysc_log_cfg_t* log_cfg_ptr,
+                                                uint64_t* resp_start_off, uint32_t* num_returned)
+{
+
+    p64h_err_t rc                 = P64H_ERR_OK;
+    bool       rx_complete        = false;
+    uint32_t   buf_fill_left      = log_cfg_ptr->num_entries;
+    void*      curr_buf_data_ptr  = log_cfg_ptr->log_ptr;
+    size_t     mem_tx_size        = 0UL;
+    uint32_t   local_num_returned = 0U;
+    uint64_t   curr_req_start_off = log_cfg_ptr->req_start_off; // Initial value does not matter if last_log_tail_valid if false
+
+    while (!rx_complete) {
+        if (buf_fill_left > 0U) {
+            rpmi_log_req_message_t* rpmi_req_msg
+                = rpmi_log_req_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, curr_req_start_off, buf_fill_left);
+            rc = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)rpmi_req_msg);
+            if (P64H_ERR_OK == rc) {
+                rpmi_log_resp_message_t* rpmi_resp_msg = (rpmi_log_resp_message_t*)&handle_ptr->resp_buf[0];
+                rc                                     = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)rpmi_resp_msg);
+                if (P64H_ERR_OK == rc) {
+                    // unpack fragment
+                    uint64_t resp_returned = rpmi_resp_msg->log_metadata.returned;
+                    if (0UL != resp_returned) {
+                        if (buf_fill_left < resp_returned) {
+                            rc          = P64H_ERR_LIB_API_TOO_MANY_ENTRIES_RETURNED;
+                            rx_complete = true;
+                        } else {
+                            mem_tx_size = (log_cfg_ptr->entry_size * resp_returned);
+                            if (mem_tx_size > (buf_fill_left * log_cfg_ptr->entry_size)) {
+                                rc          = P64H_ERR_LIB_API_INVALID_ENTRIES_RETURNED;
+                                rx_complete = true;
+                            } else {
+                                memcpy(curr_buf_data_ptr, rpmi_resp_msg->data, mem_tx_size);
+                                curr_buf_data_ptr   = (void*)((uint64_t)(curr_buf_data_ptr) + mem_tx_size);
+                                local_num_returned += resp_returned;
+                                buf_fill_left      -= resp_returned;
+                                curr_req_start_off
+                                    = __long_construct(rpmi_resp_msg->log_metadata.resp_start_off_hi, rpmi_resp_msg->log_metadata.resp_start_off_lo)
+                                      + resp_returned;
+                            }
+                        }
+                    } else {
+                        rx_complete = true;
+                    }
+                } else {
+                    rx_complete = true;
+                }
+            } else {
+                rx_complete = true;
+            }
+        } else {
+            rx_complete = true;
+        }
+    }
+    if (P64H_ERR_OK == rc) {
+        *resp_start_off = curr_req_start_off - local_num_returned;
+        *num_returned   = local_num_returned;
+    }
+
+    // convert resp->status;
+    return rc;
+}
+
+/**
+ * @brief Function for checking the validity of IDs to be sent
+ *
+ * This function validates that the request IDs are valid for a given service group and service.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_check_ids(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                        const uint32_t id1, const uint32_t id2)
+{
+    CHECK_PTR(handle_ptr);
+
+    // to be implemented
+    (void)svc_grp_id;
+    (void)svc_id;
+    (void)id0;
+    (void)id1;
+    (void)id2;
+    return P64H_ERR_OK;
+}
+
+/**
+ * @brief Function for checking the request state
+ *
+ * This function check if there is already an outstanding posted request.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_req_state_check(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id)
+{
+    CHECK_PTR(handle_ptr);
+    p64h_err_t           rc                = P64H_ERR_OK;
+    rpmi_request_info_t* rpmi_req_info_ptr = (rpmi_request_info_t*)&handle_ptr->req_info;
+
+    rpmi_env_lock((void*)&handle_ptr->lock);
+    switch (rpmi_req_info_ptr->req_state) {
+        case P64H_SYSC_RPMI_REQ_STATE_NONE:
+            rpmi_req_info_ptr->svc_grp_id = svc_grp_id;
+            rpmi_req_info_ptr->svc_id     = svc_id;
+            rpmi_req_info_ptr->thread_id  = rpmi_env_task_id_get();
+            rpmi_req_info_ptr->req_state  = P64H_SYSC_RPMI_REQ_STATE_REQ_BUSY;
+            break;
+        case P64H_SYSC_RPMI_REQ_STATE_REQ_BUSY:
+        case P64H_SYSC_RPMI_REQ_STATE_RESP_PENDING:
+            if ((rpmi_req_info_ptr->svc_grp_id == svc_grp_id) && (rpmi_req_info_ptr->svc_id == svc_id)
+                && (rpmi_req_info_ptr->thread_id == rpmi_env_task_id_get())) {
+                rpmi_req_info_ptr->req_state = P64H_SYSC_RPMI_REQ_STATE_RESP_PENDING;
+                rc                           = P64H_ERR_LIB_API_RESP_PENDING;
+            } else {
+                rc = P64H_ERR_LIB_API_REQ_BUSY;
+            }
+            break;
+        default:
+            rc = P64H_ERR_LIB_API_INVALID_REQ_STATE;
+            break;
+    }
+    rpmi_env_unlock((void*)&handle_ptr->lock);
+    return rc;
+}
+
+/**
+ * @brief Function for cleaning the request informations
+ *
+ * This function cleans the request information.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise
+ */
+static inline p64h_err_t rpmi_req_info_clean(const p64h_sysc_handle_t* handle_ptr)
+{
+    CHECK_PTR(handle_ptr);
+    rpmi_request_info_t* rpmi_req_info_ptr = (rpmi_request_info_t*)&handle_ptr->req_info;
+
+    rpmi_env_lock((void*)&handle_ptr->lock);
+    rpmi_req_info_ptr->svc_grp_id = 0;
+    rpmi_req_info_ptr->svc_id     = 0;
+    rpmi_req_info_ptr->thread_id  = 0;
+    rpmi_req_info_ptr->req_state  = P64H_SYSC_RPMI_REQ_STATE_NONE;
+    rpmi_env_unlock((void*)&handle_ptr->lock);
+
+    return P64H_ERR_OK;
+}
+/* Public Function Definitions ------------------------------------ */
+
+/**
+ * @brief Sends request and receives for commands with no params.
+ *
+ * This function sends an RPMI (Remote Procedure Call Interface) request and response
+ * that do not require any parameters to execute on the System Controller, and does not take back
+ * any specific data in the response.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The ID of the service group.
+ * @param svc_id The ID of the service.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ */
+p64h_err_t p64h_sysc_rpmi_bare_req_resp(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id)
+{
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, NULL, 0x0u, NULL, 0x0u);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends request and receives for commands with only a single id as a request.
+ *
+ * This function sends an RPMI (Remote Procedure Call Interface) request and response
+ * that only requires one id as a parameter to execute on the System Controller, and does not
+ * take back any specific data in the response.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The ID of the service group.
+ * @param svc_id The ID of the service.
+ * @param[in] id0 Request ID 0
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ */
+p64h_err_t p64h_sysc_rpmi_bare_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0)
+{
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id0, 0x0u, 0x0u, NULL, 0x0u, NULL, 0x0u);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends request and receives for commands with only two ids as a request.
+ *
+ * This function sends an RPMI (Remote Procedure Call Interface) request and response
+ * that only requires two ids as a parameter to execute on the System Controller, and does not
+ * take back any specific data in the response.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The ID of the service group.
+ * @param svc_id The ID of the service.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ */
+p64h_err_t p64h_sysc_rpmi_bare_id2(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                   const uint32_t id1)
+{
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u, NULL, 0x0u, NULL, 0x0u);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends request and receives for commands with only three ids as a request.
+ *
+ * This function sends an RPMI (Remote Procedure Call Interface) request and response
+ * that only requires three ids as a parameter to execute on the System Controller, and does not
+ * take back any specific data in the response.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The ID of the service group.
+ * @param svc_id The ID of the service.
+ * @param[in] id0 Request ID 0
+ * @param[in] id1 Request ID 1
+ * @param[in] id2 Request ID 2
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ */
+p64h_err_t p64h_sysc_rpmi_bare_id3(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                   const uint32_t id1, const uint32_t id2)
+{
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, id2);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, NULL, 0x0u, NULL, 0x0u);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends an RPMI request with the specified parameters.
+ *
+ * This function sends a request to the RPMI (Remote Procedure Management Interface) with the given service group ID,
+ * service ID, request data pointer, and request size. The response is handled internally.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The ID of the service group to which the request is being sent.
+ * @param svc_id The ID of the specific service within the service group.
+ * @param req_data_ptr A pointer to the data to be sent with the request.
+ * @param req_size The size of the data to be sent with the request.
+ *
+ * @return p64h_err_t The result of the RPMI request.
+ */
+p64h_err_t p64h_sysc_rpmi_req(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const void* req_data_ptr,
+                              const size_t req_size)
+{
+    CHECK_PTR_SIZE(req_data_ptr, req_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, req_data_ptr, req_size, NULL, 0x0u);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends a response to an RPMI request.
+ *
+ * This function sends a response to an RPMI (Remote Procedure Call Interface) request
+ * by calling the internal function `rpmi_req_resp_internal` with the provided parameters.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The ID of the service group.
+ * @param svc_id The ID of the service.
+ * @param resp_data_ptr Pointer to the response data.
+ * @param resp_size Size of the response data.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ */
+p64h_err_t p64h_sysc_rpmi_resp(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, void* resp_data_ptr,
+                               const size_t resp_size)
+{
+    CHECK_PTR_SIZE(resp_data_ptr, resp_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, NULL, 0x0u, resp_data_ptr, resp_size);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends a request and receives a response for a given service.
+ *
+ * This function sends a request to a specified service group and service ID,
+ * and waits for a response. The request and response data are passed as pointers,
+ * along with their respective sizes.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param svc_grp_id The ID of the service group to which the request is sent.
+ * @param svc_id The ID of the specific service within the service group.
+ * @param req_data_ptr Pointer to the request data.
+ * @param req_size Size of the request data.
+ * @param resp_data_ptr Pointer to the buffer where the response data will be stored.
+ * @param resp_size Size of the response data buffer.
+ *
+ * @return p64h_err_t Error code indicating the result of the request-response operation.
+ */
+p64h_err_t p64h_sysc_rpmi_req_resp(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const void* req_data_ptr,
+                                   const size_t req_size, void* resp_data_ptr, const size_t resp_size)
+{
+    CHECK_PTR_SIZE(req_data_ptr, req_size);
+    CHECK_PTR_SIZE(resp_data_ptr, resp_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, req_data_ptr, req_size, resp_data_ptr, resp_size);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends a request and receives a response using RPMI protocol.
+ *
+ * This function performs a request-response operation using the RPMI protocol.
+ * It first checks the validity of the request and response data pointers and their sizes.
+ * Then, it verifies the service group ID and service ID using the `rpmi_check_ids` function.
+ * If the IDs are valid, it proceeds to send the request and receive the response using
+ * the `rpmi_req_resp_internal` function.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group ID.
+ * @param svc_id Service ID.
+ * @param id Unique identifier for the request.
+ * @param req_data_ptr Pointer to the request data.
+ * @param req_size Size of the request data.
+ * @param resp_data_ptr Pointer to the response data.
+ * @param resp_size Size of the response data.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful, otherwise an error code.
+ */
+p64h_err_t p64h_sysc_rpmi_req_resp_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id,
+                                      const void* req_data_ptr, const size_t req_size, void* resp_data_ptr, const size_t resp_size)
+{
+
+    CHECK_PTR_SIZE(req_data_ptr, req_size);
+    CHECK_PTR_SIZE(resp_data_ptr, resp_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id, 0x0u, 0x0u, req_data_ptr, req_size, resp_data_ptr, resp_size);
+    }
+    return rc;
+}
+
+/**
+ * @brief Retrieves a list of RPMI response entries.
+ *
+ * This function checks the validity of the provided service group ID and service ID,
+ * and if valid, retrieves a list of RPMI response entries into the provided buffer.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group ID to be checked.
+ * @param svc_id Service ID to be checked.
+ * @param list_ptr Pointer to the buffer where the list of entries will be stored.
+ * @param entry_size Size of each entry in the list.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful, otherwise an error code.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_list(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, void* list_ptr,
+                                    size_t entry_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(list_ptr, entry_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, NULL, 0x0UL, list_ptr, entry_size, 0UL, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Retrieves a list of IDs from the RPMI system.
+ *
+ * This function checks the validity of the provided IDs and retrieves a list
+ * of IDs from the RPMI system based on the specified service group and service ID.
+ *
+ * @param handle_ptr Pointer to the system handle.
+ * @param svc_grp_id Service group ID.
+ * @param svc_id Service ID.
+ * @param id0 Initial ID for the request.
+ * @param list_ptr Pointer to the buffer where the list of IDs will be stored.
+ * @param entry_size Size of each entry in the list.
+ *
+ * @return p64h_err_t Error code indicating the success or failure of the operation.
+ *         P64H_ERR_OK indicates success, while other values indicate specific errors.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_list_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                       void* list_ptr, size_t entry_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(list_ptr, entry_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, id0, 0x0u, 0x0u, NULL, 0x0UL, list_ptr, entry_size, 0UL, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes a response list based on service group and service IDs.
+ *
+ * This function checks the validity of the provided IDs and processes the response list
+ * using the specified service group ID, service ID, and additional identifiers.
+ *
+ * @param handle_ptr Pointer to the system handle.
+ * @param svc_grp_id Service group ID.
+ * @param svc_id Service ID.
+ * @param id0 First identifier for the operation.
+ * @param id1 Second identifier for the operation.
+ * @param list_ptr Pointer to the list where the response will be stored.
+ * @param entry_size Size of each entry in the list.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if successful, or an error code if the operation fails.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_list_id2(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                        const uint32_t id1, void* list_ptr, size_t entry_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(list_ptr, entry_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u, NULL, 0x0UL, list_ptr, entry_size, 0UL, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes a list of IDs and performs a system call with the given parameters.
+ *
+ * This function checks the validity of the provided IDs and, if valid, performs an internal buffer operation
+ * using the specified system call parameters. It returns an error code indicating the success or failure of the operation.
+ *
+ * @param handle_ptr Pointer to the system call handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First ID to be processed.
+ * @param id1 Second ID to be processed.
+ * @param id2 Third ID to be processed.
+ * @param list_ptr Pointer to the list where results will be stored.
+ * @param entry_size Size of each entry in the list.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         - P64H_ERR_OK: Operation was successful.
+ *         - Other error codes indicate specific failure conditions.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_list_id3(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                        const uint32_t id1, const uint32_t id2, void* list_ptr, size_t entry_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(list_ptr, entry_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, id2);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, NULL, 0x0UL, list_ptr, entry_size, 0UL, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends a request with a specified ID to the RPMI system.
+ *
+ * This function checks the validity of the provided IDs and sends a request
+ * to the RPMI system using the specified service group ID, service ID, and request ID.
+ * It also verifies the pointer and size of the request data before proceeding.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group ID for the request.
+ * @param svc_id Service ID for the request.
+ * @param id Request ID to be sent.
+ * @param req_data_ptr Pointer to the request data.
+ * @param req_size Size of the request data.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful.
+ */
+p64h_err_t p64h_sysc_rpmi_req_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id,
+                                 const void* req_data_ptr, const size_t req_size)
+{
+    CHECK_PTR_SIZE(req_data_ptr, req_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id, 0x0u, 0x0u, req_data_ptr, req_size, NULL, 0UL);
+    }
+    return rc;
+}
+
+/**
+ * @brief Handles RPMI response identification and processing.
+ *
+ * This function checks the validity of the provided service group ID, service ID, and ID
+ * using the `rpmi_check_ids` function. If the IDs are valid, it proceeds to request and
+ * process the response using the `rpmi_req_resp_internal` function.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id Identifier for the request.
+ * @param resp_data_ptr Pointer to the buffer where the response data will be stored.
+ * @param resp_size Size of the response data buffer.
+ *
+ * @return Returns a `p64h_err_t` error code indicating the success or failure of the operation.
+ *         - `P64H_ERR_OK`: Operation was successful.
+ *         - Other error codes indicate specific failure conditions.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id,
+                                  void* resp_data_ptr, const size_t resp_size)
+{
+    CHECK_PTR_SIZE(resp_data_ptr, resp_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id, 0x0u, 0x0u, NULL, 0UL, resp_data_ptr, resp_size);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends a request with an output buffer to the RPMI service.
+ *
+ * This function checks the validity of the buffer pointer and size, then verifies the service group
+ * and service IDs using the RPMI system. If the IDs are valid, it proceeds to send the request data
+ * along with the output buffer to the RPMI service.
+ *
+ * @param handle_ptr Pointer to the RPMI system handle.
+ * @param svc_grp_id Service group ID to be used in the request.
+ * @param svc_id Service ID to be used in the request.
+ * @param req_data_ptr Pointer to the request data.
+ * @param req_size Size of the request data.
+ * @param buf_ptr Pointer to the output buffer.
+ * @param buf_size Size of the output buffer.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful, otherwise an error code.
+ */
+p64h_err_t p64h_sysc_rpmi_req_outbuf(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const void* req_data_ptr,
+                                     const size_t req_size, const void* buf_ptr, const size_t buf_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_outbuf_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, req_data_ptr, req_size, buf_ptr, sizeof(uint8_t), buf_size,
+                                  shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes a request and response buffer for RPMI service.
+ *
+ * This function checks the validity of the service group ID and service ID,
+ * and if valid, processes the request data into the provided buffer.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param req_data_ptr Pointer to the request data.
+ * @param req_size Size of the request data.
+ * @param buf_ptr Pointer to the buffer where the response will be stored.
+ * @param buf_size Size of the response buffer.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if successful, or an error code if the operation fails.
+ */
+p64h_err_t p64h_sysc_rpmi_req_resp_inbuf(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                         const void* req_data_ptr, const size_t req_size, void* buf_ptr, size_t buf_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, req_data_ptr, req_size, buf_ptr, sizeof(uint8_t), buf_size,
+                                 shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes an incoming buffer for a specified service group and service ID.
+ *
+ * This function checks the validity of the provided service group ID and service ID
+ * using the `rpmi_check_ids` function. If the IDs are valid, it processes the incoming
+ * buffer using the `rpmi_inbuf_internal` function.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group ID to be checked and processed.
+ * @param svc_id Service ID to be checked and processed.
+ * @param buf_ptr Pointer to the buffer to be processed.
+ * @param buf_size Size of the buffer to be processed.
+ *
+ * @return Returns a `p64h_err_t` error code indicating the result of the operation.
+ *         - `P64H_ERR_OK` if the operation was successful.
+ *         - Other error codes if the operation failed.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_inbuf(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, void* buf_ptr,
+                                     size_t buf_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, 0x0u, 0x0u, 0x0u, NULL, 0x0UL, buf_ptr, sizeof(uint8_t), buf_size, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes an RPMI response with input buffer identification.
+ *
+ * This function checks the validity of the provided service group ID, service ID, and ID0
+ * using the `rpmi_check_ids` function. If the IDs are valid, it proceeds to process the
+ * RPMI response using the `rpmi_inbuf_internal` function, which handles the input buffer
+ * specified by `buf_ptr` and `buf_size`.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First identifier for the RPMI operation.
+ * @param buf_ptr Pointer to the input buffer.
+ * @param buf_size Size of the input buffer.
+ *
+ * @return Returns a `p64h_err_t` error code indicating the result of the operation.
+ *         `P64H_ERR_OK` indicates success, while other values indicate specific errors.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_inbuf_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                        void* buf_ptr, size_t buf_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, 0x0u, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, id0, 0x0u, 0x0u, NULL, 0x0UL, buf_ptr, sizeof(uint8_t), buf_size, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes an RPMI response with specified identifiers and input buffer.
+ *
+ * This function checks the validity of the provided identifiers and processes
+ * the RPMI response using the specified input buffer. It first verifies the
+ * pointer and size of the buffer, then checks the identifiers using the
+ * `rpmi_check_ids` function. If the identifiers are valid, it proceeds to
+ * process the input buffer using the `rpmi_inbuf_internal` function.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First identifier.
+ * @param id1 Second identifier.
+ * @param buf_ptr Pointer to the input buffer.
+ * @param buf_size Size of the input buffer.
+ *
+ * @return Returns a `p64h_err_t` error code indicating the result of the operation.
+ *         - `P64H_ERR_OK` if the operation is successful.
+ *         - Other error codes if there is an issue with the identifiers or buffer processing.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_inbuf_id2(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                         const uint32_t id1, void* buf_ptr, size_t buf_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u, NULL, 0x0UL, buf_ptr, sizeof(uint8_t), buf_size, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes a response buffer for a given service group and service ID.
+ *
+ * This function checks the validity of the provided IDs and, if valid, processes
+ * the response buffer using internal mechanisms. It ensures that the buffer pointer
+ * and size are valid before proceeding with the operation.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First identifier for the operation.
+ * @param id1 Second identifier for the operation.
+ * @param id2 Third identifier for the operation.
+ * @param buf_ptr Pointer to the buffer where the response will be stored.
+ * @param buf_size Size of the buffer.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful, otherwise an error code.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_inbuf_id3(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                         const uint32_t id1, const uint32_t id2, void* buf_ptr, size_t buf_size, bool shmem_xfer)
+{
+    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, id2);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_inbuf_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, NULL, 0x0UL, buf_ptr, sizeof(uint8_t), buf_size, shmem_xfer);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends a request to the RPMI system with specified identifiers and request data.
+ *
+ * This function performs a request to the RPMI system using the provided service group ID,
+ * service ID, and identifiers. It first checks the validity of the identifiers using
+ * `rpmi_check_ids` and then sends the request using `rpmi_req_resp_internal` if the check
+ * is successful.
+ *
+ * @param handle_ptr Pointer to the RPMI system handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First identifier for the request.
+ * @param id1 Second identifier for the request.
+ * @param req_data_ptr Pointer to the request data.
+ * @param req_size Size of the request data.
+ * @return p64h_err_t Error code indicating the result of the operation.
+ */
+p64h_err_t p64h_sysc_rpmi_req_id2(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                  const uint32_t id1, const void* req_data_ptr, const size_t req_size)
+{
+    CHECK_PTR_SIZE(req_data_ptr, req_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u, req_data_ptr, req_size, NULL, 0UL);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes a response for a given service group and service ID.
+ *
+ * This function checks the validity of the provided IDs and, if valid,
+ * processes a request-response operation using the specified parameters.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First identifier for the request.
+ * @param id1 Second identifier for the request.
+ * @param resp_data_ptr Pointer to the buffer where the response data will be stored.
+ * @param resp_size Size of the response data buffer.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful, otherwise an error code.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_id2(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                   const uint32_t id1, void* resp_data_ptr, const size_t resp_size)
+{
+    CHECK_PTR_SIZE(resp_data_ptr, resp_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, 0x0u, NULL, 0UL, resp_data_ptr, resp_size);
+    }
+    return rc;
+}
+
+/**
+ * @brief Sends a request with three identifiers to the RPMI system.
+ *
+ * This function checks the validity of the provided identifiers and sends a request
+ * to the RPMI system using the specified service group ID, service ID, and identifiers.
+ * The request data and its size are also provided as parameters.
+ *
+ * @param handle_ptr Pointer to the system handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First identifier for the request.
+ * @param id1 Second identifier for the request.
+ * @param id2 Third identifier for the request.
+ * @param req_data_ptr Pointer to the request data.
+ * @param req_size Size of the request data.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful.
+ */
+p64h_err_t p64h_sysc_rpmi_req_id3(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                  const uint32_t id1, const uint32_t id2, const void* req_data_ptr, const size_t req_size)
+{
+    CHECK_PTR_SIZE(req_data_ptr, req_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, id2);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size, NULL, 0UL);
+    }
+    return rc;
+}
+
+/**
+ * @brief Processes a response for a given service group and service ID.
+ *
+ * This function checks the validity of the provided IDs and, if valid,
+ * processes a request-response operation using the specified parameters.
+ *
+ * @param handle_ptr Pointer to the system control handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param id0 First identifier for the request.
+ * @param id1 Second identifier for the request.
+ * @param id2 Third identifier for the request.
+ * @param resp_data_ptr Pointer to the buffer where the response data will be stored.
+ * @param resp_size Size of the response data buffer.
+ *
+ * @return p64h_err_t Error code indicating the result of the operation.
+ *         P64H_ERR_OK if the operation was successful, otherwise an error code.
+ */
+p64h_err_t p64h_sysc_rpmi_resp_id3(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                   const uint32_t id1, const uint32_t id2, void* resp_data_ptr, const size_t resp_size)
+{
+    CHECK_PTR_SIZE(resp_data_ptr, resp_size);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, id2);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_resp_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, NULL, 0UL, resp_data_ptr, resp_size);
+    }
+    return rc;
+}
+
+/**
+ * Logs RPMI system call information based on the provided configuration.
+ *
+ * This function checks the validity of the service group and service IDs,
+ * and if valid, logs the RPMI system call information using the specified
+ * logging configuration.
+ *
+ * @param handle_ptr Pointer to the system call handle.
+ * @param svc_grp_id Service group identifier.
+ * @param svc_id Service identifier.
+ * @param log_cfg_ptr Pointer to the logging configuration structure.
+ * @param resp_start_off Pointer to store the response start offset.
+ * @param num_returned Pointer to store the number of entries returned.
+ *
+ * @return Returns a p64h_err_t error code indicating the success or failure
+ *         of the operation.
+ */
+p64h_err_t p64h_sysc_rpmi_log(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, p64h_sysc_log_cfg_t* log_cfg_ptr,
+                              uint64_t* resp_start_off, uint32_t* num_returned)
+{
+    CHECK_PTR_SIZE(log_cfg_ptr->log_ptr, log_cfg_ptr->num_entries);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0, 0, 0);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_log_internal(handle_ptr, svc_grp_id, svc_id, 0, 0, 0, log_cfg_ptr, resp_start_off, num_returned);
+    }
+    return rc;
+}
+
+/**
+ * Logs an ID using the RPMI system call interface.
+ *
+ * This function checks the validity of the provided IDs and, if valid,
+ * requests logging of the specified ID using the RPMI system call interface.
+ *
+ * @param handle_ptr Pointer to the system call handle.
+ * @param svc_grp_id Service group ID.
+ * @param svc_id Service ID.
+ * @param id0 The ID to be logged.
+ * @param log_cfg_ptr Pointer to the log configuration structure.
+ * @param resp_start_off Pointer to store the response start offset.
+ * @param num_returned Pointer to store the number of entries returned.
+ *
+ * @return Returns a p64h_err_t error code indicating the success or failure of the operation.
+ *         P64H_ERR_OK indicates success, while other values indicate specific errors.
+ */
+p64h_err_t p64h_sysc_rpmi_log_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
+                                 p64h_sysc_log_cfg_t* log_cfg_ptr, uint64_t* resp_start_off, uint32_t* num_returned)
+{
+    CHECK_PTR_SIZE(log_cfg_ptr->log_ptr, log_cfg_ptr->num_entries);
+    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, 0, 0);
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_req_log_internal(handle_ptr, svc_grp_id, svc_id, id0, 0, 0, log_cfg_ptr, resp_start_off, num_returned);
+    }
+    return rc;
+}
+/// @}
