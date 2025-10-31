@@ -9,14 +9,7 @@
 #ifndef SEC_API_COMMON_H
 #define SEC_API_COMMON_H
 
-#include "sec_api_types.h"
 #include "sec_mbox_types.h"
-#include "boot_cfg_helper.h"
-
-sec_ret_code_e sec_otp_boot_config_get(bootcfg_otp_t *pOtp_boot_cfg_st, uint32_t* pNum_bytes_read);
-sec_ret_code_e sysc_secc_serial_num_get(uint8_t *pSerial_num);
-sec_ret_code_e sec_otp_boot_config_test(const bootcfg_otp_t *pOtp_boot_cfg_st);
-sec_ret_code_e sec_otp_boot_config_commit(const bootcfg_otp_t *pOtp_boot_cfg_st);
 
 /**
  * @brief
@@ -42,8 +35,5 @@ static inline void sec_build_mbox_req_msg(sec_mbox_cmd_req_msg_t *pCmd_req_msg_s
     pCmd_req_msg_st->data_xfer_path = SEC_MBOX_PATH;
 } // sec_build_mbox_req_msg
 
-
-/// This API could be called from Python using SWIG 
-sec_periph_stats_t sec_periph_stats_buf_get(const char* binary_data);
 
 #endif /* SEC_API_COMMON_H */

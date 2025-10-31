@@ -6,7 +6,7 @@
 
 #include "generated/p64h_sysc_ras_error_sources.h"
 #include "generated/p64h_sysc_errors.h"
-#include "env/p64h_sysc_os_specific.h"
+#include <env/p64h_sysc_os_specific.h>
 
 /* Public Structs and Enums ----------------------------------------- */
 

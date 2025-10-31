@@ -63,7 +63,7 @@ typedef enum {
     P64H_SYSC_NVM_CTRL_XSPI,          ///< xSPI CTRL
     P64H_SYSC_NVM_CTRL_SD_EMMC,       ///< SD/eMMC CTRL
     P64H_SYSC_NVM_CTRL_NAND,          ///< NAND CTRL
-    P64H_SYSC_LAST_NVM_CTRL
+    P64H_SYSC_LAST_NVM_CTRL           ///< invalid used for error checking
 } p64h_sysc_nvm_ctrl_type_t;
 
 /**
@@ -162,7 +162,7 @@ typedef struct {
 typedef enum {
     P64H_SYSC_SPI_FLASH_AXI_SRC_X_SPI,    ///< AXI4 connection via xSPI CTRL
     P64H_SYSC_SPI_FLASH_AXI_SRC_SD_E_MMC, ///< AXI4 connection via SD/eMMC Ctrl
-    P64H_SYSC_SPI_FLASH_AXI_SRC_LAST
+    P64H_SYSC_SPI_FLASH_AXI_SRC_LAST      ///< invalid used for error checking
 } p64h_sysc_spi_flash_axi_src_t;
 
 /**
@@ -170,11 +170,11 @@ typedef enum {
  *  This enum defines the possible io widths for xspi
  */
 typedef enum {
-    P64H_SYSC_SPI_MODE_IOS_1 = 0u,
-    P64H_SYSC_SPI_MODE_IOS_2 = 1u,
-    P64H_SYSC_SPI_MODE_IOS_4 = 2u,
-    P64H_SYSC_SPI_MODE_IOS_8 = 3u,
-    LAST_P64H_SYSC_SPI_MODE ///< invalid, used for error checking
+    P64H_SYSC_SPI_MODE_IOS_1 = 0u, ///< Single SPI
+    P64H_SYSC_SPI_MODE_IOS_2 = 1u, ///< Dual SPI
+    P64H_SYSC_SPI_MODE_IOS_4 = 2u, ///< Quad SPI
+    P64H_SYSC_SPI_MODE_IOS_8 = 3u, ///< Octal SPI
+    LAST_P64H_SYSC_SPI_MODE        ///< invalid, used for error checking
 } p64h_sysc_spi_flash_xspi_mode_t;
 
 /**
@@ -182,10 +182,411 @@ typedef enum {
  *  This enum defines the data rates for xspi
  */
 typedef enum {
-    P64H_SYSC_SPI_DATA_RATE_SDR = 0u,
-    P64H_SYSC_SPI_DATA_RATE_DDR = 1u,
-    LAST_P64H_SYSC_SPI_DATA_RATE ///< invalid, used for error checking
+    P64H_SYSC_SPI_DATA_RATE_SDR = 0u, ///< Single data rate
+    P64H_SYSC_SPI_DATA_RATE_DDR = 1u, ///< Double data rate
+    LAST_P64H_SYSC_SPI_DATA_RATE      ///< invalid, used for error checking
 } p64h_sysc_spi_flash_xspi_data_rate_t;
+
+/**
+ * @brief
+ *  xspi_profile
+ */
+typedef enum {
+    P64H_SYSC_SPI_PROFILE1 = 0u,       ///< Use profile 1.0 sequences (Legacy SPI and xSPI devices)
+    P64H_SYSC_SPI_PROFILE2_HYPERFLASH, ///< Use profile 2.0 sequences (HyperFlash)
+    P64H_SYSC_SPI_PROFILE2_HYPERRAM,   ///< Use profile 2.0 sequences (HyperRAM)
+    P64H_SYSC_SPI_PROFILE_SPI_NAND,    ///< Use profile 1.0 sequences (SPI NAND)
+    P64H_SYSC_SPI_PROFILE_LAST         ///< invalid, used for error checking
+} p64h_sysc_spi_flash_xspi_profile_t;
+
+/**
+ * @brief
+ *  xspi page size
+ */
+typedef enum {
+    P64H_SYSC_XSPI_PAGE_SIZE_1B = 0U,         ///< 1B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_2B,              ///< 2B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_4B,              ///< 4B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_8B,              ///< 8B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_16B,             ///< 16B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_32B,             ///< 32B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_64B,             ///< 64B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_128B,            ///< 128B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_256B,            ///< 256B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_512B,            ///< 512B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_1024B,           ///< 1024B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_2048B,           ///< 2048B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_4096B,           ///< 4096B page size
+    P64H_SYSC_XSPI_PAGE_SIZE_UNLIMITED = 0xFU // THis is only valid for the read, can we just reuse the same enum?
+} p64h_sysc_spi_flash_xspi_page_size_t;
+
+/**
+ * @brief
+ *  subsector struct
+ */
+typedef struct {
+    uint32_t sector_size;       ///< in B
+    uint8_t  erase_cmd;         ///< Command to erase this sector size.
+    uint32_t erase_cmd_timeout; ///< Command timeout in ms
+} p64h_sysc_spi_flash_xspi_sector_t;
+
+/**
+ * @brief
+ *  XSPI word size
+ */
+typedef enum {
+    P64H_SYSC_XSPI_STATUS_WORD_SIZE_8_BIT  = 0u, ///< 8 bits status word size
+    P64H_SYSC_XSPI_STATUS_WORD_SIZE_16_BIT = 1u, ///< 16 bits status word size
+    P64H_SYSC_XSPI_STATUS_WORD_SIZE_LAST         ///< invalid used for error checking
+} p64h_sysc_spi_flash_xspi_word_size_t;
+
+/**
+ * @brief
+ *  XSPI status polarity
+ */
+typedef enum {
+    P64H_SYSC_XSPI_STATUS_POLARITY_0 = 0u, ///< 0 value of polarity
+    P64H_SYSC_XSPI_STATUS_POLARITY_1 = 1u, ///< 1 value of polarity
+    P64H_SYSC_XSPI_STATUS_POLARITY_LAST    ///< invalid used for error checking
+} p64h_sysc_spi_flash_xspi_stat_polarity_t;
+
+/**
+ * @brief
+ *  XSPI crc chunk size.
+ */
+typedef enum {
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_4B   = 0U, ///< 4B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_8B   = 1U, ///< 8B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_16B  = 2U, ///< 16B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_32B  = 3U, ///< 32B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_64B  = 4U, ///< 64B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_128B = 5U, ///< 128B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_256B = 6U, ///< 256B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_512B = 7U, ///< 512B chunk size
+    P64H_SYSC_XSPI_CRC_CHUNK_SIZE_LAST       ///< invalid used for error checking
+} p64h_sysc_spi_flash_xspi_crc_chunk_size_t;
+
+/**
+ * @brief
+ *  Data bytes per Flash Memory address
+ */
+typedef enum {
+    P64H_SYSC_XSPI_XSPI_DATA_PER_ADDRESS_1B = 0U, ///< 1B per address
+    P64H_SYSC_XSPI_XSPI_DATA_PER_ADDRESS_2B = 1U, ///< 2B per address
+    P64H_SYSC_XSPI_XSPI_DATA_PER_ADDRESS_LAST     ///< invalid used for error checking
+} p64h_sysc_spi_flash_xspi_data_per_address_t;
+
+/**
+ * @brief
+ *  XSPI crc chunk variant.
+ */
+typedef enum {
+    P64H_SYSC_XSPI_CRC_VARIANT_CALC_ADDR_PHASE
+        = 0U, ///< CRC is calculated for all bytes of address transfer phase only and put on the bus after address transfer phase
+    P64H_SYSC_XSPI_CRC_VARIANT_CALC_ALL_PHASES = 1U, ///< CRC is calculated for all bytes in sequence and put on the bus after all bytes in sequence
+    P64H_SYSC_XSPI_CRC_VARIANT_CALC_LAST             ///< invalid used for error checking
+
+} p64h_sysc_spi_flash_xspi_crc_chunk_variant_t;
+
+/**
+ * @brief
+ *  XSPI crc chunk variant.
+ */
+typedef enum {
+    P64H_SYSC_XSPI_STAT_SEQ_ADDR_COUNT_1_ADDR_BYTE  = 0U, ///< 1B addr
+    P64H_SYSC_XSPI_STAT_SEQ_ADDR_COUNT_2_ADDR_BYTES = 1U, ///< 2B addr
+    P64H_SYSC_XSPI_STAT_SEQ_ADDR_COUNT_3_ADDR_BYTES = 2U, ///< 3B addr
+    P64H_SYSC_XSPI_STAT_SEQ_ADDR_COUNT_4_ADDR_BYTES = 3U, ///< 4B addr
+    P64H_SYSC_XSPI_STAT_SEQ_ADDR_COUNT_LAST               ///< invalid used for error checking
+} p64h_sysc_spi_flash_xspi_stat_seq_addr_cnt_t;
+
+/**
+ * @brief
+ *  Struct holds failure info for setting up the xspi controller.
+ */
+typedef struct {
+    uint8_t                                  cmd;          ///< command for fail status
+    uint32_t                                 addr;         ///< address phase for fail status
+    uint8_t                                  addr_cnt;     ///< address beats for fail status
+    bool                                     addr_enable;  ///< address enable for fail status
+    uint8_t                                  cmd_ext;      ///< command extension for fail status
+    uint8_t                                  dummy_cnt;    ///< dummy counts for the fail status
+    p64h_sysc_spi_flash_xspi_stat_polarity_t polarity_val; ///< polarity for the fail bit
+    bool                                     enable;       ///< enable for the fail check
+    uint8_t                                  index;        ///< index of the fail bit
+    p64h_sysc_spi_flash_xspi_word_size_t     word_size;    ///< word size for the command
+} p64h_sysc_spi_flash_xspi_fail_cfg_t;
+
+/**
+ * @brief
+ *  Program information for the xspi controller.
+ */
+typedef struct {
+    uint8_t                              cmd;            ///< Command for page program
+    uint8_t                              cmd_ext;        ///< Command extension for page program
+    bool                                 cmd_ext_enable; ///< Command extension enable for page program
+    uint8_t                              addr_cnt;       ///< Address byte count for the page program
+    p64h_sysc_spi_flash_xspi_mode_t      cmd_ios;        ///< Command io count for page program
+    p64h_sysc_spi_flash_xspi_mode_t      addr_ios;       ///< Address io count for page program
+    p64h_sysc_spi_flash_xspi_mode_t      data_ios;       ///< Data io count for page program
+    p64h_sysc_spi_flash_xspi_data_rate_t cmd_edge_mode;  ///< Command data rate
+    p64h_sysc_spi_flash_xspi_data_rate_t addr_edge_mode; ///< Address data rate
+    p64h_sysc_spi_flash_xspi_data_rate_t data_edge_mode; ///< Data edge rate
+} p64h_sysc_spi_flash_xspi_program_seq_cfg_t;
+
+/**
+ * @brief
+ *  Status information for the xspi controller.
+ */
+typedef struct {
+    p64h_sysc_spi_flash_xspi_mode_t      cmd_ios;        ///< Command IO count for status
+    p64h_sysc_spi_flash_xspi_mode_t      addr_ios;       ///< Address IO count for status
+    p64h_sysc_spi_flash_xspi_mode_t      data_ios;       ///< Data IO count for status
+    p64h_sysc_spi_flash_xspi_data_rate_t cmd_edge_mode;  ///< Command edge rate
+    p64h_sysc_spi_flash_xspi_data_rate_t addr_edge_mode; ///< Address edge rate
+    p64h_sysc_spi_flash_xspi_data_rate_t data_edge_mode; ///< Data edge rate
+} p64h_sysc_spi_flash_xspi_status_seq_cfg_t;
+
+/**
+ * @brief
+ *  Read information for the xspi controller.
+ */
+typedef struct {
+    uint8_t                              cmd;                ///< Read sequence command
+    uint8_t                              cmd_ext;            ///< Read sequence command extension
+    bool                                 cmd_ext_enable;     ///< Read sequence command extension enable
+    uint8_t                              addr_cnt;           ///< Read address count
+    p64h_sysc_spi_flash_xspi_mode_t      cmd_ios;            ///< Command IO count for reads
+    p64h_sysc_spi_flash_xspi_mode_t      addr_ios;           ///< Address IO count for reads
+    p64h_sysc_spi_flash_xspi_mode_t      data_ios;           ///< Data IO count for reads
+    p64h_sysc_spi_flash_xspi_data_rate_t cmd_edge_mode;      ///< Command edge rate
+    p64h_sysc_spi_flash_xspi_data_rate_t addr_edge_mode;     ///< Address edge rate
+    p64h_sysc_spi_flash_xspi_data_rate_t data_edge_mode;     ///< Data edge rate
+    uint8_t                              dummy_cycles;       ///< Number of dummy cycles
+    bool                                 read_seq_mb_enable; ///< If set to 1, mode bits are sent following the address bytes
+    uint8_t read_seq_mb_dummy_cnt; ///< Number of dummy cycles (if 0 - disabled). Used when sending mode bits is enabled in ACMD or Direct work modes
+    bool
+        cache_random_read_enable; ///< This bit changes behavior of the Read sequence to utilize the Read Page Cache Random/Read Page Cache Random
+                                  ///< Last commands. (not used in DIRECT mode) (Since R003) (in R004 applicable only for FULL/FULL_ASF configuration)
+} p64h_sysc_spi_flash_xspi_read_seq_cfg_t;
+
+/**
+ * @brief
+ *  Read information for the xspi controller.
+ */
+typedef struct {
+    p64h_sysc_spi_flash_xspi_profile_t device_profile;    ///< Profile of external xspi device
+    bool                               data_swap;         ///< Swap data bytes
+    bool                               crc_ual_chunk_chk; ///< Enables checking correctness of CRC unaligned chunk from Flash device.
+    bool crc_ual_chunk_enable; ///< Enables taking into consideration the command address to determine after how many bytes CRC data slice expected to
+                               ///< be returned from device
+    p64h_sysc_spi_flash_xspi_crc_chunk_size_t crc_chunk_size; ///< Number of bytes after which CRC occurs
+    bool crc_toogle_data; ///< If set, the controller expects the xSPI device to toggle CRC data on both SPI clock edges in CRC->CRC# sequence
+    p64h_sysc_spi_flash_xspi_crc_chunk_variant_t crc_variant; ///< Selecting of CRC variant (in R004 field applicable only for FULL/FULL_ASF
+                                                              ///< configuration, in IOT_NODLL this feature is enabled in STIG work mode only
+    bool                                        crc_dynamic_calc_enable; ///< If set, dynamic CRC calculation is enabled
+    p64h_sysc_spi_flash_xspi_data_per_address_t data_per_address; ///< Indicates how many bytes of data is assigned to the single Flash Memory address
+    p64h_sysc_spi_flash_xspi_page_size_t        program_page_size; ///< Determines page size of device being used for PROGRAM
+    p64h_sysc_spi_flash_xspi_page_size_t        read_page_size;    ///< Determines page size of device being used for READ
+} p64h_sysc_spi_flash_xspi_global_param_cfg_t;
+
+/**
+ * @brief
+ *  Status sequence information for the xspi controller.
+ */
+typedef struct {
+    p64h_sysc_spi_flash_xspi_mode_t              cmd_ios;          ///< Command IO count for reads
+    p64h_sysc_spi_flash_xspi_mode_t              addr_ios;         ///< Address IO count for reads
+    p64h_sysc_spi_flash_xspi_mode_t              data_ios;         ///< Data IO count for reads
+    bool                                         cmd_ext_enable;   ///< status sequence comand extension
+    p64h_sysc_spi_flash_xspi_data_rate_t         cmd_edge_mode;    ///< Command edge mode
+    p64h_sysc_spi_flash_xspi_data_rate_t         addr_edge_mode;   ///< Address edge mode
+    p64h_sysc_spi_flash_xspi_data_rate_t         data_edge_mode;   ///< Data edge mode
+    p64h_sysc_spi_flash_xspi_fail_cfg_t          prog_fail_cfg;    ///< configuration for program fail
+    p64h_sysc_spi_flash_xspi_fail_cfg_t          dev_rdy_fail_cfg; ///< Device Ready fail config
+    p64h_sysc_spi_flash_xspi_fail_cfg_t          erase_fail_cfg;   ///< Erase Fail configuration
+    p64h_sysc_spi_flash_xspi_stat_seq_addr_cnt_t addr_cnt;         ///< Address count
+} p64h_sysc_spi_flash_xspi_stat_seq_cfg_t;
+
+/**
+ * @brief
+ *  Direct mode config information for the xspi controller.
+ */
+typedef struct {
+    uint32_t dac_addr_mask; ///< This mask is used for anding bits [44:32] of the system address for read/write transfers in Legacy Hyperflash and
+                            ///< xSPI Profile 2.0 mode
+    bool disable_auto_poll; ///< If set, disable auto-polling of memory device
+    bool disable_auto_wel_instr; ///< If set, disable automatic issuing of WEL instruction before write operation (involves profile 1.0 sequence type)
+    bool dis_xip_mb;             ///< Disable XIP with modebits
+    bool en_xip_mb;              ///< Enable XIP with modebits
+    bool remap_addr_en; ///< Enables Slave Data interface address rempping. When set to 1, the incoming Slave Data Interface address will be adopted
+                        ///< and sent to the Flash device
+} p64h_sysc_spi_flash_xspi_direct_mode_cfg_t;
+
+/**
+ * @brief
+ *  Direct mode config information for the xspi controller.
+ */
+typedef struct {
+    uint8_t                              wel_cmd;            ///< write enable command
+    bool                                 wel_cmd_enable;     ///< write enable command enable
+    uint8_t                              wel_cmd_ext;        ///< write enable command extension
+    bool                                 wel_cmd_ext_enable; ///< write enable command extension enable
+    p64h_sysc_spi_flash_xspi_mode_t      cmd_ios;            ///< command number of lanes
+    p64h_sysc_spi_flash_xspi_data_rate_t cmd_edge_mode;      ///< command edge mode
+} p64h_sysc_spi_flash_xspi_wel_seq_cfg_t;
+
+/**
+ * @brief
+ *  STIG instruction types avaialble in the controller.
+ */
+
+typedef enum {
+    P64H_SYSC_XSPI_STIG_P1_READ_ARRAY               = 0U,  ///< Read Array
+    P64H_SYSC_XSPI_STIG_P1_READ_ARRAY_XIP           = 1U,  ///< Read Array XIP
+    P64H_SYSC_XSPI_STIG_P1_WRITE_ARRAY              = 2U,  ///< Write array
+    P64H_SYSC_XSPI_STIG_P1_WRITE_ENABLE_LATCH       = 3U,  ///< Write Enable Latch
+    P64H_SYSC_XSPI_STIG_P1_WRITE_DISABLE_LATCH      = 4U,  ///< Write Disable Latch
+    P64H_SYSC_XSPI_STIG_P1_ERASE_SECTOR             = 5U,  ///< Erase Sector
+    P64H_SYSC_XSPI_STIG_P1_CHIP_ERASE               = 6U,  ///< Chip Erase
+    P64H_SYSC_XSPI_STIG_P1_PROGRAM_ERASE_SUSPEND    = 7U,  ///< Program/Erase Suspend
+    P64H_SYSC_XSPI_STIG_P1_PROGRAM_ERASE_RESUME     = 8U,  ///< Program/Erase Resume
+    P64H_SYSC_XSPI_STIG_P1_READ_MEMORY_REGISTER     = 9U,  ///< Read Memory Register
+    P64H_SYSC_XSPI_STIG_P1_WRITE_MEMORY_REGISTER    = 10U, ///< Write Memory Register
+    P64H_SYSC_XSPI_STIG_P1_SETUP_READ_BURST         = 11U, ///< Setup Read Burst
+    P64H_SYSC_XSPI_STIG_P1_CLEAR_FLAG_REGISTER      = 12U, ///< Clear Flag Register
+    P64H_SYSC_XSPI_STIG_P1_ENTER_DEEP_POWER_DOWN    = 13U, ///< Enter Deep Power Down
+    P64H_SYSC_XSPI_STIG_P1_EXIT_DEEP_POWER_DOWN     = 14U, ///< Exit Deep Power Down
+    P64H_SYSC_XSPI_STIG_P1_RESET_ENABLE             = 15U, ///< Reset Enable
+    P64H_SYSC_XSPI_STIG_P1_SOFT_RESET               = 16U, ///< Soft Reset
+    P64H_SYSC_XSPI_STIG_P1_READ_JEDEC_ID            = 17U, ///< Read JEDEC ID
+    P64H_SYSC_XSPI_STIG_P1_READ_SFDP                = 18U, ///< Read SFDP
+    P64H_SYSC_XSPI_STIG_P1_ENTER_DEF_PROT_MODE      = 19U, ///< Enter default protocol mode
+    P64H_SYSC_XSPI_STIG_P1_ENABLE_SDR_OCTAL_MODE    = 20U, ///< Enable SDR Octal Mode
+    P64H_SYSC_XSPI_STIG_P1_GLOBAL_PROTECTION        = 21U, ///< Global Protection
+    P64H_SYSC_XSPI_STIG_P1_GLOBAL_UNPROTECTION      = 22U, ///< Global unprotection
+    P64H_SYSC_XSPI_STIG_P1_PROTECT_SECTOR           = 23U, ///< Protect Sector
+    P64H_SYSC_XSPI_STIG_P1_UNPROTECT_SECTOR         = 24U, ///< Unprotect Sector
+    P64H_SYSC_XSPI_STIG_P1_ENTER_4BYTE_ADDR_MODE    = 25U, ///< Enter 4 byte address mode
+    P64H_SYSC_XSPI_STIG_P1_EXIT_4BYTE_ADDR_MODE     = 26U, ///< Exit 4 byte address mode
+    P64H_SYSC_XSPI_STIG_P1_SNA_READ_PAGE            = 27U, ///< Read Page
+    P64H_SYSC_XSPI_STIG_P1_SNA_READ_CACHE           = 28U, ///< Read from cache
+    P64H_SYSC_XSPI_STIG_P1_SNA_RAND_READ_PAGE_CACHE = 29U, ///< Read Page Cache Random
+    P64H_SYSC_XSPI_STIG_P1_SNA_LAST_READ_PAGE_CACHE = 30U, ///< Read page cache last
+    P64H_SYSC_XSPI_STIG_P1_SNA_PROGRAM_LOAD         = 31U, ///< Program load
+    P64H_SYSC_XSPI_STIG_P1_SNA_RAND_PROGRAM_LOAD    = 32U, ///< Program load random
+    P64H_SYSC_XSPI_STIG_P1_SNA_PROGRAM_EXEC         = 33U, ///< Program execute
+    P64H_SYSC_XSPI_STIG_P1_SNA_SET_FEATURES         = 34U, ///< Set features
+    P64H_SYSC_XSPI_STIG_P1_SNA_GET_FEATURES         = 35U, ///< Get Features
+    P64H_SYSC_XSPI_STIG_P1_SNA_READ_ID              = 36U, ///< Read ID
+    P64H_SYSC_XSPI_STIG_P1_LAST                            ///< Last invalid type
+} p64h_sysc_spi_flash_xspi_profile1_stig_instr_type_t;
+
+/**
+ * @brief
+ *  STIG initialization instruction for external memory.
+ *  Note this currently doesn't support glueing instrcutions
+ *  and only supports profile 1 instructions.
+ */
+typedef struct {
+    p64h_sysc_spi_flash_xspi_profile1_stig_instr_type_t profile1_instr_type;  ///< STIG instruction type
+    uint8_t                                             data_number_of_bytes; ///< Number of data bytes 0,1,2 are the options
+    uint8_t                                             data_byte_0;          ///< The first data byte
+    uint8_t                                             data_byte_1;          ///< The second data byte
+    uint8_t                                             cmd;                  ///< Value to use in the cmd phase.
+    uint8_t                                             cmd_ext;              ///< command extension value.
+    bool                                                cmd_ext_enable;       ///< command extension enable.
+    uint8_t                                             addr_cnt;             ///< number of address cycles
+    p64h_sysc_spi_flash_xspi_mode_t                     cmd_ios;              ///< command ios
+    p64h_sysc_spi_flash_xspi_mode_t                     addr_ios;             ///< address ios
+    p64h_sysc_spi_flash_xspi_data_rate_t                cmd_edge_mode;        ///< command edge mode
+    p64h_sysc_spi_flash_xspi_data_rate_t                addr_edge_mode;       ///< address edge mode
+    uint32_t                                            addr;                 ///< address value
+} p64h_sysc_spi_flash_xspi_stig_init_instr_t;
+
+/**
+ * @brief
+ * Contains the information for the block protection for the xspi device
+ */
+typedef struct {
+    uint8_t  bp_cmd;            ///< Register command for the block protect bits
+    uint32_t bp_addr;           ///< address for the block protect command
+    uint8_t  bp_addr_cnt;       ///< address count for the block protect command
+    uint8_t  bp_data_num_bytes; ///< Number of data bytes 1,2 are the options
+    uint32_t bp_min_size;       ///< Smallest block protect size in Bytes
+    uint16_t bp_mask;           ///< The location of the bp bits.
+    uint8_t  tb_cmd;            ///< Register command for the top/bottom select bit
+    uint32_t tb_addr;           ///< address for the top/bottom select command
+    uint8_t  tb_addr_cnt;       ///< address coutn for the top/bottom select command
+    uint8_t  tb_data_num_bytes; ///< Number of data bytes 0,1,2 are the options
+    uint8_t  tb_index;          ///< The index of the top/bottom select bit in the register
+    uint8_t  bottom_select;     ///< Value for selecting bottom in the register
+    uint32_t top_address;       ///< The last address in the memory array
+} p64h_sysc_spi_flash_xspi_block_lock_t;
+
+/**
+ * @brief
+ * Configures the device relative delays
+ */
+typedef struct {
+    uint8_t csda_min_delay; ///< CSDA_MIN  Minimum Chip Select de-assertion timing
+    uint8_t cseot_delay;    ///< CSEOT  Chip Select End Of Transfer. It allows to improve last active clock edge to CS de-assertion device timing
+    uint8_t cssot_delay;    ///< Chip Select Start Of Transfer. It allows to improve CS de-assertion device timing to first active clock edge
+} p64h_sysc_spi_flash_xspi_dev_rel_dly_t;
+
+/**
+ * @brief
+ * Configures the commands for the reset
+ */
+typedef struct {
+    uint8_t cmd;        ///< reset command
+    uint8_t enable_cmd; ///< reset enamble command
+} p64h_sysc_spi_flash_xspi_reset_cmd_t;
+
+/**
+ * @brief
+ * Configures the command and timeout for chip erase
+ */
+typedef struct {
+    uint8_t  cmd;     ///< chip erase command
+    uint32_t timeout; ///< chip erase timeout in ms
+} p64h_sysc_spi_flash_xspi_chip_erase_t;
+
+/**
+ * @brief
+ *  Defines xSPI block configuration inside SPI_CTRL
+ */
+typedef struct {
+    uint32_t                                    num_reset;        ///< number of resets
+    p64h_sysc_top_nvm_acsu_ctrl_clk_out_t       ctrl_clk;         ///< Controller
+    p64h_sysc_spi_flash_xspi_program_seq_cfg_t  program_seq_cfg;  ///< information for the program sequence
+    p64h_sysc_spi_flash_xspi_read_seq_cfg_t     read_seq_cfg;     ///< information for the read sequence
+    p64h_sysc_spi_flash_xspi_global_param_cfg_t global_param_cfg; ///< information for the global pramaters config
+    p64h_sysc_spi_flash_xspi_mode_t             command_ios;      ///< TODO delete once yaml updated this data is available elswhere in the struct
+    p64h_sysc_spi_flash_xspi_mode_t             address_ios;      ///< TODO delete once yaml updated this data is available elswhere in the struct
+    p64h_sysc_spi_flash_xspi_mode_t             data_ios;         ///< TODO delete once yaml updated this data is available elswhere in the struct
+    p64h_sysc_spi_flash_xspi_data_rate_t        data_rate;        ///< TODO delete once yaml updated this data is available elswhere in the struct
+    p64h_sysc_spi_flash_xspi_profile_t          device_profile;   ///< TODO delete once yaml updated this data is available elsewhere in the struct
+    uint8_t                                     write_nonvolatile_lock_cmd; ///< TODO these are not ubiquitous, delete and use alternate approach
+    uint8_t                                     erase_nonvolatile_lock_cmd; ///< TODO these are not ubiquitous, delete and use alternate approach
+    uint8_t                                     read_nonvolatile_lock_cmd;  ///< TODO these are not ubiquitous, delete and use alternate approach
+    uint8_t                                     write_volatile_lock_cmd;    ///< TODO these are not ubiquitous, delete and use alternate approach
+    p64h_sysc_spi_flash_xspi_reset_cmd_t        reset_cmd_cfg;              ///< Information for the reset command config
+    p64h_sysc_spi_flash_xspi_block_lock_t       block_protect_cfg;          ///< information for the block protection scheme for the device.
+    p64h_sysc_spi_flash_xspi_dev_rel_dly_t      dev_rel_dly_cfg;            ///< information for the device relative delay config
+    p64h_sysc_spi_flash_xspi_wel_seq_cfg_t      wel_seq_cfg;                ///< information for the write enable config
+    p64h_sysc_spi_flash_xspi_chip_erase_t       chip_erase_cfg;             ///< information for the chip erase config
+    p64h_sysc_spi_flash_xspi_sector_t*          subsector_data_arr;         ///< contians subsector information
+    uint32_t                                    subsector_data_arr_len;     ///< length of subsector info
+    p64h_sysc_spi_flash_xspi_sector_t           sector_data;                ///< contians sector information
+    p64h_sysc_spi_flash_xspi_stat_seq_cfg_t     stat_seq_cfg;               ///< status sequence config
+    p64h_sysc_spi_flash_xspi_direct_mode_cfg_t  direct_mode_cfg;            ///< direct mode config
+
+    // instructions for the setup of the external memory
+    p64h_sysc_spi_flash_xspi_stig_init_instr_t* stig_init_cmd_arr;     ///< STIG initialization commands
+    uint32_t                                    stig_init_cmd_arr_len; ///< lenght of STIG initializaiton commands
+
+} p64h_sysc_spi_flash_xspi_cfg_t;
 
 /// PFlash controller width options
 typedef enum {
@@ -194,19 +595,6 @@ typedef enum {
     P64H_SYSC_PFLASH_DATA_WIDTH_32B,     ///< Parallel flash 32b data width
     P64H_SYSC_LAST_PFLASH_DATA_WIDTH,    ///< Out of range value.
 } p64h_sysc_pflash_data_width_t;
-
-/**
- * @brief
- *  Defines xSPI block configuration inside SPI_CTRL
- */
-typedef struct {
-    uint32_t                              num_reset; ///< number of resets
-    p64h_sysc_top_nvm_acsu_ctrl_clk_out_t ctrl_clk;  ///< Controller clock
-    p64h_sysc_spi_flash_xspi_mode_t       command_ios;
-    p64h_sysc_spi_flash_xspi_mode_t       address_ios;
-    p64h_sysc_spi_flash_xspi_mode_t       data_ios;
-    p64h_sysc_spi_flash_xspi_data_rate_t  data_rate;
-} p64h_sysc_spi_flash_xspi_cfg_t;
 
 /// NVM NAND controller boot configuration
 typedef struct {
@@ -235,7 +623,7 @@ typedef struct {
     bool    enable;               ///< Enable SECDED
     bool    m_en_bypass;          ///< Bypass generation and checking of SECDED on Manager AXI Bus
     bool    s_en_bypass;          ///< Bypass generation and checking of SECDED on Subordinate  AXI Bus
-    bool    timeout_en;           /// Enable timeout feature
+    bool    timeout_en;           ///< Enable timeout feature
     uint8_t timeout_clock_cycles; ///< number of clock-cycles for a timeout to occur (<= 34)
 } p64h_sysc_nand_secded_cfg_t;
 
@@ -293,12 +681,13 @@ typedef struct {
     bool override_cs_check;  ///< When set high, overrides any chip-select address mapping checks
 } p64h_sysc_pflash_cfg_interface_check_t;
 
+/// Defines pflash configuration interface.
 typedef struct {
-    bool en_byte_cmd;        // Word Addressing Override. When set HIGH, uses byte-addressing mode for sending transactions to the memory
-                             // which are smaller than memory width.
-    bool en_byte_write;      // 8b Write Command Enable. Allows writes of 8b to device if HIGH. Throws a cfg_write_width_event otherwise.
-    bool en_half_word_write; // 16b Write Command Enable. Allows writes of 16b to device if HIGH. Throws a cfg_write_width_event otherwise.
-    bool en_word_write;      // 32b Write Command Enable. Allows writes of 32b to device if HIGH. Throws a cfg_write_width_event otherwise.
+    bool en_byte_cmd;        ///< Word Addressing Override. When set HIGH, uses byte-addressing mode for sending transactions to the memory
+                             ///< which are smaller than memory width.
+    bool en_byte_write;      ///< 8b Write Command Enable. Allows writes of 8b to device if HIGH. Throws a cfg_write_width_event otherwise.
+    bool en_half_word_write; ///< 16b Write Command Enable. Allows writes of 16b to device if HIGH. Throws a cfg_write_width_event otherwise.
+    bool en_word_write;      ///< 32b Write Command Enable. Allows writes of 32b to device if HIGH. Throws a cfg_write_width_event otherwise.
 } p64h_sysc_pflash_cfg_intf_addr_mode_t;
 
 /// Defines a set of values that set delays, clk cycles, to be applied to read and write operations.
@@ -402,7 +791,7 @@ typedef struct {
     uint8_t ram_timeout_cfg;   ///< 5 bits field. The NDC RAM timeout timer will assert if the AXI interfaces ready valid handshake is waiting on the
                                ///< AXI RAM subordinate. Enable this timeout timer with AF_Nx_RAM_TIMEOUT_EN. Timer Duration = clock period *
                                ///< 2^(ram_timeout_cfg +1) + clock period Maximum value: 34
-    uint8_t timeout_timer_cfg; /// Timeout timer configuration, assert timeout_timer_en to enable timer.
+    uint8_t timeout_timer_cfg; ///< Timeout timer configuration, assert timeout_timer_en to enable timer.
                                ///< Timer Duration = clock period * 2^(timeout_timer_cfg +1) + clock period
                                ///< Maximum value: 30 (600MHz Clock is ~3.5s )
                                ///< Minimum value: The timeout should not be configured lower than the longest expected transaction time. The longest
@@ -522,7 +911,7 @@ typedef struct {
     p64h_sysc_nvm_edac_cfg_t  nvm_edac_cfg;                                    ///< NVM EDAC configuration
     p64h_sysc_sram_edac_cfg_t sram_edac_cfg[P64H_SYSC_NUM_SRAM_EDAC_PER_PAIR]; ///< SRAM EDAC configurations
     p64h_sysc_nvm_ctrl_cfg_t  nvm_ctrl_cfg[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];  ///< NVM ctrl configuration, it shall be the same if DMR is used
-    bool                      sd_enable[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];
+    bool                      sd_enable[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];     ///< SD enable
 } p64h_sysc_nvm_cpair_cfg_t;
 
 #endif // P64H_SYSC_NVM_TYPE_H

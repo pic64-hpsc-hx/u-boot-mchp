@@ -10,8 +10,6 @@
 #ifndef BOOT_CFG_HELPER_H
 #define BOOT_CFG_HELPER_H
 
-#include "acsu.h"
-
 #define CS_ARRAY_SIZE 8 ///< Define the constant for the size of the pflash CS signal address mapping array
 
 /// Max Boot Config vector select bit position allowed

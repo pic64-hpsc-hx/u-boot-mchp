@@ -14,9 +14,10 @@
 
 #include "p64h_sysc_common_types.h"
 #include <ba/p64h_sysc_shared_ba.h>
+#include <ba/p64h_sysc_sysc_ba.h>
 #include <generated/p64h_sysc_pgmrclk_defs.h>
 #include <zsbl/sec_api_types.h>
-#include <zsbl/sec_otp_types.h>
+#include <zsbl/sec_smb_types.h>
 
 /* Public Defines ------------------------------------------------- */
 #define P64H_SYSC_CFM_CH_NUM        8u ///< define the maximum number of channels in the CFM
@@ -373,9 +374,7 @@ typedef struct {
 
 } p64h_sysc_trace_dev_cfg_t;
 
-/**
- * Trace Memory Controller Status register
- */
+/**Trace Memory Controller Status register** */
 typedef struct {
     uint32_t trace_buffer_full;     ///< Trace buffer is full
     uint32_t trace_mem_ctrl_ready;  ///< Trace capture has stopped and flushed &
@@ -385,11 +384,6 @@ typedef struct {
     uint32_t trace_buffer_empty;    ///< If set, this bit indicates that the TMC does not contain any valid trace data
     uint32_t trace_mem_err;         ///<   This bit indicates that an error has occurred on the AXI master interface.
 } p64h_sysc_trace_mem_ctrl_status_t;
-
-/// appc boot configuration
-typedef struct {
-    uint32_t placeholder; ///< placeholder for appc boot configuration
-} p64h_sysc_appc_boot_cfg_t;
 
 /// appc boot configuration status
 typedef struct {

@@ -11,8 +11,6 @@
 #ifndef SCRATCHPAD_H
 #define SCRATCHPAD_H
 
-#include <env/p64h_sysc_os_specific.h>
-
 // all sysc scratch register
 #define SYSC_SCRATCH_STICKY_NUM_REG 32U
 #define SYSC_SCRATCH_STICKY_REG_WIDTH 32U

@@ -4,104 +4,23 @@
 /**
  * @file
  * @brief 
- * Defines types used for sending cmd/data over SMB & JMB
+ * Defines types common for SMB & JMB commands
  */
 #ifndef SEC_API_TYPES_H
 #define SEC_API_TYPES_H
 
-#include "sysc_flash_helper.h"
 #include "scratchreg.h"
+#include "sec_crypto_types.h" // for ECDSA_SIG_SIZE_BYTES_DER
 
 #define NUM_SW_LOCKS            64u   ///< number of SW locks
 #define NUM_HW_LOCKS            8u    ///< number of HW locks
+/// DSN length in words
+#define DSN_DWORD_LEN           2u
+#define SCAC_SIZE_WORDS         2239u    ///< Total word size to contain 3 SCACs
 
+/// bit 7 in options field of the standard header in case of secc BITS component
+#define SEC_FSBL_MASK                 (1u << 7u) ///< secc FSBL verify bit mask
 
-// lock register value
-typedef struct {
-    uint32_t lock_out:3;
-    uint32_t unused0:1;
-    uint32_t lock:4;
-    uint32_t unlock:4;
-    uint32_t lock_state:3;
-    uint32_t unused1:1;
-    uint32_t unlock_state:3;
-    uint32_t otp_perm_lock_state :11; ///< only valid for HW lock
-    uint32_t write_enabled:1;
-    uint32_t lock_tamper:1;    
-} lock_val_t;
-
-/**
- * @brief
- *  HSM generated response to device challenge
- *  returned after SEC_CMD_JTAG_INIT_FACTORY_ACCESS execution.
- *  This is provided as input to SEC_CMD_JTAG_REQ1_FACTORY_ACCESS
- */
-struct factory_access1_in {
-        uint64_t nhsm[2]; // hsm nonce
-        uint64_t hsigec[2][6]; // HSM generated EC signature with hsm/devicenonce & dsn & device
-        uint8_t  hsigpq[PQS_MLDSA87_SIGN_SIZE]; // HSM generated PQ signature with hsm/dev nonce,dsn
-};
-
-/**
- * @brief
- *  Extended return codes returned in sec_mbox_cmd_resp_msg_t.cmd_resp_attr member
- *  for the invoked security service API regardless of success/fail return code
- */
-typedef enum sec_ext_ret_code_t
-{
-    SEC_RET_CODE_NONE                    = 0,             ///< No extended info available
-    SEC_RET_CMD_ERROR                    = 1,             ///< Generic error code
-    /// @note Extended response attributes for a successful load certificate.
-    /// If KEYCERT_SIGN is returned then attempting to load further certificates in the chain
-    /// will result in invalid certificate
-    SEC_CERT_KEY_USAGE_KEYCERT_SIGN      = 0x4, ///< Key Usage info updated when load cert is success
-    SEC_CERT_KEY_USAGE_DIGITAL_SIGNATURE = 0x8, ///< Key Usage info updated when load cert is success
-
-    SEC_MD5_ERROR                        = 0x10, ///< MD5 mismatch
-    SEC_FACTORY_ULOCK_ACTIVE             = 0x20, ///< User local state value
-    SEC_FACTORY_UPERM_LOCK_ACTIVE        = 0x30, ///< User Permanent Lock state value
-    SEC_FSL_LOCK_ACTIVE                  = 0x50, ///< Factory Segment Lock is Active
-    SEC_FACTORY_ACCESS_PROTO_ERR         = 0x51, ///< Factory access protocol error
-    SEC_NONCE_NOT_FOUND                  = 0x52, ///< No matching Nonce available
-    SEC_FW_IMG_HDR_INVALID               = 0x53,  ///< FW image header params are invalid
-    SEC_FIRMWARE_ACCESS_PROTO_ERR        = 0x54, ///< Firmware access protocol error
-    SEC_MULTI_BLK_XFER_INPROGRESS,     ///< Multi block transfer in mbox is on-going
-    SEC_MULTI_BLK_XFER_DONE,     ///< Multi block transfer is complete
-    SEC_OFFSET_TOO_LARGE,       ///< offset exceeded max size for multi-block transfer
-    SEC_PUB_KEY_INVALID,        ///< Key corrupted
-    SEC_IMG_HASH_INVALID,       ///< Hash corrupted
-    SEC_PT_HASH_INVALID,        ///< Plain text hash corrupted
-    SEC_INVALID_PARAM,          ///< Incorrect parameters passed
-    SEC_VIRGIN_DEV_UNLOCK_FAIL, ///< FSL unlock failed
-    SEC_CERT_FORMAT_ERR,        ///< X.509 certificate format invalid
-    SEC_CERT_INV_ALG,           ///< X.509 algorithm OID is incorrect
-    SEC_CERT_CHAIN_RESET,       ///< Certificate Chain reset, causing ROM root public keys to be active
-    /// Attempting to load further certificates in the chain when key usage is KEYCERTSIGN
-    SEC_CERT_INVALID,           ///< Invalid certificate load
-    SEC_CERT_EC_SIG_ERROR,      ///< X.509 signature(PQ/EC) failed
-    SEC_CERT_PQ_SIG_ERROR,      ///< X.509 signature(PQ/EC) failed
-    SEC_AES_DECRYPT_TIMEOUT,    ///< AES decryption timeout failure
-    SEC_INVALID_PATCH_OPERATION,///< secc restart not allowed when applying patch from OCR
-    SEC_OTP_PATCH_SPACE_UNAVAILABLE, ///< Unable to write the patch either full or no room
-    SEC_OTP_PATCH_SPACE_EXCEEDED, ///< Exceeding end of OTP space
-    SEC_PATCH_ITIM_SPACE_EXCEEDED, ///< Patch does not fit in ITIM
-    SEC_OTP_PATCH_ALREADY_EXISTS, ///< Pre-existing patch
-    SEC_OTP_PATCH_APPLY_FAILED,   ///< Error in applying OTP patch
-    SEC_OCR_PATCH_APPLY_FAILED,   ///< Error in applying OCR patch
-    SEC_OCR_SYSC_PATCH_APPLY_FAILED, ///< Sysc OCR patch apply failed due to error restarting sysc
-    SEC_OTP_SYSC_PATCH_APPLY_FAILED, ///< Sysc OTP patch apply failed due to error restarting sysc
-    SEC_OTP_INCOMPATIBLE_PATCH_VERSION, ///< Incompatible patch version for the current running FW version
-    SEC_OTP_REQUIRED_VERSION_MISMATCH, ///< Pre-requisite firmware version mismatched
-    SEC_OTP_VERSION_PARAMS_ERROR, ///< New & existing FW versions are same
-    SEC_OTP_MINOR_VERSION_ERROR, ///< New minor version cannot be less than existing version
-    SEC_SYSC_RESTART_FAILED, ///< sysc restart failed
-    SEC_SECC_RESTART_FAILED, ///< secc restart failed
-    SEC_PATCH_ALREADY_INVALIDATED, ///< Patch is already invalidated
-    SEC_UNSUPPORTED_COMPONENT, ///< component download not allowed in this boot mode
-    SEC_HASH_ALREADY_INVALIDATED, ///< Hash is already invalidated
-    SEC_INCOMING_PATCH_WITH_FWK_NOT_ALLOWED,  ///< Patch encrypted with FWK is no longer allowed due to rom_override_fwk lock
-    SEC_PQ_CMD_ENFORCEMENT_ERROR, ///< Can't bypass PQ operation
-} sec_ext_ret_code_t;
 
 /**
  * @brief
@@ -223,60 +142,6 @@ typedef enum sec_cmd_req_e
     LAST_SEC_CMD,                  ///< Final cmd for crypto service
 } sec_cmd_req_e;
 
-/// security locks that defines security policy 
-typedef struct {
-
-    uint8_t  locks[6];
-    uint8_t  reserved0[2];
-    uint64_t pordigest;
-    uint8_t  hwm[4];
-    uint8_t  nlockset;
-    uint8_t  nkeyset;
-    uint8_t  nowp;
-    uint8_t  reserved1[9];
-} sec_policy_t;
-
-/// SecC Diagnostics data
-typedef struct 
-{
-    uint32_t secc_diag_data;
-} sec_diag_info_t;
-
-/**
- * @brief Response structure for Virgin device access command used for authentication
- *  with the tester to unlock device access
-*/
-typedef struct sec_DevNonce_mac_t
-{
-	uint64_t		nonce_device[2]; ///< device nonce
-	uint64_t		mac[4]; ///< MAC to authenticate with the tester
-} sec_DevNonce_mac_t;
-
-/**
- * @brief Factory Enroll response payload
-*/
-typedef struct
-{
-    uint64_t nfpga[2];
-    uint64_t feq_der[15];
-    uint64_t fsqec_der[15];
-    uint8_t fsqpq_der[2614];
-    uint8_t pad[2];
-    uint64_t mac[4];
-} sec_factory_enroll_out_t;
-
-/**
- * @brief OTK Gen response data
-*/
-typedef struct
-{
-    uint64_t tinfo[2];
-    uint64_t ecdh_pubkey[12];
-    uint64_t ksession_wrap[196];
-    uint64_t validator[4];
-} sec_generateotk_out_t;
-
-
 /// ROM firmware version
 typedef struct fw_version_t
 {
@@ -312,12 +177,20 @@ typedef struct {
 
 } cmd_validate_fw_out_t;
 
+/**
+ * @brief OTP blank check command structure
+*/
+typedef struct {
+    uint32_t otp_start_offset; ///< offset in OTP
+    uint32_t size_in_bytes;    ///< Number of bytes to check 
+} sec_otp_blank_check_t;
+
 
 /**
  * @brief Memory Scrub Target
 */
 typedef enum {
-    SCRUB_ICACHE   = 0x01U, ///< ITIM cache 
+    SCRUB_ICACHE   = 0x01U, ///< ITIM cache
     SCRUB_ITIM     = 0x02U, ///< SecC ITIM RAM (only supports demand scrubbing). ITIM ROM i.e. first 256 KiB of ITIM are not be scrubbed, offset will be from ITIM RAM base address)
     SCRUB_DTIM     = 0x03U, ///< SecC DTIM (supports demand and patrol scrubbing)
     SCRUB_SEC_OCR  = 0x04U, ///< SecC OCR (supports demand and patrol scrubbing)
@@ -356,38 +229,6 @@ typedef struct {
     scrub_cmd_t      cmd;      ///< patrol scrub or demard scrub   
     scrub_cfg_t      cfg;      ///< memory scrub cfg parameters
 } sec_mem_scrub_t;
-
-/**
- * EC & PQ public keys struct
- */
-typedef struct sec_ec_pq_pubkey_t{
-
-    sec_ec_pubkey_t ecpubkey;           ///< EC public key
-    sec_dilithium5_pubkey_t pqpubkey;   ///< PQ public key
-
-} sec_ec_pq_pubkey_t;
-
-
-/**
- * EC & PQ signature data struct
- */
-typedef struct sec_signature_t {
-        sec_ec_pq_pubkey_t sig_keys; ///< EC & PQ public keys
-        uint8_t ecsig0[48];          ///< ECDSA signature r component
-        uint8_t ecsig1[48];          ///< ECDSA signature s component
-        uint8_t pqsig[PQS_MLDSA87_SIGN_SIZE]; ///< PQ Dilithium5 signature
-        uint8_t reserved[13];        ///< padding
-} sec_signature_t;
-
-/**
- * Signature Verification command structure
- */
-typedef struct sec_sig_ec_pq_verify_t{
-    sec_signature_t signature;  ///< includes EC & PQ signatures, EC & PQ public keys
-    uint32_t size;              ///< message size in bytes
-    uint8_t padding[4];         ///< padding to align payload to 64b
-    uint8_t *payload;           ///< message used for signature generation
-} sec_sig_ec_pq_verify_t;
 
 /// beu stat
 typedef struct {
@@ -757,6 +598,20 @@ typedef struct {
     uint32_t padding1:8;                     ///< unused
 } sec_reg_lock_status_t;
 
+// lock register value
+typedef struct {
+    uint32_t lock_out:3;
+    uint32_t unused0:1;
+    uint32_t lock:4;
+    uint32_t unlock:4;
+    uint32_t lock_state:3;
+    uint32_t unused1:1;
+    uint32_t unlock_state:3;
+    uint32_t otp_perm_lock_state :11; ///< only valid for HW lock
+    uint32_t write_enabled:1;
+    uint32_t lock_tamper:1;
+} lock_val_t;
+
 typedef struct {
     uint32_t sec_reg_boot_config;  ///< boot_config
     uint32_t sec_reg_spare0;      ///< Connects to macro spare GPO pins to TOP-LEVEL.
@@ -1052,120 +907,4 @@ typedef enum {
     SEC_PERIPH_STAT_CMD_SEC_DMA_CTRL_STAT = 1<<11,  ///< get sec_dma_ctrl stat
 } sec_periph_stats_cmd_mask_t;
 
-/**
- * @brief Bitmask to get the peripheral stat of the category that has 1 in the bit position
- */
-typedef enum {
-    SEC_OTP_PE_DATA_CMD_TEMP_MON_R = 1 << 0,  ///< Mask for TEMP_MON_R fields
-    SEC_OTP_PE_DATA_CMD_TEMP_MON_L = 1 << 1,  ///< Mask for TEMP_MON_L fields
-    SEC_OTP_PE_DATA_CMD_CAL        = 1 << 2,  ///< Mask for CAL fields
-    SEC_OTP_PE_DATA_CMD_PE         = 1 << 3,  ///< Mask for PE fields
-    SEC_OTP_PE_DATA_CMD_SPARE      = 1 << 4   ///< Mask for SPARE fields
-} sec_otp_pe_data_cmd_mask_t;
-
-
-/**
- * @brief PE_t structure definition
- */
-typedef struct {
-    uint32_t pe_fuse_gen[8]; ///< PE_PE_FUSE_GEN
-    uint32_t pe_ringosc[8];  ///< PE_PE_RINGOSC
-} pe_t;
-
-/**
- * @brief SPARE_t structure definition
- */
-typedef struct {
-    uint32_t spare_tmr_reg1; ///< SPARE_SPARE_TMR_REG1
-    uint32_t spare_ecc0[96]; ///< SPARE_SPARE_ECC0
-    uint32_t spare_ecc1[16]; ///< SPARE_SPARE_ECC1
-    uint32_t spare_ecc2[64]; ///< SPARE_SPARE_ECC2
-} spare_t;
-
-
-/**
- * @brief TEMP_MON_x_t structure definition
- */
-typedef struct {
-    uint32_t trim_grp; ///< TEMP_MON_R_TRIM_GRP / TEMP_MON_L_TRIM_GRP
-    /**< @note Use AES_OTP_MEMORY_MAP_reg_TEMP_MON_R_TRIM_GRP_t to decode fields */
-    uint32_t conrate_grp; ///< TEMP_MON_R_CONRATE_GRP / TEMP_MON_L_CONRATE_GRP
-    uint32_t ta_grp;      ///< TEMP_MON_R_TA_GRP / TEMP_MON_L_TA_GRP
-    uint32_t tb_grp;      ///< TEMP_MON_R_TB_GRP / TEMP_MON_L_TB_GRP
-    uint32_t tc_grp;      ///< TEMP_MON_R_TC_GRP / TEMP_MON_L_TC_GRP
-    uint32_t va_grp;      ///< TEMP_MON_R_VA_GRP / TEMP_MON_L_VA_GRP
-    uint32_t vb_grp;      ///< TEMP_MON_R_VB_GRP / TEMP_MON_L_VB_GRP
-    uint32_t vc_grp;      ///< TEMP_MON_R_VC_GRP / TEMP_MON_L_VC_GRP
-    uint32_t v18a_grp;    ///< TEMP_MON_R_V18A_GRP / TEMP_MON_L_V18A_GRP
-    uint32_t v18b_grp;    ///< TEMP_MON_R_V18B_GRP / TEMP_MON_L_V18B_GRP
-    uint32_t v18c_grp;    ///< TEMP_MON_R_V18C_GRP / TEMP_MON_L_V18C_GRP
-    uint32_t level_grp;   ///< TEMP_MON_R_LEVEL_GRP / TEMP_MON_L_LEVEL_GRP
-    /**< @note Use AES_OTP_MEMORY_MAP_reg_TEMP_MON_LEVEL_GRP_t to decode fields */
-} temp_mon_x_t;
-
-
-/**
- * @brief CAL_t structure definition
- */
-typedef struct {
-    uint32_t txpll_grp[4];          ///< CAL_TXPLL_GRP
-    uint32_t cdr_dc_offset_grp[44]; ///< CAL_CDR_DC_OFFSET_GRP
-} cal_t;
-
-
-/**
- * @brief otp_pe_data_t structure definition
- */
-typedef struct {
-    temp_mon_x_t temp_mon_r; ///< TEMP_MON_R fields
-    temp_mon_x_t temp_mon_l; ///< TEMP_MON_L fields
-    cal_t cal;               ///< CAL fields
-    pe_t pe;                 ///< PE fields
-    spare_t spare;           ///< SPARE fields
-} otp_pe_data_t;
-
-
-/**
- * @brief OTP blank check command structure
-*/
-typedef struct {
-    uint32_t otp_start_offset; ///< offset in OTP
-    uint32_t size_in_bytes;    ///< Number of bytes to check 
-} sec_otp_blank_check_t;
-
-
-/**
- * @brief
- *  Bit map definitions to be used for cmd_args field in sec_mbox_cmd_req_msg_t for sign verify cmds
- *
- */
-typedef enum {
-    SEC_EC_SIGN_VERIFY_MASK              = (1u << 0),  ///< EC signature verify bit mask
-    SEC_PQ_SIGN_VERIFY_MASK              = (1u << 1),  ///< PQ signature verify bit mask
-    SEC_SYSC_IMAGE_ENCRYPTED_VERIFY_MASK = (1UL << 9), ///< Sysc image encryption mask
-} sec_signature_verify_cmd_mask;
-
-///< bit 1 in options field of the standard header in case of BITS/FKEYS (FDATA3 for SCAC)
-///< component will indicate if PQ is to be used for component verification
-#define CONFIG_OPTION_PQDSA (uint8_t)SEC_PQ_SIGN_VERIFY_MASK
-
-/// bit 7 in options field of the standard header in case of secc BITS component
-#define SEC_FSBL_MASK                 (1u << 7u) ///< secc FSBL verify bit mask
-
-/**
- * @brief /// Temparture and Voltage Sensor readout
- * 
- */
-typedef struct {    
-    uint16_t tvs_val_vdd;        ///< Converted value for channel 0 VDD.                           
-    uint16_t tvs_val_vdd18;      ///< Converted value for channel 1 VDD18.
-    uint16_t tvs_val_adc;        ///< Converted value for channel 2 ADC.
-    uint16_t tvs_val_temp;       ///< Converted value for channel 3 Temperature.
-    uint8_t  tvs_high_trig_stat; ///< High temperature threshold event has occurred since the last read, reading this feild will also clear it until next read
-    uint8_t  tvs_high_trig_val;  ///< reflects the current state of the high temperature trigger, 1 = High temperature trigger is currently present.
-    uint8_t  tvs_low_trig_stat;  ///<  Low temperature threshold event has occurred since the last read, reading this feild will also clear it until next read
-    uint8_t  tvs_low_trig_val;   ///< reflects the current state of the low temperature trigger, 1 = low temperature trigger is currently present.
-} tvs_mon_stat_t;
-
 #endif /* SEC_API_TYPES_H */
-

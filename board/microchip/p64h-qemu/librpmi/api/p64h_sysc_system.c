@@ -215,55 +215,19 @@ p64h_err_t p64h_sysc_sys_log_data_get(const p64h_sysc_handle_t* handle_ptr, uint
 }
 
 /**
- * @brief Retrieves the number of boot configurations.
+ * @brief Retrieves the AppC boot configuration.
  *
- * This function is responsible for obtaining the number of boot configurations
+ * This function is responsible for obtaining the boot configurations
  * available in the system. The result is stored in the provided pointer.
  *
  * @param[in] handle_ptr Pointer to the RPMI system controller context.
- * @param[out] num_boot_cfg_ptr Pointer to a variable where the number of boot configurations will be stored.
- *
- * @return p64h_err_t Error code indicating the success or failure of the operation.
- *         - P64H_ERR_OK: The operation was successful.
- */
-p64h_err_t p64h_sysc_sys_appc_boot_cfg_num_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_boot_cfg_ptr)
-{
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_CFG_NUM, num_boot_cfg_ptr, sizeof(*num_boot_cfg_ptr));
-}
-
-/**
- * @brief Retrieves the list of boot configuration IDs.
- *
- * This function populates the provided array with boot configuration IDs
- *
- * @param[in] handle_ptr Pointer to the RPMI system controller context.
- * @param[out] bids_ptr Pointer to an array where boot configuration IDs will be stored.
- * @param[in] shmem_xfer false: the data will be transferred thru RPMI channel
- *                       true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
- * @return p64h_err_t Error code indicating the success or failure of the operation.
- */
-p64h_err_t p64h_sysc_sys_appc_boot_cfg_list_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_boot_cfg_id_t* bids_ptr, bool shmem_xfer)
-{
-    return p64h_sysc_rpmi_resp_list(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_CFG_LIST, bids_ptr, sizeof(p64h_sysc_boot_cfg_id_t),
-                                    shmem_xfer);
-}
-
-/**
- * @brief Retrieves the boot configuration for a given boot configuration ID.
- *
- * This function fetches the boot configuration associated with the specified
- * boot configuration ID and stores it in the provided configuration pointer.
- *
- * @param[in] handle_ptr Pointer to the RPMI system controller context.
- * @param[in] bid The boot configuration ID for which the boot configuration is to be retrieved.
- * @param[out] cfg_ptr Pointer to a structure where the boot configuration will be stored.
+ * @param[out] cfg_ptr    Pointer to a structure that will be filled with the boot configuration.
  *
  * @return p64h_err_t Returns P64H_ERR_OK on success.
  */
-p64h_err_t p64h_sysc_sys_appc_boot_cfg_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_boot_cfg_id_t bid,
-                                           p64h_sysc_appc_boot_cfg_t* cfg_ptr)
+p64h_err_t p64h_sysc_sys_appc_boot_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_acot_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_resp_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_CFG, bid, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_CFG, cfg_ptr, sizeof(*cfg_ptr));
 }
 
 /**

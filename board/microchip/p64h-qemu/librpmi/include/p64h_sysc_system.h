@@ -31,10 +31,7 @@ p64h_err_t p64h_sysc_sys_log_data_get(const p64h_sysc_handle_t* handle_ptr, uint
                                       uint64_t data_buffer_size, uint64_t* resp_offset_ptr, uint32_t* bytes_read_ptr,
                                       uint64_t* current_write_offset_ptr);
 
-p64h_err_t p64h_sysc_sys_appc_boot_cfg_num_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_boot_cfg_ptr);
-p64h_err_t p64h_sysc_sys_appc_boot_cfg_list_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_boot_cfg_id_t* bids_ptr, bool shmem_xfer);
-p64h_err_t p64h_sysc_sys_appc_boot_cfg_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_boot_cfg_id_t bid,
-                                           p64h_sysc_appc_boot_cfg_t* cfg_ptr);
+p64h_err_t p64h_sysc_sys_appc_boot_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_acot_t* cfg_ptr);
 p64h_err_t p64h_sysc_sys_appc_boot_status_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_boot_cfg_id_t bid,
                                               p64h_sysc_appc_boot_cfg_status_t* status_ptr);
 p64h_err_t p64h_sysc_sys_appc_boot_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_boot_cfg_id_t bid);

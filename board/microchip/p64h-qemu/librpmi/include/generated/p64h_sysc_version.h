@@ -22,7 +22,7 @@
 #endif
 // API minor version
 #ifndef P64H_SYSC_FW_VERSION_MINOR
-#define P64H_SYSC_FW_VERSION_MINOR 7
+#define P64H_SYSC_FW_VERSION_MINOR 8
 #endif
 // API patch version 
 #ifndef P64H_SYSC_FW_VERSION_PATCH

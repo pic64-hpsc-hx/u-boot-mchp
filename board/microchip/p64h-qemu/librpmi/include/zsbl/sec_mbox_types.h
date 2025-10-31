@@ -4,29 +4,13 @@
 /**
  * @file
  * @brief 
- * Defines mailbox types & protocol structures used for sending cmd/data between sysc/secc
+ * Defines mailbox types & protocol structures
+ * used for xfering cmd/data between sysc/secc
  */
 #ifndef SEC_MBOX_TYPES_H
 #define SEC_MBOX_TYPES_H
 
-#include "sec_api_types.h"
-
-/**
- * @def DOWNLOAD_COMPONENT_IMAGE_VERIFY_IN_PLACE
- * @brief Special value to indicate in-place verification.
- *
- * This macro defines a special value to be used as the destination address
- * when performing in-place verification of a component image. When this value
- * is used, the destination address is ignored, and the image verification
- * is performed without transferring the data to a new location.
- *
- * Usage example:
- * @code
- * uint64_t dest_addr = DOWNLOAD_COMPONENT_IMAGE_VERIFY_IN_PLACE;
- * secc_config_validate_impl(src_addr, dest_addr);
- * @endcode
- */
-#define DOWNLOAD_COMPONENT_IMAGE_VERIFY_IN_PLACE UINT64_MAX
+#include <stdint.h>
 
 /**
  * @brief There are 2 mailbox instances.

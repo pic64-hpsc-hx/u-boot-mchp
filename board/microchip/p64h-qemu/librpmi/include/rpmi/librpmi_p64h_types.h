@@ -198,32 +198,30 @@ typedef enum {
     P64H_SYS_SET_LOG_CONFIG          = 6u,  ///< Log Config Mutator
     P64H_SYS_GET_LOG_CONFIG          = 7u,  ///< Log Config Accessor
     P64H_SYS_GET_LOG_DATA            = 8u,  ///< Log Data Accessor
-    P64H_SYS_GET_APPC_BOOT_CFG_NUM   = 9u,  ///< Number of Boot Config Accessor
-    P64H_SYS_GET_APPC_BOOT_CFG_LIST  = 10u, ///< Boot Config List Accessor
-    P64H_SYS_GET_APPC_BOOT_CFG       = 11u, ///< Boot Config Accessor
-    P64H_SYS_SET_APPC_BOOT_CFG       = 12u, ///< Boot Config Mutator
-    P64H_SYS_GET_APPC_BOOT_STATUS    = 13u, ///< Boot Status Accessor
-    P64H_SYS_SET_PWR_CONFIG          = 14u, ///< Power Config Mutator
-    P64H_SYS_GET_PWR_CONFIG          = 15u, ///< Power Config Accessor
-    P64H_SYS_GET_PWR_WAKEUP_TRIGGER  = 16u, ///< Power Wakeup Trigger
-    P64H_SYS_GET_DEV_TRACE_ATTRIBUTE = 17u, ///< Device Trace Attribute Accessor
-    P64H_SYS_GET_DEV_TRACE_CONFIG    = 18u, ///< Device Trace Config Accessor
-    P64H_SYS_SET_DEV_TRACE_CONFIG    = 19u, ///< Device Trace Config Mutator
-    P64H_SYS_FW_PKG_UPGRADE_UPLOAD   = 20u, ///< Send a new file to the device from remote/appc
-    P64H_SYS_FW_PKG_UPGRADE_APPLY    = 21u, ///< Apply the sent file to the device from remote/appc
-    P64H_SYS_FW_DUMP                 = 22u, ///< Dump an existing file(s) from the device for remote/appc
-    P64H_SYS_FW_DOWNLOAD             = 23u, ///< Download a dumped file(s) from the device to remote/appc
-    P64H_SYS_FW_DUMP_STATUS          = 24u, ///< Get firmware dump status
-    P64H_SYS_SET_TIME                = 25u, ///< Set up system time
-    P64H_SYS_GET_TIME                = 26u, ///< Get system time
-    P64H_SYS_SET_PGMRCLK_CFG         = 27u, ///< PGMRCLK Config Mutator
-    P64H_SYS_GET_PGMRCLK_CFG         = 28u, ///< PGMRCLK Config Accessor
-    P64H_SYS_SET_CFM_MEAS_CFG        = 29u, ///< CFM Measurement Config Mutator
-    P64H_SYS_GET_CFM_MEAS_CNT        = 30u, ///< CFM Measurement Config Accessor
-    P64H_SYS_SET_FW_PLL_CFG          = 31u, ///< FW PLL Support Block Mutator
-    P64H_SYS_GET_FW_PLL_TIMESTAMP    = 32u, ///< FW PLL Support Block Accessor
-    P64H_SYS_APPC_DTB_FIXUP          = 33u, ///< Fix up AppC DTB
-    P64H_SYS_SRV_MAX                 = 34u  ///< Max System Service Group Service
+    P64H_SYS_GET_APPC_BOOT_CFG       = 9u,  ///< Boot Config Accessor
+    P64H_SYS_SET_APPC_BOOT_CFG       = 10u, ///< Boot Config Mutator
+    P64H_SYS_GET_APPC_BOOT_STATUS    = 11u, ///< Boot Status Accessor
+    P64H_SYS_SET_PWR_CONFIG          = 12u, ///< Power Config Mutator
+    P64H_SYS_GET_PWR_CONFIG          = 13u, ///< Power Config Accessor
+    P64H_SYS_GET_PWR_WAKEUP_TRIGGER  = 14u, ///< Power Wakeup Trigger
+    P64H_SYS_GET_DEV_TRACE_ATTRIBUTE = 15u, ///< Device Trace Attribute Accessor
+    P64H_SYS_GET_DEV_TRACE_CONFIG    = 16u, ///< Device Trace Config Accessor
+    P64H_SYS_SET_DEV_TRACE_CONFIG    = 17u, ///< Device Trace Config Mutator
+    P64H_SYS_FW_PKG_UPGRADE_UPLOAD   = 18u, ///< Send a new file to the device from remote/appc
+    P64H_SYS_FW_PKG_UPGRADE_APPLY    = 19u, ///< Apply the sent file to the device from remote/appc
+    P64H_SYS_FW_DUMP                 = 20u, ///< Dump an existing file(s) from the device for remote/appc
+    P64H_SYS_FW_DOWNLOAD             = 21u, ///< Download a dumped file(s) from the device to remote/appc
+    P64H_SYS_FW_DUMP_STATUS          = 22u, ///< Get firmware dump status
+    P64H_SYS_SET_TIME                = 23u, ///< Set up system time
+    P64H_SYS_GET_TIME                = 24u, ///< Get system time
+    P64H_SYS_SET_PGMRCLK_CFG         = 25u, ///< PGMRCLK Config Mutator
+    P64H_SYS_GET_PGMRCLK_CFG         = 26u, ///< PGMRCLK Config Accessor
+    P64H_SYS_SET_CFM_MEAS_CFG        = 27u, ///< CFM Measurement Config Mutator
+    P64H_SYS_GET_CFM_MEAS_CNT        = 28u, ///< CFM Measurement Config Accessor
+    P64H_SYS_SET_FW_PLL_CFG          = 29u, ///< FW PLL Support Block Mutator
+    P64H_SYS_GET_FW_PLL_TIMESTAMP    = 30u, ///< FW PLL Support Block Accessor
+    P64H_SYS_APPC_DTB_FIXUP          = 31u, ///< Fix up AppC DTB
+    P64H_SYS_SRV_MAX                 = 32u  ///< Max System Service Group Service
 } p64h_rpmi_system_service_id_t;
 
 /// System Service Notification Events
@@ -450,11 +448,9 @@ typedef enum {
 /// NVM Service Group Service IDs
 typedef enum {
     P64H_NVM_ENABLE_NOTIFICATION = 1u, ///< Enable Notification for a  Service Group Service
-    P64H_NVM_GET_IF_NUM          = 2u, ///< Number of Interface List Accessor
-    P64H_NVM_GET_IF_LIST         = 3u, ///< Interface List Accessor
-    P64H_NVM_GET_ATTRIBUTES      = 4u, ///< Attributes Accessor
-    P64H_NVM_GET_CONFIG          = 5u, ///< Config Accessor
-    P64H_NVM_SRV_MAX             = 6u  ///< Max Service ID
+    P64H_NVM_GET_CONFIG          = 2u, ///< Config Accessor
+    P64H_NVM_GET_DEVICE          = 3u, ///< Device Information Accessor
+    P64H_NVM_SRV_MAX             = 4u  ///< Max Service ID
 } p64h_rpmi_nvm_service_id_t;
 
 // p64h debug group related

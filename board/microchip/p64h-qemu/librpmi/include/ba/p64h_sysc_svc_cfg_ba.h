@@ -17,28 +17,6 @@
 #define P64H_SYSC_NUM_METADATA_MAX          3u    ///< maximun number of metadata
 #define P64H_SYSC_APPC_BOOT_CFG_STRING_MAX  256UL ///< maximun string size for appc boot cfg name
 
-/// Appc boot mode
-typedef enum {
-    P64H_SYSC_BOOT_MODE_BOOT_CFG_PIN = 0x0u, ///< system service boot appc based on boot_cfg pin
-    P64H_SYSC_BOOT_MODE_NONE,                ///< system service do not boot appc
-    P64H_SYSC_BOOT_MODE_FORCED,              ///< system service boot appc based on specified value
-} p64h_sysc_appc_boot_mode_t;
-
-/// Appc boot mode retry action in case of failure
-typedef enum {
-    P64H_SYSC_BOOT_RETRY_ACT_APPC_RST = 0x0u, ///< reset APPC boot configuration
-    P64H_SYSC_BOOT_RETRY_ACT_SYSC_SOFT_RST,   ///< sysc soft reset
-    P64H_SYSC_BOOT_RETRY_ACT_SYSC_SYS_RST,    ///< sysc system reset
-    P64H_SYSC_BOOT_RETRY_ACT_SYSC_DEV_RST,    ///< sysc device reset
-} p64h_sysc_appc_boot_retry_act_t;
-
-/// Appc boot mode next action in case of failure
-typedef enum {
-    P64H_SYSC_BOOT_NEXT_ACT_STOP = 0x0u,            ///< stop execution
-    P64H_SYSC_BOOT_NEXT_ACT_APPC_BOOT_CFG,          ///< next specified appc boot cfg
-    P64H_SYSC_BOOT_NEXT_ACT_OTP_NEXT_SYSC_BOOT_CFG, ///< system service boot appc based on specified value
-} p64h_sysc_appc_boot_next_act_t;
-
 /// Sysc power frequency mode
 typedef enum {
     P64H_SYSC_PWR_FREQ_MODE_PMM = 0x0u, ///< performance mode MAX
@@ -165,47 +143,6 @@ typedef struct {
     p64h_sysc_pwr_wakeup_cfg_t  wakeup_cfg;                    ///< wakeup configuration
 } p64h_sysc_pwr_cfg_t;
 
-/// Appc boot configuration entry, entry X in [0..23] is associated
-/// to appc BLOB under boot_cfg/X in sysc filesystem
-typedef struct {
-    bool    enable;                                   ///< whether the entry to configured
-    char    name[P64H_SYSC_APPC_BOOT_CFG_STRING_MAX]; ///< entry name
-    uint8_t boot_partition_msk; ///< The boot partition mask specifies which partition are boot within the appc boot configuration.
-                                ///< 0: unified or split0 or cim0 in split0
-                                ///< 1: cim1 in split0
-                                ///< 2: cim2 in split0
-                                ///< 3: cim3 in split0
-                                ///< 4: split1 or cim0 in split1
-                                ///< 5: cim1 in split1
-                                ///< 6: cim2 in split1
-                                ///< 7: cim3 in split1
-    p64h_sysc_health_chk_mode_t     health_chk_mode; ///< health check configuration, not that sysc health shall be enabled to enable it at appc level
-    uint8_t                         retry;           ///< retry policy in case of failures
-    p64h_sysc_appc_boot_retry_act_t retry_act;       ///< action done on retry
-    p64h_sysc_appc_boot_next_act_t  next_act;        ///< next action in case of failures of all retried reboot
-    uint8_t                         next_appc_boot_cfg_id; ///< next Appc boot configuration in case of failures
-} p64h_sysc_appc_boot_cfg_tbl_t;
-
-/// appc boot artifacts configuration
-typedef struct {
-    p64h_sysc_boot_source_t boot_source;                                    ///< boot source
-    uint8_t                 cpair;                                          ///< connector pair 0: connector 0/1, 1: connector 2/3
-    uint8_t                 sram_edac_id;                                   ///< SRAM EDAC identifier 0 or 1
-    uint8_t                 sram_edac_inst;                                 ///< EDAC instance within SRAM EDAC
-    uint8_t                 num_metadata;                                   ///< define how many instance of metadata. 1 and 3 are valid values
-    uint64_t                metadata_base_addr[P64H_SYSC_NUM_METADATA_MAX]; ///< pointer to metadata structures
-} p64h_sysc_svc_appc_boot_artifact_cfg_t;
-
-/// Appc boot configuration
-typedef struct {
-    p64h_sysc_svc_appc_boot_artifact_cfg_t boot_artifact_cfg;  ///< AppC boot artifact configuration
-    p64h_sysc_appc_boot_mode_t             boot_mode;          ///< AppC boot mode
-    uint8_t boot_pin_tbl[P64H_SYSC_APPC_BOOT_CFG_PIN_MAP_MAX]; ///< when boot_mode == P64H_SYSC_APPC_BOOT_MODE_PIN, appc_boot_pin_tbl provides the
-                                                               ///< selected Appc boot configuration
-    uint8_t boot_val; ///< when boot_mode == P64H_SYSC_APPC_BOOT_MODE_FORCED, boot_val provides the selected Appc boot configuration
-    p64h_sysc_appc_boot_cfg_tbl_t boot_cfg_tbl[P64H_SYSC_APPC_BOOT_CFG_MAX]; ///< appc boot table
-} p64h_sysc_svc_appc_boot_cfg_t;
-
 ///< sysc wguard configuration
 typedef struct {
     uint8_t spw;    ///< wid for sys Spacewire
@@ -222,7 +159,6 @@ typedef struct {
 
 /// system service configuration
 typedef struct {
-    p64h_sysc_svc_appc_boot_cfg_t appc_boot;       ///< appc boot_cfg
     p64h_sysc_op_cfg_t            op_cfg;          ///< sysc operation configuration
     p64h_sysc_svc_fw_update_cfg_t fw_update;       ///< firmware update configuration
     p64h_sysc_health_chk_mode_t   health_chk_mode; ///< health check configuration

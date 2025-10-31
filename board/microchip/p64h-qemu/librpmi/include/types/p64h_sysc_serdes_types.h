@@ -597,14 +597,13 @@ typedef struct {
     bool                            rx_fsd_continuous; ///< Fast Signal Detect Configuration set to
                                                        ///< 0: One time measurement
                                                        ///< 1: Continuous measurement (required for DLOS)
-    bool                          rx_fsd_en;           ///< Fast Signal Detect Enable
-    bool                          rx_invert_en;        ///< Invert Enable
+    bool                        rx_fsd_en;             ///< Fast Signal Detect Enable
+    bool                        rx_invert_en;          ///< Invert Enable
+    bool                        refclk_en;             ///< TXPLL refclk receiver enable for the lane
 
-    p64h_sysc_serdes_refclk_cfg_t refclk; ///< TXPLL refclk receiver configuration for the laen
+    p64h_sysc_serdes_dlos_cfg_t dlos; ///< DLOS configuration for the lane
 
-    p64h_sysc_serdes_dlos_cfg_t   dlos; ///< DLOS configuration for the lane
-
-    p64h_sysc_serdes_lpbk_t       lpbk; ///< Loopback point (if specified) for the lane
+    p64h_sysc_serdes_lpbk_t     lpbk; ///< Loopback point (if specified) for the lane
 } p64h_sysc_serdes_if_rt_cfg_t;
 
 /// serdes grp peripheral configuration
@@ -628,6 +627,13 @@ typedef struct {
     uint8_t                    num_lanes;                                ///< Number of lanes in the group, must be 1,2,4, or 8
     p64h_sysc_serdes_if_diag_t lane[P64H_SYSC_SERDES_MAX_NUM_GRP_LANES]; ///< Status for each lane in the group
 } p64h_sysc_serdes_grp_diag_t;
+
+/// Combine 3 refclk config regsiters into one
+typedef struct {
+    uint32_t refclk_cfg_70_64;
+    uint32_t refclk_cfg_64_32;
+    uint32_t refclk_cfg_31_0;
+} p64h_sysc_serdes_refclk_t;
 
 #endif // P64H_SYSC_SERDES_TYPES_H
 

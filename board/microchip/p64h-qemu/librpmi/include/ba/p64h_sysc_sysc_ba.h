@@ -110,6 +110,28 @@ typedef struct {
     uint8_t enable; ///< enable for the switch
 } p64h_sysc_enet_swr_cfg_t;
 
+/// Appc boot mode
+typedef enum {
+    P64H_SYSC_BOOT_MODE_BOOT_CFG_PIN = 0x0u, ///< system service boot appc based on boot_cfg pin
+    P64H_SYSC_BOOT_MODE_NONE,                ///< system service do not boot appc
+    P64H_SYSC_BOOT_MODE_FORCED,              ///< system service boot appc based on specified value
+} p64h_sysc_appc_boot_mode_t;
+
+/// Appc boot mode retry action in case of failure
+typedef enum {
+    P64H_SYSC_BOOT_RETRY_ACT_APPC_RST = 0x0u, ///< reset APPC boot configuration
+    P64H_SYSC_BOOT_RETRY_ACT_SYSC_SOFT_RST,   ///< sysc soft reset
+    P64H_SYSC_BOOT_RETRY_ACT_SYSC_SYS_RST,    ///< sysc system reset
+    P64H_SYSC_BOOT_RETRY_ACT_SYSC_DEV_RST,    ///< sysc device reset
+} p64h_sysc_appc_boot_retry_act_t;
+
+/// Appc boot mode next action in case of failure
+typedef enum {
+    P64H_SYSC_BOOT_NEXT_ACT_STOP = 0x0u,            ///< stop execution
+    P64H_SYSC_BOOT_NEXT_ACT_APPC_BOOT_CFG,          ///< next specified appc boot cfg
+    P64H_SYSC_BOOT_NEXT_ACT_OTP_NEXT_SYSC_BOOT_CFG, ///< system service boot appc based on specified value
+} p64h_sysc_appc_boot_next_act_t;
+
 typedef struct {
     uint32_t                       offset;            ///< offset in image
     uint8_t                        partition_mask;    ///< appc bootmask

@@ -73,11 +73,12 @@ static char* p64h_svc_secc_mbox_names[3] = {
     "P64H_ERR_SVC_SECC_MBOX_FALSE_RESP"
 };
 
-static char* p64h_svc_hw_names[6] = {
+static char* p64h_svc_hw_names[7] = {
     "P64H_ERR_SVC_HW_CTXT_UNINIT",
     "P64H_ERR_SVC_HW_DDR_BINARY_LOAD",
     "P64H_ERR_SVC_HW_HANDLE_UNINIT",
     "P64H_ERR_SVC_HW_INVALID_ID",
+    "P64H_ERR_SVC_HW_SERDES_NOT_CFG",
     "P64H_ERR_SVC_HW_INTR_REGISTRATION_FAILED",
     "P64H_ERR_SVC_HW_UNEXPECTED_EVENT"
 };
@@ -638,7 +639,7 @@ static char* p64h_drv_sys_hpt_names[3] = {
     "P64H_ERR_DRV_SYS_HPT_MTIME_ERROR"
 };
 
-static char* p64h_drv_nvm_names[13] = {
+static char* p64h_drv_nvm_names[53] = {
     "P64H_ERR_DRV_NVM_CTRL_AF_ERR",
     "P64H_ERR_DRV_NVM_SS_NULL_HANDLE",
     "P64H_ERR_DRV_NVM_CFG_NULL",
@@ -646,12 +647,52 @@ static char* p64h_drv_nvm_names[13] = {
     "P64H_ERR_DRV_NVM_INVALID_CTRL_TYPE",
     "P64H_ERR_DRV_NVM_INVALID_EDAC_INSTANCE",
     "P64H_ERR_DRV_NVM_PFLASH_CTRL_INIT_WRONG_WIDTH",
-    "P64H_ERR_DRV_NVM_INVALID_CDNS_XSPI_INSTANCE",
-    "P64H_ERR_DRV_NVM_CDNS_XSPI_PROBE",
-    "P64H_ERR_DRV_NVM_CDNS_XSPI_INIT",
-    "P64H_ERR_DRV_NVM_INVALID_CDNS_CCP_INSTANCE",
-    "P64H_ERR_DRV_NVM_CDNS_CCP_PROBE",
-    "P64H_ERR_DRV_NVM_CDNS_CCP_INIT"
+    "P64H_ERR_DRV_NVM_INVALID_XSPI_INSTANCE",
+    "P64H_ERR_DRV_NVM_XSPI_PROBE",
+    "P64H_ERR_DRV_NVM_XSPI_INIT",
+    "P64H_ERR_DRV_NVM_XSPI_START",
+    "P64H_ERR_DRV_NVM_XSPI_GET_CB",
+    "P64H_ERR_DRV_NVM_XSPI_SET_CB",
+    "P64H_ERR_DRV_NVM_XSPI_GET_EVENT",
+    "P64H_ERR_DRV_NVM_XSPI_SET_EVENT",
+    "P64H_ERR_DRV_NVM_XSPI_GET_DIRECT_MODE_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_GET_WORK_MODE_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_SET_WORK_MODE_CONFIG_INVALID",
+    "P64H_ERR_DRV_NVM_XSPI_SET_WORK_MODE_CONFIG_BUSY",
+    "P64H_ERR_DRV_NVM_XSPI_SEND_STIG_COMMAND",
+    "P64H_ERR_DRV_NVM_XSPI_GET_STIG_STATUS",
+    "P64H_ERR_DRV_NVM_XSPI_SET_DIRECT_MODE_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_GET_GLOBAL_CMD_PARAMS",
+    "P64H_ERR_DRV_NVM_XSPI_SET_GLOBAL_CMD_PARAMS",
+    "P64H_ERR_DRV_NVM_XSPI_GET_PROGRAM_SEQ_P1_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_SET_PROGRAM_SEQ_P1_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_GET_READ_SEQ_P1_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_SET_READ_SEQ_P1_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_GET_COMM_STAT_SEQ_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_SET_COMM_STAT_SEQ_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_GET_STAT_SEQ_P1_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_SET_STAT_SEQ_P1_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_GET_WEL_SEQ_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_SET_WEL_SEQ_CONFIG",
+    "P64H_ERR_DRV_NVM_XSPI_ENABLE_DIRECT_MODE",
+    "P64H_ERR_DRV_NVM_XSPI_ENABLE_STIG_MODE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_NUM_IOS",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_DATA_EDGE_MODE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_ADDR_EDGE_MODE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_CMD_EDGE_MODE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_CMD_WORD_SIZE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_STAT_POLARITY",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_SEQ_TYPE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_CRC_CHUNK_SIZE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_CRC_VARIANT",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_DATA_PER_ADDR",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_STAT_ADDR_COUNT",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_PROGRAM_PAGE_SIZE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_READ_PAGE_SIZE",
+    "P64H_ERR_DRV_NVM_XSPI_CONVERT_P1_STIG_INSTR",
+    "P64H_ERR_DRV_NVM_INVALID_CCP_INSTANCE",
+    "P64H_ERR_DRV_NVM_XSPI_CCP_PROBE",
+    "P64H_ERR_DRV_NVM_XSPI_CCP_INIT"
 };
 
 static char* p64h_drv_edac_names[4] = {
@@ -917,11 +958,12 @@ static char* p64h_svc_secc_mbox_descs[3] = {
     "false_resp error"
 };
 
-static char* p64h_svc_hw_descs[6] = {
+static char* p64h_svc_hw_descs[7] = {
     "context accessed prior to initialization",
     "ddr_binary_load error",
     "Trying to access hw handle prior initialization",
     "ID Invalid",
+    "SerDes Not Configured",
     "intr_registration_failed error",
     "unexpected_event error"
 };
@@ -1482,7 +1524,7 @@ static char* p64h_drv_sys_hpt_descs[3] = {
     "mtime read error"
 };
 
-static char* p64h_drv_nvm_descs[13] = {
+static char* p64h_drv_nvm_descs[53] = {
     "NVM CTRL arm and fire error",
     "pointer to NVM handle is null",
     "pointer to NVM configuration is null",
@@ -1490,12 +1532,52 @@ static char* p64h_drv_nvm_descs[13] = {
     "Invalid NVM controller type",
     "Invalid EDAC instance",
     "Invalid data width specfified",
-    "Invalid Cadence XSPI instance",
-    "Cadence XSPI probe error",
-    "Cadence XSPI init error",
-    "Invalid Cadence CCP instance",
-    "Cadence CCP probe error",
-    "Cadence CCP init error"
+    "Invalid XSPI instance",
+    "XSPI CTRL probe error",
+    "XSPI CTRL init error",
+    "XSPI CTRL start Error",
+    "XSPI CTRL get Callback Error",
+    "XSPI CTRL set Callback Error",
+    "XSPI CTRL get Event Error",
+    "XSPI CTRL set Event Error",
+    "XSPI CTRL get direct mode config Error",
+    "XSPI CTRL get direct work mode Error",
+    "XSPI CTRL set work mode mode Error invalid pointer",
+    "XSPI CTRL set work mode mode Error error busy",
+    "XSPI CTRL send stig command Error",
+    "XSPI CTRL get stig status Error",
+    "XSPI CTRL set direct mode config Error",
+    "XSPI CTRL get global cmd params Error",
+    "XSPI CTRL set global cmd params Error",
+    "XSPI CTRL get program seq p1 Error",
+    "XSPI CTRL set program seq p1 Error",
+    "XSPI CTRL get read seq p1 Error",
+    "XSPI CTRL set read seq p1 Error",
+    "XSPI CTRL get comm stat seq config Error",
+    "XSPI CTRL set comm stat seq config Error",
+    "XSPI CTRL get stat seq p1 config Error",
+    "XSPI CTRL set stat seq p1 config Error",
+    "XSPI CTRL get wel seq config Error",
+    "XSPI CTRL set wel seq config Error",
+    "XSPI CTRL enable direct mode Error",
+    "XSPI CTRL enable stig mode Error",
+    "XSPI CTRL conversion to XSPI num IOS Error",
+    "XSPI CTRL conversion to XSPI data edge mode Error",
+    "XSPI CTRL conversion to XSPI addr edge mode Error",
+    "XSPI CTRL conversion to XSPI cmd edge mode Error",
+    "XSPI CTRL conversion to XSPI cmd word size Error",
+    "XSPI CTRL conversion to XSPI stat polarity Error",
+    "XSPI CTRL conversion to XSPI seq type Error",
+    "XSPI CTRL conversion to XSPI crc chunk size Error",
+    "XSPI CTRL conversion to XSPI crc variant Error",
+    "XSPI CTRL conversion to XSPI data per addr Error",
+    "XSPI CTRL conversion to XSPI stat addr count Error",
+    "XSPI CTRL conversion to XSPI program page size Error",
+    "XSPI CTRL conversion to XSPI read page size Error",
+    "XSPI CTRL conversion to XSPI p1 stig instruction Error",
+    "Invalid XSPI CCP instance",
+    "XSPI CCP probe error",
+    "XSPI CCP init error"
 };
 
 static char* p64h_drv_edac_descs[4] = {

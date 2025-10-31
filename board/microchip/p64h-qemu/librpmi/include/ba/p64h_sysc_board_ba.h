@@ -25,6 +25,9 @@
 /// Number of NVM connectors
 #define NVM_CONNECTORS_NUM 4u
 
+/// Maximum Number of Connected NVM devices (NVM_MEM_INTF * NVM_CONNECTORS_NUM)
+#define MAX_NVM_DEVICE_NUM 12u
+
 /// Number of chip-selects
 #define CS_NUM 8u
 
@@ -118,13 +121,13 @@ typedef struct {
 
 /// Board platform configuration
 typedef struct {
-    p64h_sysc_lsio_cfg_t       lsio_cfg;                                   ///< LSIO configuration
-    p64h_sysc_ddr_board_cfg_t  ddr_cfg[P64H_SYSC_DDR_INSTANCE_NUM];        ///< DDR configuration
-    p64h_sysc_mii_cfg_t        mii_cfg[MAX_MII_CFGS];                      ///< MII Configuration
-    p64h_sysc_serdes_grp_cfg_t serdes_grps_cfg[MAX_SERDES_GRPS];           ///< Serdes Group Config Implementation
-    p64h_sysc_nvm_cfg_t        nvm_cfg[NVM_CONNECTORS_NUM * NVM_MEM_INTF]; ///< NVM interfaces configuration
-    p64h_sysc_ddr_ref_clk_t    ddr_clock_cfg;                              ///< System clock configuration
-    p64h_sysc_ddr_phy_cfg_t    ddr_phy_cfg[P64H_SYSC_DDR_INSTANCE_NUM];    ///< DDR PHY configuration
+    p64h_sysc_lsio_cfg_t       lsio_cfg;                                ///< LSIO configuration
+    p64h_sysc_ddr_board_cfg_t  ddr_cfg[P64H_SYSC_DDR_INSTANCE_NUM];     ///< DDR configuration
+    p64h_sysc_mii_cfg_t        mii_cfg[MAX_MII_CFGS];                   ///< MII Configuration
+    p64h_sysc_serdes_grp_cfg_t serdes_grps_cfg[MAX_SERDES_GRPS];        ///< Serdes Group Config Implementation
+    p64h_sysc_nvm_cfg_t        nvm_cfg[MAX_NVM_DEVICE_NUM];             ///< NVM interfaces configuration
+    p64h_sysc_ddr_ref_clk_t    ddr_clock_cfg;                           ///< System clock configuration
+    p64h_sysc_ddr_phy_cfg_t    ddr_phy_cfg[P64H_SYSC_DDR_INSTANCE_NUM]; ///< DDR PHY configuration
 } p64h_sysc_board_cfg_t;
 
 #endif // P64H_SYSC_BOARD_BA_H

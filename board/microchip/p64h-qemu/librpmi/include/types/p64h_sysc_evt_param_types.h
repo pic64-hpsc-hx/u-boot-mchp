@@ -10,9 +10,9 @@
 #ifndef SYSC_EVT_PARAM_TYPES_H
 #define SYSC_EVT_PARAM_TYPES_H
 
-#include <zsbl/sec_api_types.h>
-#include <zsbl/boot_cfg_helper.h>
-#include <zsbl/sec_otp_types.h>
+#include <zsbl/sec_api_types.h>   // for sec_periph_stats_t
+#include <zsbl/sec_smb_types.h>   // for tvs_mon_stat_t
+#include <zsbl/boot_cfg_helper.h> // for bootcfg_otp_t
 
 /// Size of the array passed as parameter for validate_fw request
 #define SMB_VALIDATE_FW_NONCE_SIZE 2u
