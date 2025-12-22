@@ -531,6 +531,12 @@ config MACB
 	  GEM (Gigabit Ethernet MAC) found in some ARM SoC devices.
 	  Say Y to include support for the MACB/GEM chip.
 
+config P64H_MDIO
+	bool "P64H MDIO interface support"
+	depends on DM_MDIO
+	help
+	  This driver supports the MDIO bus found on P64H.
+
 config MACB_ZYNQ
 	bool "Cadence MACB/GEM Ethernet Interface for Xilinx Zynq"
 	depends on MACB
