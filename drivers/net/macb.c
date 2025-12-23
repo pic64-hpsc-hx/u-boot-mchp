@@ -387,7 +387,7 @@ static int _macb_send(struct macb_device *macb, const char *name, void *packet,
 		if (ctrl & MACB_BIT(TX_BUF_EXHAUSTED))
 			printf("%s: TX buffers exhausted in mid frame\n", name);
 	} else {
-		printf("%s: TX timeout\n", name);
+		printf("%s: TX timeout: 0x%lx\n", name, ctrl);
 	}
 
 	/* No one cares anyway */
@@ -964,6 +964,11 @@ static int _macb_init(struct udevice *dev, const char *name)
 		macb_writel(macb, TBQPH, upper_32_bits(macb->tx_ring_dma));
 	}
 
+	debug("%s: rx_ring_dma=0x%lx\n", name, macb->rx_ring_dma);
+	debug("%s: tx_ring_dma=0x%lx\n", name, macb->tx_ring_dma);
+	debug("%s: rx_buffer_dma=0x%lx\n", name, macb->rx_buffer_dma);
+	debug("%s: rx_buffer_size=%li\n", name, macb->rx_buffer_size);
+
 	if (macb_is_gem(macb)) {
 		/* Initialize DMA properties */
 		gmac_configure_dma(macb);
@@ -1079,6 +1084,25 @@ static void _macb_halt(struct macb_device *macb)
 	do {
 		tsr = macb_readl(macb, TSR);
 	} while (tsr & MACB_BIT(TGO));
+
+	debug("TX OK packets %i\n", readl(macb->regs + 0x0108));
+	debug("TX OK bytes %lli\n", ((u64)readl(macb->regs + 0x0104) << 32) |
+					readl(macb->regs + 0x0100));
+	debug("RX OK packets %i\n", readl(macb->regs + 0x0158));
+	debug("RX OK bytes %lli\n", ((u64)readl(macb->regs + 0x0154) << 32) |
+					readl(macb->regs + 0x0150));
+	debug("RX undersize %i\n", readl(macb->regs + 0x0184));
+	debug("RX excessive length %i\n", readl(macb->regs + 0x0188));
+	debug("RX jabber %i\n", readl(macb->regs + 0x018c));
+	debug("RX FCS err %i\n", readl(macb->regs + 0x0190));
+	debug("RX length err %i\n", readl(macb->regs + 0x0194));
+	debug("RX symbol err %i\n", readl(macb->regs + 0x0198));
+	debug("RX alignment err %i\n", readl(macb->regs + 0x019c));
+	debug("RX resource err %i\n", readl(macb->regs + 0x01a0));
+	debug("RX overrun %i\n", readl(macb->regs + 0x01a4));
+	debug("RX IP CK errors %i\n", readl(macb->regs + 0x01a8));
+	debug("RX TCK CK errors %i\n", readl(macb->regs + 0x01ac));
+	debug("RX UDP CK errors %i\n", readl(macb->regs + 0x01b0));
 
 	/* Disable TX and RX, and clear statistics */
 	macb_writel(macb, NCR, MACB_BIT(CLRSTAT));
