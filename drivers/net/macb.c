@@ -907,6 +907,11 @@ static int _macb_init(struct udevice *dev, const char *name)
 		macb_writel(macb, TBQPH, upper_32_bits(macb->tx_ring_dma));
 	}
 
+	debug("%s: rx_ring_dma=0x%lx\n", name, macb->rx_ring_dma);
+	debug("%s: tx_ring_dma=0x%lx\n", name, macb->tx_ring_dma);
+	debug("%s: rx_buffer_dma=0x%lx\n", name, macb->rx_buffer_dma);
+	debug("%s: rx_buffer_size=%li\n", name, macb->rx_buffer_size);
+
 	if (macb_is_gem(macb)) {
 		/* Initialize DMA properties */
 		gmac_configure_dma(macb);
@@ -993,6 +998,25 @@ static void _macb_halt(struct macb_device *macb)
 	do {
 		tsr = macb_readl(macb, TSR);
 	} while (tsr & MACB_BIT(TGO));
+
+	debug("TX OK packets    %i\n", gem_readl(macb, TXCNT));
+	debug("TX OK bytes      %lli\n", ((u64)gem_readl(macb, OCTTXH) << 32) |
+					gem_readl(macb, OCTTXL));
+	debug("RX OK packets    %i\n", gem_readl(macb, RXCNT));
+	debug("RX OK bytes      %lli\n", ((u64)gem_readl(macb, OCTRXH) << 32) |
+					gem_readl(macb, OCTRXL));
+	debug("RX undersize     %i\n", gem_readl(macb, RXUNDRCNT));
+	debug("RX excessive len %i\n", gem_readl(macb, RXOVRCNT));
+	debug("RX jabber        %i\n", gem_readl(macb, RXJABCNT));
+	debug("RX FCS err       %i\n", gem_readl(macb, RXFCSCNT));
+	debug("RX length err    %i\n", gem_readl(macb, RXLENGTHCNT));
+	debug("RX symbol err    %i\n", gem_readl(macb, RXSYMBCNT));
+	debug("RX alignment err %i\n", gem_readl(macb, RXALIGNCNT));
+	debug("RX resource err  %i\n", gem_readl(macb, RXRESERRCNT));
+	debug("RX overrun       %i\n", gem_readl(macb, RXORCNT));
+	debug("RX IP CK errors  %i\n", gem_readl(macb, RXIPCCNT));
+	debug("RX TCP CK errors %i\n", gem_readl(macb, RXTCPCCNT));
+	debug("RX UDP CK errors %i\n", gem_readl(macb, RXUDPCCNT));
 
 	/* Disable TX and RX, and clear statistics */
 	macb_writel(macb, NCR, MACB_BIT(CLRSTAT));
