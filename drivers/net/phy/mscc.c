@@ -123,6 +123,10 @@
 #define RMII_CLK_OUT_ENABLE_WIDTH	(1)
 #define RMII_CLK_OUT_ENABLE_MASK	(0x10)
 
+/* Extended Page 3 Register 16E3 */
+#define MSCC_PHY_SERDES_PCS_CTRL		16
+#define MSCC_PHY_SERDES_ANEG			BIT(7)
+
 /* Extended Page 3 Register 22E3 */
 #define MSCC_PHY_SERDES_TX_CRC_ERR_CNT	22
 
@@ -788,6 +792,13 @@ static int vsc8574_config_pre_init(struct phy_device *phydev)
 	reg = bus->read(bus, phy0, MDIO_DEVAD_NONE, MSCC_PHY_TEST_PAGE_8);
 	reg &= ~TR_CLK_DISABLE;
 	bus->write(bus, phy0, MDIO_DEVAD_NONE, MSCC_PHY_TEST_PAGE_8, reg);
+
+	/* Enable "MAC SerDes ANEG enable" */
+	bus->write(bus, phy0, MDIO_DEVAD_NONE, MSCC_EXT_PAGE_ACCESS,
+		   MSCC_PHY_PAGE_EXT3);
+	reg = bus->read(bus, phy0, MDIO_DEVAD_NONE, MSCC_PHY_SERDES_PCS_CTRL);
+	reg |= MSCC_PHY_SERDES_ANEG;
+	bus->write(bus, phy0, MDIO_DEVAD_NONE, MSCC_PHY_SERDES_PCS_CTRL, reg);
 
 	bus->write(bus, phy0, MDIO_DEVAD_NONE, MSCC_EXT_PAGE_ACCESS,
 			MSCC_PHY_PAGE_STD);
