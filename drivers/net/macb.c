@@ -861,9 +861,9 @@ static void gmac_configure_dma(struct macb_device *macb)
 static int _macb_init(struct udevice *dev, const char *name)
 {
 	struct macb_device *macb = dev_get_priv(dev);
-	unsigned int val = 0;
+	unsigned int val = 0, mask;
 	unsigned long paddr;
-	int ret;
+	int ret, retry;
 	int i;
 	int count;
 
@@ -968,6 +968,9 @@ static int _macb_init(struct udevice *dev, const char *name)
 
 			ncfgr |= GEM_BIT(SGMIIEN) | GEM_BIT(PCSSEL);
 			macb_writel(macb, NCFGR, ncfgr);
+
+			gem_writel(macb, PCSCTRL, gem_readl(macb, PCSCTRL) |
+				GEM_BIT(PCSCTRL_ANEG_ENBL));
 		}
 	} else {
 	/* choose RMII or MII mode. This depends on the board */
@@ -990,6 +993,32 @@ static int _macb_init(struct udevice *dev, const char *name)
 	ret = macb_phy_init(dev, name);
 	if (ret)
 		return ret;
+
+	if (macb->phy_interface == PHY_INTERFACE_MODE_SGMII) {
+		retry = 0;
+
+		while (retry < 1000) {
+			mask = GEM_BIT(PCSSTS_LINKUP) |
+				GEM_BIT(PCSSTS_ANEG_COMP);
+			ret = (gem_readl(macb, PCSSTS) & mask) == mask;
+			if (ret)
+				break;
+
+			udelay(10);
+			retry++;
+		}
+
+		if (!ret) {
+			printf("no PCS (SGMII) link\n");
+		} else {
+			/*
+			 * Some additional minimal delay seems
+			 * to be needed so that the first
+			 * packet will be sent correctly
+			 */
+			mdelay(1);
+		}
+	}
 
 	/* Enable TX and RX */
 	macb_writel(macb, NCR, MACB_BIT(TE) | MACB_BIT(RE));

@@ -144,6 +144,8 @@
 #define GEM_PEFTN		0x01f4 /* PTP Peer Event Frame Tx Ns */
 #define GEM_PEFRSL		0x01f8 /* PTP Peer Event Frame Rx Sec Low */
 #define GEM_PEFRN		0x01fc /* PTP Peer Event Frame Rx Ns */
+#define GEM_PCSCTRL		0x0200 /* PCS control */
+#define GEM_PCSSTS		0x0204 /* PCS status */
 #define GEM_DCFG1		0x0280 /* Design Config 1 */
 #define GEM_DCFG2		0x0284 /* Design Config 2 */
 #define GEM_DCFG3		0x0288 /* Design Config 3 */
@@ -441,6 +443,16 @@
 #define MACB_IDNUM_SIZE				12
 #define MACB_REV_OFFSET				0
 #define MACB_REV_SIZE				16
+
+/* Bitfields in PCSCTRL. */
+#define GEM_PCSCTRL_ANEG_ENBL_OFFSET		12
+#define GEM_PCSCTRL_ANEG_ENBL_SIZE		1
+
+/* Bitfields in PCSSTS. */
+#define GEM_PCSSTS_LINKUP_OFFSET		2
+#define GEM_PCSSTS_LINKUP_SIZE			1
+#define GEM_PCSSTS_ANEG_COMP_OFFSET		5
+#define GEM_PCSSTS_ANEG_COMP_SIZE		1
 
 /* Bitfields in DCFG1. */
 #define GEM_USERIO_OFFSET			9
