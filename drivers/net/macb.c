@@ -1405,6 +1405,11 @@ static int macb_eth_remove(struct udevice *dev)
 	mdio_unregister(macb->bus);
 	mdio_free(macb->bus);
 
+	dma_free_coherent(macb->rx_buffer);
+	dma_free_coherent(macb->rx_ring);
+	dma_free_coherent(macb->tx_ring);
+	dma_free_coherent(macb->dummy_desc);
+
 	return 0;
 }
 
