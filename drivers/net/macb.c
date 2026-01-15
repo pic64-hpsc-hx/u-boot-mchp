@@ -1257,22 +1257,6 @@ static void _macb_eth_initialize(struct macb_device *macb)
 	int id = 0;	/* This is not used by functions we call */
 	u32 ncfgr;
 
-	if (macb_is_gem(macb))
-		macb->rx_buffer_size = GEM_RX_BUFFER_SIZE;
-	else
-		macb->rx_buffer_size = MACB_RX_BUFFER_SIZE;
-
-	/* TODO: we need check the rx/tx_ring_dma is dcache line aligned */
-	macb->rx_buffer = dma_alloc_coherent(macb->rx_buffer_size *
-					     MACB_RX_RING_SIZE,
-					     &macb->rx_buffer_dma);
-	macb->rx_ring = dma_alloc_coherent(MACB_RX_DMA_DESC_SIZE,
-					   &macb->rx_ring_dma);
-	macb->tx_ring = dma_alloc_coherent(MACB_TX_DMA_DESC_SIZE,
-					   &macb->tx_ring_dma);
-	macb->dummy_desc = dma_alloc_coherent(MACB_TX_DUMMY_DMA_DESC_SIZE,
-					   &macb->dummy_desc_dma);
-
 	/*
 	 * Do some basic initialization so that we at least can talk
 	 * to the PHY
@@ -1423,6 +1407,41 @@ static int macb_eth_probe(struct udevice *dev)
 		return ret;
 #endif
 
+	if (macb_is_gem(macb))
+		macb->rx_buffer_size = GEM_RX_BUFFER_SIZE;
+	else
+		macb->rx_buffer_size = MACB_RX_BUFFER_SIZE;
+
+	/* TODO: we need check the rx/tx_ring_dma is dcache line aligned */
+	macb->rx_buffer = dma_alloc_coherent(macb->rx_buffer_size *
+					     MACB_RX_RING_SIZE,
+					     &macb->rx_buffer_dma);
+	if (!macb->rx_buffer) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
+	macb->rx_ring = dma_alloc_coherent(MACB_RX_DMA_DESC_SIZE,
+					   &macb->rx_ring_dma);
+	if (!macb->rx_ring) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
+	macb->tx_ring = dma_alloc_coherent(MACB_TX_DMA_DESC_SIZE,
+					   &macb->tx_ring_dma);
+	if (!macb->tx_ring) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
+	macb->dummy_desc = dma_alloc_coherent(MACB_TX_DUMMY_DMA_DESC_SIZE,
+					   &macb->dummy_desc_dma);
+	if (!macb->dummy_desc) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
 	_macb_eth_initialize(macb);
 
 	if (IS_ENABLED(CONFIG_DM_ETH_PHY))
@@ -1448,6 +1467,17 @@ static int macb_eth_probe(struct udevice *dev)
 #endif
 
 	return 0;
+
+err:
+	if (macb->rx_buffer)
+		dma_free_coherent(macb->rx_buffer);
+	if (macb->rx_ring)
+		dma_free_coherent(macb->rx_ring);
+	if (macb->tx_ring)
+		dma_free_coherent(macb->tx_ring);
+	if (macb->dummy_desc)
+		dma_free_coherent(macb->dummy_desc);
+	return ret;
 }
 
 static int macb_eth_remove(struct udevice *dev)
