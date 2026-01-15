@@ -57,6 +57,7 @@ DECLARE_GLOBAL_DATA_PTR;
 #define RX_BUFFER_MULTIPLE		64
 
 #define MACB_RX_RING_SIZE		32
+#define GEM_RX_RING_SIZE		PKTBUFSRX
 #define MACB_TX_RING_SIZE		16
 
 #define MACB_TX_TIMEOUT		1000
@@ -93,9 +94,6 @@ struct macb_dma_desc_64 {
 
 #define DMA_DESC_SIZE		16
 #define DMA_DESC_BYTES(n)	((n) * DMA_DESC_SIZE)
-#define MACB_TX_DMA_DESC_SIZE	(DMA_DESC_BYTES(MACB_TX_RING_SIZE))
-#define MACB_RX_DMA_DESC_SIZE	(DMA_DESC_BYTES(MACB_RX_RING_SIZE))
-#define MACB_TX_DUMMY_DMA_DESC_SIZE	(DMA_DESC_BYTES(1))
 
 #define DESC_PER_CACHELINE_32	(ARCH_DMA_MINALIGN/sizeof(struct macb_dma_desc))
 #define DESC_PER_CACHELINE_64	(ARCH_DMA_MINALIGN/DMA_DESC_SIZE)
@@ -121,6 +119,7 @@ struct macb_device {
 	struct macb_dma_desc	*rx_ring;
 	struct macb_dma_desc	*tx_ring;
 	size_t			rx_buffer_size;
+	unsigned int		rx_ring_size;
 
 	unsigned long		rx_buffer_dma;
 	unsigned long		rx_ring_dma;
@@ -286,11 +285,11 @@ static inline void macb_invalidate_ring_desc(struct macb_device *macb, bool rx)
 {
 	if (rx)
 		invalidate_dcache_range(macb->rx_ring_dma,
-			ALIGN(macb->rx_ring_dma + MACB_RX_DMA_DESC_SIZE,
+			ALIGN(macb->rx_ring_dma + DMA_DESC_BYTES(macb->rx_ring_size),
 			      PKTALIGN));
 	else
 		invalidate_dcache_range(macb->tx_ring_dma,
-			ALIGN(macb->tx_ring_dma + MACB_TX_DMA_DESC_SIZE,
+			ALIGN(macb->tx_ring_dma + DMA_DESC_BYTES(MACB_TX_RING_SIZE),
 			      PKTALIGN));
 }
 
@@ -298,23 +297,23 @@ static inline void macb_flush_ring_desc(struct macb_device *macb, bool rx)
 {
 	if (rx)
 		flush_dcache_range(macb->rx_ring_dma, macb->rx_ring_dma +
-				   ALIGN(MACB_RX_DMA_DESC_SIZE, PKTALIGN));
+				   ALIGN(DMA_DESC_BYTES(macb->rx_ring_size), PKTALIGN));
 	else
 		flush_dcache_range(macb->tx_ring_dma, macb->tx_ring_dma +
-				   ALIGN(MACB_TX_DMA_DESC_SIZE, PKTALIGN));
+				   ALIGN(DMA_DESC_BYTES(MACB_TX_RING_SIZE), PKTALIGN));
 }
 
 static inline void macb_flush_rx_buffer(struct macb_device *macb)
 {
 	flush_dcache_range(macb->rx_buffer_dma, macb->rx_buffer_dma +
-			   ALIGN(macb->rx_buffer_size * MACB_RX_RING_SIZE,
+			   ALIGN(macb->rx_buffer_size * macb->rx_ring_size,
 				 PKTALIGN));
 }
 
 static inline void macb_invalidate_rx_buffer(struct macb_device *macb)
 {
 	invalidate_dcache_range(macb->rx_buffer_dma, macb->rx_buffer_dma +
-				ALIGN(macb->rx_buffer_size * MACB_RX_RING_SIZE,
+				ALIGN(macb->rx_buffer_size * macb->rx_ring_size,
 				      PKTALIGN));
 }
 
@@ -441,7 +440,7 @@ static void reclaim_rx_buffers(struct macb_device *macb,
 	while (i > new_tail) {
 		reclaim_rx_buffer(macb, i);
 		i++;
-		if (i >= MACB_RX_RING_SIZE)
+		if (i >= macb->rx_ring_size)
 			i = 0;
 	}
 
@@ -495,7 +494,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 				unsigned int headlen, taillen;
 
 				headlen = macb->rx_buffer_size *
-					(MACB_RX_RING_SIZE - macb->rx_tail);
+					(macb->rx_ring_size - macb->rx_tail);
 				taillen = length - headlen;
 				memcpy((void *)net_rx_packets[0],
 				       buffer, headlen);
@@ -511,7 +510,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 					next_rx_tail = next_rx_tail / 2;
 			}
 
-			if (++next_rx_tail >= MACB_RX_RING_SIZE)
+			if (++next_rx_tail >= macb->rx_ring_size)
 				next_rx_tail = 0;
 			macb->next_rx_tail = next_rx_tail;
 			return length;
@@ -522,7 +521,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 				flag = false;
 			}
 
-			if (++next_rx_tail >= MACB_RX_RING_SIZE) {
+			if (++next_rx_tail >= macb->rx_ring_size) {
 				macb->wrapped = true;
 				next_rx_tail = 0;
 			}
@@ -863,7 +862,7 @@ static int gmac_init_multi_queues(struct macb_device *macb)
 	macb->dummy_desc->ctrl = MACB_BIT(TX_USED);
 	macb->dummy_desc->addr = 0;
 	flush_dcache_range(macb->dummy_desc_dma, macb->dummy_desc_dma +
-			ALIGN(MACB_TX_DUMMY_DMA_DESC_SIZE, PKTALIGN));
+			ALIGN(DMA_DESC_BYTES(1), PKTALIGN));
 	paddr = macb->dummy_desc_dma;
 
 	for (i = 1; i < num_queues; i++) {
@@ -923,8 +922,8 @@ static int _macb_init(struct udevice *dev, const char *name)
 
 	/* initialize DMA descriptors */
 	paddr = macb->rx_buffer_dma;
-	for (i = 0; i < MACB_RX_RING_SIZE; i++) {
-		if (i == (MACB_RX_RING_SIZE - 1))
+	for (i = 0; i < macb->rx_ring_size; i++) {
+		if (i == (macb->rx_ring_size - 1))
 			paddr |= MACB_BIT(RX_WRAP);
 		if (macb->config->hw_dma_cap & HW_DMA_CAP_64B)
 			count = i * 2;
@@ -1349,35 +1348,38 @@ static int macb_eth_probe(struct udevice *dev)
 		return ret;
 #endif
 
-	if (macb_is_gem(macb))
+	if (macb_is_gem(macb)) {
 		macb->rx_buffer_size = GEM_RX_BUFFER_SIZE;
-	else
+		macb->rx_ring_size = GEM_RX_RING_SIZE;
+	} else {
 		macb->rx_buffer_size = MACB_RX_BUFFER_SIZE;
+		macb->rx_ring_size = MACB_RX_RING_SIZE;
+	}
 
 	/* TODO: we need check the rx/tx_ring_dma is dcache line aligned */
 	macb->rx_buffer = dma_alloc_coherent(macb->rx_buffer_size *
-					     MACB_RX_RING_SIZE,
+					     macb->rx_ring_size,
 					     &macb->rx_buffer_dma);
 	if (!macb->rx_buffer) {
 		ret = -ENOMEM;
 		goto err;
 	}
 
-	macb->rx_ring = dma_alloc_coherent(MACB_RX_DMA_DESC_SIZE,
+	macb->rx_ring = dma_alloc_coherent(DMA_DESC_BYTES(macb->rx_ring_size),
 					   &macb->rx_ring_dma);
 	if (!macb->rx_ring) {
 		ret = -ENOMEM;
 		goto err;
 	}
 
-	macb->tx_ring = dma_alloc_coherent(MACB_TX_DMA_DESC_SIZE,
+	macb->tx_ring = dma_alloc_coherent(DMA_DESC_BYTES(MACB_TX_RING_SIZE),
 					   &macb->tx_ring_dma);
 	if (!macb->tx_ring) {
 		ret = -ENOMEM;
 		goto err;
 	}
 
-	macb->dummy_desc = dma_alloc_coherent(MACB_TX_DUMMY_DMA_DESC_SIZE,
+	macb->dummy_desc = dma_alloc_coherent(DMA_DESC_BYTES(1),
 					   &macb->dummy_desc_dma);
 	if (!macb->dummy_desc) {
 		ret = -ENOMEM;
