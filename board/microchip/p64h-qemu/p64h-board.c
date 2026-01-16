@@ -154,7 +154,10 @@ int board_late_init(void)
      */
     virtio_init();
 
-    return board_rpmi_init();
+    /* temporary fix, remove when RPMI will be updated
+    return board_rpmi_init(); 
+    */
+    return 0;
 }
 
 void *board_fdt_blob_setup(int *err)
