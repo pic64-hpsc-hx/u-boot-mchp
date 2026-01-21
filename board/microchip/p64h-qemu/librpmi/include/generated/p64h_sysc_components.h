@@ -1,4 +1,4 @@
-/* (c) 2025 Microchip Technology Inc. */
+/* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
 /* ======================================= */
@@ -76,6 +76,7 @@ typedef enum p64h_comp_t {
     P64H_COMP_DRV_ANLT,                    ///< component id for ANLT driver
     P64H_COMP_DRV_M1_CORE,                 ///< component id for m1_core driver
     P64H_COMP_DRV_SYS_TOP,                 ///< component id for sys_top driver
+    P64H_COMP_DRV_SYS_SPI_FLASH,           ///< component id for sys_spi_flash driver
     P64H_COMP_DRV_SYS_HPT,                 ///< component id for sys_hpt driver
     P64H_COMP_DRV_NVM,                     ///< component id for nvm driver
     P64H_COMP_DRV_EDAC,                    ///< component id for EDAC component
@@ -91,7 +92,8 @@ typedef enum p64h_comp_t {
     P64H_COMP_DRV_WDOG,                    ///< component id for wdog driver
     P64H_COMP_DRV_LSIO,                    ///< component id for Low-speed IO driver
     P64H_COMP_DRV_APP_DMA,                 ///< component id for APP DMA driver
-    P64H_COMP_DRV_SPI_FLASH,               ///< component id for spi flash driver
+    P64H_COMP_DRV_GPIO,                    ///< component id for gpio sok driver
+    P64H_COMP_DRV_MDIO,                    ///< component id for MDIO driver
     P64H_COMP_LAST
 } p64h_comp_t;
 
@@ -153,6 +155,7 @@ typedef enum p64h_sysc_log_id_t {
     P64H_SYSC_LOG_ID_DRV_ANLT,                    ///< log identifier for ANLT driver
     P64H_SYSC_LOG_ID_DRV_M1_CORE,                 ///< log identifier for m1_core driver
     P64H_SYSC_LOG_ID_DRV_SYS_TOP,                 ///< log identifier for sys_top driver
+    P64H_SYSC_LOG_ID_DRV_SYS_SPI_FLASH,           ///< log identifier for sys_spi_flash driver
     P64H_SYSC_LOG_ID_DRV_SYS_HPT,                 ///< log identifier for sys_hpt driver
     P64H_SYSC_LOG_ID_DRV_NVM,                     ///< log identifier for nvm driver
     P64H_SYSC_LOG_ID_DRV_EDAC,                    ///< log identifier for EDAC component
@@ -168,8 +171,12 @@ typedef enum p64h_sysc_log_id_t {
     P64H_SYSC_LOG_ID_DRV_WDOG,                    ///< log identifier for wdog driver
     P64H_SYSC_LOG_ID_DRV_LSIO,                    ///< log identifier for Low-speed IO driver
     P64H_SYSC_LOG_ID_DRV_APP_DMA,                 ///< log identifier for APP DMA driver
-    P64H_SYSC_LOG_ID_DRV_SPI_FLASH,               ///< log identifier for spi flash driver
+    P64H_SYSC_LOG_ID_DRV_GPIO,                    ///< log identifier for gpio sok driver
+    P64H_SYSC_LOG_ID_DRV_MDIO,                    ///< log identifier for MDIO driver
     P64H_SYSC_LOG_ID_LAST
 } p64h_sysc_log_id_t;
+
+/* Public Methods ------------------------------------------ */
+const char *p64h_log_id_name_get(const p64h_sysc_log_id_t log_id);
 
 #endif /* P64H_SYSC_DEF_COMPONENTS_H */

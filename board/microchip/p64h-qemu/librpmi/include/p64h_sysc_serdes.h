@@ -22,6 +22,9 @@ p64h_err_t p64h_sysc_serdes_cfg_set(const p64h_sysc_handle_t* handle_ptr, p64h_s
                                     const p64h_sysc_serdes_grp_runtim_cfg_t* cfg_ptr);
 p64h_err_t p64h_sysc_serdes_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id, p64h_sysc_serdes_grp_runtim_cfg_t* cfg_ptr);
 p64h_err_t p64h_sysc_serdes_diag_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id, p64h_sysc_serdes_grp_diag_t* diag_ptr);
+p64h_err_t p64h_sysc_serdes_prov(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id, p64h_sysc_serdes_rate_t rate,
+                                 p64h_sysc_serdes_grp_cfg_t* cfg_ptr);
+p64h_err_t p64h_sysc_serdes_deprov(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id);
 p64h_err_t p64h_sysc_serdes_anlt_cfg_set(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id,
                                          const p64h_sysc_serdes_grp_anlt_cfg_t* cfg_ptr);
 p64h_err_t p64h_sysc_serdes_anlt_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id,

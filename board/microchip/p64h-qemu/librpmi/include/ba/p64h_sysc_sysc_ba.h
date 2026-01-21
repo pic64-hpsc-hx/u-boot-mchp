@@ -24,12 +24,18 @@
 #include <types/p64h_sysc_nvm_types.h>
 
 /* Public Defines ------------------------------------------------- */
-#define P64H_SYSC_ENET_SW_SIZE       (16384UL)   ///<  Maximum size of enet switch cfg
-#define P64H_SYSC_KEYS_CFG_SIZE      1U * 1024UL ///<  Maximum size of keys cfg
-#define P64H_SYSC_PQ_FW_CFG_SIZE     1U * 1024UL ///<  Maximum size of pq_fw cfg
-#define P64H_SYSC_APPC_ZSBL_SIZE     1U * 1024UL ///<  Maximum size of zsbl binary
-#define P64H_SYSC_APPC_RNMI_SIZE     1U * 1024UL ///<  Maximum size of rnmi binary
-#define P64H_SYSC_MAX_FW_SCRIPT_CMDS 20U         ///< Maximum Number of supported FW SCRIPT COMMANDS
+#define P64H_SYSC_SYSC_CFG_MAX_SIZE          0x400000
+#define P64H_SYSC_CFG0_MIN_ALLOCATED_SIZE    3000
+#define P64H_SYSC_CFG2_MIN_ALLOCATED_SIZE    3000
+#define P64H_SYSC_SECC_FW_MIN_ALLOCATED_SIZE 30000
+
+#define P64H_SYSC_SYSC_BOOT_CFG_MAX          8U          ///<  Maximum number of SysC boot cfg
+#define P64H_SYSC_ENET_SW_SIZE               (1UL)       ///< TODO: getting memory size issues, to fix later. Maximum size of enet switch cfg
+#define P64H_SYSC_KEYS_CFG_SIZE              (1U * 1024UL) ///<  Maximum size of keys cfg
+#define P64H_SYSC_PQ_FW_CFG_SIZE             (1U * 1024UL) ///<  Maximum size of pq_fw cfg
+#define P64H_SYSC_APPC_ZSBL_SIZE             (1U * 1024UL) ///<  Maximum size of zsbl binary
+#define P64H_SYSC_APPC_RNMI_SIZE             (1U * 1024UL) ///<  Maximum size of rnmi binary
+#define P64H_SYSC_MAX_FW_SCRIPT_CMDS         2U          ///< Maximum Number of supported FW SCRIPT COMMANDS
 
 // ########################### Enumerations ##########################
 /// Enumeration for OCR CTRL
@@ -39,76 +45,6 @@ typedef enum {
     P64H_SYSC_OCR_CTRL_SYSC,        ///< SYSC OCR Controller
     P64H_SYSC_OCR_CTRL_LAST         ///< invalid, used for error checking
 } p64h_sysc_ocr_ctrl_t;
-
-/// fw update script command
-typedef enum {
-    P64H_SYSC_FW_SCR_CMD_OTP_BOOT_CFG_TEST,
-    P64H_SYSC_FW_SCR_CMD_OTP_BOOT_CFG_SET,
-    P64H_SYSC_FW_SCR_CMD_OTP_BOOT_CFG_GET,
-    P64H_SYSC_FW_SCR_CMD_BIN_ERASE,
-    P64H_SYSC_FW_SCR_CMD_BIN_WR,
-    P64H_SYSC_FW_SCR_CMD_BIN_RD,
-    P64H_SYSC_FW_SCR_CMD_FS_FORMAT,
-    P64H_SYSC_FW_SCR_CMD_FS_RM,
-    P64H_SYSC_FW_SCR_CMD_FS_CP,
-    P64H_SYSC_FW_SCR_CMD_FS_MV,
-    P64H_SYSC_FW_SCR_CMD_ENTER_CRITICAL_SECTION,
-    P64H_SYSC_FW_SCR_CMD_EXIT_CRITICAL_SECTION,
-    P64H_SYSC_FW_SCR_CMD_REBOOT,
-    P64H_SYSC_FW_SCR_CMD_SYSC_IMG_WR,
-    P64H_SYSC_FW_SCR_CMD_SYSC_IMG_CFG1_WR
-} p64h_sysc_fw_scr_cmd_t;
-
-typedef struct {
-    char fw_comp[P64H_SYSC_STRING_MAX];
-} p64h_sysc_otp_boot_cfg_test_data_t;
-
-typedef struct {
-    char     fw_comp[P64H_SYSC_STRING_MAX];
-    uint32_t length;
-    uint32_t img_id;
-    uint32_t offset;
-} p64h_sysc_img_wr_data_t;
-
-typedef struct {
-    char     fw_comp[P64H_SYSC_STRING_MAX];
-    uint32_t length;
-} p64h_sysc_img_cfg1_wr_data_t;
-
-typedef struct {
-    char type[P64H_SYSC_STRING_MAX];
-} p64h_sysc_reboot_cmd_data_t;
-
-typedef union {
-    p64h_sysc_otp_boot_cfg_test_data_t otp_boot_cfg_test_data;
-    p64h_sysc_img_wr_data_t            sysc_img_wr_data;
-    p64h_sysc_reboot_cmd_data_t        reboot_cmd_data;
-    p64h_sysc_img_cfg1_wr_data_t       sysc_img_cfg1_wr_data;
-} p64h_sysc_fw_script_cmd_data_t;
-
-/**
- * @brief
- * This struct contains the enum of all fw script commands and data
- */
-typedef struct {
-    p64h_sysc_fw_scr_cmd_t         name; /// enum of fw script commands
-    p64h_sysc_fw_script_cmd_data_t cmd_data;
-} p64h_sysc_fw_cmd_t;
-
-/**
- * @brief
- * This struct packs all firmware script commands into one struct
- */
-typedef struct {
-    uint32_t           num_cmd;                            ///< Number of commands in fw script
-    p64h_sysc_fw_cmd_t cmds[P64H_SYSC_MAX_FW_SCRIPT_CMDS]; ///< List of Commands in fw script
-} p64h_sysc_fw_script_t;
-
-/// enet switch configuration
-typedef struct {
-    // TBD
-    uint8_t enable; ///< enable for the switch
-} p64h_sysc_enet_swr_cfg_t;
 
 /// Appc boot mode
 typedef enum {
@@ -131,6 +67,151 @@ typedef enum {
     P64H_SYSC_BOOT_NEXT_ACT_APPC_BOOT_CFG,          ///< next specified appc boot cfg
     P64H_SYSC_BOOT_NEXT_ACT_OTP_NEXT_SYSC_BOOT_CFG, ///< system service boot appc based on specified value
 } p64h_sysc_appc_boot_next_act_t;
+
+// fw update type enum
+typedef enum {
+    P64H_SYSC_SYSC_IMG_UPGRADE = 0,
+    P64H_SYSC_APPC_IMG_UPGRADE,
+    P64H_SYSC_OTP_BOOT_CFG_IMG_UPGRADE
+} p64h_sysc_pkg_type_t;
+
+// sysc overwrite options enum
+typedef enum {
+    P64H_SYSC_OVERWRITE_SYSC_IMG = 0,           ///< Complete Sysc Image
+    P64H_SYSC_OVERWRITE_SYSC_FSBL,              ///< SysC FSBL
+    P64H_SYSC_OVERWRITE_SYSC_CFG0,              ///< SysC cfg0
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_SYSC_SOC_CFG, ///< System-on-Chip configuration
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_DDR_CFG,      ///< DDR configuration
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_SW_SVC_CFG,   ///< Software service configuration
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_ACOT,         ///< AppC Images Offset Table
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_ENET_SW_CFG,  ///< Ethernet switch configuration
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_KEYS_CFG,     ///< Keys config
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_PQ_FW,        ///< PQ firmware
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_APPC_ZSBL,    ///< AppC ZSBL
+    P64H_SYSC_OVERWRITE_SYSC_CFG1_APPC_RNMI,    ///< AppC RNMI
+    P64H_SYSC_OVERWRITE_SYSC_CFG2,              ///< TODO: add this?
+    P64H_SYSC_OVERWRITE_LAST
+} p64h_sysc_sysc_overwrite_t;
+
+// appc upgrade (overwrite or update) options enum
+typedef enum {
+    P64H_SYSC_UPGRADE_APPC_IMG_APPC_CFG = 0,               ///< full Appc Image
+    P64H_SYSC_UPGRADE_APPC_IMG_ACOT,                       ///< Acot config (for full cfg upgrade)
+    P64H_SYSC_UPGRADE_APPC_IMG_BOOTCFG_APPC_BOOTSCRIPT,    ///< Appc bootscript
+    P64H_SYSC_UPGRADE_APPC_IMG_BOOTCFG_APPC_STATIC_CFG,    ///< Appc static config
+    P64H_SYSC_UPGRADE_APPC_IMG_BOOTCFG_SW_SV_CFG,          ///< Appc bootcfg software service configuration
+    P64H_SYSC_UPGRADE_APPC_IMG_BOOTCFG_PARTITION_APPC_CFG, ///< AppC partition config
+    P64H_SYSC_UPGRADE_APPC_IMG_BOOTCFG_PARTITION_APPC_DTB, ///< AppC partition dtb
+    P64H_SYSC_UPGRADE_APPC_IMG_APPC_BIN,                   ///< AppC boot artifact
+    P64H_SYSC_UPGRADE_APPC_IMG_LAST
+} p64h_sysc_appc_upgrade_t;
+
+typedef struct {
+    uint8_t img_id;
+    uint8_t side_img_id;
+    bool    has_side_img;
+} p64h_sysc_sysc_img_upgrade_info_t;
+
+typedef struct {
+    uint8_t img_id;
+    bool    upgrade_b_side;
+    bool    is_overwrite;
+} p64h_sysc_appc_img_upgrade_info_t;
+
+typedef union {
+    p64h_sysc_sysc_img_upgrade_info_t sysc_img_upgrade_info;
+    p64h_sysc_appc_img_upgrade_info_t appc_img_upgrade_info;
+    // p64h_sysc_otp_boot_cfg_img_upgrade_info_t sysc_img_upgrade_info;
+} p64h_sysc_pkg_type_info_t;
+
+typedef enum {
+    P64H_SYSC_FW_PKG_REBOOT_ACT_NONE,
+    P64H_SYSC_FW_PKG_REBOOT_ACT_APPC_RST,
+    P64H_SYSC_FW_PKG_REBOOT_ACT_SYSC_SOFT_RST,
+    P64H_SYSC_FW_PKG_REBOOT_ACT_SYSC_SYS_RST,
+    P64H_SYSC_FW_PKG_REBOOT_ACT_SYSC_DEV_RST,
+    P64H_SYSC_FW_PKG_REBOOT_ACT_LAST
+} p64h_sysc_fw_pkg_reboot_act_t;
+
+typedef enum {
+    P64H_SYSC_FW_PKG_ERASE_TYPE_CHIP_ERASE,
+    P64H_SYSC_FW_PKG_ERASE_TYPE_SECTOR_ERASE,
+    P64H_SYSC_FW_PKG_ERASE_TYPE_NO_ERASE,
+    P64H_SYSC_FW_PKG_ERASE_TYPE_LAST
+} p64h_sysc_fw_pkg_erase_type_t;
+
+typedef struct {
+    p64h_sysc_pkg_type_info_t     pkg_info;
+    p64h_sysc_pkg_type_t          pkg_type;
+    p64h_sysc_fw_pkg_reboot_act_t reboot_act;
+    p64h_sysc_fw_pkg_erase_type_t erase_type;
+} p64h_sysc_fw_pkg_info_t;
+
+// typedef struct {
+//     char fw_comp[P64H_SYSC_STRING_MAX];
+// } p64h_sysc_otp_boot_cfg_test_data_t;
+
+typedef enum {
+    P64H_SYSC_SPLIT_UPGRADE_REQ_NONE = 0,
+    P64H_SYSC_SPLIT_UPGRADE_REQ_SPLIT,
+    P64H_SYSC_SPLIT_UPGRADE_REQ_SPLIT_FINISHED,
+    P64H_SYSC_SPLIT_UPGRADE_REQ_LAST,
+} p64h_sysc_split_upgrade_req_t;
+
+typedef struct {
+    uint64_t offset;               ///< gives the offset in artifact_data
+    uint64_t total_size;           ///< total size of object being upgraded
+    uint64_t split_size;           ///< size of current upgrade chunk (only valid if split_upgrade_req != BAAL_SPLIT_UPGRADE_REQ_NONE)
+    uint64_t split_upgrade_offset; ///< offset in object data of current chunk (only valid if split_upgrade_req != BAAL_SPLIT_UPGRADE_REQ_NONE)
+    p64h_sysc_split_upgrade_req_t split_upgrade_req; ///< information on the split upgrade state of this command
+} p64h_sysc_upgrade_cmd_data_t;
+
+typedef struct {
+    p64h_sysc_upgrade_cmd_data_t upgrade_cmd_data;
+    p64h_sysc_sysc_overwrite_t   sysc_overwrite_type;
+} p64h_sysc_sysc_img_wr_data_t;
+
+typedef struct {
+    p64h_sysc_upgrade_cmd_data_t upgrade_cmd_data;
+    uint64_t                     acot_offset; ///< gives the offset in artifact_data for the acot. Only used for appc cfg overwrite
+    uint8_t                      appc_cfg_id;
+    uint8_t                      hw_prof_id;
+    uint8_t                      partition_id; ///< Only used if upgrading partition artifact
+    uint8_t                      appc_bin_id;
+    p64h_sysc_appc_upgrade_t     appc_upgrade_type;
+} p64h_sysc_appc_img_wr_data_t;
+
+typedef union {
+    // p64h_sysc_otp_boot_cfg_test_data_t otp_boot_cfg_test_data;
+    p64h_sysc_sysc_img_wr_data_t sysc_img_wr_data;
+    p64h_sysc_appc_img_wr_data_t appc_img_wr_data;
+} p64h_sysc_fw_cmd_t;
+
+/**
+ * @brief
+ * This struct packs all firmware script commands into one struct
+ */
+typedef struct {
+    uint32_t           num_cmd;                            ///< Number of commands in fw script
+    p64h_sysc_fw_cmd_t cmds[P64H_SYSC_MAX_FW_SCRIPT_CMDS]; ///< List of Commands in fw script
+} p64h_sysc_fw_script_t;
+
+/**
+ * @brief
+ * This struct contains a whole firmware upgrade package
+ */
+typedef struct {
+    p64h_sysc_fw_pkg_info_t pkg_info;           ///< Package information
+    p64h_sysc_fw_script_t   fw_script;          ///< Firmware script
+    uint64_t                artifact_data_size; ///< Size in bytes of binary data section. TODO: maybe not needed
+    uint8_t                 artifact_data[0];   ///< Artifact data section.
+} p64h_sysc_fw_pkg_t;
+
+/// enet switch configuration
+typedef struct {
+    // TBD
+    uint8_t enable; ///< enable for the switch
+} p64h_sysc_enet_swr_cfg_t;
 
 typedef struct {
     uint32_t                       offset;            ///< offset in image
@@ -253,16 +334,25 @@ typedef struct cper {
 typedef struct __attribute__((packed)) {
     // TODO: do we want to keep these first four sizes for redundancy checks? They should always be equal to the sizeof(type), which is fixed for a
     // fsbl version
-    uint32_t sysc_soc_cfg_size; ///> size of sysc_soc_cfg
-    uint32_t ddr_cfg_size;      ///> size of ddr_cfg
-    uint32_t sw_svc_cfg_size;   ///> size of sw_svc_cfg
-    uint32_t acot_cfg_size;     ///> size of acot_cfg
-    uint32_t enet_sw_size;      ///> size of enet_sw
-    uint32_t keys_size;         ///> size of keys
-    uint32_t pq_fw_size;        ///> size of keys
-    uint32_t appc_zsbl_size;    ///> size of appc_zsbl
-    uint32_t appc_rnmi_size;    ///> size of appc_rnmi
-    uint32_t padding;           ///> 32-bit padding for 64-bit alignment
+    uint32_t sysc_soc_cfg_offset; ///> offset of sysc_soc_cfg
+    uint32_t sysc_soc_cfg_size;   ///> size of sysc_soc_cfg
+    uint32_t ddr_cfg_offset;      ///> offset of ddr_cfg
+    uint32_t ddr_cfg_size;        ///> size of ddr_cfg
+    uint32_t sw_svc_cfg_offset;   ///> offset of sw_svc_cfg
+    uint32_t sw_svc_cfg_size;     ///> size of sw_svc_cfg
+    uint32_t acot_cfg_offset;     ///> offset of acot_cfg
+    uint32_t acot_cfg_size;       ///> size of acot_cfg
+    uint32_t enet_sw_offset;      ///> offset of enet_sw
+    uint32_t enet_sw_size;        ///> size of enet_sw
+    uint32_t keys_offset;         ///> offset of keys
+    uint32_t keys_size;           ///> size of keys
+    uint32_t pq_fw_offset;        ///> offset of keys
+    uint32_t pq_fw_size;          ///> size of keys
+    uint32_t appc_zsbl_offset;    ///> offset of appc_zsbl
+    uint32_t appc_zsbl_size;      ///> size of appc_zsbl
+    uint32_t appc_rnmi_offset;    ///> offset of appc_rnmi
+    uint32_t appc_rnmi_size;      ///> size of appc_rnmi
+    uint32_t padding;             ///> 32-bit padding for 64-bit alignment
 } p64h_sysc_cfg1_blobs_header_t;
 
 #define P64H_SYSC_SOC_CFG_SIZE    sizeof(p64h_sysc_soc_cfg_t)    ///<  Maximum size of sysc_soc_cfg
@@ -274,17 +364,8 @@ typedef struct __attribute__((packed)) {
  * @brief
  * This struct packs all cfg1 binaries in a blob
  */
-typedef struct __attribute__((packed)) {
-    p64h_sysc_cfg1_blobs_header_t header;                                ///< header info with file sizes
-    uint8_t                       sysc_soc_cfg[P64H_SYSC_SOC_CFG_SIZE];  ///< pointer to sysc_soc_cfg
-    uint8_t                       ddr_cfg[P64H_SYSC_DDR_CFG_SIZE];       ///< pointer to ddr cfg
-    uint8_t                       sw_svc_cfg[P64H_SYSC_SW_SVC_CFG_SIZE]; ///< pointer to sysc service cfg
-    uint8_t                       acot_cfg[P64H_SYSC_ACOT_CFG_SIZE];     ///< pointer to acot cfg
-    uint8_t                       enet_sw[P64H_SYSC_ENET_SW_SIZE];       ///< pointer to enet switch
-    uint8_t                       keys[P64H_SYSC_KEYS_CFG_SIZE];         ///< pointer to keys cfg
-    uint8_t                       pq_fw[P64H_SYSC_PQ_FW_CFG_SIZE];       ///< pointer to pq_fw cfg
-    uint8_t                       appc_zsbl[P64H_SYSC_APPC_ZSBL_SIZE];   ///< pointer to appc zsbl
-    uint8_t                       appc_rnmi[P64H_SYSC_APPC_RNMI_SIZE];   ///< pointer to appc rnmi
+typedef struct {
+    p64h_sysc_cfg1_blobs_header_t header; ///< header info with file sizes
 } p64h_sysc_blobs_layout_t;
 
 #endif // P64H_SYSC_BA_SYSC_BA_H

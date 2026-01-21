@@ -18,22 +18,49 @@
 #include <generated/p64h_sysc_pgmrclk_defs.h>
 #include <zsbl/sec_api_types.h>
 #include <zsbl/sec_smb_types.h>
+#include <zsbl/scratchreg.h>
+#include <p64h_sysc_math.h>
 
 /* Public Defines ------------------------------------------------- */
 #define P64H_SYSC_CFM_CH_NUM        8u ///< define the maximum number of channels in the CFM
 #define SYS_TRACE_NUM_CROSS_TRIGGER 78 ///< Number of cross trigger matrix instances
+///< Number of mask SYSC Log ID
+#define P64H_SYSC_LOG_ID_MASK_NUM DIV_ROUND_UP(P64H_SYSC_LOG_ID_LAST, 8 * sizeof(uint64_t))
 
 /* Public Structs and Enums --------------------------------------- */
 
-/// Enum for firmware dump component selection
+// TODO: this is not specific to a boot cfg right? there's just one?
+
+// P64H_SYSC_DUMP_COMP_OTP_BOOT_CFG      = ONE_HOT(0), ///< OTP boot configuration component
+
+/// Enum for sysc cfg dump component selection
 typedef enum {
-    P64H_SYSC_DUMP_COMP_OTP_BOOT_CFG      = ONE_HOT(0), ///< OTP boot configuration component
-    P64H_SYSC_DUMP_COMP_SYSC_IMG          = ONE_HOT(1), ///< System controller image component
-    P64H_SYSC_DUMP_COMP_SYSC_FS_SYSC      = ONE_HOT(2), ///< System controller file system (SYSC) component
-    P64H_SYSC_DUMP_COMP_SYSC_FS_BOOTCFG   = ONE_HOT(3), ///< System controller file system (boot configuration) component
-    P64H_SYSC_DUMP_COMP_SYSC_FS_APPC      = ONE_HOT(4), ///< System controller file system (APPC) component
-    P64H_SYSC_DUMP_COMP_SYSC_FS_SYSC_DATA = ONE_HOT(5)  ///< System controller file system (SYSC data) component
-} p64h_sysc_fw_dump_comp_t;
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG = 0U,          ///< Dump whole sysc config - will ignore individual selection of artifacts below
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_FSBL,              ///< SysC FSBL
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG0,              ///< SysC cfg0
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_SYSC_SOC_CFG, ///< System-on-Chip configuration
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_DDR_CFG,      ///< DDR configuration
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_SW_SVC_CFG,   ///< Software service configuration
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_ACOT,         ///< AppC Images Offset Table
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_ENET_SW_CFG,  ///< Ethernet switch configuration
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_KEYS_CFG,     ///< Keys config
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_PQ_FW,        ///< PQ firmware
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_APPC_ZSBL,    ///< AppC ZSBL
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_APPC_RNMI,    ///< AppC RNMI
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG2,              ///< TODO: add this?
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_LAST
+} p64h_sysc_sysc_cfg_dump_comp_t;
+
+/// Enum for appc cfg dump component selection
+typedef enum {
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_CFG = 0U,           ///< Dump whole appc config - will ignore individual selection of artifacts below
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_APPC_BOOTSCRIPT,    ///< Appc bootscript
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_APPC_STATIC_CFG,    ///< Appc static config
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_SW_SV_CFG,          ///< Appc bootcfg software service configuration
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_PARTITION_APPC_CFG, ///< AppC partition config
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_PARTITION_APPC_DTB, ///< AppC partition dtb
+    P64H_SYSC_APPC_CFG_DUMP_COMP_LAST
+} p64h_sysc_appc_cfg_dump_comp_t;
 
 /// system event identifier
 typedef enum {
@@ -257,6 +284,12 @@ typedef struct {
     uint64_t       dsn[DSN_DWORD_LEN]; ///< Device Serial number
 } p64h_sysc_sys_attr_t;
 
+/// logger information
+typedef struct {
+    uint64_t id_mask[P64H_SYSC_LOG_ID_MASK_NUM]; ///< logger id mask
+    uint64_t dest_mask;                          ///< logger destination mask
+} p64h_sysc_sys_log_info_t;
+
 /// logger configuration
 typedef struct {
     p64h_sysc_log_level_t       level; ///< logger level
@@ -310,6 +343,16 @@ typedef struct {
     p64h_sysc_trace_mem_cfg_t    mem_cfg;           ///< if trace_dest_select == SYSTEM_MEM, set up trace buffer
     p64h_sysc_trace_serdes_cfg_t serdes_cfg;        ///< if trace_dest_select == SERDES, set up serdes
 } p64h_sysc_trace_dest_cfg_t;
+
+/**
+ * @brief M1 dump data contents
+ */
+typedef struct {
+    scratchpad_boot_mode_t       boot_mode;   ///< Sticky register for boot control
+    scratchpad_boot_ctxt_t       boot_ctxt;   ///< Sticky register capturing the history of boot sequences across multiple boots/reboots
+    uint32_t                     boot_cnt;    ///< boot counter (16 bits counter)
+    sysc_scratchreg_exc_sticky_t exc_handler; ///< exception handler context
+} p64h_sysc_m1_dump_t;
 
 /**
  * system level trace timestamp configuration
@@ -397,25 +440,45 @@ typedef struct {
     p64h_sysc_trace_dest_t sink_selected;                ///< Currently selected sink
 } p64h_sysc_trace_dev_attr_t;
 
+/// Package data configuration
+typedef struct {
+    bool is_compressed; ///< Indicates if package compression is enabled (true: compressed, false: not compressed)
+    bool is_encrypted;  ///< Indicates if package encryption is enabled (true: encrypted, false: not encrypted)
+} p64h_sysc_fw_pkg_data_cfg_t;
+
 /// Package configuration
 typedef struct {
-    bool compress;   ///< Indicates if package compression is enabled (true: compressed, false: not compressed)
-    bool encryp_opt; ///< Indicates if package encryption is enabled (true: encrypted, false: not encrypted)
+    p64h_sysc_fw_pkg_data_cfg_t pkg_data_cfg; ///< Package data config
+    uint64_t                    pkg_size;     ///< The length of the pkg sent over rpmi.
+    uint64_t uncompressed_pkg_size; ///< The length of the decompressed fw upgrade package. (equal to pkg_size if fw_pkg_cfg.compress == false)
+    bool     apply_pkg;             ///< Whether we should apply the package right after an upload, or wait the apply command
 } p64h_sysc_fw_pkg_cfg_t;
 
-/// firmware upgrade configuration
+/// firmware dump config
 typedef struct {
-    p64h_sysc_fw_pkg_cfg_t fw_pkg_cfg; ///< Package configuration options
-} p64h_sysc_fw_upgrade_cfg_t;
+    uint32_t appc_cfg_binaries_msk[P64H_SYSC_NUM_APPC_HW_PROF];  ///< mask specifying what appc binaries to dump from each appc cfg. appc binary 0 as
+                                                                 ///< the least significant bit, etc.
+    uint16_t sysc_cfg_artifact_msk[P64H_SYSC_SYSC_BOOT_CFG_MAX]; ///< mask (p64h_sysc_sysc_cfg_dump_comp_t) specifying what to dump from each sysc cfg
+    uint8_t  appc_cfg_artifact_msk[P64H_SYSC_NUM_APPC_HW_PROF];  ///< mask (p64h_sysc_appc_cfg_dump_comp_t) specifying what to dump from each appc cfg
+                                                                 ///< artifacts to dump for each appc cfg
+    // uint8_t sysc_cfg_msk; ///< System controller image mask (bitmask, valid range: 0x00 to 0xFF for images 0..7)
+    // uint8_t appc_cfg_msk;   ///< Boot configuration mask (bitmask, valid range: 0x00 to 0xFF for boot configs 0..7)
+    p64h_sysc_fw_pkg_data_cfg_t fw_pkt_cfg; ///< Package data configuration options
+} p64h_sysc_fw_dump_cfg_t;
+
+typedef struct {
+    uint64_t offset;
+    uint64_t size;
+} p64h_sysc_fw_dump_comp_info_t;
 
 /// firmware dump configuration
 typedef struct {
-    p64h_sysc_fw_dump_comp_t comp;          ///< Firmware dump component selection
-    p64h_sysc_fw_pkg_cfg_t   fw_pkt_cfg;    ///< Package configuration options
-    uint32_t                 sysc_img_msk;  ///< System controller image mask (bitmask, valid range: 0x00 to 0xFF for images 0..7)
-    uint32_t                 bootcfg_msk;   ///< Boot configuration mask (bitmask, valid range: 0x00 to 0xFFFFFF for boot configs 0..23)
-    uint32_t                 sysc_data_msk; ///< System controller data mask (partition_id: 0..7, sysc partition: 8)
-} p64h_sysc_fw_dump_cfg_t;
+    // uint32_t appc_cfg_binaries_msk[P64H_SYSC_NUM_APPC_HW_PROF];          ///< One-hot encoded appc binaries for each appc cfg. appc binary 0 as the
+    // least significant bit, etc. uint16_t sysc_cfg_msk[P64H_SYSC_SYSC_BOOT_CFG_MAX];          ///< One-hot encoded (p64h_sysc_fw_dump_comp_t)
+    // artifacts to dump for each sysc cfg uint8_t appc_cfg_msk[P64H_SYSC_NUM_APPC_HW_PROF];          ///< One-hot encoded
+    // (p64h_sysc_appc_cfg_dump_comp_t) artifacts to dump for each appc cfg (excluding appc binaries)
+    uint8_t dump_data[0]; ///< List of p64h_sysc_fw_dump_comp_info_t, one for each bit set to one in the masks.
+} p64h_sysc_fw_dump_pkg_t;
 
 // Firmware dump status configuration
 typedef struct {
@@ -466,6 +529,8 @@ typedef struct {
  *   Structure defining CFM divider measurement count.
  */
 typedef struct {
+    uint32_t cfm_busy;
+    uint32_t refcount;
     uint32_t count[P64H_SYSC_CFM_MEAS_SEL_GENERIC_LAST]; ///< measurement count for all channels
 } p64h_sysc_cfm_meas_count_t;
 
@@ -491,6 +556,7 @@ typedef enum {
 typedef struct {
     uint64_t test_timestamp;
     uint64_t master_timestamp;
+    uint64_t measurement_count;
 } p64h_sysc_fw_pll_timestamp_t;
 
 typedef struct {

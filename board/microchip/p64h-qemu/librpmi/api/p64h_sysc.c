@@ -107,6 +107,13 @@ p64h_err_t p64h_sysc_rpmi_shmem_init(const p64h_sysc_rpmi_shmem_cfg_t* cfg_ptr, 
     }
 
     if (P64H_ERR_OK == rc) {
+        // IPC message callback function
+        (*handle_pptr)->ctxt.ops.ipc_msg_send    = cfg_ptr->ops.ipc_msg_send;
+        (*handle_pptr)->ctxt.ops.ipc_msg_get     = cfg_ptr->ops.ipc_msg_get;
+        (*handle_pptr)->ctxt.ops.ipc_int_handler = p64h_sysc_rpmi_intr_isr;
+    }
+
+    if (P64H_ERR_OK == rc) {
         p64h_sysc_sys_info_t sys_info;
         rc = p64h_sysc_sys_info_get(*handle_pptr, &sys_info);
         if (P64H_ERR_OK == rc) {
@@ -145,4 +152,17 @@ p64h_err_t __attribute__((weak)) p64h_sysc_rpmi_remote_init(const p64h_sysc_rpmi
     return rc;
 }
 
+/**
+ * @brief Uninitialize the remote system controller with the given handle
+ *
+ * @param[in] handle_ptr Pointer to the system controller handle.
+ *
+ * @return p64h_err_t Error code indicating the success or failure of the uninitialization.
+ */
+p64h_err_t __attribute__((weak)) p64h_sysc_rpmi_remote_uninit(p64h_sysc_handle_t* handle_ptr)
+{
+    P64H_SYSC_ASSERT(NULL != handle_ptr, P64H_ERR_LIB_API_NULL_POINTER);
+    handle_ptr->init = false;
+    return P64H_ERR_OK;
+}
 /// @}

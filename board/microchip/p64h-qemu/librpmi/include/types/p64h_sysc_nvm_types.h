@@ -13,6 +13,7 @@
 #define P64H_SYSC_NVM_TYPE_H
 
 #include "p64h_sysc_common_types.h"
+#include <generated/p64h_sysc_errors.h>
 
 /* Public Structs and Enums --------------------------------------- */
 
@@ -28,6 +29,40 @@
 #define P64H_SYSC_NVM_NOC_IF_NVM_EDAC         1u ///< define a NVM EDAC interface
 #define PFLASH_CTRL_DEVICE_MAX                8u ///< Number of external drives behind each PFLASH Controller.
 #define PFLASH_CFG_CS_PAGE_RANGE_INDICES      2u ///< Number of upper and lower set of address in cs_page_range
+
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_INITIAL                                                                                                         \
+    0x00000001u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the initial test
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_WRITE_READ_PAGE                                                                                                 \
+    0x00000002u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the write read page test
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_SECTOR_ERASE                                                                                                    \
+    0x00000004u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the sector erase test
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_BLOCK_LOCK                                                                                                      \
+    0x00000008u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the block lock test
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_0                                                                                                            \
+    0x00000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 0
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_1                                                                                                            \
+    0x08000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 1
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_2                                                                                                            \
+    0x10000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 2
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_3                                                                                                            \
+    0x18000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 3
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_4                                                                                                            \
+    0x20000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 4
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_5                                                                                                            \
+    0x28000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 5
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_6                                                                                                            \
+    0x30000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 6
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_7                                                                                                            \
+    0x38000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 7
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_ERASE_BTW                                                                                                       \
+    0x40000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to erase blocks between tests
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_VERBOSE                                                                                                         \
+    0x80000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to add more print messages.
+#define P64H_SYSC_NVM_XSPI_DIAG_NUM_TESTS         4u ///< Total number of tests that can be run in a single RPMI call
+
+#define P64H_SYSC_NVM_XSPI_STIG_INIT_CMD_ARR_SIZE 8 ///< Max size of the stig commands
+#define P64H_SYSC_NVM_XSPI_SUBSECTOR_ARR_SIZE     4 ///< Max size of the subsector array
+
 /* Public Structs and Enums --------------------------------------- */
 
 /// NVM interface
@@ -44,6 +79,7 @@ typedef enum {
     P64H_SYSC_NVM_IF_ID_NVM_EDAC_1_1,       ///< NVM_EDAC 1, inst=1, connector=3
     P64H_SYSC_NVM_IF_ID_SD_0,               ///< SD interface 0
     P64H_SYSC_NVM_IF_ID_SD_1,               ///< SD interface 1
+    P64H_SYSC_NVM_IF_LAST                   ///< invalid, used for error checking
 } p64h_sysc_nvm_if_id_t;
 
 /// enumerate  Bose–Chaudhuri–Hocquenghem (BCH) type
@@ -96,17 +132,19 @@ typedef enum {
  * @brief Enumeration of NVM NOC interface encoded with p64h_sysc_nvm_noc_if_enc_t
  */
 typedef enum {
-    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_0_0 = 0x0000u, ///< SRAM_EDAC 0, inst=0, connector=0
-    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_0_1 = 0x0101u, ///< SRAM_EDAC 0, inst=1, connector=1
-    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_1_0 = 0x0010u, ///< SRAM_EDAC 1, inst=0, connector=0
-    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_1_1 = 0x0111u, ///< SRAM_EDAC 1, inst=1, connector=1
-    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_2_0 = 0x0022u, ///< SRAM_EDAC 2, inst=0, connector=2
-    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_2_1 = 0x0123u, ///< SRAM_EDAC 2, inst=1, connector=3
-    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_0_0  = 0x1000u, ///< NVM_EDAC 0, inst=0, connector=0
-    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_0_1  = 0x1101u, ///< NVM_EDAC 0, inst=1, connector=1
-    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_1_0  = 0x1012u, ///< NVM_EDAC 1, inst=0, connector=2
-    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_1_1  = 0x1113u, ///< NVM_EDAC 1, inst=1, connector=3
-    P64H_SYSC_NVM_NOC_IF_LAST                     ///< used for error checking and to show when there is no interface to be used
+    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_0_0 = 0x0000u,     ///< SRAM_EDAC 0, inst=0, connector=0
+    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_0_1 = 0x0101u,     ///< SRAM_EDAC 0, inst=1, connector=1
+    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_1_0 = 0x0010u,     ///< SRAM_EDAC 1, inst=0, connector=0
+    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_1_1 = 0x0111u,     ///< SRAM_EDAC 1, inst=1, connector=1
+    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_2_0 = 0x0022u,     ///< SRAM_EDAC 2, inst=0, connector=2
+    P64H_SYSC_NVM_NOC_IF_SRAM_EDAC_2_1 = 0x0123u,     ///< SRAM_EDAC 2, inst=1, connector=3
+    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_0_0  = 0x1000u,     ///< NVM_EDAC 0, inst=0, connector=0
+    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_0_1  = 0x1101u,     ///< NVM_EDAC 0, inst=1, connector=1
+    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_1_0  = 0x1012u,     ///< NVM_EDAC 1, inst=0, connector=2
+    P64H_SYSC_NVM_NOC_IF_NVM_EDAC_1_1  = 0x1113u,     ///< NVM_EDAC 1, inst=1, connector=3
+    P64H_SYSC_NVM_NOC_IF_SYS_IF_0      = 0x01110000u, ///< SYSTEM controller SPI interface 0
+    P64H_SYSC_NVM_NOC_IF_SYS_IF_1      = 0x11110000u, ///< SYSTEM controller SPI interface 1
+    P64H_SYSC_NVM_NOC_IF_LAST                         ///< used for error checking and to show when there is no interface to be used
 } p64h_sysc_nvm_noc_if_t;
 
 /// NVM CTRL clock selection
@@ -164,6 +202,43 @@ typedef enum {
     P64H_SYSC_SPI_FLASH_AXI_SRC_SD_E_MMC, ///< AXI4 connection via SD/eMMC Ctrl
     P64H_SYSC_SPI_FLASH_AXI_SRC_LAST      ///< invalid used for error checking
 } p64h_sysc_spi_flash_axi_src_t;
+
+/**
+ * @brief
+ *  Struct for the possible XSPI diagnostic tests that can
+ *  be run.
+ */
+typedef union {
+    struct {
+        // enables for the various tests.
+        unsigned en_initial_test         : 1; ///< single byte write/read test
+        unsigned en_write_read_page_test : 1; ///< single page write/read test
+        unsigned en_sector_erase_test    : 1; ///< sector erase test
+        unsigned en_block_lock_test      : 1; ///< block lock protection test
+
+        unsigned reserved                : 23; ///< bits 4-26 reserved for future use
+
+        // Options to change how the run is done
+        unsigned chip_select         : 3; ///< which chip select to use for the testing
+        unsigned erase_between_tests : 1; ///< perform sector erases between tests, can be enabled whenever, but the en_sector_erase_test passing is
+                                          ///< suggested, since it checks to see if the sector erase actually works. Also clears block locks between
+                                          ///< all tests.
+        unsigned verbose : 1;             ///< Increase output to aid debugging.
+
+    } bits;        ///< individual bits represnting tests to run
+    uint32_t mask; ///< Mask for the above bits
+
+} p64h_sysc_spi_flash_diag_xspi_cfg_struct_t;
+
+/**
+ * @brief
+ *  This struct packages a test info struct containing what tests should be run with an
+ *  array of test results from the test that were run
+ */
+typedef struct {
+    p64h_sysc_spi_flash_diag_xspi_cfg_struct_t test_info; ///< struct containing what tests should be run and other controls
+    p64h_err_t                                 test_errs[P64H_SYSC_NVM_XSPI_DIAG_NUM_TESTS]; ///< array of test results
+} p64h_sysc_nvm_diag_test_t;
 
 /**
  * @brief
@@ -485,7 +560,7 @@ typedef enum {
 /**
  * @brief
  *  STIG initialization instruction for external memory.
- *  Note this currently doesn't support glueing instrcutions
+ *  Note this currently doesn't support glueing instructions
  *  and only supports profile 1 instructions.
  */
 typedef struct {
@@ -554,46 +629,55 @@ typedef struct {
 
 /**
  * @brief
+ * Configuration struct for the xspi phy
+ */
+typedef struct {
+    uint32_t boot_cfg;                ///< initial xspi boot config
+    uint32_t xspi_init_rb_valid_time; ///< Initial value of the rb valid time register
+    uint32_t phy_dq_timing;           ///< Initial value of the dq timing register
+    uint32_t phy_dqs_timing;          ///< Initial value of the dqs timing register
+    uint32_t phy_gate_lpbk_ctrl;      ///< Initial value of the gate loopback control register
+    uint32_t phy_dll_master_ctrl;     ///< Initial value of the dll master control register
+    uint32_t phy_dll_slave_ctrl;      ///< Initial value of the phy dll slave control register
+    uint32_t xspi_discovery;          ///< Initial value of the xspi discover register
+
+} p64h_sysc_spi_flash_xspi_phy_cfg_t;
+
+/**
+ * @brief
  *  Defines xSPI block configuration inside SPI_CTRL
  */
 typedef struct {
-    uint32_t                                    num_reset;        ///< number of resets
-    p64h_sysc_top_nvm_acsu_ctrl_clk_out_t       ctrl_clk;         ///< Controller
-    p64h_sysc_spi_flash_xspi_program_seq_cfg_t  program_seq_cfg;  ///< information for the program sequence
-    p64h_sysc_spi_flash_xspi_read_seq_cfg_t     read_seq_cfg;     ///< information for the read sequence
-    p64h_sysc_spi_flash_xspi_global_param_cfg_t global_param_cfg; ///< information for the global pramaters config
-    p64h_sysc_spi_flash_xspi_mode_t             command_ios;      ///< TODO delete once yaml updated this data is available elswhere in the struct
-    p64h_sysc_spi_flash_xspi_mode_t             address_ios;      ///< TODO delete once yaml updated this data is available elswhere in the struct
-    p64h_sysc_spi_flash_xspi_mode_t             data_ios;         ///< TODO delete once yaml updated this data is available elswhere in the struct
-    p64h_sysc_spi_flash_xspi_data_rate_t        data_rate;        ///< TODO delete once yaml updated this data is available elswhere in the struct
-    p64h_sysc_spi_flash_xspi_profile_t          device_profile;   ///< TODO delete once yaml updated this data is available elsewhere in the struct
-    uint8_t                                     write_nonvolatile_lock_cmd; ///< TODO these are not ubiquitous, delete and use alternate approach
-    uint8_t                                     erase_nonvolatile_lock_cmd; ///< TODO these are not ubiquitous, delete and use alternate approach
-    uint8_t                                     read_nonvolatile_lock_cmd;  ///< TODO these are not ubiquitous, delete and use alternate approach
-    uint8_t                                     write_volatile_lock_cmd;    ///< TODO these are not ubiquitous, delete and use alternate approach
-    p64h_sysc_spi_flash_xspi_reset_cmd_t        reset_cmd_cfg;              ///< Information for the reset command config
-    p64h_sysc_spi_flash_xspi_block_lock_t       block_protect_cfg;          ///< information for the block protection scheme for the device.
-    p64h_sysc_spi_flash_xspi_dev_rel_dly_t      dev_rel_dly_cfg;            ///< information for the device relative delay config
-    p64h_sysc_spi_flash_xspi_wel_seq_cfg_t      wel_seq_cfg;                ///< information for the write enable config
-    p64h_sysc_spi_flash_xspi_chip_erase_t       chip_erase_cfg;             ///< information for the chip erase config
-    p64h_sysc_spi_flash_xspi_sector_t*          subsector_data_arr;         ///< contians subsector information
-    uint32_t                                    subsector_data_arr_len;     ///< length of subsector info
-    p64h_sysc_spi_flash_xspi_sector_t           sector_data;                ///< contians sector information
-    p64h_sysc_spi_flash_xspi_stat_seq_cfg_t     stat_seq_cfg;               ///< status sequence config
-    p64h_sysc_spi_flash_xspi_direct_mode_cfg_t  direct_mode_cfg;            ///< direct mode config
+    uint32_t                                    num_reset;         ///< number of resets
+    p64h_sysc_top_nvm_acsu_ctrl_clk_out_t       ctrl_clk;          ///< Controller
+    p64h_sysc_spi_flash_xspi_program_seq_cfg_t  program_seq_cfg;   ///< information for the program sequence
+    p64h_sysc_spi_flash_xspi_read_seq_cfg_t     read_seq_cfg;      ///< information for the read sequence
+    p64h_sysc_spi_flash_xspi_global_param_cfg_t global_param_cfg;  ///< information for the global pramaters config
+    p64h_sysc_spi_flash_xspi_reset_cmd_t        reset_cmd_cfg;     ///< Information for the reset command config
+    p64h_sysc_spi_flash_xspi_block_lock_t       block_protect_cfg; ///< information for the block protection scheme for the device.
+    p64h_sysc_spi_flash_xspi_dev_rel_dly_t      dev_rel_dly_cfg;   ///< information for the device relative delay config
+    p64h_sysc_spi_flash_xspi_wel_seq_cfg_t      wel_seq_cfg;       ///< information for the write enable config
+    p64h_sysc_spi_flash_xspi_chip_erase_t       chip_erase_cfg;    ///< information for the chip erase config
+    p64h_sysc_spi_flash_xspi_sector_t
+             subsector_data_arr[P64H_SYSC_NVM_XSPI_SUBSECTOR_ARR_SIZE]; ///< contians subsector information maximum of 4 entries
+    uint32_t subsector_data_arr_len;                                    ///< length of subsector info
+    p64h_sysc_spi_flash_xspi_sector_t          sector_data;             ///< contians sector information
+    p64h_sysc_spi_flash_xspi_stat_seq_cfg_t    stat_seq_cfg;            ///< status sequence config
+    p64h_sysc_spi_flash_xspi_direct_mode_cfg_t direct_mode_cfg;         ///< direct mode config
 
     // instructions for the setup of the external memory
-    p64h_sysc_spi_flash_xspi_stig_init_instr_t* stig_init_cmd_arr;     ///< STIG initialization commands
-    uint32_t                                    stig_init_cmd_arr_len; ///< lenght of STIG initializaiton commands
-
+    p64h_sysc_spi_flash_xspi_stig_init_instr_t
+             stig_init_cmd_arr[P64H_SYSC_NVM_XSPI_STIG_INIT_CMD_ARR_SIZE]; ///< STIG initialization commands maximum of 8 entries
+    uint32_t stig_init_cmd_arr_len;                                        ///< length of STIG initializaiton commands
+    p64h_sysc_spi_flash_xspi_phy_cfg_t initial_phy_config;                 ///< Phy config at bringup
 } p64h_sysc_spi_flash_xspi_cfg_t;
 
 /// PFlash controller width options
 typedef enum {
-    P64H_SYSC_PFLASH_DATA_WIDTH_8B = 0u, ///< Parallel flash 8b data width
-    P64H_SYSC_PFLASH_DATA_WIDTH_16B,     ///< Parallel flash 16b data width
-    P64H_SYSC_PFLASH_DATA_WIDTH_32B,     ///< Parallel flash 32b data width
-    P64H_SYSC_LAST_PFLASH_DATA_WIDTH,    ///< Out of range value.
+    P64H_SYSC_PFLASH_DATA_WIDTH_8B  = 8u,  ///< Parallel flash 8b data width
+    P64H_SYSC_PFLASH_DATA_WIDTH_16B = 16u, ///< Parallel flash 16b data width
+    P64H_SYSC_PFLASH_DATA_WIDTH_32B = 32u, ///< Parallel flash 32b data width
+    P64H_SYSC_LAST_PFLASH_DATA_WIDTH,      ///< Out of range value.
 } p64h_sysc_pflash_data_width_t;
 
 /// NVM NAND controller boot configuration
@@ -715,6 +799,74 @@ typedef struct {
     p64h_sysc_pflash_cfg_intf_addr_mode_t     intf_addr_mode;                      ///< PFlash controller addressing mode.
     p64h_sysc_pflash_cfg_interface_delay_t    intf_delay;                          ///< Delay settings for commands.
 } p64h_sysc_pflash_cfg_t;
+
+/// S29GL01GS ID-CFI Address Space Overlay (ASO), word-addressed (x16), offsets relative to sector address
+typedef struct {
+    /// ID (Autoselect) Address Map
+    uint16_t manufacturer_id;       ///< (SA) + 0x0000
+    uint16_t device_id_start;       ///< (SA) + 0x0001
+    uint16_t sect_protect_verif;    ///< (SA) + 0x0002
+    uint16_t indicator_bits;        ///< (SA) + 0x0003
+    uint16_t reserved_0004_000B[8]; ///< (SA) + 0x0004–0x000B
+    uint16_t lower_software_bits;   ///< (SA) + 0x000C
+    uint16_t upper_software_bits;   ///< (SA) + 0x000D
+    uint16_t device_id_density;     ///< (SA) + 0x000E
+    uint16_t device_id_end;         ///< (SA) + 0x000F
+    /// CFI Query Identification String
+    uint16_t qry[3];                   ///< (SA) + 0x0010-0x0012
+    uint16_t prim_oem_cmd_set[2];      ///< (SA) + 0x0013-0x0014
+    uint16_t prim_oem_ext_tbl_addr[2]; ///< (SA) + 0x0015-0x0016
+    uint16_t alt_oem_cmd_set[2];       ///< (SA) + 0x0017-0x0018
+    uint16_t alt_oem_ext_tbl_addr[2];  ///< (SA) + 0x0019-0x001A
+    /// CFI System Interface String
+    uint16_t vcc_min;                 ///< (SA) + 0x001B
+    uint16_t vcc_max;                 ///< (SA) + 0x001C
+    uint16_t vpp_min;                 ///< (SA) + 0x001D
+    uint16_t vpp_max;                 ///< (SA) + 0x001E
+    uint16_t word_prog_time_typ;      ///< (SA) + 0x001F
+    uint16_t buf_prog_time_typ;       ///< (SA) + 0x0020
+    uint16_t sect_erase_time_typ;     ///< (SA) + 0x0021
+    uint16_t chip_erase_time_typ;     ///< (SA) + 0x0022
+    uint16_t word_prog_time_max_mul;  ///< (SA) + 0x0023
+    uint16_t buf_prog_time_max_mul;   ///< (SA) + 0x0024
+    uint16_t sect_erase_time_max_mul; ///< (SA) + 0x0025
+    uint16_t chip_erase_time_max_mul; ///< (SA) + 0x0026
+    /// CFI Device Geometry Definition
+    uint16_t device_size;             ///< (SA) + 0x0027
+    uint16_t device_intf_desc[2];     ///< (SA) + 0x0028-0x0029
+    uint16_t buf_prog_bytes_max[2];   ///< (SA) + 0x002A-0x002B
+    uint16_t erase_block_regions_num; ///< (SA) + 0x002C
+    uint16_t erase_block_region1[4];  ///< (SA) + 0x002D–0x0030
+    uint16_t erase_block_region2[4];  ///< (SA) + 0x0031–0x0034
+    uint16_t erase_block_region3[4];  ///< (SA) + 0x0035–0x0038
+    uint16_t erase_block_region4[4];  ///< (SA) + 0x0039–0x003C
+    uint16_t reserved_003D_003F[3];   ///< (SA) + 0x003D–0x003F
+    /// CFI Primary (PRI) Vendor-Specific Extended Query
+    uint16_t pri[3];                       ///< (SA) + 0x0040-0x0042
+    uint16_t pri_major_version_num;        ///< (SA) + 0x0043
+    uint16_t pri_minor_version_num;        ///< (SA) + 0x0044
+    uint16_t asu_proc_tech_bits;           ///< (SA) + 0x0045
+    uint16_t erase_suspend_support;        ///< (SA) + 0x0046
+    uint16_t sect_protect_support;         ///< (SA) + 0x0047
+    uint16_t temp_sect_unprotect_support;  ///< (SA) + 0x0048
+    uint16_t sect_protect_scheme;          ///< (SA) + 0x0049
+    uint16_t simultaneous_op_support;      ///< (SA) + 0x004A
+    uint16_t burst_mode_type_support;      ///< (SA) + 0x004B
+    uint16_t page_mode_type_support;       ///< (SA) + 0x004C
+    uint16_t acc_supply_min_support;       ///< (SA) + 0x004D
+    uint16_t acc_supply_max_support;       ///< (SA) + 0x004E
+    uint16_t wp_support;                   ///< (SA) + 0x004F
+    uint16_t prog_suspend_support;         ///< (SA) + 0x0050
+    uint16_t unlock_bypass_support;        ///< (SA) + 0x0051
+    uint16_t sss_size;                     ///< (SA) + 0x0052
+    uint16_t sw_features;                  ///< (SA) + 0x0053
+    uint16_t page_size;                    ///< (SA) + 0x0054
+    uint16_t erase_suspend_time_max;       ///< (SA) + 0x0055
+    uint16_t prog_suspend_time_max;        ///< (SA) + 0x0056
+    uint16_t reserved_0057_0077[33];       ///< (SA) + 0x0057–0x0077
+    uint16_t embedded_hw_rst_time_max;     ///< (SA) + 0x0078
+    uint16_t non_embedded_hw_rst_time_max; ///< (SA) + 0x0079
+} p64h_sysc_pflash_id_cfi_aso_map_t;
 
 /**
  * @brief

@@ -36,8 +36,6 @@
 typedef enum p64h_sysc_intr_ctrl_type_t {
     P64H_SYSC_INTR_CTRL_LIC = 0,
     P64H_SYSC_INTR_CTRL_PLIC,
-    P64H_SYSC_INTR_CTRL_ALIC,
-    P64H_SYSC_INTR_CTRL_APLIC
 } p64h_sysc_intr_ctrl_type_t;
 
 /////////////////

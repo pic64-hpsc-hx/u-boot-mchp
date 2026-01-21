@@ -17,6 +17,10 @@
 #define MAX_HART_COUNT            8U // The maximum number of cores
 #define P64H_SYSC_DESC_STRING_MAX 256UL
 
+///< Maximum size of 32-bit memory to read
+// TODO: reduce the size from 0x1000(16K) to 0x400(4K)
+#define P64H_SYSC_MEM_READ_MAX 0x1000
+
 /**
  * @brief
  *  Unit test return codes
@@ -76,7 +80,6 @@ typedef enum {
     P64H_SYSC_TEST_UTEST_TYPE_LAST
 } p64h_sysc_test_utest_type_e;
 
-typedef p64h_sysc_test_utest_type_e p64h_sysc_tid_t;
 /**
  * @brief
  *  NoC Types
@@ -338,6 +341,12 @@ typedef struct {
     p64h_sysc_test_utest_param_t param; ///< test parameters
 } p64h_sysc_test_launch_cfg_t;
 
+/// etest execution configuration
+typedef struct {
+    p64h_sysc_test_utest_type_e type;  ///< unit test type
+    uint32_t                    param; ///< test parameters
+} p64h_sysc_etest_launch_cfg_t;
+
 /// test report
 typedef struct {
     uint32_t placeholder; ///< placeholder for test report
@@ -361,5 +370,16 @@ typedef struct {
 typedef struct {
     uint32_t value; ///< Pointer to value to test
 } p64h_sysc_test_reg_op_resp_t;
+
+/// memory dump operation request
+typedef struct {
+    uint64_t addr; ///< Address to read to
+    uint32_t size; ///< size to read value to
+} p64h_sysc_test_mem_dump_req_t;
+
+/// memory dump operation response
+typedef struct {
+    uint32_t value[P64H_SYSC_MEM_READ_MAX]; ///<  Array of memory values read
+} p64h_sysc_test_mem_dump_resp_t;
 
 #endif // P64H_SYSC_TEST_TYPES_H

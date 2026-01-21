@@ -32,7 +32,7 @@ typedef enum {
     P64H_SYSC_PSM_ID_APPC_P6,     ///< AppC Partition 6
     P64H_SYSC_PSM_ID_APPC_P7,     ///< AppC Partition 7
     P64H_SYSC_PSM_ID_SYSC,        ///< SysC Partition
-    P64H_SYSC_PSM_ID_MAX,
+    P64H_SYSC_PSM_ID_COUNT        ///< Number of partitions (not a valid ID)
 } p64h_sysc_psm_id_t;
 
 /// Enum for selecting the memory buffer mode of operation

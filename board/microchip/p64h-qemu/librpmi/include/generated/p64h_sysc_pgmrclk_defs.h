@@ -1,4 +1,4 @@
-/* (c) 2025 Microchip Technology Inc. */
+/* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
 /* ======================================= */

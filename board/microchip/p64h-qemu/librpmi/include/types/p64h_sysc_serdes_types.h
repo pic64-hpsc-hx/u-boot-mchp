@@ -88,7 +88,8 @@
 #define P64H_SYSC_SERDES_RT_CFG_MASK_REFCLK            0x00400000U ///< Bitmask for REFCLK
 #define P64H_SYSC_SERDES_RT_CFG_MASK_DLOS              0x00800000U ///< Bitmask for DLOS
 #define P64H_SYSC_SERDES_RT_CFG_MASK_LPBK              0x01000000U ///< Bitmask for LPBK
-#define P64H_SYSC_SERDES_RT_CFG_MASK_ALL_FIELDS        0x01FFFFFFU ///< Bitmask for ALL_FIELDS
+#define P64H_SYSC_SERDES_RT_CFG_MASK_TX_DRVR           0x02000000U ///< Bitmask for TX DRIVER
+#define P64H_SYSC_SERDES_RT_CFG_MASK_ALL_FIELDS        0x03FFFFFFU ///< Bitmask for ALL_FIELDS
 
 /// Some recommended RX calibration sequences preprocessed into uint64_t's
 #define P64H_SYSC_SERDES_RX_FULLCALIB 0x00000004BD876521U ///< Full calibration sequence, should be run once on initial SerDes bringup
@@ -102,11 +103,14 @@
 #define PATTGEN_USR_PAT_NUM_BYTES       40u ///< Pattern Generator supports user pattern 320 bits
 #define ERR_INJ_MODE_NUM_BYTES          10u ///< Error injection mode 80 bits
 #define SQUELCH_NUM_BYTES               10u ///< Squelch 80 bits
-/// Bitmask for ANLT Diagnostic Fields
-#define P64H_SYSC_SERDES_DIAG_MASK_DLOS       0b001U ///< Bitmask for DLOS
-#define P64H_SYSC_SERDES_DIAG_MASK_PATTMON    0b010U ///< Bitmask for PATTMON
-#define P64H_SYSC_SERDES_DIAG_MASK_RX_CALIB   0b100U ///< Bitmask for RX_CALIB
-#define P64H_SYSC_SERDES_DIAG_MASK_ALL_FIELDS 0b111U ///< Bitmask for ALL_FIELDS
+/// Bitmask for SerDes Diagnostic Fields
+#define P64H_SYSC_SERDES_DIAG_MASK_RATE       0b000001U ///< Bitmask for RATE
+#define P64H_SYSC_SERDES_DIAG_MASK_TXPLL_LOCK 0b000010U ///< Bitmask for TXPLL_LOCK
+#define P64H_SYSC_SERDES_DIAG_MASK_TRANSCOND  0b000100U ///< Bitmask for TRANSCOND
+#define P64H_SYSC_SERDES_DIAG_MASK_DLOS       0b001000U ///< Bitmask for DLOS
+#define P64H_SYSC_SERDES_DIAG_MASK_PATTMON    0b010000U ///< Bitmask for PATTMON
+#define P64H_SYSC_SERDES_DIAG_MASK_RX_CALIB   0b100000U ///< Bitmask for RX_CALIB
+#define P64H_SYSC_SERDES_DIAG_MASK_ALL_FIELDS 0b111111U ///< Bitmask for ALL_FIELDS
 
 /* Public Structs and Enums --------------------------------------- */
 
@@ -304,6 +308,19 @@ typedef enum p64h_sysc_serdes_lpbk_t {
     P64H_SYSC_SERDES_LPBK_LAST               ///< invalid, used for error checking
 } p64h_sysc_serdes_lpbk_t;
 
+/// TXDRV configuration
+typedef struct {
+    uint32_t txodrv     : 2;
+    uint32_t txitrim    : 2;
+    uint32_t txdrv      : 3;
+    uint32_t txdrvtrim  : 24;
+
+    uint16_t txdel      : 16;
+
+    uint32_t txdata_inv : 8;
+    uint32_t txrtrim    : 3;
+} p64h_sysc_serdes_if_tx_drvr_t;
+
 /// RX Calibration sequence options
 typedef enum {
     P64H_SYSC_SERDES_RXCALIB_END_OF_SEQ = 0u,     ///< 0x0: End of sequence - termination code
@@ -409,6 +426,15 @@ typedef enum {
     P64H_SYSC_SERDES_RTT_150_OHM,      ///< 0b11: Target is 150 Ohms
     P64H_SYSC_SERDES_RTT_LAST          ///< invalid, used for error checking
 } p64h_sysc_serdes_rtt_prog_t;
+
+/// Transition Conditioner Status
+typedef enum {
+    P64H_SYSC_SERDES_TRANSCOND_NOT_CFG = 0, ///< Transition Conditioner is not currently configured/enabled
+    P64H_SYSC_SERDES_TRANSCOND_NORMAL,      ///< Databus is not all stuck at one value
+    P64H_SYSC_SERDES_TRANSCOND_STUCK_AT_0,  ///< Databus is stuck at all 0's
+    P64H_SYSC_SERDES_TRANSCOND_STUCK_AT_1,  ///< Databus is stuck at all 1's
+    P64H_SYSC_SERDES_TRANSCOND_LAST,        ///< invalid, used for error checking
+} p64h_sysc_serdes_transcond_stat_t;
 
 /// serdes group attributes
 typedef struct {
@@ -597,13 +623,15 @@ typedef struct {
     bool                            rx_fsd_continuous; ///< Fast Signal Detect Configuration set to
                                                        ///< 0: One time measurement
                                                        ///< 1: Continuous measurement (required for DLOS)
-    bool                        rx_fsd_en;             ///< Fast Signal Detect Enable
-    bool                        rx_invert_en;          ///< Invert Enable
-    bool                        refclk_en;             ///< TXPLL refclk receiver enable for the lane
+    bool                          rx_fsd_en;           ///< Fast Signal Detect Enable
+    bool                          rx_invert_en;        ///< Invert Enable
+    bool                          refclk_en;           ///< TXPLL refclk receiver enable for the lane
 
-    p64h_sysc_serdes_dlos_cfg_t dlos; ///< DLOS configuration for the lane
+    p64h_sysc_serdes_dlos_cfg_t   dlos; ///< DLOS configuration for the lane
 
-    p64h_sysc_serdes_lpbk_t     lpbk; ///< Loopback point (if specified) for the lane
+    p64h_sysc_serdes_lpbk_t       lpbk; ///< Loopback point (if specified) for the lane
+
+    p64h_sysc_serdes_if_tx_drvr_t tx_drvr; ///< TX driver configuration for the lane
 } p64h_sysc_serdes_if_rt_cfg_t;
 
 /// serdes grp peripheral configuration
@@ -615,14 +643,22 @@ typedef struct {
 
 /// serdes perlane diagnostics
 typedef struct {
-    uint8_t                          mask;     ///< One-hot mask for what fields to return
-    bool                             dlos;     ///< Current status of DLOS for the lane
-    p64h_sysc_serdes_pattmon_sync_t  pattmon;  ///< Current Pattern Monitor status for the lane
-    p64h_sysc_serdes_rx_calib_stat_t rx_calib; ///< Current Rx Calibration status for the lane
+    uint8_t                           mask;       ///< One-hot mask for what fields to return
+    p64h_sysc_serdes_rate_t           rate;       ///< Current Rate SerDes is Configured to
+    bool                              txpll_lock; ///< Current TXPLL lock status
+    p64h_sysc_serdes_transcond_stat_t transcond;  ///< Current Transition Conditioner Status possible values are
+                                                  ///< NOT_CFG: Transition Conditioner is not configured on current lane
+                                                  ///< NORMAL: Databus is not stuck at a value
+                                                  ///< STUCK_AT_0: Databus is stuck at zero
+                                                  ///< STUCK_AT_1: Databus is stuck at 1
+    bool                             dlos;        ///< Current status of DLOS for the lane
+    p64h_sysc_serdes_pattmon_sync_t  pattmon;     ///< Current Pattern Monitor status for the lane
+    p64h_sysc_serdes_rx_calib_stat_t rx_calib;    ///< Current Rx Calibration status for the lane
 } p64h_sysc_serdes_if_diag_t;
 
 /// serdes group diagnostic
 typedef struct {
+    p64h_sysc_serdes_grp_id_t  name;                                     ///< SerDes group name
     uint8_t                    mask;                                     ///< One-hot Mask for which lanes to consider
     uint8_t                    num_lanes;                                ///< Number of lanes in the group, must be 1,2,4, or 8
     p64h_sysc_serdes_if_diag_t lane[P64H_SYSC_SERDES_MAX_NUM_GRP_LANES]; ///< Status for each lane in the group

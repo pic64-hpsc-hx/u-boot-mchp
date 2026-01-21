@@ -97,7 +97,8 @@ typedef struct p64h_sysc_svc_rpmi_client_t {
     p64h_sysc_rpmi_q_int_mode_t     p2a_queue_int_mode; ///< P2A queue interrupt mode
     p64h_sysc_rpmi_q_int_mode_t     a2p_queue_int_mode; ///< A2P queue interrupt mode
     p64h_sysc_rpmi_access_control_t access_control;     ///< access control level
-    bool req_posted; ///< default false, when true API send req, check resp and return a message when response is not available
+    bool     req_posted;  ///< default false, when true API send req, check resp and return a message when response is not available
+    uint32_t ipc_channel; ///< IPC channel ID
 } p64h_sysc_svc_rpmi_client_t;
 
 /// system service enable
@@ -130,7 +131,9 @@ typedef enum {
 typedef struct {
     bool     enable[LAST_P64H_SYSC_PWR_WAKEUP_TYPE]; ///< determine which wakeup is enabled
     uint64_t timer_interval;                         ///< timer interval, 0 means is disabled
+    uint8_t  timer_id;                               ///< timer identifier
     uint8_t  gpio_id;                                ///< gpio identifier
+    uint8_t  gpio_level_high;                        ///< gpio level high trigger the wake up
     uint8_t  ras_profile_id;                         ///< ras profile identifier
 } p64h_sysc_pwr_wakeup_cfg_t;
 
@@ -171,7 +174,6 @@ typedef struct {
     p64h_sysc_svc_rpmi_client_t rpmi_client;       ///< rpmi_client
     bool                        serial_com_enable; ///< enable serial communication
     p64h_sysc_uart_inst_id_t    uart_id;           ///< UART identifier
-    uint32_t                    ipc1_chnl_mask;    ///< IPC1 channels' mask
 } p64h_sysc_svc_com_cfg_t;
 
 /// system trace service configuration

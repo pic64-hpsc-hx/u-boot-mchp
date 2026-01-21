@@ -23,10 +23,10 @@ p64h_err_t p64h_sysc_sys_evt_state_get(const p64h_sysc_handle_t* handle_ptr, con
 p64h_err_t p64h_sysc_sys_info_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_sys_info_t* sys_info_ptr);
 p64h_err_t p64h_sysc_sys_attr_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_sys_attr_t* sys_attr_ptr);
 
-p64h_err_t p64h_sysc_sys_log_num_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_log_ptr);
-p64h_err_t p64h_sysc_sys_log_list_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_log_id_t* lids_ptr, bool shmem_xfer);
-p64h_err_t p64h_sysc_sys_log_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, const p64h_sysc_sys_log_cfg_t cfg_ptr);
-p64h_err_t p64h_sysc_sys_log_cfg_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, p64h_sysc_sys_log_cfg_t* cfg_ptr);
+p64h_err_t p64h_sysc_sys_log_info_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_sys_log_info_t* log_info_ptr);
+p64h_err_t p64h_sysc_sys_log_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, const p64h_sysc_sys_log_cfg_t* cfg_ptr);
+p64h_err_t p64h_sysc_sys_log_cfg_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, const p64h_sysc_log_destination_t did,
+                                     p64h_sysc_sys_log_cfg_t* cfg_ptr);
 p64h_err_t p64h_sysc_sys_log_data_get(const p64h_sysc_handle_t* handle_ptr, uint64_t requested_read_offset, void* data_buffer,
                                       uint64_t data_buffer_size, uint64_t* resp_offset_ptr, uint32_t* bytes_read_ptr,
                                       uint64_t* current_write_offset_ptr);
@@ -44,11 +44,12 @@ p64h_err_t p64h_sysc_sys_trace_dev_attr_get(const p64h_sysc_handle_t* handle_ptr
 p64h_err_t p64h_sysc_sys_trace_dev_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_trace_dev_cfg_t* cfg_ptr);
 p64h_err_t p64h_sysc_sys_trace_dev_cfg_set(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_trace_dev_cfg_t* cfg_ptr);
 
-p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_upload(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_upgrade_cfg_t* cfg_ptr, const void* data_ptr,
+p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_upload(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_pkg_cfg_t* cfg_ptr, const void* data_ptr,
                                                size_t size, bool shmem_xfer);
-p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_apply(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_upgrade_cfg_t* cfg_ptr);
-p64h_err_t p64h_sysc_sys_fw_dump(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_dump_cfg_t* cfg_ptr, uint32_t* dump_size);
-p64h_err_t p64h_sysc_sys_fw_download(const p64h_sysc_handle_t* handle_ptr, void* data_ptr, size_t size, bool shmem_xfer);
+p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_apply(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_pkg_cfg_t* cfg_ptr);
+p64h_err_t p64h_sysc_sys_fw_dump(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_dump_cfg_t* cfg_ptr);
+p64h_err_t p64h_sysc_sys_fw_download(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_fw_dump_cfg_t* cfg_ptr, void* data_ptr, size_t size,
+                                     bool shmem_xfer);
 p64h_err_t p64h_sysc_sys_fw_dump_status_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_fw_dump_status_t* status_ptr);
 
 p64h_err_t p64h_sysc_sys_time_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_time_t* time_ptr);
@@ -64,5 +65,6 @@ p64h_err_t p64h_sysc_sys_cfm_meas_count_get(const p64h_sysc_handle_t* handle_ptr
 p64h_err_t p64h_sysc_sys_fw_pll_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_pll_cfg_t* fw_pll_cfg_ptr);
 p64h_err_t p64h_sysc_sys_fw_pll_timestamp_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_fw_pll_timestamp_t* timestamp_ptr);
 p64h_err_t p64h_sysc_sys_dtb_fixup(const p64h_sysc_handle_t* handle_ptr, const uint64_t dtb_addr);
+p64h_err_t p64h_sysc_m1_dump(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_m1_dump_t* m1_dump_ptr);
 #endif // P64H_SYSC_SYSTEM_H
 /// @}

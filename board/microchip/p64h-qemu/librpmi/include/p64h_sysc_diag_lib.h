@@ -18,19 +18,25 @@
 #include <generated/p64h_sysc_lsio_defs.h>
 #include <types/p64h_sysc_serdes_types.h>
 #include <types/p64h_sysc_system_types.h>
+#include "ras/p64h_acpi_tables.h"
+#include "generated/p64h_sysc_ras_data_defs.h"
+#include <types/p64h_sysc_psm_types.h>
 
 /// info options
 typedef struct {
-    bool no_stdout;                         ///< no stdout
-    bool file_output;                       ///< output to file
-    char output_path[P64H_SYSC_STRING_MAX]; ///< filepath to output
-    bool verbose;                           ///< verbose mode
+    bool  no_stdout;                         ///< no stdout
+    bool  file_output;                       ///< output to file
+    char  output_path[P64H_SYSC_STRING_MAX]; ///< filepath to output
+    char* mode;                              ///< file access mode
+    bool  verbose;                           ///< verbose mode
 } p64h_sysc_info_options_t;
 
 p64h_err_t p64h_sysc_ddr_info(const p64h_sysc_ddr_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_ddr_phy_info(const uint32_t ddr_phy_id, const p64h_sysc_ddr_phy_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_lsio_info(const p64h_sysc_lsio_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_nvm_cfg_info(const p64h_sysc_nvm_cpair_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_nvm_device_info(const p64h_sysc_nvm_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_nvm_diag(const p64h_sysc_nvm_diag_test_t* diag_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_serdes_info(const p64h_sysc_serdes_grp_attr_t* attr_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_serdes_diag(const p64h_sysc_serdes_grp_diag_t* diag_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_sys_info(const p64h_sysc_sys_info_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
@@ -38,6 +44,18 @@ p64h_err_t p64h_sysc_sys_attr(const p64h_sysc_sys_attr_t* cfg_ptr, const p64h_sy
 p64h_err_t p64h_sysc_pgmrclk_cfg_info(const p64h_pgmrclk_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_acot_entry_info(const p64h_sysc_acot_entry_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
 p64h_err_t p64h_sysc_appc_boot_cfg_info(const p64h_sysc_acot_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_ras_err_decode_cper_to_buf(const p64h_acpi_hest_generic_data_v300_t* rec, const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_ras_err_decode_erte_to_buf(const p64h_sysc_ras_erte_t* log_ptr, uint32_t num_entries,
+                                                const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_fw_pll_sup_info(const p64h_sysc_fw_pll_timestamp_t* timestamp_ptr, const p64h_sysc_info_options_t* options_ptr,
+                                     const uint32_t divide);
+p64h_err_t p64h_sysc_cfm_count_info(const p64h_sysc_cfm_meas_count_t* count_ptr, const p64h_sysc_cfm_inst_t cfm_inst,
+                                    const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_log_cfg_info(const p64h_sysc_sys_log_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_m1_dump_info(const p64h_sysc_m1_dump_t* m1_info_ptr, const p64h_sysc_info_options_t* options_ptr);
 
+p64h_err_t p64h_sysc_psm_info(const p64h_sysc_psm_attr_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_sys_log_info(const p64h_sysc_sys_log_info_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
+p64h_err_t p64h_sysc_pwr_info(const p64h_sysc_pwr_cfg_t* cfg_ptr, const p64h_sysc_info_options_t* options_ptr);
 #endif // P64H_SYSC_RAS_LIB_H
 /// @}

@@ -3,6 +3,7 @@
 
 #include <rpmi/librpmi_mchp.h>
 #include <rpmi/librpmi_types.h>
+#include <rpmi/librpmi.h>
 #include <p64h_sysc_env.h>
 
 /* Private Defines ------------------------------------------------ */
@@ -187,7 +188,7 @@ bool p64h_sysc_rpmi_handle_init(p64h_sysc_handle_t* handle_ptr, const p64h_sysc_
     return handle_ptr->init;
 }
 
-bool p64h_sysc_rpmi_evt_enable(p64h_sysc_handle_t* handle_ptr, p64h_rpmi_service_group_id_t srvgrp, uint32_t evt_id, p64h_sysc_evt_fct_t* cb)
+bool p64h_sysc_rpmi_evt_enable(p64h_sysc_handle_t* handle_ptr, p64h_rpmi_service_group_id_t srvgrp, uint32_t evt_id, p64h_sysc_evt_fct_t cb)
 {
     // check parameters
     if (handle_ptr == NULL || evt_id >= LIBRPMI_EVENT_MAX_NUM) {
@@ -207,4 +208,23 @@ bool p64h_sysc_rpmi_evt_disable(p64h_sysc_handle_t* handle_ptr, p64h_rpmi_servic
     handle_ptr->evt_cb[srvgrp].evt_func[evt_id] = NULL;
 
     return true;
+}
+
+void p64h_sysc_rpmi_intr_isr(void* param)
+{
+    p64h_sysc_handle_t* handle_ptr = (p64h_sysc_handle_t*)param;
+    rpmi_error_t        rpmi_err   = RPMI_SUCCESS;
+    rpmi_message_t      msg        = { 0 };
+    rpmi_uint16_t       srvgrp     = 0;
+    uint32_t            evt_id     = 0;
+
+    rpmi_err = rpmi_transport_dequeue((struct rpmi_transport*)&handle_ptr->trans_shmem.trans_common.trans, RPMI_QUEUE_P2A_REQ, &msg);
+    if (RPMI_SUCCESS == rpmi_err && msg.header.datalen > 0) {
+        srvgrp                       = msg.header.servicegroup_id;
+        evt_id                       = msg.data[0];
+        p64h_sysc_evt_fct_t evt_func = handle_ptr->evt_cb[srvgrp].evt_func[evt_id];
+        if (evt_func != NULL) {
+            evt_func(param);
+        }
+    }
 }

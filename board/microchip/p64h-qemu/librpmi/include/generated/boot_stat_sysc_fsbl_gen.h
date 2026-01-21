@@ -26,25 +26,25 @@
 #define BOOT_STAGE_SYSC_FSBL_RAS_ACTIVE          42U ///< SYSC FSBL - RAS is up and active  
 #define BOOT_STAGE_SYSC_FSBL_APP_HEALTH_CHK      43U ///< SYSC FSBL - app health check  
 #define BOOT_STAGE_SYSC_FSBL_SAFE_MODE           44U ///< SYSC FSBL - safe mode  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_13             45U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_14             46U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_15             47U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_16             48U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_17             49U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_18             50U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_19             51U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_20             52U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_21             53U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_22             54U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_23             55U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_READY_FOR_POR       45U ///< SYSC FSBL - ready to be PoR  
+#define BOOT_STAGE_SYSC_FSBL_APP_ACSU_LOCK_FAILED 46U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_SYS0_ACSU_LOCK_FAILED 47U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_SYS1_ACSU_LOCK_FAILED 48U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_CPU_ACSU_LOCK_FAILED 49U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_ENET_ACSU_LOCK_FAILED 50U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_NVM0_ACSU_LOCK_FAILED 51U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_NVM1_ACSU_LOCK_FAILED 52U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_NVM2_ACSU_LOCK_FAILED 53U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_EDAC_ACSU_LOCK_FAILED 54U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_SYSC_ACSU_LOCK_FAILED 55U ///< Reserved for future use for SYSC FW  
 #define BOOT_STAGE_SYSC_FSBL_RSVD_24             56U ///< Reserved for future use for SYSC FW  
 #define BOOT_STAGE_SYSC_FSBL_RSVD_25             57U ///< Reserved for future use for SYSC FW  
 #define BOOT_STAGE_SYSC_FSBL_RSVD_26             58U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_27             59U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_28             60U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_29             61U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_30             62U ///< Reserved for future use for SYSC FW  
-#define BOOT_STAGE_SYSC_FSBL_RSVD_31             63U ///< Reserved for future use for SYSC FW  
+#define BOOT_STAGE_SYSC_FSBL_RNMI_INT_HANDLER    59U ///< SYSC FSBL - entering RNMI interrupt handler  
+#define BOOT_STAGE_SYSC_FSBL_STACK_OVERFLOW      60U ///< SYSC FSBL - stack overflow detected in handlers  
+#define BOOT_STAGE_SYSC_FSBL_HOLD                61U ///< SYSC FSBL - SYSC is in HALT, infinite WFI loop  
+#define BOOT_STAGE_SYSC_FSBL_RNMI_EXCP_HANDLER   62U ///< SYSC FSBL - entering RNMI exception handler  
+#define BOOT_STAGE_SYSC_FSBL_ASSERT              63U ///< SYSC FSBL - software assert  
 #else // __ASSEMBLER__
 
 #ifndef BOOT_STAT_GEN_SYSC_FSBL_H
@@ -66,25 +66,25 @@ typedef enum boot_stage_sysc_fsbl_t
     BOOT_STAGE_SYSC_FSBL_RAS_ACTIVE          = 42U, ///< SYSC FSBL - RAS is up and active  
     BOOT_STAGE_SYSC_FSBL_APP_HEALTH_CHK      = 43U, ///< SYSC FSBL - app health check  
     BOOT_STAGE_SYSC_FSBL_SAFE_MODE           = 44U, ///< SYSC FSBL - safe mode  
-    BOOT_STAGE_SYSC_FSBL_RSVD_13             = 45U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_14             = 46U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_15             = 47U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_16             = 48U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_17             = 49U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_18             = 50U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_19             = 51U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_20             = 52U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_21             = 53U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_22             = 54U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_23             = 55U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_READY_FOR_POR       = 45U, ///< SYSC FSBL - ready to be PoR  
+    BOOT_STAGE_SYSC_FSBL_APP_ACSU_LOCK_FAILED = 46U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_SYS0_ACSU_LOCK_FAILED = 47U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_SYS1_ACSU_LOCK_FAILED = 48U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_CPU_ACSU_LOCK_FAILED = 49U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_ENET_ACSU_LOCK_FAILED = 50U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_NVM0_ACSU_LOCK_FAILED = 51U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_NVM1_ACSU_LOCK_FAILED = 52U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_NVM2_ACSU_LOCK_FAILED = 53U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_EDAC_ACSU_LOCK_FAILED = 54U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_SYSC_ACSU_LOCK_FAILED = 55U, ///< Reserved for future use for SYSC FW  
     BOOT_STAGE_SYSC_FSBL_RSVD_24             = 56U, ///< Reserved for future use for SYSC FW  
     BOOT_STAGE_SYSC_FSBL_RSVD_25             = 57U, ///< Reserved for future use for SYSC FW  
     BOOT_STAGE_SYSC_FSBL_RSVD_26             = 58U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_27             = 59U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_28             = 60U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_29             = 61U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_30             = 62U, ///< Reserved for future use for SYSC FW  
-    BOOT_STAGE_SYSC_FSBL_RSVD_31             = 63U, ///< Reserved for future use for SYSC FW  
+    BOOT_STAGE_SYSC_FSBL_RNMI_INT_HANDLER    = 59U, ///< SYSC FSBL - entering RNMI interrupt handler  
+    BOOT_STAGE_SYSC_FSBL_STACK_OVERFLOW      = 60U, ///< SYSC FSBL - stack overflow detected in handlers  
+    BOOT_STAGE_SYSC_FSBL_HOLD                = 61U, ///< SYSC FSBL - SYSC is in HALT, infinite WFI loop  
+    BOOT_STAGE_SYSC_FSBL_RNMI_EXCP_HANDLER   = 62U, ///< SYSC FSBL - entering RNMI exception handler  
+    BOOT_STAGE_SYSC_FSBL_ASSERT              = 63U, ///< SYSC FSBL - software assert  
 } boot_stage_sysc_fsbl_t;
 
 /**
@@ -153,49 +153,49 @@ static inline const char *boot_stage_sysc_fsbl_str( boot_stage_sysc_fsbl_t code 
           case BOOT_STAGE_SYSC_FSBL_SAFE_MODE:
               res = "BOOT_STAGE_SYSC_FSBL_SAFE_MODE";
               break;
-          // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_13:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_13";
+          // SYSC FSBL - ready to be PoR
+          case BOOT_STAGE_SYSC_FSBL_READY_FOR_POR:
+              res = "BOOT_STAGE_SYSC_FSBL_READY_FOR_POR";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_14:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_14";
+          case BOOT_STAGE_SYSC_FSBL_APP_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_APP_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_15:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_15";
+          case BOOT_STAGE_SYSC_FSBL_SYS0_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_SYS0_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_16:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_16";
+          case BOOT_STAGE_SYSC_FSBL_SYS1_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_SYS1_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_17:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_17";
+          case BOOT_STAGE_SYSC_FSBL_CPU_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_CPU_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_18:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_18";
+          case BOOT_STAGE_SYSC_FSBL_ENET_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_ENET_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_19:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_19";
+          case BOOT_STAGE_SYSC_FSBL_NVM0_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_NVM0_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_20:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_20";
+          case BOOT_STAGE_SYSC_FSBL_NVM1_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_NVM1_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_21:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_21";
+          case BOOT_STAGE_SYSC_FSBL_NVM2_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_NVM2_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_22:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_22";
+          case BOOT_STAGE_SYSC_FSBL_EDAC_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_EDAC_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_23:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_23";
+          case BOOT_STAGE_SYSC_FSBL_SYSC_ACSU_LOCK_FAILED:
+              res = "BOOT_STAGE_SYSC_FSBL_SYSC_ACSU_LOCK_FAILED";
               break;
           // Reserved for future use for SYSC FW
           case BOOT_STAGE_SYSC_FSBL_RSVD_24:
@@ -209,25 +209,25 @@ static inline const char *boot_stage_sysc_fsbl_str( boot_stage_sysc_fsbl_t code 
           case BOOT_STAGE_SYSC_FSBL_RSVD_26:
               res = "BOOT_STAGE_SYSC_FSBL_RSVD_26";
               break;
-          // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_27:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_27";
+          // SYSC FSBL - entering RNMI interrupt handler
+          case BOOT_STAGE_SYSC_FSBL_RNMI_INT_HANDLER:
+              res = "BOOT_STAGE_SYSC_FSBL_RNMI_INT_HANDLER";
               break;
-          // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_28:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_28";
+          // SYSC FSBL - stack overflow detected in handlers
+          case BOOT_STAGE_SYSC_FSBL_STACK_OVERFLOW:
+              res = "BOOT_STAGE_SYSC_FSBL_STACK_OVERFLOW";
               break;
-          // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_29:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_29";
+          // SYSC FSBL - SYSC is in HALT, infinite WFI loop
+          case BOOT_STAGE_SYSC_FSBL_HOLD:
+              res = "BOOT_STAGE_SYSC_FSBL_HOLD";
               break;
-          // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_30:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_30";
+          // SYSC FSBL - entering RNMI exception handler
+          case BOOT_STAGE_SYSC_FSBL_RNMI_EXCP_HANDLER:
+              res = "BOOT_STAGE_SYSC_FSBL_RNMI_EXCP_HANDLER";
               break;
-          // Reserved for future use for SYSC FW
-          case BOOT_STAGE_SYSC_FSBL_RSVD_31:
-              res = "BOOT_STAGE_SYSC_FSBL_RSVD_31";
+          // SYSC FSBL - software assert
+          case BOOT_STAGE_SYSC_FSBL_ASSERT:
+              res = "BOOT_STAGE_SYSC_FSBL_ASSERT";
               break;
           default:
               res = "unknown boot_stage_sysc_fsbl_t";

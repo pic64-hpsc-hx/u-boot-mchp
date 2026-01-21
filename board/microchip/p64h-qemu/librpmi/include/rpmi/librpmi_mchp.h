@@ -123,9 +123,25 @@ typedef struct {
     uint32_t p2a_queue_size;
 } p64h_sysc_rpmi_tr_cfg_t;
 
+/// The maximum size of IPC message
+#define IPC_MESSAGE_MAX_SZ (64u)
+
+/// IPC message buffer
+typedef struct {
+    uint8_t buf[IPC_MESSAGE_MAX_SZ]; ///< IPC message buffer
+} p64h_ipc_msg_buf_t;
+
+/// Platform specific IPC message operations
+typedef struct {
+    int (*ipc_msg_send)(const uint32_t chnl, uint8_t* msg, uint32_t msg_size); ///< IPC message send
+    int (*ipc_msg_get)(const uint32_t chnl, uint8_t* msg, uint32_t* msg_size); ///< IPC message get
+    void (*ipc_int_handler)(void* arg);                                        ///< IPC interrupt handler
+} p64h_ipc_msg_platform_ops;
+
 /// sysc RPMI shared memory configuration
 typedef struct {
-    p64h_sysc_rpmi_mem_cfg_t mem; ///< shared memory configuration
+    p64h_sysc_rpmi_mem_cfg_t  mem; ///< shared memory configuration
+    p64h_ipc_msg_platform_ops ops; ///< Pointer to platform specific operations
 } p64h_sysc_rpmi_shmem_cfg_t;
 
 /// sysc RPMI remote configuration
@@ -147,6 +163,10 @@ typedef struct {
     p64h_sysc_rpmi_cid_t         cid;                    ///< client identifier
     p64h_sysc_rpmi_tr_cfg_t      tr;                     ///< transport configuration
     rpmi_transport_shmem_queue_t queues[RPMI_QUEUE_MAX]; ///< queues
+    p64h_sysc_rpmi_q_int_mode_t  p2a_queue_int_mode;     ///< P2A queue interrupt mode
+    p64h_sysc_rpmi_q_int_mode_t  a2p_queue_int_mode;     ///< A2P queue interrupt mode
+    uint32_t                     ipc_channel;            ///< IPC channel for RPMI queue
+    p64h_ipc_msg_platform_ops    ops;                    ///< Pointer to platform specific operations
     bool req_posted; ///< default false, when true API send req, check resp and return a message when response is not available
 } rpmi_p_ctxt_t;
 
@@ -186,8 +206,6 @@ typedef struct {
     rpmi_transport_shmem_t trans_shmem;                    ///< shmem transport
     rpmi_transport_io_t    trans_io;                       ///< io transport
     osal_lock              lock;                           ///< transport lock
-    uint8_t                req_buf[RPMI_MAX_SLOT_SIZE];    ///< RPMI request buffer
-    uint8_t                resp_buf[RPMI_MAX_SLOT_SIZE];   ///< RPMI response buffer
     uint32_t               access_control;                 ///< privilege level
     rpmi_event_callback_t  evt_cb[P64H_RPMI_SRVGRP_COUNT]; ///< RPMI event callback
     rpmi_request_info_t    req_info;                       ///< RPMI request informations
@@ -206,7 +224,7 @@ bool p64h_sysc_rpmi_trans_io_init(p64h_sysc_handle_t* handle_ptr);
 bool p64h_sysc_rpmi_shmem_transport_init(p64h_sysc_handle_t* handle_ptr);
 bool p64h_sysc_rpmi_shmem_ctxt_init(p64h_sysc_handle_t* handle_ptr, const p64h_sysc_rpmi_cfg_t* cfg_ptr);
 bool p64h_sysc_rpmi_handle_init(p64h_sysc_handle_t* handle_ptr, const p64h_sysc_rpmi_cfg_t* cfg_ptr);
-bool p64h_sysc_rpmi_evt_enable(p64h_sysc_handle_t* handle_ptr, p64h_rpmi_service_group_id_t srvgrp, uint32_t evt_id, p64h_sysc_evt_fct_t* cb);
+bool p64h_sysc_rpmi_evt_enable(p64h_sysc_handle_t* handle_ptr, p64h_rpmi_service_group_id_t srvgrp, uint32_t evt_id, p64h_sysc_evt_fct_t cb);
 bool p64h_sysc_rpmi_evt_disable(p64h_sysc_handle_t* handle_ptr, p64h_rpmi_service_group_id_t srvgrp, uint32_t evt_id);
-
+void p64h_sysc_rpmi_intr_isr(void* param);
 #endif // LIB_RPMI_MCHP_H

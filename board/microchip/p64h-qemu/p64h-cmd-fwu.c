@@ -42,12 +42,18 @@ static int p64h_rpmi_fwu_cmd(struct cmd_tbl *cmdtp,
 {
     p64h_err_t ret;
     const p64h_sysc_handle_t* handle_ptr = board_get_rpmi_handle();
-    p64h_sysc_fw_upgrade_cfg_t cfg = {
-        .fw_pkg_cfg = {
-            .compress = false,
-            .encryp_opt = false,
+    p64h_sysc_fw_pkg_cfg_t cfg = {
+        .pkg_data_cfg = {
+            .is_compressed = false,
+            .is_encrypted = false,
         },
     };
+
+    /* Check if RPMI is activated */
+    if (!handle_ptr) {
+         printf("ERROR !!! RPMI is not enabled\n");
+         return CMD_RET_FAILURE;
+    }
 
     /* two parameters :
      * - address of the downloaded firmware data
@@ -70,6 +76,10 @@ static int p64h_rpmi_fwu_cmd(struct cmd_tbl *cmdtp,
     const void *data = (const void *) simple_strtoul(argv[1], NULL, 0);
     size_t data_size = (size_t) simple_strtoul(argv[2], NULL, 0);
 
+    cfg.uncompressed_pkg_size = data_size;
+    cfg.pkg_size = data_size;
+    cfg.apply_pkg = false;
+
     printf("Upgrade firmware command: ");
     ret = p64h_sysc_sys_fw_pkg_upgrade_upload(handle_ptr, &cfg, data, data_size, true);
     if (P64H_ERR_OK != ret) {
@@ -88,7 +98,6 @@ static int p64h_rpmi_fwu_cmd(struct cmd_tbl *cmdtp,
 
     return CMD_RET_SUCCESS;
 }
-
 
 U_BOOT_CMD(
     rpmi_fwu, 3, 1, p64h_rpmi_fwu_cmd,

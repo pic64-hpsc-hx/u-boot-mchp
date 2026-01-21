@@ -16,12 +16,13 @@
 #include "p64h_sysc_common_types.h"
 
 /* Public Defines ------------------------------------------------- */
-#define P64H_SYSC_DDR_INSTANCE_NUM 2u   ///< /// Number of DDR instances
-#define P64H_SYSC_DDR_EDAC_IF      2u   ///< define the number of DDR EDAC interfaces
-#define P64H_SYSC_DDR_INST_NUM     2u   ///< number of DDR instances
-#define P64H_SYSC_DDR_CTRL_REGS    412u ///< Number of DDR controller registers
-#define P64H_SYSC_DDR_PHY_DQ_PINS  80u  ///< DDR PHY number of DQ pins
-#define P64H_SYSC_DDR_PHY_LANE_NUM 10u  ///< DDR PHY number of lanes
+#define P64H_SYSC_DDR_INSTANCE_NUM  2u   ///< /// Number of DDR instances
+#define P64H_SYSC_DDR_EDAC_IF       2u   ///< define the number of DDR EDAC interfaces
+#define P64H_SYSC_DDR_INST_NUM      2u   ///< number of DDR instances
+#define P64H_SYSC_DDR_HSIO_INST_NUM 5u   ///< number of HSIO bank instances
+#define P64H_SYSC_DDR_CTRL_REGS     412u ///< Number of DDR controller registers
+#define P64H_SYSC_DDR_PHY_DQ_PINS   80u  ///< DDR PHY number of DQ pins
+#define P64H_SYSC_DDR_PHY_LANE_NUM  10u  ///< DDR PHY number of lanes
 
 /* Public Structs and Enums --------------------------------------- */
 
@@ -52,22 +53,64 @@ typedef enum {
 
 /// DDR PHY lane configuration
 typedef struct {
-    uint8_t tap_write_dqs_delay;     ///< TAP write DQS delay
-    uint8_t wr_calib_delay;          ///< Write calibration delay
-    uint8_t steps_180_rd_gate_delay; ///< Read gate 180 degree step delay
-    uint8_t tap_rd_gate_delay;       ///< Initial read gate delay setting
+    uint8_t wrlvl_iog_sr_dly_txs;      ///< Tap write DQS delay
+    uint8_t wrdbus_phywrap_pipe_delay; ///< Write calibration delay
+    uint8_t rdgt_phywrap_steps_180;    ///< Read gate 180 degree step offset
+    uint8_t rdgt_lanectl_sr_rdgt_dly;  ///< Initial read gate delay setting
+    uint8_t rdbus_lanectl_sr_rx0_dly;  ///< Initial read data bus RX delay
+    uint8_t wrdbus_iog_dm_dly_txs;     ///< Tap write DM delay
 } p64h_sysc_ddr_phy_lane_cfg_t;
 
 /// DQ Pin configuration for DDR PHY
 typedef struct {
     uint8_t tap_tx_delay; ///< TAP Tx delay
-    uint8_t tax_rx_delay; ///< TAP Rx delay
+    uint8_t tap_rx_delay; ///< TAP Rx delay
 } p64h_sysc_ddr_phy_dq_pin_cfg_t;
+
+/// Debug info on DLL
+typedef struct {
+    uint8_t reg0_lock_int_ri;    ///< reg0 lock status
+    uint8_t reg0_unlock_irq_ri;  ///< reg0 unlock status
+    uint8_t reg1_lock_int_ri;    ///< reg1 unlock status
+    uint8_t reg1_unlock_int_ri;  ///< reg1 unlock status
+    uint8_t reg0_lock_int_irq;   ///< reg0 lcok interrupt bit
+    uint8_t reg0_unlock_int_irq; ///< reg0 unlock interrupt bit
+    uint8_t reg1_lock_int_irq;   ///< reg1 lock interrupt bit
+    uint8_t reg1_unlock_int_irq; ///< reg1 unlock interrupt bit
+} p64h_sysc_ddr_phy_debug_dll_t;
+
+/// Debug info on PLL
+typedef struct {
+    uint8_t lock_irq_ri;    ///< PLL lock status
+    uint8_t unlock_irq_ri;  ///< PLL unlock status
+    uint8_t lock_irq_irq;   ///< PLL lock interrupt bit
+    uint8_t unlock_irq_irq; ///< PLL unlock interrupt bit
+} p64h_sysc_ddr_phy_debug_pll_t;
+
+/// Debug info on hsio
+typedef struct {
+    uint16_t ro_bnk_pcode;  ///< Calib pcode
+    uint16_t ro_bnk_ncode;  ///< Calib ncode
+    uint8_t  ro_ioen;       ///< IO enable probe
+    uint8_t  ro_io_en_dly;  ///< IO enable delay probe
+    uint8_t  ro_down_vdd18; ///< Voltage probe
+} p64h_sysc_ddr_phy_debug_hsio_bank_t;
+
+/// Debug info on calib/pll/dll
+typedef struct {
+    p64h_sysc_ddr_phy_debug_hsio_bank_t hsio_bank[P64H_SYSC_DDR_HSIO_INST_NUM];
+    p64h_sysc_ddr_phy_debug_pll_t       hsio1_pll0;
+    p64h_sysc_ddr_phy_debug_pll_t       hsio3_pll0;
+    p64h_sysc_ddr_phy_debug_dll_t       hsio1_dll0;
+    p64h_sysc_ddr_phy_debug_dll_t       hsio3_dll0;
+} p64h_sysc_ddr_phy_debug_t;
 
 /// DDR PHY configuration
 typedef struct {
+    uint32_t                       ca_sr_dly_txs;                         ///< Common CA delay for control signals
     p64h_sysc_ddr_phy_dq_pin_cfg_t dq_pin_cfg[P64H_SYSC_DDR_PHY_DQ_PINS]; ///< DQ pin configuration
     p64h_sysc_ddr_phy_lane_cfg_t   lane_cfg[P64H_SYSC_DDR_PHY_LANE_NUM];  ///< Lane configuration
+    p64h_sysc_ddr_phy_debug_t      debug;
 } p64h_sysc_ddr_phy_cfg_t;
 
 /// DDR topology
@@ -167,6 +210,13 @@ typedef struct {
 typedef struct {
     uint32_t placeholder; ///< placeholder for DDR margining test report
 } p64h_sysc_ddr_margin_report_t;
+
+// Identifies the ddr_intf, rank, lanes, and DQ bits that a training operation shall work on
+typedef struct {
+    uint32_t ddr_intf;
+    uint32_t rank;
+    bool     include_lanes[P64H_SYSC_DDR_PHY_LANE_NUM];
+} ddr_ss_phy_training_loc_t;
 
 #endif // P64H_SYSC_DDR_TYPE_H
 /// @}

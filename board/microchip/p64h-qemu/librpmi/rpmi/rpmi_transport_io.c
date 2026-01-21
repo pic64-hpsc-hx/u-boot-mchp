@@ -24,6 +24,30 @@
 /* Private Variables ---------------------------------------------- */
 /* Prototypes ----------------------------------------------------- */
 /* Private Function Definitions ----------------------------------- */
+
+/**
+ * @brief Calculates the CRC32 checksum of the given data.
+ *
+ * @param data   Pointer to the input data.
+ * @param length Length of the input data.
+ * @return       The calculated CRC32 checksum.
+ */
+static uint32_t rpmi_crc32(const uint8_t* data, const size_t length)
+{
+    uint32_t crc = 0xFFFFFFFF;
+    for (size_t i = 0; i < length; ++i) {
+        crc ^= data[i];
+        for (int j = 0; j < 8; ++j) {
+            if (crc & 1) {
+                crc = (crc >> 1) ^ 0xEDB88320;
+            } else {
+                crc >>= 1;
+            }
+        }
+    }
+    return ~crc;
+}
+
 /* Public Function Definitions ------------------------------------ */
 rpmi_bool_t __attribute__((weak)) io_is_empty(struct rpmi_transport* trans, enum rpmi_queue_type qtype)
 {
@@ -47,6 +71,7 @@ enum rpmi_error __attribute__((weak)) io_enqueue(struct rpmi_transport* trans, e
     struct rpmi_io*           io      = iotrans->io;
     uint32_t                  write_len;
     int                       rc;
+    uint32_t                  calculated_checksum;
 
     if (NULL == msg) {
         return RPMI_ERR_INVALID_PARAM;
@@ -57,7 +82,7 @@ enum rpmi_error __attribute__((weak)) io_enqueue(struct rpmi_transport* trans, e
     // spills out of the segment boundary.
     write_len = msg->header.datalen + sizeof(struct rpmi_message_header);
     // if the message is larger than the slot_size, return an error don't just truncate and return as if nothing was wrong.
-    if (write_len > trans->slot_size) {
+    if (write_len > trans->slot_size - sizeof(rpmi_uint32_t)) {
         return RPMI_ERR_BAD_RANGE;
     }
 
@@ -67,7 +92,14 @@ enum rpmi_error __attribute__((weak)) io_enqueue(struct rpmi_transport* trans, e
         return RPMI_ERR_FAILED;
     }
 
-    return 0;
+    // send checksum
+    calculated_checksum = rpmi_crc32((const uint8_t*)msg, write_len);
+    rc                  = rpmi_io_write(io, (uint8_t*)&calculated_checksum, sizeof(calculated_checksum));
+    if (rc) {
+        DPRINTF("%s: %s: failed to write message checksum 0x%08x\n", __func__, trans->name, calculated_checksum);
+        return RPMI_ERR_FAILED;
+    }
+    return RPMI_SUCCESS;
 }
 
 enum rpmi_error __attribute__((weak)) io_dequeue(struct rpmi_transport* trans, enum rpmi_queue_type qtype, struct rpmi_message* out_msg)
@@ -76,6 +108,8 @@ enum rpmi_error __attribute__((weak)) io_dequeue(struct rpmi_transport* trans, e
     struct rpmi_io*           io      = iotrans->io;
     rpmi_uint32_t             payload_len;
     int                       rc;
+    uint32_t                  received_checksum;
+    uint32_t                  calculated_checksum;
 
     // read just the header first
     rc = rpmi_io_read(io, out_msg, sizeof(struct rpmi_message_header));
@@ -83,6 +117,7 @@ enum rpmi_error __attribute__((weak)) io_dequeue(struct rpmi_transport* trans, e
         DPRINTF("%s: %s: failed to read message at headidx %d for qtype %d\n", __func__, trans->name, headidx, qtype);
         return RPMI_ERR_FAILED;
     }
+
     // Capture the payload size from the header and read only the datalen amount of data from the slot incase the storage passed is not the full
     // slot_size. If the datalen indicates more than the slot_size, which should only be possible if memory is corrupted, then truncate and return
     // only slot_size bytes into out_msg. Throwing an error here doesn't help much as that will not remove the problematic message from the queue and
@@ -95,8 +130,18 @@ enum rpmi_error __attribute__((weak)) io_dequeue(struct rpmi_transport* trans, e
         DPRINTF("%s: %s: failed to read message at headidx %d for qtype %d\n", __func__, trans->name, headidx, qtype);
         return RPMI_ERR_FAILED;
     }
-
-    return 0;
+    // validate checksum
+    rc = rpmi_io_read(io, &received_checksum, sizeof(rpmi_uint32_t));
+    if (rc) {
+        DPRINTF("%s: %s: failed to read message checksum at headidx %d for qtype %d\n", __func__, trans->name, headidx, qtype);
+        return RPMI_ERR_FAILED;
+    }
+    calculated_checksum = rpmi_crc32((const uint8_t*)out_msg, sizeof(struct rpmi_message_header) + payload_len);
+    if (calculated_checksum != received_checksum) {
+        DPRINTF("%s: %s: checksum mismatch received 0x%08x != calculated 0x%08x\n", __func__, trans->name, received_checksum, calculated_checksum);
+        return RPMI_P64H_ERR_CHECKSUM_MISMATCH;
+    }
+    return RPMI_SUCCESS;
 }
 
 bool p64h_sysc_rpmi_trans_io_init(p64h_sysc_handle_t* handle_ptr)

@@ -206,6 +206,16 @@ typedef struct {
     uint32_t pmp_addr[IOBRIDGE_PMP_ADDR_NUM];          ///< 16 * 32-bit PMP addr; Each PMP addr consists of 32 bit LSB and 32 bit MSB.
 } p64h_sysc_iobridge_cfg_t;
 
+/// define FRER mode
+typedef enum {
+    P64H_SYSC_FRER_NONE = 0,    ///< No FRER
+    P64H_SYSC_FRER_2TO1_GROUP0, ///< 2to1 FRER group 0
+    P64H_SYSC_FRER_2TO1_GROUP1, ///< 2to1 FRER group 1
+    P64H_SYSC_FRER_3TO1_GROUP0, ///< 3to1 FRER group 0
+    P64H_SYSC_FRER_3TO1_GROUP1, ///< 3to1 FRER group 1
+    P64H_SYSC_LAST_FRER_MODE    ///< Used for error checking
+} p64h_sysc_frer_mode_t;
+
 /// define enet rate
 typedef enum {
     P64H_SYSC_APPC_ENET_RATE_MII_10M = 0u,  ///< MII interface for 10M
@@ -249,6 +259,8 @@ typedef struct {
     p64h_sysc_appc_enet_rate_t rate;            ///< the rate of the end-point
     uint32_t                   enable_ptp;      ///< do we enable PTP
     uint32_t                   enable_loopback; ///< Enable for MII-mode/RGMII-mode Rx to Tx loopback path logic of an Ethernet Endpoint
+    bool                       serdes_en;       ///< Indication of whether we are in SerDes or MII mode
+    p64h_sysc_frer_mode_t      frer_mode;       ///< FRER mode
     // Each initiator should have their own iobridge config inside their
     // configuration struct, TODO for appdma, rdma, etc.
     p64h_sysc_iobridge_cfg_t iobridge_cfg; ///< iobridge inside the end-point
@@ -458,15 +470,19 @@ typedef enum {
 
 /// GPIO configuration
 typedef struct {
-    p64h_sysc_gpio_inst_id_t inst;    ///< Instance of the ID enumeration
-    uint8_t                  pin_cfg; ///< Pin Mux configuration
+    p64h_sysc_gpio_inst_id_t inst; ///< Instance of the ID enumeration
 } p64h_sysc_gpio_cfg_t;
 
 /// GPIO MUX configuration
 typedef struct {
+    uint32_t gpio_out_mux_mask_low;                                  ///< GPIO_OUTPUT_MUX select pin bitmask lsb
+    uint32_t gpio_out_mux_mask_high;                                 ///< GPIO_OUTPUT_MUX select pin bitmask msb
     uint32_t gpio_out_mux[APPC_PERIPH_GPIO_OUT_MUX_INST_NUM];        ///< GPIO_OUTPUT_MUX select pin to perform gpio output muxing
+    uint32_t gpio_in_mux_to_appc0_mask;                              ///< GPIO_INPUT_MIX select pin bitmask
     uint32_t gpio_in_mux_to_appc0[APPC_PERIPH_GPIO_IN_MUX_INST_NUM]; ///< GPIO_INPUT_MIX select pin to perform muxing on appc0
+    uint32_t gpio_in_mux_to_appc1_mask;                              ///< GPIO_INPUT_MIX select pin bitmask
     uint32_t gpio_in_mux_to_appc1[APPC_PERIPH_GPIO_IN_MUX_INST_NUM]; ///< GPIO_INPUT_MIX select pin to perform muxing on appc1
+    uint32_t gpio_in_mux_to_sys_mask;                                ///< GPIO_INPUT_MIX select pin bitmask
     uint32_t gpio_in_mux_to_sys[APPC_PERIPH_GPIO_IN_MUX_INST_NUM];   ///< GPIO_INPUT_MIX select pin to perform muxing on sysc
 } p64h_sysc_gpio_mux_cfg_t;
 /**

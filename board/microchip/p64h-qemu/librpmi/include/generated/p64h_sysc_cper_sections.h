@@ -1,4 +1,4 @@
-/* (c) 2025 Microchip Technology Inc. */
+/* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
 /* ======================================= */
@@ -32,6 +32,13 @@
 #define SRAM_EDAC_GUID P64H_UUID_INIT(0xddb8a8b2,0x2914,0x47d3,0x81,0x71,0x47,0x94,0xf6,0x25,0x14,0x83)
 #define NVM_EDAC_GUID P64H_UUID_INIT(0x14d3e022,0xf665,0x44eb,0xb7,0x3a,0x4f,0xda,0x6d,0x13,0xa9,0xa1)
 #define FW_ERR_GUID P64H_UUID_INIT(0x9a522ab2,0xc256,0x43c1,0xa5,0xbf,0x5c,0xec,0xef,0x5a,0xbc,0x83)
+#define INTR_STORM_GUID P64H_UUID_INIT(0x725fa5d3,0x1c3d,0x443f,0x93,0x21,0x44,0x17,0x61,0x57,0x81,0xf6)
+#define ENET_SW_GUID P64H_UUID_INIT(0xc80543b2,0xeafe,0x4bbf,0x88,0xf0,0xef,0x3e,0x2,0xcb,0x90,0xee)
+#define PFLASH_CTRL_GUID P64H_UUID_INIT(0xd7638d80,0xe961,0x46c5,0x87,0xf9,0x5,0xd,0x96,0x33,0xd0,0xf4)
+#define DDR_EDAC_GUID P64H_UUID_INIT(0x3d798239,0xec96,0x4e76,0x8f,0x7e,0x29,0x9f,0xb6,0x69,0xc7,0x4)
+#define SPI_CTRL_GUID P64H_UUID_INIT(0x38d66588,0x4d7c,0x498e,0xa4,0x36,0x57,0xa0,0x90,0x1c,0xfa,0x9e)
+#define NAND_CTRL_GUID P64H_UUID_INIT(0x4b9f98cd,0x2b66,0x4005,0xb2,0xf,0xcb,0xeb,0x11,0x2d,0x7f,0x47)
+#define DDR_CTRL_GUID P64H_UUID_INIT(0xe7f522ea,0xfa2e,0x4eb5,0x96,0xeb,0x3b,0xda,0xa5,0x9a,0x1b,0x6a)
 
 /* Public Structs and Enums - populated from Yaml files ----------------- */
 typedef struct {
@@ -1420,6 +1427,194 @@ typedef struct {
     uint32_t svc_comp; ///< Service which encountered the error. Represented by the p64h_comp_t type
 } fw_err_section_t;
 
+/*********************************************
+* INTR_STORM CPER Section
+********************************************/
+
+#define INTR_STORM_INTR_CTRL_LIC 0UL ///< SYSC Local interrupt controller
+#define INTR_STORM_INTR_CTRL_PLIC 1UL ///< SYSC Platform-level interrupt controller
+
+/**
+ * @brief intr_storm CPER section data description
+ */
+typedef struct {
+    uint32_t intr_ctrl; ///< Interrupt controller where an interrupt storm was detected
+    uint32_t intr_num; ///< Interrupt number which generated the interrupt storm
+} intr_storm_section_t;
+
+/*********************************************
+* ENET_SW CPER Section
+********************************************/
+
+
+
+/**
+ * @brief ENET_SW_RAM_IDX bitfields access descriptor
+ */
+typedef struct {
+    uint32_t X:8; ///< X index
+    uint32_t Y:8; ///< Y index
+    uint32_t Z:8; ///< Z index
+    uint32_t pad:8; ///< padding bits
+} enet_sw_ram_idx_bits_t;
+
+/**
+ * @brief ENET_SW_RAM_IDX bit access and word access wrapper union
+ */
+typedef union {
+    enet_sw_ram_idx_bits_t b; ///< Bitfields accessor
+    uint32_t w; ///< Word accessor
+} enet_sw_ram_idx_t;
+
+/**
+ * @brief enet_sw CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    enet_sw_ram_idx_t ram_idx; ///< RAM location index for ENET Switch Errors
+} enet_sw_section_t;
+
+/*********************************************
+* PFLASH_CTRL CPER Section
+********************************************/
+
+#define PFLASH_CTRL_EVENT_NO_EVENT 0UL ///< No Event
+#define PFLASH_CTRL_EVENT_TRANS_DROP 1UL ///< Transaction dropped due to uncorrectable error or timeout
+#define PFLASH_CTRL_EVENT_BUS_ECC_CORR 2UL ///< Bus Correctable ECC Error
+#define PFLASH_CTRL_EVENT_BUS_ECC_UNCORR 3UL ///< Bus Uncorrectable ECC Error
+#define PFLASH_CTRL_PFLASH_CTRL_IDX_INST_0 0UL ///< PFLASH CTRL INST 0
+#define PFLASH_CTRL_PFLASH_CTRL_IDX_INST_1 1UL ///< PFLASH CTRL INST 1
+#define PFLASH_CTRL_PFLASH_CTRL_IDX_INST_2 2UL ///< PFLASH CTRL INST 2
+#define PFLASH_CTRL_PFLASH_CTRL_IDX_INST_3 3UL ///< PFLASH CTRL INST 3
+
+/**
+ * @brief pflash_ctrl CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t pflash_ctrl_idx; ///< PFLASH CTRL instance identifier
+} pflash_ctrl_section_t;
+
+/*********************************************
+* DDR_EDAC CPER Section
+********************************************/
+
+#define DDR_EDAC_EVENT_NO_EVENT 0UL ///< No Event
+#define DDR_EDAC_EVENT_RD_TIMEOUT 1UL ///< Read command or data channel timeout
+#define DDR_EDAC_EVENT_WR_TIMEOUT 2UL ///< Write command or data channel timeout
+#define DDR_EDAC_EVENT_TRANS_DROP 3UL ///< Transaction dropped due to uncorrectable error
+#define DDR_EDAC_EVENT_FAULT_CORR 4UL ///< SECDEC AXI bus protection correctable error
+#define DDR_EDAC_EVENT_FAULT 5UL ///< EDAC fault occurred
+#define DDR_EDAC_EVENT_RAM_CORR 6UL ///< RAM correctable error
+#define DDR_EDAC_EVENT_RAM_UNCORR 7UL ///< RAM uncorrectable error
+#define DDR_EDAC_EVENT_EMON_CORR 8UL ///< EMON correctable error
+#define DDR_EDAC_EVENT_EMON_UNCORR 9UL ///< EMON uncorrectable error
+#define DDR_EDAC_EVENT_APP 10UL ///< Errors with AXI BIST or Patrol Scrub completion
+#define DDR_EDAC_EDAC_ID_INST_0 0UL ///< EDAC INST 0
+#define DDR_EDAC_EDAC_ID_INST_1 1UL ///< EDAC INST 1
+#define DDR_EDAC_EDAC_ID_NO_INST 2UL ///< No EDAC INST
+
+/**
+ * @brief ddr_edac CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t edac_id; ///< EDAC instance identifier
+    uint32_t emon_loc_cor_0; ///< Locations corrected LSB 0 - 31
+    uint32_t emon_loc_cor_1; ///< Locations corrected bit 32 - 63
+    uint32_t emon_loc_cor_2; ///< Locations corrected MSB 64 - 80
+    uint32_t emon_loc_uncor; ///< Decoders that have generated uncorrectable decodes
+} ddr_edac_section_t;
+
+/*********************************************
+* SPI_CTRL CPER Section
+********************************************/
+
+#define SPI_CTRL_EVENT_NO_EVENT 0UL ///< No Event
+#define SPI_CTRL_EVENT_TRANS_DROP 1UL ///< Transaction dropped due to uncorrectable error or timeout
+#define SPI_CTRL_EVENT_BUS_ECC_CORR 2UL ///< Bus Correctable ECC Error
+#define SPI_CTRL_EVENT_BUS_ECC_UNCORR 3UL ///< Bus Uncorrectable ECC Error
+#define SPI_CTRL_EVENT_XSPI_RAM_CORR 4UL ///< XSPI RAM correctable error
+#define SPI_CTRL_EVENT_XSPI_RAM_UNCORR 5UL ///< XSPI RAM uncorrectable error
+#define SPI_CTRL_EVENT_SD_RAM_CORR 6UL ///< SD RAM correctable error
+#define SPI_CTRL_EVENT_SD_RAM_UNCORR 7UL ///< SD RAM uncorrectable error
+#define SPI_CTRL_SPI_CTRL_IDX_INST_0 0UL ///< SPI CTRL INST 0
+#define SPI_CTRL_SPI_CTRL_IDX_INST_1 1UL ///< SPI CTRL INST 1
+#define SPI_CTRL_SPI_CTRL_IDX_INST_2 2UL ///< SPI CTRL INST 2
+#define SPI_CTRL_SPI_CTRL_IDX_INST_3 3UL ///< SPI CTRL INST 3
+
+/**
+ * @brief spi_ctrl CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t spi_ctrl_idx; ///< SPI CTRL instance identifier
+} spi_ctrl_section_t;
+
+/*********************************************
+* NAND_CTRL CPER Section
+********************************************/
+
+#define NAND_CTRL_EVENT_NO_EVENT 0UL ///< No Event
+#define NAND_CTRL_EVENT_TRANS_DROP 1UL ///< Transaction dropped due to uncorrectable error or timeout
+#define NAND_CTRL_EVENT_S_BUS_ECC_CORR 2UL ///< AXI subordinate Bus Correctable ECC Error
+#define NAND_CTRL_EVENT_S_BUS_ECC_UNCORR 3UL ///< AXI subordinate Bus Uncorrectable ECC Error
+#define NAND_CTRL_EVENT_M_BUS_ECC_CORR 4UL ///< AXI manager Bus Correctable ECC Error
+#define NAND_CTRL_EVENT_M_BUS_ECC_UNCORR 5UL ///< AXI manager Bus Uncorrectable ECC Error
+#define NAND_CTRL_EVENT_M_RESP_UNCORR 6UL ///< AXI manager Response Uncorrectable Error
+#define NAND_CTRL_EVENT_RAM_CORR 7UL ///< RAM correctable error
+#define NAND_CTRL_EVENT_RAM_UNCORR 8UL ///< RAM uncorrectable error
+#define NAND_CTRL_NAND_CTRL_IDX_INST_0 0UL ///< NAND CTRL INST 0
+#define NAND_CTRL_NAND_CTRL_IDX_INST_1 1UL ///< NAND CTRL INST 1
+#define NAND_CTRL_NAND_CTRL_IDX_INST_2 2UL ///< NAND CTRL INST 2
+#define NAND_CTRL_NAND_CTRL_IDX_INST_3 3UL ///< NAND CTRL INST 3
+
+/**
+ * @brief nand_ctrl CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t nand_ctrl_idx; ///< NAND CTRL instance identifier
+} nand_ctrl_section_t;
+
+/*********************************************
+* DDR_CTRL CPER Section
+********************************************/
+
+#define DDR_CTRL_EVENT_NO_EVENT 0UL ///< No Event
+#define DDR_CTRL_EVENT_DDR_CTRL 1UL ///< error detected in the DDR controller
+#define DDR_CTRL_EVENT_ECC_CORR 2UL ///< ECC correctable error
+#define DDR_CTRL_EVENT_ECC_UNCORR 3UL ///< ECC uncorrectable error
+#define DDR_CTRL_CTRL_ID_INST_0 0UL ///< CTRL INST 0
+#define DDR_CTRL_CTRL_ID_INST_1 1UL ///< CTRL INST 1
+#define DDR_CTRL_CTRL_ID_NO_INST 2UL ///< No CTRL INST
+
+/**
+ * @brief DDR_CTRL_FIFO_FULL bitfields access descriptor
+ */
+typedef struct {
+    uint8_t port:4; ///< port fifo is full.
+    uint8_t core:3; ///< core fifo is full.
+    uint8_t pad:1; ///< padding bits
+} ddr_ctrl_fifo_full_bits_t;
+
+/**
+ * @brief DDR_CTRL_FIFO_FULL bit access and word access wrapper union
+ */
+typedef union {
+    ddr_ctrl_fifo_full_bits_t b; ///< Bitfields accessor
+    uint8_t w; ///< Word accessor
+} ddr_ctrl_fifo_full_t;
+
+/**
+ * @brief ddr_ctrl CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t ctrl_id; ///< CTRL instance identifier
+    ddr_ctrl_fifo_full_t fifo_full; ///< fifo is full
+} ddr_ctrl_section_t;
+
 /**
  * @brief CPER section data union
  */
@@ -1444,6 +1639,13 @@ typedef union {
     sram_edac_section_t sram_edac_section; ///< sram_edac CPER section type
     nvm_edac_section_t nvm_edac_section; ///< nvm_edac CPER section type
     fw_err_section_t fw_err_section; ///< fw_err CPER section type
+    intr_storm_section_t intr_storm_section; ///< intr_storm CPER section type
+    enet_sw_section_t enet_sw_section; ///< enet_sw CPER section type
+    pflash_ctrl_section_t pflash_ctrl_section; ///< pflash_ctrl CPER section type
+    ddr_edac_section_t ddr_edac_section; ///< ddr_edac CPER section type
+    spi_ctrl_section_t spi_ctrl_section; ///< spi_ctrl CPER section type
+    nand_ctrl_section_t nand_ctrl_section; ///< nand_ctrl CPER section type
+    ddr_ctrl_section_t ddr_ctrl_section; ///< ddr_ctrl CPER section type
 } p64h_cper_section_t;
 
 

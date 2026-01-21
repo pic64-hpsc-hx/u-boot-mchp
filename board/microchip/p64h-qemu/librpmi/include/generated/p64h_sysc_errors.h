@@ -1,4 +1,4 @@
-/* (c) 2025 Microchip Technology Inc. */
+/* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
 /* ======================================= */
@@ -38,7 +38,9 @@ typedef enum p64h_err_t {
     P64H_ERR_IPC_WRONG_MESSAGE,                                                                                                                                     ///< IPC wrong message type error
     P64H_ERR_IPC_MESSAGE_SIZE_ERROR,                                                                                                                                ///< IPC message size error.
     P64H_ERR_IPC_SEND_FAIL,                                                                                                                                         ///< IPC send fail
+    P64H_ERR_IPC_GET_MSG_FAIL,                                                                                                                                      ///< IPC get fail
     P64H_ERR_IPC_CHANNEL_NOT_FOUND,                                                                                                                                 ///< IPC channel not found
+    P64H_ERR_IPC_CHANNEL_ID_INVALID,                                                                                                                                ///< IPC channel ID invalid
     P64H_ERR_RPMSG_FAIL,                                                                                                                                            ///< RPMSG API related failure
     P64H_ERR_DDR_INIT_FAIL,                                                                                                                                         ///< DDR initialization failed
     P64H_ERR_CONFIG_POPULATE_FAIL,                                                                                                                                  ///< Populating config failure
@@ -63,6 +65,7 @@ typedef enum p64h_err_t {
     P64H_ERR_SVC_SYSTEM_INVALID_API,
     P64H_ERR_SVC_SYSTEM_UNEXPECTED_EVENT,
     P64H_ERR_SVC_SYSTEM_DEV_CFG_VERSION_INIT,
+    P64H_ERR_SVC_SYSTEM_ACOT_ENTRY_INVALID,                                                                                                                         ///< ACOT entry invalid
     P64H_ERR_SVC_APPC_INVALID_API                                           = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_SVC_APPC),
     P64H_ERR_SVC_APPC_UNEXPECTED_EVENT,
     P64H_ERR_SVC_APPC_NOT_LOADED_APPC_CFG,                                                                                                                          ///< appc_cfg not loaded at bootscript execution time
@@ -106,6 +109,8 @@ typedef enum p64h_err_t {
     P64H_ERR_SVC_HW_INVALID_ID,                                                                                                                                     ///< HW RPMI Call made with invalid ID
     P64H_ERR_SVC_HW_SERDES_NOT_CFG,                                                                                                                                 ///< Attempted to call an RPMI function on a SerDes group which does not have a static configuration
     P64H_ERR_SVC_HW_INTR_REGISTRATION_FAILED,
+    P64H_ERR_SVC_HW_INTR_DISABLE_FAILED,                                                                                                                            ///< Failed to disable the interrupt
+    P64H_ERR_SVC_HW_INTR_ENABLE_FAILED,                                                                                                                             ///< Failed to enable the interrupt
     P64H_ERR_SVC_HW_UNEXPECTED_EVENT,
     P64H_ERR_SVC_SWITCH_INVALID_API                                         = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_SVC_SWITCH),
     P64H_ERR_SVC_SWITCH_UNEXPECTED_EVENT,
@@ -156,6 +161,8 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_APP_PERIPH_DDR_INVALID_INST,                                                                                                                       ///< Error: trying to configure an invalid DDR instance
     P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NULL_HANDLE,                                                                                                                   ///< Error: a pointer argument to an ENET Switch configuration is null
     P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NULL_CFG,                                                                                                                      ///< Error: a pointer argument to an ENET Switch configuration is null
+    P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NO_INTR_FOUND,                                                                                                                 ///< Error: no interrupt status bit was set
+    P64H_ERR_DRV_APP_PERIPH_ENET_SWR_INVALID_PARAM,                                                                                                                 ///< Error: invalid function parameters passed
     P64H_ERR_DRV_APP_PERIPH_NULL_HANDLE,                                                                                                                            ///< Error: a pointer to the app_periph handle is null
     P64H_ERR_DRV_APP_PERIPH_NULL_CFG,                                                                                                                               ///< Error: a pointer to the app_periph configuration is null
     P64H_ERR_DRV_APP_PERIPH_UART_NULL_HANDLE,                                                                                                                       ///< Error: a pointer argument to an UART handle is null
@@ -184,6 +191,7 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_APP_PERIPH_MDIO_NULL_CFG,                                                                                                                          ///< Error: a pointer argument to a mdio configuration is NULL
     P64H_ERR_DRV_APP_PERIPH_MDIO_INVALID_INSTANCE,                                                                                                                  ///< Error: trying to configure an invalid number of mdio instances
     P64H_ERR_DRV_APP_PERIPH_MDIO_AF_ERR,                                                                                                                            ///< Error: trying to configure arm and fire mdio register
+    P64H_ERR_DRV_APP_PERIPH_MDIO_IO_ERR,                                                                                                                            ///< Error: mdio operation failed
     P64H_ERR_DRV_APP_PERIPH_SPI_NULL_HANDLE,                                                                                                                        ///< Error: a pointer argument to a spi handle is NULL
     P64H_ERR_DRV_APP_PERIPH_SPI_NULL_CFG,                                                                                                                           ///< Error: a pointer argument to a spi configuration is NULL
     P64H_ERR_DRV_APP_PERIPH_SPI_INVALID_INSTANCE,                                                                                                                   ///< Error: trying to configure an invalid number of spi instances
@@ -207,7 +215,11 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_APP_PERIPH_TRACE_AF_ERR,                                                                                                                           ///< Error: trying to configure arm and fire trace register
     P64H_ERR_DRV_APP_PERIPH_USER_CRYPTO_NULL_HANDLE,                                                                                                                ///< Error: a pointer argument to an User Crypto configuration is null
     P64H_ERR_DRV_APP_PERIPH_USER_CRYPTO_NULL_CFG,                                                                                                                   ///< Error returned when a pointer argument to an User Crypto configuration is null.
-    P64H_ERR_DRV_DDR_INVALID_INSTANCE                                       = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_DDR),              ///< Error returned when trying to configure an invalid DDR instance
+    P64H_ERR_DRV_DDR_INVALID_INSTANCE                                       = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_DDR),              ///< Error returned when trying to configure an invalid DDR instance (0 or 1 are valid value)
+    P64H_ERR_DRV_DDR_PHY_IN_RESET,                                                                                                                                  ///< Error returned when trying to access DDR PHY when it is in reset
+    P64H_ERR_DRV_DDR_PHY_INVALID_DQ_WITDH,                                                                                                                          ///< Error returned when trying to cofigure an invalid DDR DQ width
+    P64H_ERR_DRV_DDR_DDR_PLL_LOCK_TIMEOUT,                                                                                                                          ///< Error: DDR_PLL failed to lock
+    P64H_ERR_DRV_DDR_DDR_DLL_LOCK_TIMEOUT,                                                                                                                          ///< Error: DDR_DLL failed to lock
     P64H_ERR_DRV_TOP_AF_ERR                                                 = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_TOP),              ///< Error returned when trying to configure arm and fire TOP register
     P64H_ERR_DRV_TOP_INVALID_INSTANCE,
     P64H_ERR_DRV_TOP_LOWPOWER_SET_FAILED,
@@ -254,6 +266,7 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_NOC_CORE_INVALID_ASYNC_PERIOD,                                                                                                                     ///< Invalid Async Period
     P64H_ERR_DRV_NOC_CORE_HANDLE_ERROR,                                                                                                                             ///< handle error
     P64H_ERR_DRV_NOC_CORE_CFG_ERROR,                                                                                                                                ///< configuration error
+    P64H_ERR_DRV_NOC_CORE_INVALID_PARAM,                                                                                                                            ///< Error: an invalid parameter is passed to a NOC driver functions
     P64H_ERR_DRV_IOBRIDGE_NULL_PARAMS                                       = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_IOBRIDGE),         ///< Error returned when a argument pointer is NULL.
     P64H_ERR_DRV_WGUARD_NULL_WGC_SLOT_CFG                                   = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_WGUARD),           ///< Error returned when a pointer to Wguard checker slot configuration is NULL.
     P64H_ERR_DRV_WGUARD_NULL_WGM_CFG,                                                                                                                               ///< Error returned when a pointer to Wguard marker configuration is NULL.
@@ -282,6 +295,7 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_APP_IPC_NULL_HANDLE                                        = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_APP_IPC),          ///< Error: a pointer argument to an IPC handle is NULL
     P64H_ERR_DRV_DDR_CTRL_NULL_HANDLE                                       = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_DDR_CTRL),         ///< Error: a pointer argument to a ddr_ctrl handle is NULL
     P64H_ERR_DRV_DDR_CTRL_UNSUPPORTED_TYPE,                                                                                                                         ///< Error: DDR is configured for an unsupported type
+    P64H_ERR_DRV_DDR_CTRL_INVALID_CTRL_INSTANCE,                                                                                                                    ///< Error: trying to configure an invalid CTRL instance
     P64H_ERR_DRV_DDR_EDAC_INVALID_FEC_MODE                                  = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_DDR_EDAC),         ///< Error: trying to configure an invalid FEC mode
     P64H_ERR_DRV_DDR_EDAC_INVALID_READ_PERIOD,                                                                                                                      ///< Error: trying to configure an invalid period of rests
     P64H_ERR_DRV_DDR_EDAC_INVALID_WDRESP_VAL,                                                                                                                       ///< Error: trying to configure an invalid write response timeout
@@ -296,6 +310,9 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_DMA_MEMORY_ALLOCATION_FAILURE,                                                                                                                     ///< Error: the memory allocation failed
     P64H_ERR_DRV_DMA_UNIMPLEMENTED,                                                                                                                                 ///< Error: the function called is unimplemented
     P64H_ERR_DRV_DMA_INVALID_ARG,                                                                                                                                   ///< Error: the argument is invalid
+    P64H_ERR_DRV_DMA_DMAC_CHID_OUT_OF_RANGE_ERR,                                                                                                                    ///< Error: The select channel id is does not exist
+    P64H_ERR_DRV_DMA_DMAC_XFER_DONE_FAIL,                                                                                                                           ///< Error: DMA transfer failed to complete
+    P64H_ERR_DRV_DMA_DMAC_BLK_XFER_FAIL,                                                                                                                            ///< Error: DMA block transfer failed
     P64H_ERR_DRV_OCR_FIFO_MEL_RD_ERR                                        = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_OCR),              ///< Error: unable to read from the OCR Memory Error Logger FIFO
     P64H_ERR_DRV_OCR_INIT_BUSY,                                                                                                                                     ///< Error: OCR Memory block is performing initialization and is not accessible
     P64H_ERR_DRV_OCR_INIT_FAIL,                                                                                                                                     ///< init_fail
@@ -326,6 +343,11 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_SYS_TOP_NULL_RETURN,                                                                                                                               ///< Error: a pointer to the result is NULL
     P64H_ERR_DRV_SYS_TOP_HANDLE_ERROR,                                                                                                                              ///< handle error
     P64H_ERR_DRV_SYS_TOP_CFG_ERROR,                                                                                                                                 ///< configuration error
+    P64H_ERR_DRV_SYS_SPI_FLASH_CFG_NULL                                     = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_SYS_SPI_FLASH),    ///< Error: a pointer argument to a SYS SPI Flash configuration is NULL
+    P64H_ERR_DRV_SYS_SPI_FLASH_INIT_ERR,                                                                                                                            ///< Error: SYS SPI Flash initialization failed
+    P64H_ERR_DRV_SYS_SPI_FLASH_PROG_ERR,                                                                                                                            ///< Error: SYS SPI Flash program failed
+    P64H_ERR_DRV_SYS_SPI_FLASH_READ_ERR,                                                                                                                            ///< Error: SYS SPI Flash read failed
+    P64H_ERR_DRV_SYS_SPI_FLASH_ERASE_ERR,                                                                                                                           ///< Error: SYS SPI Flash erase failed
     P64H_ERR_DRV_SYS_HPT_INVALID_PARAM                                      = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_SYS_HPT),          ///< Error: hpt arguement invalid
     P64H_ERR_DRV_SYS_HPT_EXCEED_MAX_LOOP,                                                                                                                           ///< Error: MAX loop reached
     P64H_ERR_DRV_SYS_HPT_MTIME_ERROR,                                                                                                                               ///< Error returned when read mtime.
@@ -335,7 +357,9 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_NVM_INVALID_CTRL_INSTANCE,                                                                                                                         ///< Error: trying to configure an invalid NVM controller instance
     P64H_ERR_DRV_NVM_INVALID_CTRL_TYPE,                                                                                                                             ///< Error: trying to configure an invalid NVM controller type
     P64H_ERR_DRV_NVM_INVALID_EDAC_INSTANCE,                                                                                                                         ///< Error: trying to configure an invalid EDAC instance
-    P64H_ERR_DRV_NVM_PFLASH_CTRL_INIT_WRONG_WIDTH,                                                                                                                  ///< Error return when trying to configure pflash with wrong width
+    P64H_ERR_DRV_NVM_PFLASH_CTRL_UNSUPPORTED_DATA_WIDTH,                                                                                                            ///< Error return when trying to configure pflash unsupported data width
+    P64H_ERR_DRV_NVM_PFLASH_CTRL_DEVICE_READY_TIMEOUT,                                                                                                              ///< Error return when pflash device ready times out
+    P64H_ERR_DRV_NVM_PFLASH_CTRL_WRITE_BUFFER_NULL,                                                                                                                 ///< Error return when trying to load program data with null write buffer for write buffer program
     P64H_ERR_DRV_NVM_INVALID_XSPI_INSTANCE,                                                                                                                         ///< Error: trying to configure an invalid XSPI instance
     P64H_ERR_DRV_NVM_XSPI_PROBE,                                                                                                                                    ///< Error: trying to probe XSPI controller
     P64H_ERR_DRV_NVM_XSPI_INIT,                                                                                                                                     ///< Error: trying to init XSPI controller
@@ -382,10 +406,13 @@ typedef enum p64h_err_t {
     P64H_ERR_DRV_NVM_INVALID_CCP_INSTANCE,                                                                                                                          ///< Error: trying to configure an invalid XSPI CCP instance
     P64H_ERR_DRV_NVM_XSPI_CCP_PROBE,                                                                                                                                ///< Error: trying to probe XSPI CCP
     P64H_ERR_DRV_NVM_XSPI_CCP_INIT,                                                                                                                                 ///< Error: trying to init XSPI CCP
+    P64H_ERR_DRV_NVM_DIAG_TEST_FAIL,                                                                                                                                ///< Error: Diagnostic Test Failed
     P64H_ERR_DRV_EDAC_NULL_HANDLE                                           = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_EDAC),             ///< Error: a pointer argument to an EDAC handle is NULL
     P64H_ERR_DRV_EDAC_INVALID_CFG,                                                                                                                                  ///< Error: the EDAC configuration is invalid
     P64H_ERR_DRV_EDAC_INVALID_EDAC_INSTANCE,                                                                                                                        ///< Error: trying to configure an invalid EDAC instance
     P64H_ERR_DRV_EDAC_EMON_RD_TIMEOUT,                                                                                                                              ///< Error returned on timeout when trying to read EDAC error monitor
+    P64H_ERR_DRV_GPIO_NULL_HANDLE                                           = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_GPIO),             ///< Error: a pointer argument to an GPIO handle is NULL
+    P64H_ERR_DRV_GPIO_INVALID_PIN_INDEX,                                                                                                                            ///< Error: trying to configure an invalid pin index
     P64H_ERR_DRV_X288_RAS_NO_SIGNAL                                         = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_X288_RAS),         ///< No errors active in the error map since no signal was logged to the signal status register
     P64H_ERR_DRV_X288_RAS_INVALID_INST_ID,                                                                                                                          ///< Error bank instance ID from registers is invalid
     P64H_ERR_DRV_ARM_N_FIRE_NULL_HANDLE                                     = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_DRV_ARM_N_FIRE),       ///< Error: a pointer argument to an handle is NULL
@@ -655,6 +682,8 @@ typedef enum p64h_err_t {
     P64H_ERR_LIB_API_REQ_BUSY,                                                                                                                                      ///< There is already an outstanding posted request
     P64H_ERR_LIB_API_RESP_PENDING,                                                                                                                                  ///< Response is not ready
     P64H_ERR_LIB_API_INVALID_REQ_STATE,                                                                                                                             ///< Invalid request state is returned
+    P64H_ERR_LIB_API_CHECKSUM_MISMATCH,                                                                                                                             ///< Checksum mismatched, data is corrupted
+    P64H_ERR_LIB_API_CALLBACK_UNSET,                                                                                                                                ///< The callback function is unset
     P64H_ERR_LIB_SYSC_SOC_CFG_NULL_CFG                                      = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_LIB_SYSC_SOC_CFG),     ///< Error returned when a pointer argument to a configuration is NULL.
     P64H_ERR_LIB_SYSC_SOC_CFG_NULL_HANDLE,                                                                                                                          ///< Error returned when a pointer argument to a handle is NULL.
     P64H_ERR_LIB_SYSC_SOC_CFG_INVALID_FS_INSTANCE,                                                                                                                  ///< Error returned when trying to use invalid filesystem instance
@@ -664,6 +693,8 @@ typedef enum p64h_err_t {
     P64H_ERR_LIB_RASLIB_NO_BERT_ERROR,                                                                                                                              ///< No error to report for the requested BERT entry
     P64H_ERR_LIB_RASLIB_ERT_INVALID_READ,                                                                                                                           ///< Request to read the ERT at a buffer offset beyond the history of the buffer entries
     P64H_ERR_LIB_RASLIB_INVALID_HER_DATA,                                                                                                                           ///< Unexpected and invalid data extracted from parsing HER
+    P64H_ERR_LIB_FW_UPGRADE_UPLOAD_FAIL                                     = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_LIB_FW_UPGRADE),       ///< firmware upgrade upload fail
+    P64H_ERR_LIB_FW_UPGRADE_APPLY_FAIL,                                                                                                                             ///< firmware upgrade apply fail
     P64H_ERR_LIB_BAAL_INVALID_SIMG_ID                                       = P64H_SYSC_SVC_ERR_SVC_OFFSET + P64H_SYSC_COMP_ENCODE(P64H_COMP_LIB_BAAL),             ///< Error returned when the sysc image identifier is invalid
     P64H_ERR_LIB_BAAL_METADATA_ERR,                                                                                                                                 ///< Error returned when there was an issue accessing or reading from an AppC image metadata
     P64H_ERR_LIB_BAAL_APPC_NOT_INIT,                                                                                                                                ///< Error returned when baal was not properly initialized to access AppC Boot Articats
@@ -672,7 +703,11 @@ typedef enum p64h_err_t {
     P64H_ERR_LIB_BAAL_DEINIT_FAIL,                                                                                                                                  ///< BAAL deinit fail.
     P64H_ERR_LIB_BAAL_GET_FAIL,                                                                                                                                     ///< BAAL failed to get an artifact
     P64H_ERR_LIB_BAAL_READ_FAIL,                                                                                                                                    ///< BAAL failed to read an artifact
-    P64H_ERR_LIB_BAAL_WRITE_FAIL,                                                                                                                                   ///< BAAL to write to an artifact
+    P64H_ERR_LIB_BAAL_DMA_FAIL,                                                                                                                                     ///< baal failed to write to an artifact with dma
+    P64H_ERR_LIB_BAAL_UPGRADE_FAIL,                                                                                                                                 ///< baal failed to upgrade an AppC artifact
+    P64H_ERR_LIB_BAAL_OVERWRITE_FAIL,                                                                                                                               ///< baal failed to overwrite artifact
+    P64H_ERR_LIB_BAAL_SECTOR_ERASE_FAIL,                                                                                                                            ///< baal failed to erase a sector
+    P64H_ERR_LIB_BAAL_UPDATE_FAIL,                                                                                                                                  ///< baal failed to update an AppC artifact
     P64H_ERR_LIB_BAAL_OTP_READ_FAIL,                                                                                                                                ///< BAAL failed to read data from otp
     P64H_ERR_LIB_BAAL_SECC_FSBL_DWNLD,                                                                                                                              ///< BAAL failed to load secc fsbl image
     P64H_ERR_LIB_BAAL_INVALID_FSBL_SIZE,                                                                                                                            ///< BAAL invalid fsbl size error.

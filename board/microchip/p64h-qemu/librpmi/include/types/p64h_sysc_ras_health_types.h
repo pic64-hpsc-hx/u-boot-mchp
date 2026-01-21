@@ -19,10 +19,10 @@
 /* Public Defines ------------------------------------------------- */
 
 /* Public Structs and Enums --------------------------------------- */
-
+/// enumerate mem scrubber ids
 typedef enum {
     NVM_SRAM = 0,
-    DDR,
+    DDR_MEM,
     APPC_OCR,
     SYSC_OCR,
     SECC_OCR,
@@ -80,7 +80,7 @@ typedef enum {
     SYSC_L1D,
     IOMMU_0_TLB,
     IOMMU_1_TLB,
-    P64H_MEMSCRUBBER_ID_MAX,
+    P64H_MEMSCRUBBER_ID_COUNT, ///< Number of ids (not a valid ID)
 } p64h_sysc_mem_scrubber_id_t;
 
 /// Description of the configuration fields for a specified memory scrubber

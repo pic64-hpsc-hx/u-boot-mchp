@@ -89,8 +89,57 @@ typedef enum {
     NVM_DEVICE_NAND_TOGGLE_1_0, ///< NAND Toggle 1.0 device
     NVM_DEVICE_NAND_TOGGLE_2_0, ///< NAND Toggle 2.0 device
     NVM_DEVICE_NAND_LEGACY,     ///< NAND Legacy device
-    LAS_NVM_DEVICE              ///< invalid, used for error checking
+    LAST_NVM_DEVICE             ///< invalid, used for error checking
 } p64h_sysc_nvm_device_t;
+
+/// SYSC Interface ID
+typedef enum p64h_sysc_if_id_t {
+    P64H_SYSC_IF_ID_GPIO_0 = 0u,
+    P64H_SYSC_IF_ID_GPIO_1,
+    P64H_SYSC_IF_ID_ENET_EP_0,
+    P64H_SYSC_IF_ID_ENET_EP_1,
+    P64H_SYSC_IF_ID_ENET_EP_2,
+    P64H_SYSC_IF_ID_ENET_EP_3,
+    P64H_SYSC_IF_ID_ENET_SWR_0,
+    P64H_SYSC_IF_ID_ENET_SWR_1,
+    P64H_SYSC_IF_ID_ENET_SWR_2,
+    P64H_SYSC_IF_ID_ENET_SWR_3,
+    P64H_SYSC_IF_ID_ENET_SWR_4,
+    P64H_SYSC_IF_ID_ENET_SWR_5,
+    P64H_SYSC_IF_ID_ENET_SWR_6,
+    P64H_SYSC_IF_ID_ENET_SWR_7,
+    P64H_SYSC_IF_ID_ENET_SWR_8,
+    P64H_SYSC_IF_ID_ENET_SWR_9,
+    P64H_SYSC_IF_ID_ENET_SWR_10,
+    P64H_SYSC_IF_ID_ENET_SWR_11,
+    P64H_SYSC_IF_ID_ENET_SWR_12,
+    P64H_SYSC_IF_ID_ENET_SWR_13,
+    P64H_SYSC_IF_ID_ENET_SWR_14,
+    P64H_SYSC_IF_ID_ENET_SWR_15,
+    P64H_SYSC_IF_ID_LAST
+} p64h_sysc_if_id_t;
+
+/// SYSC Interface Mode
+typedef enum p64h_sysc_if_mode_t {
+    P64H_SYSC_IF_MODE_SYS_GPIO,
+    P64H_SYSC_IF_MODE_GPIO_0,
+    P64H_SYSC_IF_MODE_GPIO_1,
+    P64H_SYSC_IF_MODE_HPT_0,
+    P64H_SYSC_IF_MODE_HPT_1,
+    P64H_SYSC_IF_MODE_HPT_2,
+    P64H_SYSC_IF_MODE_HPT_3,
+    P64H_SYSC_IF_MODE_HPT_4,
+    P64H_SYSC_IF_MODE_HPT_5,
+    P64H_SYSC_IF_MODE_HPT_6,
+    P64H_SYSC_IF_MODE_HPT_7,
+    P64H_SYSC_IF_MODE_ENET_EP_2,
+    P64H_SYSC_IF_MODE_ENET_EP_3,
+    P64H_SYSC_IF_MODE_USB_CTRL_0,
+    P64H_SYSC_IF_MODE_USB_CTRL_1,
+    P64H_SYSC_IF_MODE_SERDES,
+    P64H_SYSC_IF_MODE_MII,
+    P64H_SYSC_IF_MODE_LAST
+} p64h_sysc_if_mode_t;
 
 /// MII Rate Configuration
 typedef enum p64h_sysc_mii_rate_t {
@@ -119,11 +168,20 @@ typedef struct {
     uint64_t               size;            ///< memory size
 } p64h_sysc_nvm_cfg_t;
 
+typedef struct {
+    p64h_sysc_if_id_t   id;
+    bool                enable;
+    p64h_sysc_if_mode_t mode;
+    int32_t             mdio_if;
+    int32_t             i2c_if;
+} p64h_sysc_if_cfg_t;
+
 /// Board platform configuration
 typedef struct {
     p64h_sysc_lsio_cfg_t       lsio_cfg;                                ///< LSIO configuration
     p64h_sysc_ddr_board_cfg_t  ddr_cfg[P64H_SYSC_DDR_INSTANCE_NUM];     ///< DDR configuration
     p64h_sysc_mii_cfg_t        mii_cfg[MAX_MII_CFGS];                   ///< MII Configuration
+    p64h_sysc_if_cfg_t         interface_cfg[P64H_SYSC_IF_ID_LAST];     ///< GPIO/ENET Interface Configuration
     p64h_sysc_serdes_grp_cfg_t serdes_grps_cfg[MAX_SERDES_GRPS];        ///< Serdes Group Config Implementation
     p64h_sysc_nvm_cfg_t        nvm_cfg[MAX_NVM_DEVICE_NUM];             ///< NVM interfaces configuration
     p64h_sysc_ddr_ref_clk_t    ddr_clock_cfg;                           ///< System clock configuration

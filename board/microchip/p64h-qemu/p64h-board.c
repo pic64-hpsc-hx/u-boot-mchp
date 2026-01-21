@@ -15,7 +15,7 @@ DECLARE_GLOBAL_DATA_PTR;
 static p64h_sysc_rpmi_shmem_cfg_t shmem_cfg;
 static p64h_sysc_handle_t* handle_ptr = NULL;
 
-static int p64h_rpmi_get_cells_with_fallback(const void *fdt,
+static int board_rpmi_get_cells(const void *fdt,
                                              int nodeoffset,
                                              int parentoffset,
                                              const char *propname,
@@ -41,11 +41,11 @@ static int p64h_rpmi_get_shmem_cfg(const void *fdt, int nodeoffset) {
     }
 
     uint32_t address_cells, size_cells;
-    if (p64h_rpmi_get_cells_with_fallback(fdt, nodeoffset, parent, "#address-cells", &address_cells) < 0) {
+    if (board_rpmi_get_cells(fdt, nodeoffset, parent, "#address-cells", &address_cells) < 0) {
         printf("RPMI: #address-cells not found in node or parent\n");
         return -1;
     }
-    if (p64h_rpmi_get_cells_with_fallback(fdt, nodeoffset, parent, "#size-cells", &size_cells) < 0) {
+    if (board_rpmi_get_cells(fdt, nodeoffset, parent, "#size-cells", &size_cells) < 0) {
         printf("RPMI: #size-cells not found in node or parent\n");
         return -1;
     }
@@ -86,8 +86,7 @@ static int p64h_rpmi_get_shmem_cfg(const void *fdt, int nodeoffset) {
     return 0;
 }
 
-
-static int board_rpmi_init(void)
+static void board_rpmi_init(void)
 {
     p64h_sysc_sys_info_t info;
     int len, nodeoffset, depth, found = 0;
@@ -111,29 +110,34 @@ static int board_rpmi_init(void)
             break;
     }
 
+    /* if RPMI failed then just ignore it, never stop U-Boot */
     if (!found) {
-        printf("RPMI: No RPMI device found in DTS\n");
-        return -1;
+        printf("RPMI: *** DISABLED *** No device found in DTS\n");
+        goto board_rpmi_init_failed;
     }
 
     if (p64h_rpmi_get_shmem_cfg(fdt, nodeoffset)) {
-        printf("RPMI: get RPMI shared memory config failed\n");
-        return -1;
+        printf("RPMI: *** DISABLED *** Shared memory config failed\n");
+        goto board_rpmi_init_failed;
     }
 
     if (P64H_ERR_OK != p64h_sysc_rpmi_shmem_init(&shmem_cfg, &handle_ptr)) {
-        printf("RPMI: RPMI shared memory initialization failed\n");
-        return -1;
+        printf("RPMI: *** DISABLED *** Shared memory initialization failed\n");
+        goto board_rpmi_init_failed;
     }
 
     if (P64H_ERR_OK != p64h_sysc_sys_info_get(handle_ptr, &info)) {
-        printf("RPMI: RPMI get version failed\n");
-        return -1;
+        printf("RPMI: *** DISABLED *** Get version failed\n");
+        goto board_rpmi_init_failed;
     }
 
     printf("RPMI:  v%u.%u.%u\n",
         info.fw_version.major, info.fw_version.minor, info.fw_version.patch);
-    return 0;
+    return;
+
+board_rpmi_init_failed:
+        /* rpmi is disabled */
+        handle_ptr = NULL;
 }
 
 const p64h_sysc_handle_t* board_get_rpmi_handle(void)
@@ -154,9 +158,9 @@ int board_late_init(void)
      */
     virtio_init();
 
-    /* temporary fix, remove when RPMI will be updated
-    return board_rpmi_init(); 
-    */
+    /* Initialize RPMI subsystem */
+    board_rpmi_init();
+
     return 0;
 }
 

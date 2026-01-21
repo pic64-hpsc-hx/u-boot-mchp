@@ -9,7 +9,6 @@
  * @{
  */
 #include "p64h_sysc_system.h"
-#include "p64h_sysc.h"
 
 /**
  * @brief Enable a system event.
@@ -29,12 +28,12 @@ p64h_err_t p64h_sysc_sys_evt_enable(p64h_sysc_handle_t* handle_ptr, const p64h_s
     enable_notification.eid                        = (uint32_t)eid;
     enable_notification.req_state                  = (uint32_t)0x1u; // 1 = enable
 
-    if (p64h_sysc_rpmi_evt_enable(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, eid, (p64h_sysc_evt_fct_t*)sys_evt_fct) == false) {
+    if (p64h_sysc_rpmi_evt_enable(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, eid, (p64h_sysc_evt_fct_t)sys_evt_fct) == false) {
         return P64H_ERR_SVC_EM_UNEXPECTED_EVENT;
     }
 
-    return p64h_sysc_rpmi_req_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_ENABLE_NOTIFICATION, P64H_SYSC_RPMI_CID_GET(handle_ptr),
-                                 &enable_notification, sizeof(enable_notification));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_ENABLE_NOTIFICATION, P64H_SYSC_RPMI_CID_GET(handle_ptr), 0x0u, 0x0u,
+                                   &enable_notification, sizeof(enable_notification), NULL, 0x0u);
 }
 
 /**
@@ -56,8 +55,8 @@ p64h_err_t p64h_sysc_sys_evt_disable(p64h_sysc_handle_t* handle_ptr, const p64h_
         return P64H_ERR_SVC_EM_UNEXPECTED_EVENT;
     }
 
-    return p64h_sysc_rpmi_req_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_ENABLE_NOTIFICATION, P64H_SYSC_RPMI_CID_GET(handle_ptr),
-                                 &enable_notification, sizeof(enable_notification));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_ENABLE_NOTIFICATION, P64H_SYSC_RPMI_CID_GET(handle_ptr), 0x0u, 0x0u,
+                                   &enable_notification, sizeof(enable_notification), NULL, 0x0u);
 }
 
 /**
@@ -75,8 +74,8 @@ p64h_err_t p64h_sysc_sys_evt_state_get(const p64h_sysc_handle_t* handle_ptr, con
     rpmi_enable_notification_t enable_notification = { 0x0u, 0x0u };
     enable_notification.eid                        = (uint32_t)eid;
     enable_notification.req_state                  = (uint32_t)0x2u;
-    return p64h_sysc_rpmi_req_resp_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_ENABLE_NOTIFICATION, P64H_SYSC_RPMI_CID_GET(handle_ptr),
-                                      &enable_notification, sizeof(enable_notification), enabled_ptr, sizeof(*enabled_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_ENABLE_NOTIFICATION, P64H_SYSC_RPMI_CID_GET(handle_ptr), 0x0u, 0x0u,
+                                   &enable_notification, sizeof(enable_notification), enabled_ptr, sizeof(*enabled_ptr));
 }
 
 /**
@@ -93,7 +92,8 @@ p64h_err_t p64h_sysc_sys_evt_state_get(const p64h_sysc_handle_t* handle_ptr, con
  */
 p64h_err_t p64h_sysc_sys_info_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_sys_info_t* sys_info_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_INFO, sys_info_ptr, sizeof(*sys_info_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_INFO, 0x0u, 0x0u, 0x0u, NULL, 0x0u, sys_info_ptr,
+                                   sizeof(*sys_info_ptr));
 }
 
 /**
@@ -110,40 +110,25 @@ p64h_err_t p64h_sysc_sys_info_get(const p64h_sysc_handle_t* handle_ptr, p64h_sys
  */
 p64h_err_t p64h_sysc_sys_attr_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_sys_attr_t* sys_attr_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_ATTRIBUTES, sys_attr_ptr, sizeof(*sys_attr_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_ATTRIBUTES, 0x0u, 0x0u, 0x0u, NULL, 0x0u, sys_attr_ptr,
+                                   sizeof(*sys_attr_ptr));
 }
 
 /**
- * @brief Retrieves the number of system logs.
+ * @brief Retrieve system log information.
  *
  * This function is responsible for obtaining the current number of system logs.
  *
  * @param[in] handle_ptr Pointer to the RPMI system controller context.
- * @param[out] num_log_ptr Pointer to a variable where the number of logs will be stored.
+ * @param[out] log_info_ptr Pointer to a structure where the log information will be stored.
  *
  * @return p64h_err_t Error code indicating the status of the operation.
  *         - P64H_ERR_OK: Operation completed successfully.
  */
-p64h_err_t p64h_sysc_sys_log_num_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_log_ptr)
+p64h_err_t p64h_sysc_sys_log_info_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_sys_log_info_t* log_info_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_LOG_NUM, num_log_ptr, sizeof(*num_log_ptr));
-}
-
-/**
- * @brief Retrieves the list of system log IDs.
- *
- * This function populates the provided array with the system log IDs
- *
- * @param[in] handle_ptr Pointer to the RPMI system controller context.
- * @param[out] lids_ptr Pointer to an array where the log IDs will be stored.
- * @param[in] shmem_xfer false: the data will be transferred thru RPMI channel
- *                       true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
- * @return p64h_err_t Error code indicating the status of the operation.
- *         - P64H_ERR_OK: Operation completed successfully.
- */
-p64h_err_t p64h_sysc_sys_log_list_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_log_id_t* lids_ptr, bool shmem_xfer)
-{
-    return p64h_sysc_rpmi_resp_list(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_LOG_LIST, lids_ptr, sizeof(p64h_sysc_log_id_t), shmem_xfer);
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_LOG_INFO, 0x0u, 0x0u, 0x0u, NULL, 0x0u, log_info_ptr,
+                                   sizeof(*log_info_ptr));
 }
 
 /**
@@ -157,26 +142,30 @@ p64h_err_t p64h_sysc_sys_log_list_get(const p64h_sysc_handle_t* handle_ptr, p64h
  *
  * @return p64h_err_t Returns P64H_ERR_OK on success.
  */
-p64h_err_t p64h_sysc_sys_log_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, const p64h_sysc_sys_log_cfg_t cfg_ptr)
+p64h_err_t p64h_sysc_sys_log_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, const p64h_sysc_sys_log_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_req_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_LOG_CONFIG, (uint32_t)lid, &cfg_ptr, sizeof(cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_LOG_CONFIG, (uint32_t)lid, 0x0u, 0x0u, cfg_ptr, sizeof(*cfg_ptr),
+                                   NULL, 0x0u);
 }
 
 /**
- * @brief Retrieves the system log configuration for a given log ID.
+ * @brief Retrieves the system log configuration for a given log ID and destination.
  *
- * This function fetches the system log configuration associated with the specified log ID
+ * This function fetches the system log configuration associated with the specified log ID and destination
  * and stores it in the provided configuration pointer.
  *
  * @param[in] handle_ptr Pointer to the RPMI system controller context.
  * @param[in] lid The log ID for which the system log configuration is to be retrieved.
+ * @param[in] did The log destination for which the system log configuration is to be retrieved.
  * @param[out] cfg_ptr Pointer to a structure where the retrieved system log configuration will be stored.
  *
  * @return p64h_err_t Returns P64H_ERR_OK on success.
  */
-p64h_err_t p64h_sysc_sys_log_cfg_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, p64h_sysc_sys_log_cfg_t* cfg_ptr)
+p64h_err_t p64h_sysc_sys_log_cfg_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_log_id_t lid, const p64h_sysc_log_destination_t did,
+                                     p64h_sysc_sys_log_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_resp_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_LOG_CONFIG, (uint32_t)lid, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_LOG_CONFIG, (uint32_t)lid, (uint32_t)did, 0x0u, NULL, 0x0u,
+                                   cfg_ptr, sizeof(*cfg_ptr));
 }
 
 /**
@@ -197,19 +186,20 @@ p64h_err_t p64h_sysc_sys_log_data_get(const p64h_sysc_handle_t* handle_ptr, uint
                                       uint64_t* current_write_offset_ptr)
 {
     p64h_sysc_log_cfg_t log_cfg_ptr;
+    uint64_t            entries_left = 0U;
 
-    log_cfg_ptr.log_ptr       = data_buffer;
-    log_cfg_ptr.num_entries   = data_buffer_size;
-    log_cfg_ptr.entry_size    = sizeof(char);
-    log_cfg_ptr.req_start_off = requested_read_offset;
+    log_cfg_ptr.log_ptr              = data_buffer;
+    log_cfg_ptr.num_entries          = data_buffer_size;
+    log_cfg_ptr.entry_size           = sizeof(char);
+    log_cfg_ptr.req_start_off        = requested_read_offset;
 
     /* currently no api to retrieve a header structure plus variable response buffer,
        so temporarily creating a contiguous response buffer and doing an extra copy. */
-    p64h_err_t result = p64h_sysc_rpmi_log(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_LOG_DATA, &log_cfg_ptr, resp_offset_ptr, bytes_read_ptr);
+    p64h_err_t result = p64h_sysc_rpmi_log(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_LOG_DATA, &log_cfg_ptr, resp_offset_ptr, bytes_read_ptr,
+                                           &entries_left);
 
     if (result == P64H_ERR_OK) {
-        // memcpy(data_buffer, resp->data, resp->header.bytes_read);
-        *current_write_offset_ptr = *resp_offset_ptr + *bytes_read_ptr;
+        *current_write_offset_ptr = *resp_offset_ptr + *bytes_read_ptr + entries_left;
     }
     return result;
 }
@@ -227,7 +217,8 @@ p64h_err_t p64h_sysc_sys_log_data_get(const p64h_sysc_handle_t* handle_ptr, uint
  */
 p64h_err_t p64h_sysc_sys_appc_boot_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_acot_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_CFG, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_CFG, 0x0u, 0x0u, 0x0u, NULL, 0x0u, cfg_ptr,
+                                   sizeof(*cfg_ptr));
 }
 
 /**
@@ -245,7 +236,8 @@ p64h_err_t p64h_sysc_sys_appc_boot_cfg_get(const p64h_sysc_handle_t* handle_ptr,
 p64h_err_t p64h_sysc_sys_appc_boot_status_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_boot_cfg_id_t bid,
                                               p64h_sysc_appc_boot_cfg_status_t* status_ptr)
 {
-    return p64h_sysc_rpmi_resp_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_STATUS, (uint32_t)bid, status_ptr, sizeof(*status_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_APPC_BOOT_STATUS, (uint32_t)bid, 0x0u, 0x0u, NULL, 0x0u,
+                                   status_ptr, sizeof(*status_ptr));
 }
 
 /**
@@ -260,7 +252,7 @@ p64h_err_t p64h_sysc_sys_appc_boot_status_get(const p64h_sysc_handle_t* handle_p
  */
 p64h_err_t p64h_sysc_sys_appc_boot_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_boot_cfg_id_t bid)
 {
-    return p64h_sysc_rpmi_req(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_APPC_BOOT_CFG, &bid, sizeof(bid));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_APPC_BOOT_CFG, 0x0u, 0x0u, 0x0u, &bid, sizeof(bid), NULL, 0x0u);
 }
 
 /**
@@ -277,7 +269,8 @@ p64h_err_t p64h_sysc_sys_appc_boot_cfg_set(const p64h_sysc_handle_t* handle_ptr,
  */
 p64h_err_t p64h_sysc_sys_pwr_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_pwr_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_req(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_PWR_CONFIG, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_PWR_CONFIG, 0x0u, 0x0u, 0x0u, cfg_ptr, sizeof(*cfg_ptr), NULL,
+                                   0x0u);
 }
 
 /**
@@ -294,7 +287,8 @@ p64h_err_t p64h_sysc_sys_pwr_cfg_set(const p64h_sysc_handle_t* handle_ptr, const
  */
 p64h_err_t p64h_sysc_sys_pwr_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_pwr_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_PWR_CONFIG, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_PWR_CONFIG, 0x0u, 0x0u, 0x0u, NULL, 0x0u, cfg_ptr,
+                                   sizeof(*cfg_ptr));
 }
 
 /**
@@ -307,7 +301,7 @@ p64h_err_t p64h_sysc_sys_pwr_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_
  */
 p64h_err_t p64h_sysc_sys_pwr_wakeup_trigger(const p64h_sysc_handle_t* handle_ptr)
 {
-    return p64h_sysc_rpmi_bare_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_PWR_WAKEUP_TRIGGER);
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_PWR_WAKEUP_TRIGGER, 0x0u, 0x0u, 0x0u, NULL, 0x0u, NULL, 0x0u);
 }
 
 /**
@@ -321,7 +315,8 @@ p64h_err_t p64h_sysc_sys_pwr_wakeup_trigger(const p64h_sysc_handle_t* handle_ptr
  */
 p64h_err_t p64h_sysc_sys_trace_dev_attr_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_trace_dev_attr_t* attr_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_DEV_TRACE_ATTRIBUTE, attr_ptr, sizeof(*attr_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_DEV_TRACE_ATTRIBUTE, 0x0u, 0x0u, 0x0u, NULL, 0x0u, attr_ptr,
+                                   sizeof(*attr_ptr));
 }
 
 /**
@@ -339,7 +334,8 @@ p64h_err_t p64h_sysc_sys_trace_dev_attr_get(const p64h_sysc_handle_t* handle_ptr
  */
 p64h_err_t p64h_sysc_sys_trace_dev_cfg_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_trace_dev_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_DEV_TRACE_CONFIG, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_DEV_TRACE_CONFIG, 0x0u, 0x0u, 0x0u, NULL, 0x0u, cfg_ptr,
+                                   sizeof(*cfg_ptr));
 }
 
 /**
@@ -353,7 +349,8 @@ p64h_err_t p64h_sysc_sys_trace_dev_cfg_get(const p64h_sysc_handle_t* handle_ptr,
  */
 p64h_err_t p64h_sysc_sys_trace_dev_cfg_set(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_trace_dev_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_req(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_DEV_TRACE_CONFIG, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_DEV_TRACE_CONFIG, 0x0u, 0x0u, 0x0u, cfg_ptr, sizeof(*cfg_ptr),
+                                   NULL, 0x0u);
 }
 
 /**
@@ -369,11 +366,11 @@ p64h_err_t p64h_sysc_sys_trace_dev_cfg_set(const p64h_sysc_handle_t* handle_ptr,
  *                       true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
  * @return p64h_err_t Error code indicating the result of the operation.
  */
-p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_upload(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_upgrade_cfg_t* cfg_ptr, const void* data_ptr,
+p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_upload(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_pkg_cfg_t* cfg_ptr, const void* data_ptr,
                                                size_t size, bool shmem_xfer)
 {
-    return p64h_sysc_rpmi_req_outbuf(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_PKG_UPGRADE_UPLOAD, cfg_ptr, sizeof(*cfg_ptr), data_ptr, size,
-                                     shmem_xfer);
+    return p64h_sysc_rpmi_req_with_data(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_PKG_UPGRADE_UPLOAD, cfg_ptr, sizeof(*cfg_ptr), data_ptr,
+                                        size, shmem_xfer);
 }
 
 /**
@@ -385,9 +382,10 @@ p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_upload(const p64h_sysc_handle_t* handle_
  * @param[in] cfg_ptr Pointer to the firmware upgrade configuration structure.
  * @return p64h_err_t Error code indicating the result of the operation.
  */
-p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_apply(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_upgrade_cfg_t* cfg_ptr)
+p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_apply(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_pkg_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_req(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_PKG_UPGRADE_APPLY, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_PKG_UPGRADE_APPLY, 0x0u, 0x0u, 0x0u, cfg_ptr, sizeof(*cfg_ptr),
+                                   NULL, 0x0u);
 }
 
 /**
@@ -397,13 +395,12 @@ p64h_err_t p64h_sysc_sys_fw_pkg_upgrade_apply(const p64h_sysc_handle_t* handle_p
  *
  * @param[in] handle_ptr Pointer to the RPMI system controller context.
  * @param[in] cfg_ptr Pointer to the firmware dump configuration structure.
- * @param[out] dump_size Size of the dump returned by sysc.
  *
  * @return p64h_err_t Error code indicating the result of the operation.
  */
-p64h_err_t p64h_sysc_sys_fw_dump(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_dump_cfg_t* cfg_ptr, uint32_t* dump_size)
+p64h_err_t p64h_sysc_sys_fw_dump(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_dump_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_DUMP, cfg_ptr, sizeof(*cfg_ptr), dump_size, sizeof(*dump_size));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_DUMP, 0x0u, 0x0u, 0x0u, cfg_ptr, sizeof(*cfg_ptr), NULL, 0x0u);
 }
 
 /**
@@ -419,9 +416,11 @@ p64h_err_t p64h_sysc_sys_fw_dump(const p64h_sysc_handle_t* handle_ptr, const p64
  * @return p64h_err_t Error code indicating the result of the firmware update operation.
  *         - P64H_ERR_OK: Firmware update was successful.
  */
-p64h_err_t p64h_sysc_sys_fw_download(const p64h_sysc_handle_t* handle_ptr, void* data_ptr, size_t size, bool shmem_xfer)
+p64h_err_t p64h_sysc_sys_fw_download(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_fw_dump_cfg_t* cfg_ptr, void* data_ptr, size_t size,
+                                     bool shmem_xfer)
 {
-    return p64h_sysc_rpmi_resp_inbuf(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_DOWNLOAD, data_ptr, size, shmem_xfer);
+    return p64h_sysc_rpmi_resp_with_data(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_DOWNLOAD, 0x0u, 0x0u, 0x0u, cfg_ptr, sizeof(*cfg_ptr),
+                                         data_ptr, size, shmem_xfer);
 }
 
 /**
@@ -437,7 +436,8 @@ p64h_err_t p64h_sysc_sys_fw_download(const p64h_sysc_handle_t* handle_ptr, void*
  */
 p64h_err_t p64h_sysc_sys_fw_dump_status_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_fw_dump_status_t* status_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_DUMP_STATUS, status_ptr, sizeof(*status_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_FW_DUMP_STATUS, 0x0u, 0x0u, 0x0u, NULL, 0x0u, status_ptr,
+                                   sizeof(*status_ptr));
 }
 
 /**
@@ -453,7 +453,7 @@ p64h_err_t p64h_sysc_sys_fw_dump_status_get(const p64h_sysc_handle_t* handle_ptr
  */
 p64h_err_t p64h_sysc_sys_time_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_time_t* time_ptr)
 {
-    return p64h_sysc_rpmi_req(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_TIME, time_ptr, sizeof(*time_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_TIME, 0x0u, 0x0u, 0x0u, time_ptr, sizeof(*time_ptr), NULL, 0x0u);
 }
 
 /**
@@ -469,7 +469,7 @@ p64h_err_t p64h_sysc_sys_time_set(const p64h_sysc_handle_t* handle_ptr, const p6
  */
 p64h_err_t p64h_sysc_sys_time_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_time_t* time_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_TIME, time_ptr, sizeof(*time_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_TIME, 0x0u, 0x0u, 0x0u, NULL, 0x0u, time_ptr, sizeof(*time_ptr));
 }
 
 /**
@@ -482,7 +482,8 @@ p64h_err_t p64h_sysc_sys_time_get(const p64h_sysc_handle_t* handle_ptr, p64h_sys
  */
 p64h_err_t p64h_sysc_sys_pgmrclk_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_pgmrclk_id_t clk_id, const p64h_pgmrclk_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_req_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_PGMRCLK_CFG, (uint32_t)clk_id, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_PGMRCLK_CFG, (uint32_t)clk_id, 0x0u, 0x0u, cfg_ptr,
+                                   sizeof(*cfg_ptr), NULL, 0x0u);
 }
 
 /**
@@ -495,7 +496,8 @@ p64h_err_t p64h_sysc_sys_pgmrclk_cfg_set(const p64h_sysc_handle_t* handle_ptr, c
  */
 p64h_err_t p64h_sysc_sys_pgmrclk_cfg_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_pgmrclk_id_t clk_id, p64h_pgmrclk_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_resp_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_PGMRCLK_CFG, (uint32_t)clk_id, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_PGMRCLK_CFG, (uint32_t)clk_id, 0x0u, 0x0u, NULL, 0x0u, cfg_ptr,
+                                   sizeof(*cfg_ptr));
 }
 
 /**
@@ -509,7 +511,8 @@ p64h_err_t p64h_sysc_sys_pgmrclk_cfg_get(const p64h_sysc_handle_t* handle_ptr, c
 p64h_err_t p64h_sysc_sys_cfm_meas_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_cfm_inst_t cfm_inst,
                                           const p64h_sysc_cfm_cfg_t* cfg_ptr)
 {
-    return p64h_sysc_rpmi_req_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_CFM_MEAS_CFG, (uint32_t)cfm_inst, cfg_ptr, sizeof(*cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_CFM_MEAS_CFG, (uint32_t)cfm_inst, 0x0u, 0x0u, cfg_ptr,
+                                   sizeof(*cfg_ptr), NULL, 0x0u);
 }
 
 /**
@@ -523,7 +526,8 @@ p64h_err_t p64h_sysc_sys_cfm_meas_cfg_set(const p64h_sysc_handle_t* handle_ptr, 
 p64h_err_t p64h_sysc_sys_cfm_meas_count_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_cfm_inst_t cfm_inst,
                                             p64h_sysc_cfm_meas_count_t* count_ptr)
 {
-    return p64h_sysc_rpmi_resp_id(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_CFM_MEAS_CNT, (uint32_t)cfm_inst, count_ptr, sizeof(*count_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_CFM_MEAS_CNT, (uint32_t)cfm_inst, 0x0u, 0x0u, NULL, 0x0u,
+                                   count_ptr, sizeof(*count_ptr));
 }
 
 /**
@@ -535,7 +539,8 @@ p64h_err_t p64h_sysc_sys_cfm_meas_count_get(const p64h_sysc_handle_t* handle_ptr
  */
 p64h_err_t p64h_sysc_sys_fw_pll_cfg_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_fw_pll_cfg_t* fw_pll_cfg_ptr)
 {
-    return p64h_sysc_rpmi_req(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_FW_PLL_CFG, fw_pll_cfg_ptr, sizeof(*fw_pll_cfg_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_SET_FW_PLL_CFG, 0x0u, 0x0u, 0x0u, fw_pll_cfg_ptr,
+                                   sizeof(*fw_pll_cfg_ptr), NULL, 0x0u);
 }
 
 /**
@@ -547,7 +552,8 @@ p64h_err_t p64h_sysc_sys_fw_pll_cfg_set(const p64h_sysc_handle_t* handle_ptr, co
  */
 p64h_err_t p64h_sysc_sys_fw_pll_timestamp_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_fw_pll_timestamp_t* timestamp_ptr)
 {
-    return p64h_sysc_rpmi_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_FW_PLL_TIMESTAMP, timestamp_ptr, sizeof(*timestamp_ptr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_GET_FW_PLL_TIMESTAMP, 0x0u, 0x0u, 0x0u, NULL, 0x0u, timestamp_ptr,
+                                   sizeof(*timestamp_ptr));
 }
 
 /**
@@ -559,6 +565,20 @@ p64h_err_t p64h_sysc_sys_fw_pll_timestamp_get(const p64h_sysc_handle_t* handle_p
  */
 p64h_err_t p64h_sysc_sys_dtb_fixup(const p64h_sysc_handle_t* handle_ptr, const uint64_t dtb_addr)
 {
-    return p64h_sysc_rpmi_req(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_APPC_DTB_FIXUP, &dtb_addr, sizeof(dtb_addr));
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_APPC_DTB_FIXUP, 0x0u, 0x0u, 0x0u, &dtb_addr, sizeof(dtb_addr), NULL,
+                                   0x0u);
+}
+
+/**
+ * @brief Fetch the contents of the M1 scratchregisters for SysC.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] m1_dump_ptr Pointer to the M1 content
+ * @return p64h_err_t Error code indicating the result of the operation.
+ */
+p64h_err_t p64h_sysc_m1_dump(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_m1_dump_t* m1_dump_ptr)
+{
+    return p64h_sysc_rpmi_req_resp(handle_ptr, P64H_RPMI_SRVGRP_SYSTEM, P64H_SYS_M1_DUMP, 0x0u, 0x0u, 0x0u, NULL, 0x0, m1_dump_ptr,
+                                   sizeof(p64h_sysc_m1_dump_t));
 }
 /// @}

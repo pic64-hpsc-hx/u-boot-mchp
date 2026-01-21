@@ -1,4 +1,4 @@
-/* (c) 2025 Microchip Technology Inc. */
+/* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
 /* ======================================= */
@@ -98,6 +98,123 @@ typedef enum  {
     P64H_SYSC_LSIO_CEE     = 0x1,
     P64H_SYSC_LSIO_CEE_TEE_TYPE_LAST
 } p64h_sysc_lsio_cee_tee_type_t;
+
+/**
+ * @brief P64H LSIO DRVSNK value 
+ *
+ */
+typedef enum  {
+    P64H_SYSC_LSIO_DRVSNK_OFF                   = 0x0,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_1_MA             = 0x1,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_1_5_MA           = 0x2,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_2_MA             = 0x3,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_2_5_MA           = 0x4,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_3_MA             = 0x5,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_3_5_MA           = 0x6,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_4_MA             = 0x7,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_4_5_MA           = 0x8,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_5_MA             = 0x9,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_5_5_MA           = 0xa,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_6_MA             = 0xb,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_6_5_MA           = 0xc,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_7_MA             = 0xd,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_7_5_MA           = 0xe,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_8_MA             = 0xf,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_8_5_MA           = 0x10,
+    P64H_SYSC_LSIO_DRVSNK_LVDS_9_MA             = 0x11,
+    P64H_SYSC_LSIO_DRVSNK_DEFAULT_HARDCODED     = 0x12,
+    P64H_SYSC_LSIO_DRVSNK_TYPE_LAST
+} p64h_sysc_lsio_drvsnk_type_t;
+
+/**
+ * @brief P64H LSIO DRVSRC value 
+ *
+ */
+typedef enum  {
+    P64H_SYSC_LSIO_DRVSRC_OFF                   = 0x0,
+    P64H_SYSC_LSIO_DRVSRC_OHM_240               = 0x1,
+    P64H_SYSC_LSIO_DRVSRC_OHM_120               = 0x2,
+    P64H_SYSC_LSIO_DRVSRC_OHM_80                = 0x3,
+    P64H_SYSC_LSIO_DRVSRC_OHM_60                = 0x4,
+    P64H_SYSC_LSIO_DRVSRC_OHM_48                = 0x5,
+    P64H_SYSC_LSIO_DRVSRC_OHM_40                = 0x6,
+    P64H_SYSC_LSIO_DRVSRC_OHM_34                = 0x7,
+    P64H_SYSC_LSIO_DRVSRC_OHM_30                = 0x8,
+    P64H_SYSC_LSIO_DRVSRC_OHM_27                = 0x9,
+    P64H_SYSC_LSIO_DRVSRC_OHM_24                = 0xa,
+    P64H_SYSC_LSIO_DRVSRC_OHM_22                = 0xb,
+    P64H_SYSC_LSIO_DRVSRC_MAX                   = 0xc,
+    P64H_SYSC_LSIO_DRVSRC_DEFAULT_HARDCODED     = 0xd,
+    P64H_SYSC_LSIO_DRVSRC_TYPE_LAST
+} p64h_sysc_lsio_drvsrc_type_t;
+
+/**
+ * @brief P64H LSIO WPD value 
+ *
+ */
+typedef enum  {
+    P64H_SYSC_LSIO_WPD_DISABLED              = 0x0,
+    P64H_SYSC_LSIO_WPD_ENABLED               = 0x1,
+    P64H_SYSC_LSIO_WPD_DEFAULT_HARDCODED     = 0x2,
+    P64H_SYSC_LSIO_WPD_TYPE_LAST
+} p64h_sysc_lsio_wpd_type_t;
+
+/**
+ * @brief P64H LSIO WPU value 
+ *
+ */
+typedef enum  {
+    P64H_SYSC_LSIO_WPU_DISABLED              = 0x0,
+    P64H_SYSC_LSIO_WPU_ENABLED               = 0x1,
+    P64H_SYSC_LSIO_WPU_DEFAULT_HARDCODED     = 0x2,
+    P64H_SYSC_LSIO_WPU_TYPE_LAST
+} p64h_sysc_lsio_wpu_type_t;
+
+/**
+ * @brief P64H LSIO ODT_SRC and ODT_SNK value 
+ *
+ */
+typedef enum  {
+    P64H_SYSC_LSIO_ODT_SRCSNK_OFF                   = 0x0,
+    P64H_SYSC_LSIO_ODT_SRCSNK_OHM_240               = 0x1,
+    P64H_SYSC_LSIO_ODT_SRCSNK_OHM_120               = 0x2,
+    P64H_SYSC_LSIO_ODT_SRCSNK_OHM_80                = 0x3,
+    P64H_SYSC_LSIO_ODT_SRCSNK_OHM_60                = 0x4,
+    P64H_SYSC_LSIO_ODT_SRCSNK_OHM_48                = 0x5,
+    P64H_SYSC_LSIO_ODT_SRCSNK_OHM_40                = 0x6,
+    P64H_SYSC_LSIO_ODT_SRCSNK_OHM_34                = 0x7,
+    P64H_SYSC_LSIO_ODT_SRCSNK_DIFF_RESISTOR_ON      = 0x8,
+    P64H_SYSC_LSIO_ODT_SRCSNK_DEFAULT_HARDCODED     = 0x9,
+    P64H_SYSC_LSIO_ODT_SRCSNK_TYPE_LAST
+} p64h_sysc_lsio_odt_srcsnk_type_t;
+
+/**
+ * @brief P64H LSIO HYST enabled 
+ *
+ */
+typedef enum  {
+    P64H_SYSC_LSIO_HYST_DISABLED              = 0x0,
+    P64H_SYSC_LSIO_HYST_ENABLED               = 0x1,
+    P64H_SYSC_LSIO_HYST_DEFAULT_HARDCODED     = 0x2,
+    P64H_SYSC_LSIO_HYST_TYPE_LAST
+} p64h_sysc_lsio_hyst_type_t;
+
+/**
+ * @brief P64H LSIO ODT static type 
+ *
+ */
+typedef enum  {
+    P64H_SYSC_LSIO_ODT_STATIC_OFF                   = 0x0,
+    P64H_SYSC_LSIO_ODT_STATIC_DYN_DOWN              = 0x1,
+    P64H_SYSC_LSIO_ODT_STATIC_DYN_UP                = 0x2,
+    P64H_SYSC_LSIO_ODT_STATIC_DYN_THEV_DIFFR        = 0x3,
+    P64H_SYSC_LSIO_ODT_STATIC_OFF2                  = 0x4,
+    P64H_SYSC_LSIO_ODT_STATIC_DYN_DOWN2             = 0x5,
+    P64H_SYSC_LSIO_ODT_STATIC_DYN_UP2               = 0x6,
+    P64H_SYSC_LSIO_ODT_STATIC_DYN_THEV_DIFFR2       = 0x7,
+    P64H_SYSC_LSIO_ODT_STATIC_DEFAULT_HARDCODED     = 0x8,
+    P64H_SYSC_LSIO_ODT_STATIC_TYPE_LAST
+} p64h_sysc_lsio_odt_static_type_t;
 
 /**
  * @brief P64H LSIO Bank controller name 
@@ -711,12 +828,12 @@ typedef enum p64h_sysc_lsio_pin_name_t {
  * @brief P64H LSIO Pin location struct 
  *
  */
-typedef struct p64h_sysc_lsio_pin_loc_desc_t{
-	uint8_t bank   : 4; //< element of [0,15] or p64h_sysc_lsio_bank_name_t
-	uint8_t ceetee : 1; //< element of [0,1] or p64h_sysc_lsio_cee_tee_type_t
-	uint8_t lane   : 1; //< element of [0,1]
-	uint8_t pair   : 4; //< element of [0,9]
-	uint8_t padding: 6; //< unused
+typedef struct __attribute__((packed)) p64h_sysc_lsio_pin_loc_desc_t{
+	uint16_t bank   : 4; //< element of [0,15] or p64h_sysc_lsio_bank_name_t
+	uint16_t ceetee : 1; //< element of [0,1] or p64h_sysc_lsio_cee_tee_type_t
+	uint16_t lane   : 1; //< element of [0,1]
+	uint16_t pair   : 4; //< element of [0,9]
+	uint16_t padding: 6; //< unused
 } p64h_sysc_lsio_pin_loc_desc_t;
 
 
@@ -724,10 +841,37 @@ typedef struct p64h_sysc_lsio_pin_loc_desc_t{
  * @brief P64H LSIO Pin location union - the index is encoded in p64h_sysc_lsio_pin_loc_desc_t
  *
  */
-typedef union {
+typedef union __attribute__((packed)) {
 	p64h_sysc_lsio_pin_name_t w;       //< 16-bit flattened integer - pin enum value - CFG_TYPE array index
 	p64h_sysc_lsio_pin_loc_desc_t b;   //< 16-bit unsigned integer
 } p64h_sysc_lsio_pin_loc_t;
+
+
+ /**
+ * @brief P64H LSIO Advanced config struct - Used to overwrite hardcoded pin configs
+ *
+ */
+typedef struct __attribute__((packed)) p64h_sysc_lsio_advanced_pin_cfg_desc_t{
+	uint32_t drvsnk     : 5; //< DRVSNK pin value
+	uint32_t drvsrc     : 4; //< DRVSRC pin value
+	uint32_t wpd        : 2; //< WPD pin value
+	uint32_t wpu        : 2; //< WPU pin value
+	uint32_t odt_src    : 4; //< ODT_SRC pin value
+	uint32_t odt_snk    : 4; //< ODT_SNK pin value
+	uint32_t hyst       : 2; //< HYST pin value
+	uint32_t odt_static : 4; //< ODT_STATIC pin value
+	uint32_t padding    : 5; //< unused
+} p64h_sysc_lsio_advanced_pin_cfg_desc_t;
+
+
+/**
+ * @brief P64H LSIO Pin advanced configuration union
+ *
+ */
+typedef union __attribute__((packed)) {
+	uint32_t w;       //< 32-bit flattened integer - pin advanced config value
+	p64h_sysc_lsio_advanced_pin_cfg_desc_t b;   //< 16-bit unsigned integer
+} p64h_sysc_lsio_pin_advanced_cfg_t;
 
  
 /**
@@ -737,6 +881,7 @@ typedef union {
 typedef struct p64h_sysc_lsio_cfg_t{
 	p64h_sysc_lsio_bank_cfg_type_t lsio_bank_cfg[P64H_SYSC_LSIO_BANK_NAME_LAST]; ///< All banks config_types
 	p64h_sysc_lsio_pin_cfg_type_t  lsio_pin_cfg[P64H_SYSC_LSIO_PIN_NAME_LAST];   ///< All pins config_types
+	p64h_sysc_lsio_pin_advanced_cfg_t  lsio_pin_advanced_cfg[P64H_SYSC_LSIO_PIN_NAME_LAST];   ///< All pins advanced config_types tweaks
 } p64h_sysc_lsio_cfg_t;
 
 

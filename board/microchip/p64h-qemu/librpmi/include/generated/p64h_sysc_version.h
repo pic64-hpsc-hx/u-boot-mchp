@@ -18,11 +18,11 @@
 
 // API major version
 #ifndef P64H_SYSC_FW_VERSION_MAJOR
-#define P64H_SYSC_FW_VERSION_MAJOR 1
+#define P64H_SYSC_FW_VERSION_MAJOR 2
 #endif
 // API minor version
 #ifndef P64H_SYSC_FW_VERSION_MINOR
-#define P64H_SYSC_FW_VERSION_MINOR 8
+#define P64H_SYSC_FW_VERSION_MINOR 0
 #endif
 // API patch version 
 #ifndef P64H_SYSC_FW_VERSION_PATCH

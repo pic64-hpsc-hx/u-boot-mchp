@@ -1,4 +1,4 @@
-/* (c) 2025 Microchip Technology Inc. */
+/* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
 /* ======================================= */
@@ -9,13 +9,14 @@
 #include <generated/p64h_sysc_errors.h>
 
 
-static char* p64h_svc_system_names[6] = {
+static char* p64h_svc_system_names[7] = {
     "P64H_ERR_SVC_SYSTEM_CTXT_INIT",
     "P64H_ERR_SVC_SYSTEM_SERVICE_START",
     "P64H_ERR_SVC_SYSTEM_ERR",
     "P64H_ERR_SVC_SYSTEM_INVALID_API",
     "P64H_ERR_SVC_SYSTEM_UNEXPECTED_EVENT",
-    "P64H_ERR_SVC_SYSTEM_DEV_CFG_VERSION_INIT"
+    "P64H_ERR_SVC_SYSTEM_DEV_CFG_VERSION_INIT",
+    "P64H_ERR_SVC_SYSTEM_ACOT_ENTRY_INVALID"
 };
 
 static char* p64h_svc_appc_names[10] = {
@@ -73,13 +74,15 @@ static char* p64h_svc_secc_mbox_names[3] = {
     "P64H_ERR_SVC_SECC_MBOX_FALSE_RESP"
 };
 
-static char* p64h_svc_hw_names[7] = {
+static char* p64h_svc_hw_names[9] = {
     "P64H_ERR_SVC_HW_CTXT_UNINIT",
     "P64H_ERR_SVC_HW_DDR_BINARY_LOAD",
     "P64H_ERR_SVC_HW_HANDLE_UNINIT",
     "P64H_ERR_SVC_HW_INVALID_ID",
     "P64H_ERR_SVC_HW_SERDES_NOT_CFG",
     "P64H_ERR_SVC_HW_INTR_REGISTRATION_FAILED",
+    "P64H_ERR_SVC_HW_INTR_DISABLE_FAILED",
+    "P64H_ERR_SVC_HW_INTR_ENABLE_FAILED",
     "P64H_ERR_SVC_HW_UNEXPECTED_EVENT"
 };
 
@@ -107,7 +110,7 @@ static char* p64h_svc_health_names[2] = {
     "P64H_ERR_SVC_HEALTH_UNEXPECTED_EVENT"
 };
 
-static char* p64h_core_names[28] = {
+static char* p64h_core_names[30] = {
     "P64H_ERR_OK",
     "P64H_ERR_GENERAL",
     "P64H_ERR_BOOT_CONFIG_FILE",
@@ -117,7 +120,9 @@ static char* p64h_core_names[28] = {
     "P64H_ERR_IPC_WRONG_MESSAGE",
     "P64H_ERR_IPC_MESSAGE_SIZE_ERROR",
     "P64H_ERR_IPC_SEND_FAIL",
+    "P64H_ERR_IPC_GET_MSG_FAIL",
     "P64H_ERR_IPC_CHANNEL_NOT_FOUND",
+    "P64H_ERR_IPC_CHANNEL_ID_INVALID",
     "P64H_ERR_RPMSG_FAIL",
     "P64H_ERR_DDR_INIT_FAIL",
     "P64H_ERR_CONFIG_POPULATE_FAIL",
@@ -144,7 +149,7 @@ static char* p64h_P64H_COMP_CORE_INTR_HANDLER_names[0] = {};
 
 static char* p64h_P64H_COMP_CORE_SHARED_names[0] = {};
 
-static char* p64h_lib_baal_names[13] = {
+static char* p64h_lib_baal_names[17] = {
     "P64H_ERR_LIB_BAAL_INVALID_SIMG_ID",
     "P64H_ERR_LIB_BAAL_METADATA_ERR",
     "P64H_ERR_LIB_BAAL_APPC_NOT_INIT",
@@ -153,7 +158,11 @@ static char* p64h_lib_baal_names[13] = {
     "P64H_ERR_LIB_BAAL_DEINIT_FAIL",
     "P64H_ERR_LIB_BAAL_GET_FAIL",
     "P64H_ERR_LIB_BAAL_READ_FAIL",
-    "P64H_ERR_LIB_BAAL_WRITE_FAIL",
+    "P64H_ERR_LIB_BAAL_DMA_FAIL",
+    "P64H_ERR_LIB_BAAL_UPGRADE_FAIL",
+    "P64H_ERR_LIB_BAAL_OVERWRITE_FAIL",
+    "P64H_ERR_LIB_BAAL_SECTOR_ERASE_FAIL",
+    "P64H_ERR_LIB_BAAL_UPDATE_FAIL",
     "P64H_ERR_LIB_BAAL_OTP_READ_FAIL",
     "P64H_ERR_LIB_BAAL_SECC_FSBL_DWNLD",
     "P64H_ERR_LIB_BAAL_INVALID_FSBL_SIZE",
@@ -289,7 +298,7 @@ static char* p64h_lib_appc_soc_cfg_names[6] = {
     "P64H_ERR_LIB_APPC_SOC_CFG_RNMI_TIMEOUT"
 };
 
-static char* p64h_lib_api_names[27] = {
+static char* p64h_lib_api_names[29] = {
     "P64H_ERR_LIB_API_NULL_POINTER",
     "P64H_ERR_LIB_API_BAD_SIZE",
     "P64H_ERR_LIB_API_CID_INVALID",
@@ -316,7 +325,9 @@ static char* p64h_lib_api_names[27] = {
     "P64H_ERR_LIB_API_INVALID_ENTRIES_RETURNED",
     "P64H_ERR_LIB_API_REQ_BUSY",
     "P64H_ERR_LIB_API_RESP_PENDING",
-    "P64H_ERR_LIB_API_INVALID_REQ_STATE"
+    "P64H_ERR_LIB_API_INVALID_REQ_STATE",
+    "P64H_ERR_LIB_API_CHECKSUM_MISMATCH",
+    "P64H_ERR_LIB_API_CALLBACK_UNSET"
 };
 
 static char* p64h_lib_sysc_soc_cfg_names[5] = {
@@ -368,7 +379,10 @@ static char* p64h_P64H_COMP_LIB_EINJLIB_names[0] = {};
 
 static char* p64h_P64H_COMP_LIB_RPMI_names[0] = {};
 
-static char* p64h_P64H_COMP_LIB_FW_UPGRADE_names[0] = {};
+static char* p64h_lib_fw_upgrade_names[2] = {
+    "P64H_ERR_LIB_FW_UPGRADE_UPLOAD_FAIL",
+    "P64H_ERR_LIB_FW_UPGRADE_APPLY_FAIL"
+};
 
 static char* p64h_P64H_COMP_LIB_IPC_names[0] = {};
 
@@ -379,7 +393,7 @@ static char* p64h_drv_app_wrap_names[4] = {
     "P64H_ERR_DRV_APP_WRAP_INVALID_INST"
 };
 
-static char* p64h_drv_app_periph_names[81] = {
+static char* p64h_drv_app_periph_names[84] = {
     "P64H_ERR_DRV_APP_PERIPH_GPIO_NULL_HANDLE",
     "P64H_ERR_DRV_APP_PERIPH_GPIO_NULL_CFG",
     "P64H_ERR_DRV_APP_PERIPH_GPIO_INVALID_INSTANCE",
@@ -410,6 +424,8 @@ static char* p64h_drv_app_periph_names[81] = {
     "P64H_ERR_DRV_APP_PERIPH_DDR_INVALID_INST",
     "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NULL_HANDLE",
     "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NULL_CFG",
+    "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NO_INTR_FOUND",
+    "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_INVALID_PARAM",
     "P64H_ERR_DRV_APP_PERIPH_NULL_HANDLE",
     "P64H_ERR_DRV_APP_PERIPH_NULL_CFG",
     "P64H_ERR_DRV_APP_PERIPH_UART_NULL_HANDLE",
@@ -438,6 +454,7 @@ static char* p64h_drv_app_periph_names[81] = {
     "P64H_ERR_DRV_APP_PERIPH_MDIO_NULL_CFG",
     "P64H_ERR_DRV_APP_PERIPH_MDIO_INVALID_INSTANCE",
     "P64H_ERR_DRV_APP_PERIPH_MDIO_AF_ERR",
+    "P64H_ERR_DRV_APP_PERIPH_MDIO_IO_ERR",
     "P64H_ERR_DRV_APP_PERIPH_SPI_NULL_HANDLE",
     "P64H_ERR_DRV_APP_PERIPH_SPI_NULL_CFG",
     "P64H_ERR_DRV_APP_PERIPH_SPI_INVALID_INSTANCE",
@@ -463,8 +480,12 @@ static char* p64h_drv_app_periph_names[81] = {
     "P64H_ERR_DRV_APP_PERIPH_USER_CRYPTO_NULL_CFG"
 };
 
-static char* p64h_drv_ddr_names[1] = {
-    "P64H_ERR_DRV_DDR_INVALID_INSTANCE"
+static char* p64h_drv_ddr_names[5] = {
+    "P64H_ERR_DRV_DDR_INVALID_INSTANCE",
+    "P64H_ERR_DRV_DDR_PHY_IN_RESET",
+    "P64H_ERR_DRV_DDR_PHY_INVALID_DQ_WITDH",
+    "P64H_ERR_DRV_DDR_DDR_PLL_LOCK_TIMEOUT",
+    "P64H_ERR_DRV_DDR_DDR_DLL_LOCK_TIMEOUT"
 };
 
 static char* p64h_drv_top_names[18] = {
@@ -488,7 +509,7 @@ static char* p64h_drv_top_names[18] = {
     "P64H_ERR_DRV_TOP_PSC_STAT_ERROR"
 };
 
-static char* p64h_drv_noc_core_names[28] = {
+static char* p64h_drv_noc_core_names[29] = {
     "P64H_ERR_DRV_NOC_CORE_UNSUPPORTED_EVENT_TYPE",
     "P64H_ERR_DRV_NOC_CORE_INVALID_OBSERVED_PORT_INDEX",
     "P64H_ERR_DRV_NOC_CORE_INVALID_DUMP_SELECTION",
@@ -516,7 +537,8 @@ static char* p64h_drv_noc_core_names[28] = {
     "P64H_ERR_DRV_NOC_CORE_STAT_ALARM_THRESHOLD_OUT_OF_RANGE",
     "P64H_ERR_DRV_NOC_CORE_INVALID_ASYNC_PERIOD",
     "P64H_ERR_DRV_NOC_CORE_HANDLE_ERROR",
-    "P64H_ERR_DRV_NOC_CORE_CFG_ERROR"
+    "P64H_ERR_DRV_NOC_CORE_CFG_ERROR",
+    "P64H_ERR_DRV_NOC_CORE_INVALID_PARAM"
 };
 
 static char* p64h_drv_iobridge_names[1] = {
@@ -563,9 +585,10 @@ static char* p64h_drv_app_ipc_names[1] = {
     "P64H_ERR_DRV_APP_IPC_NULL_HANDLE"
 };
 
-static char* p64h_drv_ddr_ctrl_names[2] = {
+static char* p64h_drv_ddr_ctrl_names[3] = {
     "P64H_ERR_DRV_DDR_CTRL_NULL_HANDLE",
-    "P64H_ERR_DRV_DDR_CTRL_UNSUPPORTED_TYPE"
+    "P64H_ERR_DRV_DDR_CTRL_UNSUPPORTED_TYPE",
+    "P64H_ERR_DRV_DDR_CTRL_INVALID_CTRL_INSTANCE"
 };
 
 static char* p64h_drv_ddr_edac_names[7] = {
@@ -578,14 +601,17 @@ static char* p64h_drv_ddr_edac_names[7] = {
     "P64H_ERR_DRV_DDR_EDAC_INVALID_RCMD_VAL"
 };
 
-static char* p64h_drv_dma_names[7] = {
+static char* p64h_drv_dma_names[10] = {
     "P64H_ERR_DRV_DMA_NULL_POINTER",
     "P64H_ERR_DRV_DMA_INVALID_MASK",
     "P64H_ERR_DRV_DMA_TIMEOUT",
     "P64H_ERR_DRV_DMA_INVALID_TYPE",
     "P64H_ERR_DRV_DMA_MEMORY_ALLOCATION_FAILURE",
     "P64H_ERR_DRV_DMA_UNIMPLEMENTED",
-    "P64H_ERR_DRV_DMA_INVALID_ARG"
+    "P64H_ERR_DRV_DMA_INVALID_ARG",
+    "P64H_ERR_DRV_DMA_DMAC_CHID_OUT_OF_RANGE_ERR",
+    "P64H_ERR_DRV_DMA_DMAC_XFER_DONE_FAIL",
+    "P64H_ERR_DRV_DMA_DMAC_BLK_XFER_FAIL"
 };
 
 static char* p64h_drv_ocr_names[4] = {
@@ -633,20 +659,30 @@ static char* p64h_drv_sys_top_names[5] = {
     "P64H_ERR_DRV_SYS_TOP_CFG_ERROR"
 };
 
+static char* p64h_drv_sys_spi_flash_names[5] = {
+    "P64H_ERR_DRV_SYS_SPI_FLASH_CFG_NULL",
+    "P64H_ERR_DRV_SYS_SPI_FLASH_INIT_ERR",
+    "P64H_ERR_DRV_SYS_SPI_FLASH_PROG_ERR",
+    "P64H_ERR_DRV_SYS_SPI_FLASH_READ_ERR",
+    "P64H_ERR_DRV_SYS_SPI_FLASH_ERASE_ERR"
+};
+
 static char* p64h_drv_sys_hpt_names[3] = {
     "P64H_ERR_DRV_SYS_HPT_INVALID_PARAM",
     "P64H_ERR_DRV_SYS_HPT_EXCEED_MAX_LOOP",
     "P64H_ERR_DRV_SYS_HPT_MTIME_ERROR"
 };
 
-static char* p64h_drv_nvm_names[53] = {
+static char* p64h_drv_nvm_names[56] = {
     "P64H_ERR_DRV_NVM_CTRL_AF_ERR",
     "P64H_ERR_DRV_NVM_SS_NULL_HANDLE",
     "P64H_ERR_DRV_NVM_CFG_NULL",
     "P64H_ERR_DRV_NVM_INVALID_CTRL_INSTANCE",
     "P64H_ERR_DRV_NVM_INVALID_CTRL_TYPE",
     "P64H_ERR_DRV_NVM_INVALID_EDAC_INSTANCE",
-    "P64H_ERR_DRV_NVM_PFLASH_CTRL_INIT_WRONG_WIDTH",
+    "P64H_ERR_DRV_NVM_PFLASH_CTRL_UNSUPPORTED_DATA_WIDTH",
+    "P64H_ERR_DRV_NVM_PFLASH_CTRL_DEVICE_READY_TIMEOUT",
+    "P64H_ERR_DRV_NVM_PFLASH_CTRL_WRITE_BUFFER_NULL",
     "P64H_ERR_DRV_NVM_INVALID_XSPI_INSTANCE",
     "P64H_ERR_DRV_NVM_XSPI_PROBE",
     "P64H_ERR_DRV_NVM_XSPI_INIT",
@@ -692,7 +728,8 @@ static char* p64h_drv_nvm_names[53] = {
     "P64H_ERR_DRV_NVM_XSPI_CONVERT_P1_STIG_INSTR",
     "P64H_ERR_DRV_NVM_INVALID_CCP_INSTANCE",
     "P64H_ERR_DRV_NVM_XSPI_CCP_PROBE",
-    "P64H_ERR_DRV_NVM_XSPI_CCP_INIT"
+    "P64H_ERR_DRV_NVM_XSPI_CCP_INIT",
+    "P64H_ERR_DRV_NVM_DIAG_TEST_FAIL"
 };
 
 static char* p64h_drv_edac_names[4] = {
@@ -833,6 +870,31 @@ static char* p64h_drv_arm_n_fire_names[123] = {
     "P64H_ERR_DRV_ARM_N_FIRE_SIGNATURE_TOP1_M1_SOK_SECC_PCBI"
 };
 
+static char* p64h_P64H_COMP_DRV_DEBUG_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_APP_SPW_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_DDR_NOC_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_PIER_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_PCIE_CXL_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_ZSBL_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_TRACE_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_WDOG_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_LSIO_names[0] = {};
+
+static char* p64h_P64H_COMP_DRV_APP_DMA_names[0] = {};
+
+static char* p64h_drv_gpio_names[2] = {
+    "P64H_ERR_DRV_GPIO_NULL_HANDLE",
+    "P64H_ERR_DRV_GPIO_INVALID_PIN_INDEX"
+};
+
 static char** p64h_err_names[P64H_COMP_LAST] = {
     p64h_svc_system_names,
     p64h_svc_appc_names,
@@ -866,7 +928,7 @@ static char** p64h_err_names[P64H_COMP_LAST] = {
     p64h_P64H_COMP_LIB_UTEST_names,
     p64h_P64H_COMP_LIB_EINJLIB_names,
     p64h_P64H_COMP_LIB_RPMI_names,
-    p64h_P64H_COMP_LIB_FW_UPGRADE_names,
+    p64h_lib_fw_upgrade_names,
     p64h_P64H_COMP_LIB_IPC_names,
     p64h_drv_app_wrap_names,
     p64h_drv_app_periph_names,
@@ -887,20 +949,33 @@ static char** p64h_err_names[P64H_COMP_LAST] = {
     p64h_drv_anlt_names,
     p64h_drv_m1_core_names,
     p64h_drv_sys_top_names,
+    p64h_drv_sys_spi_flash_names,
     p64h_drv_sys_hpt_names,
     p64h_drv_nvm_names,
     p64h_drv_edac_names,
     p64h_drv_x288_ras_names,
-    p64h_drv_arm_n_fire_names
+    p64h_drv_arm_n_fire_names,
+    p64h_P64H_COMP_DRV_DEBUG_names,
+    p64h_P64H_COMP_DRV_APP_SPW_names,
+    p64h_P64H_COMP_DRV_DDR_NOC_names,
+    p64h_P64H_COMP_DRV_PIER_names,
+    p64h_P64H_COMP_DRV_PCIE_CXL_names,
+    p64h_P64H_COMP_DRV_ZSBL_names,
+    p64h_P64H_COMP_DRV_TRACE_names,
+    p64h_P64H_COMP_DRV_WDOG_names,
+    p64h_P64H_COMP_DRV_LSIO_names,
+    p64h_P64H_COMP_DRV_APP_DMA_names,
+    p64h_drv_gpio_names
 };
 
-static char* p64h_svc_system_descs[6] = {
+static char* p64h_svc_system_descs[7] = {
     "ctxt_init error",
     "service_start error",
     "err error",
     "invalid_api error",
     "unexpected_event error",
-    "dev_cfg_version_init error"
+    "dev_cfg_version_init error",
+    "ACOT entry invalid"
 };
 
 static char* p64h_svc_appc_descs[10] = {
@@ -958,13 +1033,15 @@ static char* p64h_svc_secc_mbox_descs[3] = {
     "false_resp error"
 };
 
-static char* p64h_svc_hw_descs[7] = {
+static char* p64h_svc_hw_descs[9] = {
     "context accessed prior to initialization",
     "ddr_binary_load error",
     "Trying to access hw handle prior initialization",
     "ID Invalid",
     "SerDes Not Configured",
     "intr_registration_failed error",
+    "intr_disable_failed error",
+    "intr_enable_failed error",
     "unexpected_event error"
 };
 
@@ -992,7 +1069,7 @@ static char* p64h_svc_health_descs[2] = {
     "unexpected_event error"
 };
 
-static char* p64h_core_descs[28] = {
+static char* p64h_core_descs[30] = {
     "ok error",
     "general error",
     "boot_config_file error",
@@ -1002,7 +1079,9 @@ static char* p64h_core_descs[28] = {
     "ipc_wrong_message error",
     "ipc_message_size error",
     "ipc_send_fail error",
+    "ipc_get_msg_fail error",
     "IPC channel not found",
+    "IPC channel ID invalid",
     "rpmsg_fail error",
     "ddr_init_fail error",
     "config_populate_fail error",
@@ -1029,7 +1108,7 @@ static char* p64h_P64H_COMP_CORE_INTR_HANDLER_descs[0] = {};
 
 static char* p64h_P64H_COMP_CORE_SHARED_descs[0] = {};
 
-static char* p64h_lib_baal_descs[13] = {
+static char* p64h_lib_baal_descs[17] = {
     "invalid sysc image identifier",
     "AppC image metadata error",
     "AppC Boot Articats initialization error",
@@ -1038,7 +1117,11 @@ static char* p64h_lib_baal_descs[13] = {
     "baal_deinit_fail error",
     "get artifact error",
     "baal read artifact error",
-    "file_write_fail error",
+    "dma error",
+    "upgrade error",
+    "overwrite error",
+    "sector erase error",
+    "update error",
     "otp read fail error",
     "secc_fsbl_dwnld error",
     "invalid_fsbl_size error",
@@ -1174,7 +1257,7 @@ static char* p64h_lib_appc_soc_cfg_descs[6] = {
     "Timeout on executing rnmi action"
 };
 
-static char* p64h_lib_api_descs[27] = {
+static char* p64h_lib_api_descs[29] = {
     "RPMI NULL pointer",
     "RPMI size cannot be zero",
     "RPMI Client identifier is invalid",
@@ -1201,7 +1284,9 @@ static char* p64h_lib_api_descs[27] = {
     "invalid_entries_returned error",
     "req_busy error",
     "resp_pending error",
-    "invalid_req_state error"
+    "invalid_req_state error",
+    "checksum_mismatched error",
+    "callback_unset error"
 };
 
 static char* p64h_lib_sysc_soc_cfg_descs[5] = {
@@ -1253,7 +1338,10 @@ static char* p64h_P64H_COMP_LIB_EINJLIB_descs[0] = {};
 
 static char* p64h_P64H_COMP_LIB_RPMI_descs[0] = {};
 
-static char* p64h_P64H_COMP_LIB_FW_UPGRADE_descs[0] = {};
+static char* p64h_lib_fw_upgrade_descs[2] = {
+    "firmware upgrade upload fail",
+    "firmware upgrade apply fail"
+};
 
 static char* p64h_P64H_COMP_LIB_IPC_descs[0] = {};
 
@@ -1264,7 +1352,7 @@ static char* p64h_drv_app_wrap_descs[4] = {
     "invalid app_wrap instance"
 };
 
-static char* p64h_drv_app_periph_descs[81] = {
+static char* p64h_drv_app_periph_descs[84] = {
     "pointer to gpio handle is null",
     "pointer to gpio configuration is null",
     "invalid GPIO instance",
@@ -1295,6 +1383,8 @@ static char* p64h_drv_app_periph_descs[81] = {
     "invalid DDR instance",
     "pointer to ENET Switch handle is null",
     "pointer to ENET Switch configuration is null",
+    "no interrupt status bit was set",
+    "invalid function parameters passed",
     "pointer to app_periph handle is null",
     "pointer to app_periph configuration is null",
     "pointer to UART handle is null",
@@ -1323,6 +1413,7 @@ static char* p64h_drv_app_periph_descs[81] = {
     "pointer to MDIO configuration is null",
     "invalid MDIO instance",
     "MDIO arm and fire error",
+    "MDIO timeout error",
     "pointer to SPI handle is null",
     "pointer to SPI configuration is null",
     "invalid SPI instance",
@@ -1348,8 +1439,12 @@ static char* p64h_drv_app_periph_descs[81] = {
     "pointer to User Crypto configuration is null"
 };
 
-static char* p64h_drv_ddr_descs[1] = {
-    "Invalid DDR instance"
+static char* p64h_drv_ddr_descs[5] = {
+    "Invalid DDR instance",
+    "Trying accessing PHY while in reset",
+    "Invalid DDR DQ width",
+    "DDR_PLL failed to lock",
+    "DDR_DLL failed to lock"
 };
 
 static char* p64h_drv_top_descs[18] = {
@@ -1373,7 +1468,7 @@ static char* p64h_drv_top_descs[18] = {
     "PSC Status Error"
 };
 
-static char* p64h_drv_noc_core_descs[28] = {
+static char* p64h_drv_noc_core_descs[29] = {
     "unsupported_event_type error",
     "invalid_observed_port_index error",
     "invalid_dump_selection error",
@@ -1401,7 +1496,8 @@ static char* p64h_drv_noc_core_descs[28] = {
     "stat_alarm_threshold_out_of_range error",
     "invalid_async_period error",
     "handle_error error",
-    "cfg_error error"
+    "cfg_error error",
+    "invalid_param"
 };
 
 static char* p64h_drv_iobridge_descs[1] = {
@@ -1448,9 +1544,10 @@ static char* p64h_drv_app_ipc_descs[1] = {
     "pointer to IPC handle is NULL"
 };
 
-static char* p64h_drv_ddr_ctrl_descs[2] = {
+static char* p64h_drv_ddr_ctrl_descs[3] = {
     "pointer to ddr_ctrl handle is null",
-    "ddr_ctrl unsupported type"
+    "ddr_ctrl unsupported type",
+    "Invalid CTRL instance"
 };
 
 static char* p64h_drv_ddr_edac_descs[7] = {
@@ -1463,14 +1560,17 @@ static char* p64h_drv_ddr_edac_descs[7] = {
     "Invalid read request timeout "
 };
 
-static char* p64h_drv_dma_descs[7] = {
+static char* p64h_drv_dma_descs[10] = {
     "pointer is null",
     "mask value is invalid",
     "time is out",
     "invalid type",
     "memory allocation failure",
     "unimplemented",
-    "argument is invalid"
+    "argument is invalid",
+    "dmac_chid_out_of_range_err",
+    "dmac_xfer_done_fail",
+    "dmac_blk_xfer_fail"
 };
 
 static char* p64h_drv_ocr_descs[4] = {
@@ -1518,20 +1618,30 @@ static char* p64h_drv_sys_top_descs[5] = {
     "cfg_error error"
 };
 
+static char* p64h_drv_sys_spi_flash_descs[5] = {
+    "SYS SPI Flash configuration pointer is null",
+    "SYS SPI Flash initialization error",
+    "SYS SPI Flash program error",
+    "SYS SPI Flash read error",
+    "SYS SPI Flash erase error"
+};
+
 static char* p64h_drv_sys_hpt_descs[3] = {
     "invalid parameter",
     "exceed MAX loop",
     "mtime read error"
 };
 
-static char* p64h_drv_nvm_descs[53] = {
+static char* p64h_drv_nvm_descs[56] = {
     "NVM CTRL arm and fire error",
     "pointer to NVM handle is null",
     "pointer to NVM configuration is null",
     "Invalid NVM controller instance",
     "Invalid NVM controller type",
     "Invalid EDAC instance",
-    "Invalid data width specfified",
+    "pflash unsupported data width configured",
+    "pflash device ready timed out",
+    "pflash write buffer null",
     "Invalid XSPI instance",
     "XSPI CTRL probe error",
     "XSPI CTRL init error",
@@ -1577,7 +1687,8 @@ static char* p64h_drv_nvm_descs[53] = {
     "XSPI CTRL conversion to XSPI p1 stig instruction Error",
     "Invalid XSPI CCP instance",
     "XSPI CCP probe error",
-    "XSPI CCP init error"
+    "XSPI CCP init error",
+    "Diagnostic Test Failure"
 };
 
 static char* p64h_drv_edac_descs[4] = {
@@ -1718,6 +1829,31 @@ static char* p64h_drv_arm_n_fire_descs[123] = {
     "signature TOP1_M1_SOK_SECC_PCBI mismatches"
 };
 
+static char* p64h_P64H_COMP_DRV_DEBUG_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_APP_SPW_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_DDR_NOC_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_PIER_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_PCIE_CXL_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_ZSBL_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_TRACE_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_WDOG_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_LSIO_descs[0] = {};
+
+static char* p64h_P64H_COMP_DRV_APP_DMA_descs[0] = {};
+
+static char* p64h_drv_gpio_descs[2] = {
+    "pointer to GPIO handle is null",
+    "Invalid GPIO index"
+};
+
 static char** p64h_err_descs[P64H_COMP_LAST] = {
     p64h_svc_system_descs,
     p64h_svc_appc_descs,
@@ -1751,7 +1887,7 @@ static char** p64h_err_descs[P64H_COMP_LAST] = {
     p64h_P64H_COMP_LIB_UTEST_descs,
     p64h_P64H_COMP_LIB_EINJLIB_descs,
     p64h_P64H_COMP_LIB_RPMI_descs,
-    p64h_P64H_COMP_LIB_FW_UPGRADE_descs,
+    p64h_lib_fw_upgrade_descs,
     p64h_P64H_COMP_LIB_IPC_descs,
     p64h_drv_app_wrap_descs,
     p64h_drv_app_periph_descs,
@@ -1772,11 +1908,23 @@ static char** p64h_err_descs[P64H_COMP_LAST] = {
     p64h_drv_anlt_descs,
     p64h_drv_m1_core_descs,
     p64h_drv_sys_top_descs,
+    p64h_drv_sys_spi_flash_descs,
     p64h_drv_sys_hpt_descs,
     p64h_drv_nvm_descs,
     p64h_drv_edac_descs,
     p64h_drv_x288_ras_descs,
-    p64h_drv_arm_n_fire_descs
+    p64h_drv_arm_n_fire_descs,
+    p64h_P64H_COMP_DRV_DEBUG_descs,
+    p64h_P64H_COMP_DRV_APP_SPW_descs,
+    p64h_P64H_COMP_DRV_DDR_NOC_descs,
+    p64h_P64H_COMP_DRV_PIER_descs,
+    p64h_P64H_COMP_DRV_PCIE_CXL_descs,
+    p64h_P64H_COMP_DRV_ZSBL_descs,
+    p64h_P64H_COMP_DRV_TRACE_descs,
+    p64h_P64H_COMP_DRV_WDOG_descs,
+    p64h_P64H_COMP_DRV_LSIO_descs,
+    p64h_P64H_COMP_DRV_APP_DMA_descs,
+    p64h_drv_gpio_descs
 };
 
 

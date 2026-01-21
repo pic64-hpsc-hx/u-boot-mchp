@@ -63,8 +63,8 @@ typedef long          rpmi_ssize_t;
  */
 
 /** RPMI specification version */
-#define RPMI_SPEC_VERSION_MAJOR 1
-#define RPMI_SPEC_VERSION_MINOR 0
+#define RPMI_SPEC_VERSION_MAJOR 1U
+#define RPMI_SPEC_VERSION_MINOR 0U
 
 /*
  * 31                                            0
@@ -78,32 +78,32 @@ typedef long          rpmi_ssize_t;
  */
 
 /** Message Header byte offset */
-#define RPMI_MSG_HDR_OFFSET (0x0)
+#define RPMI_MSG_HDR_OFFSET (0x0U)
 /** Message Header Size in bytes */
-#define RPMI_MSG_HDR_SIZE (8)
+#define RPMI_MSG_HDR_SIZE (8U)
 
 /** ServiceGroup ID field byte offset */
-#define RPMI_MSG_SERVICEGROUP_ID_OFFSET (0x0)
+#define RPMI_MSG_SERVICEGROUP_ID_OFFSET (0x0U)
 /** ServiceGroup ID field size in bytes */
-#define RPMI_MSG_SERVICEGROUP_ID_SIZE (2)
+#define RPMI_MSG_SERVICEGROUP_ID_SIZE (2U)
 
 /** Service ID field byte offset */
-#define RPMI_MSG_SERVICE_ID_OFFSET (0x2)
+#define RPMI_MSG_SERVICE_ID_OFFSET (0x2U)
 /** Service ID field size in bytes */
-#define RPMI_MSG_SERVICE_ID_SIZE (1)
+#define RPMI_MSG_SERVICE_ID_SIZE (1U)
 
 /** Flags field byte offset */
-#define RPMI_MSG_FLAGS_OFFSET (0x3)
+#define RPMI_MSG_FLAGS_OFFSET (0x3U)
 /** Flags field size in bytes */
-#define RPMI_MSG_FLAGS_SIZE          (1)
+#define RPMI_MSG_FLAGS_SIZE          (1U)
 
 #define RPMI_MSG_FLAGS_TYPE_POS      (0U)
-#define RPMI_MSG_FLAGS_TYPE_MASK     0x7
-#define RPMI_MSG_FLAGS_TYPE          ((0x7) << RPMI_MSG_FLAGS_TYPE_POS)
+#define RPMI_MSG_FLAGS_TYPE_MASK     0x7U
+#define RPMI_MSG_FLAGS_TYPE          ((0x7U) << RPMI_MSG_FLAGS_TYPE_POS)
 
 #define RPMI_MSG_FLAGS_DOORBELL_POS  (3U)
-#define RPMI_MSG_FLAGS_DOORBELL_MASK 0x1
-#define RPMI_MSG_FLAGS_DOORBELL      ((0x1) << RPMI_MSG_FLAGS_DOORBELL_POS)
+#define RPMI_MSG_FLAGS_DOORBELL_MASK 0x1U
+#define RPMI_MSG_FLAGS_DOORBELL      ((0x1U) << RPMI_MSG_FLAGS_DOORBELL_POS)
 
 /** Data length field byte offset */
 #define RPMI_MSG_DATALEN_OFFSET (0x4)
@@ -200,7 +200,8 @@ enum rpmi_error {
     RPMI_ERR_RESERVED_END   = -127,
     RPMI_ERR_VENDOR_START   = -128,
     // P64H Specific Error Codes
-    RPMI_P64H_ERR_NOT_IMPLEMENTED = -65536
+    RPMI_P64H_ERR_NOT_IMPLEMENTED = -65536,
+    RPMI_P64H_ERR_CHECKSUM_MISMATCH
 };
 
 /** RPMI Queue Types */
@@ -237,20 +238,20 @@ enum rpmi_base_service_id {
     RPMI_BASE_SRV_MAX                        = 0x09,
 };
 
-#define RPMI_BASE_VERSION_MINOR_POS  0
-#define RPMI_BASE_VERSION_MINOR_MASK 0xffff
+#define RPMI_BASE_VERSION_MINOR_POS  0U
+#define RPMI_BASE_VERSION_MINOR_MASK 0xffffU
 
-#define RPMI_BASE_VERSION_MAJOR_POS  16
-#define RPMI_BASE_VERSION_MAJOR_MASK 0xffff
+#define RPMI_BASE_VERSION_MAJOR_POS  16U
+#define RPMI_BASE_VERSION_MAJOR_MASK 0xffffU
 
 #define RPMI_BASE_VERSION(__major, __minor)                                                                                                          \
     ((((__major) & RPMI_BASE_VERSION_MAJOR_MASK) << RPMI_BASE_VERSION_MAJOR_POS)                                                                     \
      | (((__minor) & RPMI_BASE_VERSION_MINOR_MASK) << RPMI_BASE_VERSION_MINOR_POS))
 
-#define RPMI_BASE_VENDOR_ID(__id, __subid) ((((__subid) & 0xffff) << 16) | ((__id) & 0xffff))
+#define RPMI_BASE_VENDOR_ID(__id, __subid) ((((__subid) & 0xffffU) << 16U) | ((__id) & 0xffffU))
 
-#define RPMI_BASE_FLAGS_F0_EV_NOTIFY       (1U << 31)
-#define RPMI_BASE_FLAGS_F0_MSI_EN          (1U << 30)
+#define RPMI_BASE_FLAGS_F0_EV_NOTIFY       (1UL << 31U)
+#define RPMI_BASE_FLAGS_F0_MSI_EN          (1UL << 30U)
 
 /** RPMI System Reset ServiceGroup Service IDs */
 enum rpmi_sysreset_service_id {
@@ -264,7 +265,7 @@ enum rpmi_sysreset_service_id {
 #define RPMI_SYSRST_TYPE_COLD_REBOOT           1U
 #define RPMI_SYSRST_TYPE_WARM_REBOOT           2U
 
-#define RPMI_SYSRST_ATTRIBUTES_FLAGS_SUPPORTED (1U << 31)
+#define RPMI_SYSRST_ATTRIBUTES_FLAGS_SUPPORTED (1UL << 31U)
 
 /** RPMI System Suspend ServiceGroup Service IDs */
 enum rpmi_system_suspend_service_id {
@@ -276,8 +277,8 @@ enum rpmi_system_suspend_service_id {
 
 #define RPMI_SYSSUSP_TYPE_SUSPEND_TO_RAM            0U
 
-#define RPMI_SYSSUSP_ATTRIBUTES_FLAGS_CUSTOM_RESUME (1U << 31)
-#define RPMI_SYSSUSP_ATTRIBUTES_FLAGS_SUPPORTED     (1U << 30)
+#define RPMI_SYSSUSP_ATTRIBUTES_FLAGS_CUSTOM_RESUME (1UL << 31)
+#define RPMI_SYSSUSP_ATTRIBUTES_FLAGS_SUPPORTED     (1UL << 30)
 
 /** RPMI Hart State Management (HSM) ServiceGroup Service IDs */
 enum rpmi_hsm_service_id {
@@ -440,7 +441,7 @@ struct rpmi_shmem {
     /** Pointer to platform specific operations */
     const struct rpmi_shmem_platform_ops* ops;
 
-    /** Private data of the platform specific oprations */
+    /** Private data of the platform specific operations */
     void* ops_priv;
 };
 
@@ -463,7 +464,7 @@ struct rpmi_io {
     /** Name of the IO */
     const char* name;
 
-    /** Shmem instance used by the IO (currently unused)*/
+    /** Shmem instance used by the IO*/
     struct rpmi_shmem* shmem;
 
     /** IO port type */
@@ -472,7 +473,7 @@ struct rpmi_io {
     /** Pointer to platform specific operations */
     const struct rpmi_io_platform_ops* ops;
 
-    /** Private data of the platform specific oprations */
+    /** Private data of the platform specific operations */
     void* ops_priv;
 };
 
@@ -508,7 +509,7 @@ typedef void (*p64h_sysc_evt_fct_t)(void* evt_ptr);
 
 /** RPMI Event callback function */
 struct rpmi_event_callback {
-    p64h_sysc_evt_fct_t* evt_func[LIBRPMI_EVENT_MAX_NUM];
+    p64h_sysc_evt_fct_t evt_func[LIBRPMI_EVENT_MAX_NUM];
 };
 
 /** @} */

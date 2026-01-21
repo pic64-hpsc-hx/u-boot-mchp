@@ -8,6 +8,7 @@
 
 #include <rpmi/librpmi.h>
 #include <rpmi/librpmi_mchp.h>
+#include "p64h_sysc_math.h"
 
 #undef DEBUG
 #include <env/p64h_sysc_os_specific.h>
@@ -115,6 +116,7 @@ enum rpmi_error rpmi_transport_enqueue(struct rpmi_transport* trans, enum rpmi_q
         rpmi_env_unlock(trans->lock);
         return RPMI_ERR_IO;
     }
+
     rc = trans->enqueue(trans, qtype, msg);
     rpmi_env_unlock(trans->lock);
 
@@ -182,7 +184,7 @@ bool p64h_sysc_rpmi_slot_size_validate(const rpmi_uint32_t slot_size)
     if (slot_size < RPMI_SLOT_SIZE_MIN) {
         return false;
     }
-    if ((slot_size & (slot_size - 1u)) != 0u) {
+    if (ALIGN(slot_size, 0x1000) != slot_size) {
         return false;
     }
     return true;

@@ -14,34 +14,30 @@
 #include "p64h_sysc_shared_svc_ba.h"
 #include "p64h_sysc_shared_wguard_ba.h"
 
-#define P64H_SYSC_MAX_BOOT_CMDS                  72u                ///< Current Maximum Number of supported Boot Commands
-#define P64H_SYSC_APPC_CFG_PARTITION_MAX         8u                 ///< define the maximum number of appc partition
-#define P64H_SYSC_APP_NOC_QOS_GEN_MAX            35u                ///< Number of QoS generators inside the App NoC
-#define P64H_SYSC_DDR_NOC_QOS_GEN_MAX            4u                 ///< Number of QoS generators inside the DDR NoC
-#define P64H_SYSC_APP_NOC_QOS_RATE_ADAPT_MAX     24u                ///< Number of QoS rate adapters inside the APP NoC
-#define P64H_SYSC_MAX_APPC_STATIC_BINARIES       3u                 ///< Maximum number of static binaries
-#define P64H_SYSC_MAX_APPC_PARTITIONS            8u                 ///< Maximum number of partitions
-#define P64H_SYSC_MAX_APPC_PARTITIONS_BINARIES   2u                 ///< Maximum number of partition binaries
-#define P64H_SYSC_NUM_APPC_HW_PROF               8u                 ///< Number of appc HW profiles // TODO: should be 16 because of A/B sides?
-#define P64H_SYSC_MAX_APPC_BINARIES              30u                ///< number of max appc image binaries (maybe more need to update)
-#define P64H_SYSC_APPC_IMAGE_MAX                 6u                 ///< number of max appc images
-#define P64H_SYSC_APPC_METADATA_COPIES           3u                 ///< number of metadata copies in appc image binary
-#define P64H_SYSC_SIZE_APPC_BOOTSCRIPT           (32 * 1024)        ///< Size of appc_bootscript
-#define P64H_SYSC_P64H_SYSC_SIZE_APPC_STATIC_CFG (64 * 1024)        ///< Size of appc_static_cfg
-#define P64H_SYSC_SIZE_SW_SVC_CFG                (4 * 1024)         ///< Size of sw_svc_cfg
-#define P64H_SYSC_SIZE_APPC_CFG                  (8 * 1024)         ///< Size of appc_cfg
-#define P64H_SYSC_SIZE_CORE_DTB                  (20 * 1024)        ///< Size of core_dtb
-#define P64H_SYSC_TOTAL_SIZE_APPC_HW_PROF        (324 * 1024)       ///< Size of one appc_hw _prof
-#define P64H_SYSC_SIZE_APPC_SECTION              (32 * 1024 * 1024) ///< Size of appc section
-#define P64H_SYSC_SIZE_UPDATE_SECTION            (32 * 1024 * 1024) ///< Size of update section
-#define P64H_SYSC_APPC_IMAGE_MAX_SIZE                                                                                                                \
-    (P64H_SYSC_NUM_APPC_HW_PROF * P64H_SYSC_TOTAL_SIZE_APPC_HW_PROF + P64H_SYSC_SIZE_APPC_SECTION                                                    \
-     + P64H_SYSC_SIZE_UPDATE_SECTION)                              ///< Max size of appc image binary
-#define P64H_SYSC_SIZE_UPDATE_SECTION_REDUNDANT (16 * 1024 * 1024) ///< Size of update section in redundant layout
-#define P64H_SYSC_SIZE_APPC_SECTION_REDUNDANT   (32 * 1024 * 1024) ///< Size of APPC section in redundant layout
-#define P64H_SYSC_PER_HW_PROF_MAX_SIZE_REDUNDANT                                                                                                     \
-    (P64H_SYSC_TOTAL_SIZE_APPC_HW_PROF + P64H_SYSC_SIZE_APPC_SECTION_REDUNDANT                                                                       \
-     + P64H_SYSC_SIZE_UPDATE_SECTION_REDUNDANT); ///< Max size of appc image binary in redundant layout
+#define P64H_SYSC_MAX_BOOT_CMDS                72u ///< Current Maximum Number of supported Boot Commands
+#define P64H_SYSC_APPC_CFG_PARTITION_MAX       8u  ///< define the maximum number of appc partition
+#define P64H_SYSC_APP_NOC_QOS_GEN_MAX          35u ///< Number of QoS generators inside the App NoC
+#define P64H_SYSC_DDR_NOC_QOS_GEN_MAX          4u  ///< Number of QoS generators inside the DDR NoC
+#define P64H_SYSC_APP_NOC_QOS_RATE_ADAPT_MAX   24u ///< Number of QoS rate adapters inside the APP NoC
+#define P64H_SYSC_MAX_APPC_STATIC_BINARIES     3u  ///< Maximum number of static binaries
+#define P64H_SYSC_MAX_APPC_PARTITIONS          8u  ///< Maximum number of partitions
+#define P64H_SYSC_MAX_APPC_PARTITIONS_BINARIES 2u  ///< Maximum number of partition binaries
+#define P64H_SYSC_NUM_APPC_HW_PROF             8u  ///< Number of appc HW profiles // TODO: should be 16 because of A/B sides?
+#define P64H_SYSC_MAX_APPC_BINARIES            30u ///< number of max appc image binaries (maybe more need to update)
+#define P64H_SYSC_APPC_METADATA_COPIES         3u  ///< number of metadata copies in appc image binary
+#define P64H_SYSC_APPC_COMPACT_MAGIC_NUMBER    (0x0123456789abcdefULL)
+#define P64H_SYSC_APPC_REDUNDANT_MAGIC_NUMBER  (0xfedcba9876543210ULL)
+
+// Forward declarations to get the size
+struct p64h_sysc_appc_boot_script_t;
+struct p64h_sysc_appc_static_cfg_t;
+#define P64H_SYSC_SIZE_APPC_BOOTSCRIPT    sizeof(p64h_sysc_appc_boot_script_t) ///< Size of appc bootscript artifact
+#define P64H_SYSC_SIZE_APPC_STATIC_CFG    sizeof(p64h_sysc_appc_static_cfg_t)  ///< Size of appc static config artifact
+#define P64H_SYSC_SIZE_APPC_SW_SVC_CFG    sizeof(p64h_sysc_soc_svc_cfg_t)      ///< Size of boot config software service config artifact
+#define P64H_SYSC_SIZE_PARTITION_APPC_CFG sizeof(p64h_sysc_appc_cfg_t)         ///< Size of appc partition config
+#define P64H_SYSC_SIZE_PARTITION_APPC_DTB (30 * 1024) ///< Minimum size allocated for an appc partition dtb TODO: need to review what this should be
+#define P64H_SYSC_SIZE_APPC_EXE                                                                                                                      \
+    (100 * 1024) ///< Minimum size allocated for an appc baremetal or rtems executable TODO: need to review what this should be
 
 /**
  * @brief
@@ -111,9 +107,10 @@ typedef struct {
  *   Defines boot action of a bootscript execution specified by p64h_sysc_psm_command_t
  */
 typedef enum {
-    P64H_SYSC_PSM_ACTION_START,  ///< Load an Appc Config
-    P64H_SYSC_PSM_ACTION_STOP,   ///< Start an Appc Config
-    P64H_SYSC_PSM_ACTION_SUSPEND ///< Stop an Appc Config
+    P64H_SYSC_PSM_ACTION_START,     ///< Start an Appc Config
+    P64H_SYSC_PSM_ACTION_STOP,      ///< Stop an Appc Config
+    P64H_SYSC_PSM_ACTION_SUSPEND,   ///< Suspend an Appc Config
+    P64H_SYSC_PSM_ACTION_STATUS_GET ///< Get status
     // TODO: add more actions (status_get, etc.)
 } p64h_sysc_psm_action_t;
 
@@ -417,12 +414,23 @@ typedef struct p64h_sysc_appc_partition_t {
  */
 typedef struct {
     uint64_t offset; ///< offset of the binary
-    uint64_t length; ///< length of the binary
+    uint64_t size;   ///< size of the binary
 } p64h_sysc_section_desc_t;
 
 /**
  * @brief
- *   Appc hardware profile map for redundant mode. Contains static and partition binaries.
+ *   AppC binary section descriptor struct
+ */
+typedef struct {
+    uint64_t offset;   ///< offset of the binary
+    uint64_t size;     ///< size of the binary
+    uint64_t max_size; ///< maximum size of the binary allocated to allow overwrites. note: should be set equal to .size if moved to update section
+                       ///< when doing a fw update
+} p64h_sysc_appc_bin_desc_t;
+
+/**
+ * @brief
+ *   Appc hardware profile map. Contains static and partition binaries.
  */
 typedef struct {
     p64h_sysc_section_desc_t
@@ -433,7 +441,7 @@ typedef struct {
     uint64_t section_desc_valid; ///< Bit mask specifying which section descriptor structs are valid. The least-significant bit applies to the first
                                  ///< section description of static_cfg and so on. Only the first (P64H_SYSC_MAX_APPC_STATIC_BINARIES +
                                  ///< P64H_SYSC_MAX_APPC_PARTITIONS*P64H_SYSC_MAX_APPC_PARTITIONS_BINARIES) bits are used
-} p64h_sysc_appc_hw_prof_blob_t;
+} p64h_sysc_appc_hw_prof_desc_t;
 
 /**
  * @brief
@@ -451,8 +459,9 @@ typedef struct {
  * Metadata for Appc image binary
  */
 typedef struct {
-    p64h_sysc_appc_hw_prof_blob_t appc_hw_prof;                              //<< Appc hardware profile blob
-    p64h_sysc_section_desc_t      appc_section[P64H_SYSC_MAX_APPC_BINARIES]; ///< Shared Appc binaries blob
+    uint64_t                      magic_number; //<< Magic number to check if appc cfg is valid (only until we have proper checksums)
+    p64h_sysc_appc_hw_prof_desc_t appc_hw_prof; //<< Appc hardware profile
+    p64h_sysc_appc_bin_desc_t     appc_section[P64H_SYSC_MAX_APPC_BINARIES]; ///< Shared Appc binaries blob
     p64h_sysc_update_desc_t       update_desc;                               ///< update section
     uint32_t appc_section_valid; ///< Bit mask specifying which appc binary section descriptor structs are valid. The least-significant bit applies to
                                  ///< the first appc binary and so on. Only the first P64H_SYSC_MAX_APPC_BINARIES bits are used
@@ -464,8 +473,9 @@ typedef struct {
  * Metadata for Appc image binary
  */
 typedef struct {
-    p64h_sysc_appc_hw_prof_blob_t appc_hw_prof[P64H_SYSC_NUM_APPC_HW_PROF];  //<< Appc hardware profile blob
-    p64h_sysc_section_desc_t      appc_section[P64H_SYSC_MAX_APPC_BINARIES]; ///< Shared Appc binaries blob
+    uint64_t                      magic_number; //<< Magic number to check if appc cfg is valid (only until we have proper checksums)
+    p64h_sysc_appc_hw_prof_desc_t appc_hw_prof[P64H_SYSC_NUM_APPC_HW_PROF];  //<< Appc hardware profile
+    p64h_sysc_appc_bin_desc_t     appc_section[P64H_SYSC_MAX_APPC_BINARIES]; ///< Shared Appc binaries blob
     p64h_sysc_update_desc_t       update_desc;                               ///< update section
     uint32_t appc_section_valid; ///< Bit mask specifying which appc binary section descriptor structs are valid. The least-significant bit applies to
                                  ///< the first appc binary and so on. Only the first P64H_SYSC_MAX_APPC_BINARIES bits are used

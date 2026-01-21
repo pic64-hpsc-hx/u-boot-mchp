@@ -15,9 +15,11 @@
 #include <rpmi/librpmi_types.h>
 #include <generated/p64h_sysc_errors.h>
 
-#define RPMI_MAX_SLOT_SIZE       (4U * 1024U)
-#define P64H_RPMI_SRVGRP_ID_BASE 0xA000
-#define P64H_RPMI_SRVGRP_COUNT   (P64H_RPMI_SRVGRP_MAX - P64H_RPMI_SRVGRP_ID_BASE - 1u)
+/// Maximum size of an RPMI slot buffer
+// reserving 4 bytes for checksum to ensure data integrity(e.g., CRC32).
+#define RPMI_MAX_SLOT_SIZE       ((32U * 1024U) - 4U)
+#define P64H_RPMI_SRVGRP_ID_BASE (0xA000)
+#define P64H_RPMI_SRVGRP_COUNT   ((uint32_t)((uint32_t)(P64H_RPMI_SRVGRP_MAX)-P64H_RPMI_SRVGRP_ID_BASE) - 1u)
 
 /// Enum encapsulating the possible RPMI roles
 typedef enum {
@@ -59,51 +61,53 @@ typedef struct {
 typedef struct {
     rpmi_message_header_t header; ///< Header
     rpmi_resp_metadata_t  resp_metadata;
-    uint8_t               data[0]; ///< The payload of the response.
+    uint8_t               data[0] __attribute__((aligned(8))); ///< The payload of the response.
 } rpmi_resp_message_t;
 
 /// RPMI Generic request type
 typedef struct {
-    rpmi_message_header_t header;       ///< header message
-    rpmi_req_metadata_t   req_metadata; ///< header message
-    uint8_t               data[0];      ///< The payload of the request.
+    rpmi_message_header_t header;                              ///< header message
+    rpmi_req_metadata_t   req_metadata;                        ///< header message
+    uint8_t               data[0] __attribute__((aligned(8))); ///< The payload of the request.
 } rpmi_req_message_t;
 
-/// RPMI Inbuf Request metadata type
+/// RPMI Response With Data request metadata type
 typedef struct {
     rpmi_req_metadata_t req_metadata; ///< rpmi request metadata
     uint32_t            offset;       ///< Offset for next fragment data
     uint32_t            remaining;    ///< Remaining size the requestor expects to receive, 0 if requestor doesn't specify size to receive
     bool                shmem_xfer;   ///< false: the buffer will transfer thru RPMI channel
                                       ///< true: the data_ptr shall be available to the system controller
-} rpmi_inbuf_req_metadata_t;
+} rpmi_data_pull_req_metadata_t;
 
-/// RPMI Inbuf Response metadata type
+/// RPMI Response With Data response metadata type
 typedef struct {
     rpmi_resp_metadata_t resp_metadata; ///< rpmi response metadata
     uint32_t             remaining;     ///< Number of buffer elements remaining to transfer
     uint32_t             returned;      ///< Number of buffer elements returned
-} rpmi_inbuf_resp_metadata_t;
+} rpmi_data_pull_resp_metadata_t;
 
-/// RPMI Inbuf Response type
+/// RPMI Response With Data response type
 typedef struct {
-    rpmi_message_header_t      header;         ///< header
-    rpmi_inbuf_resp_metadata_t inbuf_metadata; ///< inbuf metadata
-    uint8_t                    data[0];        ///< The payload of the response.
-} rpmi_inbuf_resp_message_t;
+    rpmi_message_header_t          header;                              ///< header
+    rpmi_data_pull_resp_metadata_t metadata;                            ///< metadata
+    uint8_t                        data[0] __attribute__((aligned(8))); ///< The payload of the response.
+} rpmi_data_pull_resp_message_t;
 
-/// RPMI Inbuf Request type
+/// RPMI Response With Data request type
 typedef struct {
-    rpmi_message_header_t     header;         ///< header message
-    rpmi_inbuf_req_metadata_t inbuf_metadata; ///< inbuf metadata
-    uint8_t                   data[0];        ///< The payload of the request.
-} rpmi_inbuf_req_message_t;
+    rpmi_message_header_t         header;                              ///< header message
+    rpmi_data_pull_req_metadata_t metadata;                            ///< metadata
+    uint8_t                       data[0] __attribute__((aligned(8))); ///< The payload of the request.
+} rpmi_data_pull_req_message_t;
 
 /// RPMI log response metadata type
-typedef struct {
+typedef struct __attribute__((aligned(8))) {
     rpmi_resp_metadata_t resp_metadata;     ///< rpmi response metadata
-    uint32_t             resp_start_off_lo; ///< Actual log offset from which data was returned
-    uint32_t             resp_start_off_hi; ///< Actual log offset from which data was returned
+    uint32_t             resp_start_off_lo; ///< Actual log offset from which data was returned (LSB)
+    uint32_t             resp_start_off_hi; ///< Actual log offset from which data was returned (MSB)
+    uint32_t             entries_left_lo;   ///< Number of entries left to pull (LSB)
+    uint32_t             entries_left_hi;   ///< Number of entries left to pull (MSB)
     uint32_t             returned;          ///< Number of log entries returned
 } rpmi_log_resp_metadata_t;
 
@@ -117,16 +121,16 @@ typedef struct {
 
 /// RPMI log response message type
 typedef struct {
-    rpmi_message_header_t    header;       ///< header
-    rpmi_log_resp_metadata_t log_metadata; ///< log metadata
-    uint8_t                  data[0];      ///< The payload of the response.
+    rpmi_message_header_t    header;                              ///< header
+    rpmi_log_resp_metadata_t log_metadata;                        ///< log metadata
+    uint8_t                  data[0] __attribute__((aligned(8))); ///< The payload of the response.
 } rpmi_log_resp_message_t;
 
 /// RPMI log request message type
 typedef struct {
-    rpmi_message_header_t   header;       ///< header message
-    rpmi_log_req_metadata_t log_metadata; ///< log metadata
-    uint8_t                 data[0];      ///< The payload of the request.
+    rpmi_message_header_t   header;                              ///< header message
+    rpmi_log_req_metadata_t log_metadata;                        ///< log metadata
+    uint8_t                 data[0] __attribute__((aligned(8))); ///< The payload of the request.
 } rpmi_log_req_message_t;
 
 typedef struct {
@@ -136,13 +140,13 @@ typedef struct {
     uint32_t            sent;         ///< Number of buffer elements sent in this transaction
     bool                shmem_xfer;   ///< false: the buffer will transfer thru RPMI channel
                                       ///< true: the data_ptr shall be available to the system controller
-} rpmi_outbuf_req_metadata_t;
+} rpmi_data_push_req_metadata_t;
 
 typedef struct {
-    rpmi_message_header_t      header;          ///< header
-    rpmi_outbuf_req_metadata_t outbuf_metadata; ///< header
-    uint8_t                    data[0];         ///< The payload of the response.
-} rpmi_outbuf_req_message_t;
+    rpmi_message_header_t         header;                              ///< header
+    rpmi_data_push_req_metadata_t metadata;                            ///< metadata
+    uint8_t                       data[0] __attribute__((aligned(8))); ///< The payload of the response.
+} rpmi_data_push_req_message_t;
 
 /// RPMI generic event request
 typedef struct {
@@ -150,17 +154,12 @@ typedef struct {
     uint32_t req_state; ///< 0: Disable, 1: Enable, 2: Return current state
 } rpmi_enable_notification_t;
 
-/// RPMI Service Group Access Controls
-typedef enum {
-    P64H_RPMI_SVCGRP_UNSUPPORTED = 0u, ///< Group is unsupported
-    P64H_RPMI_SVCGRP_SUPPORTED   = 1u, ///< Group is supported
-    P64H_RPMI_SVCGRP_RESTRICTED  = 2u  ///< Group is supported but is restricted
-} p64h_rpmi_service_group_access_control_t;
-
-/// RPMI Service Access Control
+/// RPMI Service Access Controls
 typedef enum {
     P64H_RPMI_SVC_UNSUPPORTED = 0u, ///< Service is unsupported
     P64H_RPMI_SVC_SUPPORTED   = 1u, ///< Service is supported
+    P64H_RPMI_SVC_RESTRICTED  = 2u, ///< Service is supported but is restricted
+    P64H_RPMI_SVC_CHALLENGE   = 3u  ///< Service is supported but need key
 } p64h_rpmi_service_access_control_t;
 
 /// P64H Implementation Specific RPMI Service Group IDs
@@ -193,34 +192,34 @@ typedef enum {
     P64H_SYS_ENABLE_NOTIFICATION     = 1u,  ///< Enable Notification from a System Service
     P64H_SYS_GET_INFO                = 2u,  ///< Service Discovery
     P64H_SYS_GET_ATTRIBUTES          = 3u,  ///< Feature and list data
-    P64H_SYS_GET_LOG_NUM             = 4u,  ///< Number of Log Accessor
-    P64H_SYS_GET_LOG_LIST            = 5u,  ///< Log List Accessor
-    P64H_SYS_SET_LOG_CONFIG          = 6u,  ///< Log Config Mutator
-    P64H_SYS_GET_LOG_CONFIG          = 7u,  ///< Log Config Accessor
-    P64H_SYS_GET_LOG_DATA            = 8u,  ///< Log Data Accessor
-    P64H_SYS_GET_APPC_BOOT_CFG       = 9u,  ///< Boot Config Accessor
-    P64H_SYS_SET_APPC_BOOT_CFG       = 10u, ///< Boot Config Mutator
-    P64H_SYS_GET_APPC_BOOT_STATUS    = 11u, ///< Boot Status Accessor
-    P64H_SYS_SET_PWR_CONFIG          = 12u, ///< Power Config Mutator
-    P64H_SYS_GET_PWR_CONFIG          = 13u, ///< Power Config Accessor
-    P64H_SYS_GET_PWR_WAKEUP_TRIGGER  = 14u, ///< Power Wakeup Trigger
-    P64H_SYS_GET_DEV_TRACE_ATTRIBUTE = 15u, ///< Device Trace Attribute Accessor
-    P64H_SYS_GET_DEV_TRACE_CONFIG    = 16u, ///< Device Trace Config Accessor
-    P64H_SYS_SET_DEV_TRACE_CONFIG    = 17u, ///< Device Trace Config Mutator
-    P64H_SYS_FW_PKG_UPGRADE_UPLOAD   = 18u, ///< Send a new file to the device from remote/appc
-    P64H_SYS_FW_PKG_UPGRADE_APPLY    = 19u, ///< Apply the sent file to the device from remote/appc
-    P64H_SYS_FW_DUMP                 = 20u, ///< Dump an existing file(s) from the device for remote/appc
-    P64H_SYS_FW_DOWNLOAD             = 21u, ///< Download a dumped file(s) from the device to remote/appc
-    P64H_SYS_FW_DUMP_STATUS          = 22u, ///< Get firmware dump status
-    P64H_SYS_SET_TIME                = 23u, ///< Set up system time
-    P64H_SYS_GET_TIME                = 24u, ///< Get system time
-    P64H_SYS_SET_PGMRCLK_CFG         = 25u, ///< PGMRCLK Config Mutator
-    P64H_SYS_GET_PGMRCLK_CFG         = 26u, ///< PGMRCLK Config Accessor
-    P64H_SYS_SET_CFM_MEAS_CFG        = 27u, ///< CFM Measurement Config Mutator
-    P64H_SYS_GET_CFM_MEAS_CNT        = 28u, ///< CFM Measurement Config Accessor
-    P64H_SYS_SET_FW_PLL_CFG          = 29u, ///< FW PLL Support Block Mutator
-    P64H_SYS_GET_FW_PLL_TIMESTAMP    = 30u, ///< FW PLL Support Block Accessor
-    P64H_SYS_APPC_DTB_FIXUP          = 31u, ///< Fix up AppC DTB
+    P64H_SYS_GET_LOG_INFO            = 4u,  ///< Log Discovery
+    P64H_SYS_SET_LOG_CONFIG          = 5u,  ///< Log Config Mutator
+    P64H_SYS_GET_LOG_CONFIG          = 6u,  ///< Log Config Accessor
+    P64H_SYS_GET_LOG_DATA            = 7u,  ///< Log Data Accessor
+    P64H_SYS_GET_APPC_BOOT_CFG       = 8u,  ///< Boot Config Accessor
+    P64H_SYS_SET_APPC_BOOT_CFG       = 9u,  ///< Boot Config Mutator
+    P64H_SYS_GET_APPC_BOOT_STATUS    = 10u, ///< Boot Status Accessor
+    P64H_SYS_SET_PWR_CONFIG          = 11u, ///< Power Config Mutator
+    P64H_SYS_GET_PWR_CONFIG          = 12u, ///< Power Config Accessor
+    P64H_SYS_GET_PWR_WAKEUP_TRIGGER  = 13u, ///< Power Wakeup Trigger
+    P64H_SYS_GET_DEV_TRACE_ATTRIBUTE = 14u, ///< Device Trace Attribute Accessor
+    P64H_SYS_GET_DEV_TRACE_CONFIG    = 15u, ///< Device Trace Config Accessor
+    P64H_SYS_SET_DEV_TRACE_CONFIG    = 16u, ///< Device Trace Config Mutator
+    P64H_SYS_FW_PKG_UPGRADE_UPLOAD   = 17u, ///< Send a new file to the device from remote/appc
+    P64H_SYS_FW_PKG_UPGRADE_APPLY    = 18u, ///< Apply the sent file to the device from remote/appc
+    P64H_SYS_FW_DUMP                 = 19u, ///< Dump an existing file(s) from the device for remote/appc
+    P64H_SYS_FW_DOWNLOAD             = 20u, ///< Download a dumped file(s) from the device to remote/appc
+    P64H_SYS_FW_DUMP_STATUS          = 21u, ///< Get firmware dump status
+    P64H_SYS_SET_TIME                = 22u, ///< Set up system time
+    P64H_SYS_GET_TIME                = 23u, ///< Get system time
+    P64H_SYS_SET_PGMRCLK_CFG         = 24u, ///< PGMRCLK Config Mutator
+    P64H_SYS_GET_PGMRCLK_CFG         = 25u, ///< PGMRCLK Config Accessor
+    P64H_SYS_SET_CFM_MEAS_CFG        = 26u, ///< CFM Measurement Config Mutator
+    P64H_SYS_GET_CFM_MEAS_CNT        = 27u, ///< CFM Measurement Config Accessor
+    P64H_SYS_SET_FW_PLL_CFG          = 28u, ///< FW PLL Support Block Mutator
+    P64H_SYS_GET_FW_PLL_TIMESTAMP    = 29u, ///< FW PLL Support Block Accessor
+    P64H_SYS_APPC_DTB_FIXUP          = 30u, ///< Fix up AppC DTB
+    P64H_SYS_M1_DUMP                 = 31u, ///< M1 boot context dump
     P64H_SYS_SRV_MAX                 = 32u  ///< Max System Service Group Service
 } p64h_rpmi_system_service_id_t;
 
@@ -290,11 +289,14 @@ typedef enum {
 
 /// DDR Service Group Service IDs
 typedef enum {
-    P64H_DDR_ENABLE_NOTIFICATION = 1u, ///< Enable Notification for a DDR Service Group Service
-    P64H_DDR_GET_CONFIG          = 2u, ///< DDR Config Accessor
-    P64H_DDR_MARGIN_TEST         = 3u, ///< DDR Margin Test
-    P64H_DDR_MARGIN_REPORT       = 4u, ///< DDR Margin Report
-    P64H_DDR_SRV_MAX             = 5u  ///< Max DDR Service ID
+    P64H_DDR_ENABLE_NOTIFICATION            = 1u, ///< Enable Notification for a DDR Service Group Service
+    P64H_DDR_GET_CONFIG                     = 2u, ///< DDR Config Accessor
+    P64H_DDR_PHY_GET_CONFIG                 = 3u, ///< DDR PHY Config Accessor
+    P64H_DDR_MARGIN_TEST                    = 4u, ///< DDR Margin Test
+    P64H_DDR_MARGIN_REPORT                  = 5u, ///< DDR Margin Report
+    P64H_DDR_WR_LVL_DEBUG_SWEEP             = 6u, ///< DDR Write Leveling Debug Sweep
+    P64H_DDR_RDGT_FIND_TDFI_RDDATA_EN_VALUE = 7u, ///< DDR Read Gate Training Find TDFI_RDDATA_EN Value
+    P64H_DDR_SRV_MAX                        = 8u  ///< Max DDR Service ID
 } p64h_rpmi_ddr_service_id_t;
 
 // p64h serdes service group related
@@ -307,11 +309,13 @@ typedef enum {
     P64H_SYSC_SERDES_GET_ATTRIBUTES      = 4u,  ///< SERDES Attributes Accessor
     P64H_SYSC_SERDES_GET_CONFIG          = 5u,  ///< SERDES Config Accessor
     P64H_SYSC_SERDES_SET_CONFIG          = 6u,  ///< SERDES Config Mutator
-    P64H_SYSC_SERDES_GET_DIAG            = 7u,  ///< SERDES Diagnostic Accessor
-    P64H_SYSC_SERDES_ANLT_SET_CONFIG     = 8u,  ///< SERDES Auto-Negoitiaion and Link Training Config Accessor
-    P64H_SYSC_SERDES_ANLT_GET_CONFIG     = 9u,  ///< SERDES Auto-Negoitiaion and Link Training Config Mutator
-    P64H_SYSC_SERDES_ANLT_GET_DIAG       = 10u, ///< SERDES Auto-Negoitiaion and Link Training Diagnostic Acessor
-    P64H_SYSC_SERDES_SRV_MAX             = 11u  ///< Max SERDES Service ID
+    P64H_SYSC_SERDES_PROVISION           = 7u,  ///< SERDES Provision a given SerDes Group
+    P64H_SYSC_SERDES_DEPROVISION         = 8u,  ///< SERDES Bring down a given SerDes Group
+    P64H_SYSC_SERDES_GET_DIAG            = 9u,  ///< SERDES Diagnostic Accessor
+    P64H_SYSC_SERDES_ANLT_SET_CONFIG     = 10u, ///< SERDES Auto-Negoitiaion and Link Training Config Accessor
+    P64H_SYSC_SERDES_ANLT_GET_CONFIG     = 11u, ///< SERDES Auto-Negoitiaion and Link Training Config Mutator
+    P64H_SYSC_SERDES_ANLT_GET_DIAG       = 12u, ///< SERDES Auto-Negoitiaion and Link Training Diagnostic Acessor
+    P64H_SYSC_SERDES_SRV_MAX             = 13u  ///< Max SERDES Service ID
 } p64h_rpmi_serdes_service_id_t;
 
 // p64h low speed I/O service group related
@@ -336,16 +340,18 @@ typedef enum {
 
 /// Test Service Group Service IDs
 typedef enum {
-    P64H_TEST_ENABLE_NOTIFICATION = 1u, ///< Enable Notification for a Test Service Group Service
-    P64H_TEST_GET_TEST_ID_NUM     = 2u, ///< Number of Test Id Accessor
-    P64H_TEST_GET_TEST_LIST       = 3u, ///< Test List Id Accessor
-    P64H_TEST_GET_ATTRIBUTES      = 4u, ///< Test Attribute Accessor
-    P64H_TEST_GET_STATUS          = 5u, ///< Test Status Accessor
-    P64H_TEST_LAUNCH              = 6u, ///< Start a Test
-    P64H_TEST_STOP                = 7u, ///< Stop a Test
-    P64H_TEST_GET_REPORT          = 8u, ///< Test Report Accessor
-    P64H_TEST_REG_OP              = 9u, ///< Perform Register Operations
-    P64H_TEST_SRV_MAX             = 10u ///< Max Test Service ID
+    P64H_TEST_ENABLE_NOTIFICATION = 1u,  ///< Enable Notification for a Test Service Group Service
+    P64H_TEST_GET_TEST_ID_NUM     = 2u,  ///< Number of Test Id Accessor
+    P64H_TEST_GET_TEST_LIST       = 3u,  ///< Test List Id Accessor
+    P64H_TEST_GET_ATTRIBUTES      = 4u,  ///< Test Attribute Accessor
+    P64H_TEST_GET_STATUS          = 5u,  ///< Test Status Accessor
+    P64H_TEST_LAUNCH              = 6u,  ///< Start a Test
+    P64H_TEST_STOP                = 7u,  ///< Stop a Test
+    P64H_TEST_GET_REPORT          = 8u,  ///< Test Report Accessor
+    P64H_TEST_REG_OP              = 9u,  ///< Perform Register Operations
+    P64H_TEST_MEM_DUMP            = 10u, ///< Perform memory dump
+    P64H_TEST_ETEST_LAUNCH        = 11u, ///< Start an Embedded Test
+    P64H_TEST_SRV_MAX             = 12u  ///< Max Test Service ID
 } p64h_rpmi_test_service_id_t;
 
 // p64h RAS error monitoring service group related
@@ -442,7 +448,7 @@ typedef enum {
     P64H_CRYPTO_SHA                 = 5u,
     P64H_CRYPTO_AES                 = 6u,
     P64H_CRYPTO_SIGN                = 7u,
-    P64H_CRYPTO_SRV_MAC             = 8u
+    P64H_CRYPTO_SRV_MAX             = 8u
 } p64h_rpmi_crypto_service_id_t;
 
 /// NVM Service Group Service IDs
@@ -450,7 +456,8 @@ typedef enum {
     P64H_NVM_ENABLE_NOTIFICATION = 1u, ///< Enable Notification for a  Service Group Service
     P64H_NVM_GET_CONFIG          = 2u, ///< Config Accessor
     P64H_NVM_GET_DEVICE          = 3u, ///< Device Information Accessor
-    P64H_NVM_SRV_MAX             = 4u  ///< Max Service ID
+    P64H_NVM_DIAG_TEST           = 4u, ///< Run Diagnostic Test
+    P64H_NVM_SRV_MAX             = 5u  ///< Max Service ID
 } p64h_rpmi_nvm_service_id_t;
 
 // p64h debug group related

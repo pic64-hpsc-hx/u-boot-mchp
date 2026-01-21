@@ -1,4 +1,4 @@
-/* (c) 2025 Microchip Technology Inc. */
+/* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
 #ifndef RAS_DATA_DEFS_H
@@ -6,7 +6,8 @@
 
 #include "generated/p64h_sysc_ras_error_sources.h"
 #include "generated/p64h_sysc_errors.h"
-#include <env/p64h_sysc_os_specific.h>
+#include "ba/p64h_sysc_intr_ba.h"
+#include <assert.h>
 
 /* Public Structs and Enums ----------------------------------------- */
 
@@ -368,7 +369,7 @@ typedef struct __attribute__((packed)) {
 typedef struct __attribute__((packed)) {
     uint32_t word_addr; ///< Word address of the memory word where an error was detected
     uint16_t word_len; ///< Word length in bytes
-    uint8_t grp_mask; ///< Mask of the 4 byte groups within the word where the error occurred
+    uint8_t affected_grp_map; ///< Bitmap of which ECC group within a memory word have been affected by an ECC error. Each word is made up of a number of 32bits data and 7bits of ECC.
 } p64h_sysc_ras_ocr_ecc_t;
 
 
@@ -376,8 +377,7 @@ typedef struct __attribute__((packed)) {
  * @brief OCR ECC error data
  */
 typedef struct __attribute__((packed)) {
-    uint32_t word_addr; ///< Word address of the memory word where an error was detected
-    uint8_t grp_mask; ///< Mask of the 4 byte groups within the word where the error occurred
+    uint32_t word_addr; ///< Word address of the memory word where an error was detected. Each word is made up of a number of 32bits data and 7bits of ECC.
 } p64h_sysc_ras_ocr_ecc_inj_t;
 
 
@@ -516,15 +516,16 @@ typedef struct __attribute__((packed)) {
 
 
 /**
- * @brief EMON error event data
+ * @brief NVM subsystem edac error event data
  */
 typedef struct __attribute__((packed)) {
+    uint32_t edac_idx; ///< Internal edac instance index
     uint32_t emon_loc_cor_0; ///< Locations corrected LSB 0 - 31
     uint32_t emon_loc_cor_1; ///< Locations corrected MSB 32 - 63
     uint32_t emon_loc_uncor; ///< Decoders that have generated uncorrectable decodes
     uint32_t ram_corr; ///< Correctable Memory location addresses
     uint32_t ram_uncorr; ///< Uncorrectable Memory location addresses
-} p64h_sysc_ras_sram_edac_emon_evt_t;
+} p64h_sysc_ras_nvm_ss_edac_evt_t;
 
 
 /**
@@ -572,6 +573,26 @@ typedef struct __attribute__((packed)) {
 
 
 /**
+ * @brief EMON error event data
+ */
+typedef struct __attribute__((packed)) {
+    uint32_t emon_loc_cor_0; ///< Locations corrected LSB 0 - 31
+    uint32_t emon_loc_cor_1; ///< Locations corrected bit 32 - 63
+    uint32_t emon_loc_cor_2; ///< Locations corrected MSB 64 - 79
+    uint32_t emon_loc_uncor; ///< Decoders that have generated uncorrectable decodes
+} p64h_sysc_ras_ddr_edac_emon_evt_t;
+
+
+/**
+ * @brief Performance monitor error event data
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t core_fifo_fill; ///< Core fifo fill
+    uint8_t port_fifo_fill; ///< Port fifo fill
+} p64h_sysc_ras_ddr_ctrl_pmon_evt_t;
+
+
+/**
  * @brief Mask for the state of the cores within the x288
  */
 typedef struct __attribute__((packed)) {
@@ -580,6 +601,25 @@ typedef struct __attribute__((packed)) {
     uint8_t halt; ///< Mask of cores in halt state
     uint8_t cease; ///< Mask of cores in cease state
 } p64h_sysc_ras_x288_cores_state_t;
+
+
+/**
+ * @brief RAM location index for ENET Switch Errors
+ */
+typedef struct __attribute__((packed)) {
+    uint8_t X; ///< X index
+    uint8_t Y; ///< Y index
+    uint8_t Z; ///< Z index
+} p64h_sysc_ras_enet_swr_ram_idx_t;
+
+
+/**
+ * @brief Data provided to characterize an interrupt storm. Once an interrupt storm is detected, the interrupt controller pin is squelched.
+ */
+typedef struct __attribute__((packed)) {
+    p64h_sysc_intr_ctrl_type_t intr_ctrl; ///< Interrupt controller on which the interrupt storm was detected
+    uint32_t intr_num; ///< Interrupt pin within the interrupt controller on which the interrupt storm was detected
+} p64h_sysc_ras_intr_storm_src_t;
 
 
 //////////////////////
@@ -591,7 +631,8 @@ typedef struct __attribute__((packed)) {
  */
 typedef enum {
     RAS_EINJ_OCR_ECC_INJ = 0, ///< Error injection attribute type p64h_sysc_ras_ocr_ecc_inj_t
-    RAS_EINJ_SRAM_EDAC_PARAMS = 1, ///< Error injection attribute type p64h_sysc_ras_sram_edac_params_t
+    RAS_EINJ_DDR_EDAC_PARAMS = 1, ///< Error injection attribute type p64h_sysc_ras_ddr_edac_params_t
+    RAS_EINJ_SRAM_EDAC_PARAMS = 2, ///< Error injection attribute type p64h_sysc_ras_sram_edac_params_t
 } p64h_sysc_ras_einj_attrs_t;
 
 
@@ -600,6 +641,7 @@ typedef enum {
  */
 typedef union{
     p64h_sysc_ras_ocr_ecc_inj_t ocr_ecc_inj; ///< ocr_ecc_inj type
+    p64h_sysc_ras_ddr_edac_params_t ddr_edac_params; ///< ddr_edac_params type
     p64h_sysc_ras_sram_edac_params_t sram_edac_params; ///< sram_edac_params type
 } p64h_sysc_ras_einj_params_t;
 
@@ -620,7 +662,10 @@ typedef union{
     p64h_sysc_ras_iommu_err_t iommu_err; ///< iommu_err type
     p64h_sysc_ras_x288_ls_error_t x288_ls_error; ///< x288_ls_error type
     p64h_sysc_ras_x288_cores_state_t x288_cores_state; ///< x288_cores_state type
-    p64h_sysc_ras_sram_edac_emon_evt_t sram_edac_emon_evt; ///< sram_edac_emon_evt type
+    p64h_sysc_ras_ddr_ctrl_pmon_evt_t ddr_ctrl_pmon_evt; ///< ddr_ctrl_pmon_evt type
+    p64h_sysc_ras_ddr_edac_emon_evt_t ddr_edac_emon_evt; ///< ddr_edac_emon_evt type
+    p64h_sysc_ras_enet_swr_ram_idx_t enet_swr_ram_idx; ///< enet_swr_ram_idx type
+    p64h_sysc_ras_nvm_ss_edac_evt_t nvm_ss_edac_evt; ///< nvm_ss_edac_evt type
     p64h_sysc_ras_vdd_thres_detect_id_t vdd_thres_detect; ///< vdd_thres_detect ID type
     p64h_sysc_ras_cmon_thres_evt_t cmon_thres_evt; ///< cmon_thres_evt type
     p64h_sysc_ras_mesh_block_id_t mesh_block; ///< mesh_block ID type
@@ -629,6 +674,7 @@ typedef union{
     p64h_sysc_ras_tamper_hw_lock_id_t tamper_hw_lock; ///< tamper_hw_lock ID type
     p64h_sysc_ras_temp_evt_t temp_evt; ///< temp_evt type
     p64h_sysc_ras_fw_error_t fw_error; ///< fw_error type
+    p64h_sysc_ras_intr_storm_src_t intr_storm_src; ///< intr_storm_src type
 } p64h_sysc_ras_err_data_t;
 
 
