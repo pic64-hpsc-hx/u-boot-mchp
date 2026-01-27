@@ -12,5 +12,5 @@ obj-y   += rpmi_transport.o
 obj-y   += rpmi_transport_io.o
 obj-y   += rpmi_transport_shmem.o
 
-ccflags-y += -I$(srctree)/board/microchip/p64h-qemu/include
-ccflags-y += -I$(srctree)/board/microchip/p64h-qemu/librpmi/include
+ccflags-y += -I$(srctree)/board/microchip/p64h/include
+ccflags-y += -I$(srctree)/board/microchip/p64h/librpmi/include

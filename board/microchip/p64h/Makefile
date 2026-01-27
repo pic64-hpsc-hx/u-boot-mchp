@@ -9,5 +9,5 @@ obj-y   += p64h-cmd-fwu.o
 obj-y   += librpmi/
 obj-y   += librpmi-env/
 
-ccflags-y += -I$(srctree)/board/microchip/p64h-qemu/include
-ccflags-y += -I$(srctree)/board/microchip/p64h-qemu/librpmi/include
+ccflags-y += -I$(srctree)/board/microchip/p64h/include
+ccflags-y += -I$(srctree)/board/microchip/p64h/librpmi/include

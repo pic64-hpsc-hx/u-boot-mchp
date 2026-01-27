@@ -1,7 +1,7 @@
-if TARGET_QEMU_MICROCHIP_P64H
+if TARGET_MICROCHIP_P64H
 
 config SYS_BOARD
-	default "p64h-qemu"
+	default "p64h"
 
 config SYS_VENDOR
 	default "microchip"
@@ -10,7 +10,7 @@ config SYS_CPU
 	default "generic"
 
 config SYS_CONFIG_NAME
-	default "qemu-microchip-p64h"
+	default "microchip_p64h"
 
 config TEXT_BASE
 	default 0x4000000000 if !RISCV_SMODE
@@ -69,5 +69,5 @@ config BOARD_SPECIFIC_OPTIONS
 	imply CMD_USB
 	imply UFS
 	imply UFS_PCI
-	
+
 endif

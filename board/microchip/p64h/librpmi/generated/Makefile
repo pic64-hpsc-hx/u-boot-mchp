@@ -6,5 +6,5 @@
 
 obj-y += p64h_sysc_errors.o
 
-ccflags-y += -I$(srctree)/board/microchip/p64h-qemu/include
-ccflags-y += -I$(srctree)/board/microchip/p64h-qemu/librpmi/include
+ccflags-y += -I$(srctree)/board/microchip/p64h/include
+ccflags-y += -I$(srctree)/board/microchip/p64h/librpmi/include
