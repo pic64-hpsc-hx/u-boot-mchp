@@ -7,6 +7,7 @@
 #include <common.h>
 #include <virtio_types.h>
 #include <virtio.h>
+#include <asm/sections.h>
 
 #include <p64h-board.h>
 
@@ -167,6 +168,10 @@ int board_late_init(void)
 void *board_fdt_blob_setup(int *err)
 {
     *err = 0;
-    /* Stored the DTB address there during our init */
-    return (void *)(ulong)gd->arch.firmware_fdt_addr;
+    if (IS_ENABLED(CONFIG_OF_SEPARATE) || IS_ENABLED(CONFIG_OF_BOARD)) {
+        if (gd->arch.firmware_fdt_addr)
+            return (ulong *)(uintptr_t)gd->arch.firmware_fdt_addr;
+    }
+
+    return (ulong *)_end;
 }
