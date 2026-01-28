@@ -1,0 +1,1010 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/* (c) 2026 Microchip Technology Inc. */
+
+/dts-v1/;
+
+/ {
+	#address-cells = <2>;
+	#size-cells = <2>;
+	compatible = "microchip,p64h";
+	model = "Microchip P64H SoC";
+
+	chosen {};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		timebase-frequency = <50000000>;
+		cpu0: cpu@0 {
+			reg = <0x0>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_10104000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc0>;
+			cpu0_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu1: cpu@1 {
+			reg = <0x1>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_10108000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc1>;
+			cpu1_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu2: cpu@2 {
+			reg = <2>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_1010c000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc2>;
+			cpu2_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu3: cpu@3 {
+			reg = <3>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_10110000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc3>;
+			cpu3_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu4: cpu@4 {
+			reg = <4>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_30104000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc4>;
+			cpu4_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu5: cpu@5 {
+			reg = <5>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_30108000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc5>;
+			cpu5_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu6: cpu@6 {
+			reg = <6>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_3010c000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc6>;
+			cpu6_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu7: cpu@7 {
+			reg = <7>;
+			clock-frequency = <0>;
+			compatible = "sifive,bullet0", "riscv";
+			d-cache-block-size = <64>;
+			d-cache-sets = <256>;
+			d-cache-size = <65536>;
+			d-tlb-sets = <1>;
+			d-tlb-size = <40>;
+			device_type = "cpu";
+			i-cache-block-size = <64>;
+			i-cache-sets = <256>;
+			i-cache-size = <32768>;
+			i-tlb-sets = <1>;
+			i-tlb-size = <40>;
+			mmu-type = "riscv,sv48";
+			next-level-cache = <&pl2_30110000>;
+			riscv,isa-base = "rv64i";
+			riscv,isa-extensions = "i", "m", "a", "f", "d", "c",
+			  "v", "zicbop", "zicboz",  "ziccrse", "zicntr",
+			  "zihintntl", "zihintpause", "zihpm", "zfh", "zba",
+			  "zbb", "zbs", "zkt", "zvfh", "smaia", "smstateen",
+			  "ssaia", "sscofpmf", "svade", "svinval", "svnapot",
+			  "svpbmt", "xsfvfnrclipxfqf", "xsfvfwmaccqqq",
+			  "xsfvqmaccqoq";
+			riscv,cbop-block-size = <64>;
+			riscv,cboz-block-size = <64>;
+			tlb-split;
+			power-domains = <&tmc7>;
+			cpu7_intc: interrupt-controller {
+				#interrupt-cells = <1>;
+				compatible = "riscv,cpu-intc";
+				interrupt-controller;
+			};
+		};
+
+		cpu-map  {
+			cluster0 {
+				core0 {
+					cpu = <&cpu0>;
+				};
+				core1 {
+					cpu = <&cpu1>;
+				};
+				core2 {
+					cpu = <&cpu2>;
+				};
+				core3 {
+					cpu = <&cpu3>;
+				};
+			};
+			cluster1 {
+				core0 {
+					cpu = <&cpu4>;
+				};
+				core1 {
+					cpu = <&cpu5>;
+				};
+				core2 {
+					cpu = <&cpu6>;
+				};
+				core3 {
+					cpu = <&cpu7>;
+				};
+			};
+		};
+	};
+
+	pmu {
+		compatible = "riscv,pmu";
+		riscv,raw-event-to-mhpmcounters =
+			<0x0 0x0  0xffffffff 0x000000ff 0x7f8>,
+			<0x0 0x1  0xffffffff 0xfff000ff 0x7f8>,
+			<0x0 0x2  0xffffffff 0xffffc0ff 0x7f8>,
+			<0x0 0x64 0xffffffff 0xffff00ff 0x7f8>,
+			<0x0 0x65 0xffffffff 0xfffffcff 0x7f8>;
+		riscv,event-to-mhpmcounters =
+			<0x00001 0x00001 0x7f8>,
+			<0x00002 0x00002 0x7f8>,
+			<0x00004 0x00006 0x7f8>,
+			<0x10009 0x10009 0x7f8>,
+			<0x10019 0x10019 0x7f8>,
+			<0x10021 0x10021 0x7f8>;
+		riscv,event-to-mhpmevent =
+			<0x00001 0x0 0x0165>,
+			<0x00002 0x0 0x0265>,
+			<0x00004 0x0 0x0202>,
+			<0x00005 0x0 0x4000>,
+			<0x00006 0x0 0x2001>,
+			<0x10009 0x0 0x0102>,
+			<0x10019 0x0 0x1002>,
+			<0x10021 0x0 0x0802>;
+	};
+
+	Lpclk: p_clock {
+		#clock-cells = <0>;
+		clock-frequency = <200000000>;
+		clock-output-names = "pclk";
+		compatible = "fixed-clock";
+	};
+
+	Lhclk: h_clock {
+		#clock-cells = <0>;
+		clock-frequency = <500000000>;
+		clock-output-names = "hclk";
+		compatible = "fixed-clock";
+	};
+
+	svc_clk: svc-clk {
+		#clock-cells = <0>;
+		clock-frequency = <156250000>;
+		compatible = "fixed-clock";
+	};
+
+	soc {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		compatible = "simple-bus";
+		ranges;
+
+		clint@2000000 {
+			compatible = "sifive,clint0", "riscv,clint0";
+			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
+				<&cpu1_intc 3>, <&cpu1_intc 7>,
+				<&cpu2_intc 3>, <&cpu2_intc 7>,
+				<&cpu3_intc 3>, <&cpu3_intc 7>;
+			reg = <0x0 0x2000000 0x0 0x10000>;
+		};
+
+		clint@22000000 {
+			compatible = "sifive,clint0", "riscv,clint0";
+			interrupts-extended = <&cpu4_intc 3>, <&cpu4_intc 7>,
+				<&cpu5_intc 3>, <&cpu5_intc 7>,
+				<&cpu6_intc 3>, <&cpu6_intc 7>,
+				<&cpu7_intc 3>, <&cpu7_intc 7>;
+			reg = <0x0 0x22000000 0x0 0x10000>;
+		};
+
+		cache_controller_2010000: cache_controller@2010000 {
+			#address-cells = <1>;
+			#size-cells = <1>;
+			cache-block-size = <64>;
+			cache-level = <3>;
+			cache-sets = <8192>;
+			cache-size = <8388608>;
+			cache-unified;
+			compatible = "sifive,extensiblecache0", "cache", "simple-bus";
+			ranges;
+			sifive,slice-count = <8>;
+			interrupt-parent = <&aplic1_m_mode>;
+			interrupts = < 2 4 4 4 6 4 8 4 2 4 4 4 6 4 8 4>;
+
+			ec_slice_2010000: ec_slice@2010000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic0_m_mode>;
+				interrupts = <2 4>;
+				ranges = <0x0 0x2010000 0x4000>;
+				reg = <0x2010000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+				#error_source-cells = <0>;
+			};
+
+			ec_slice_2014000: ec_slice@2014000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic0_m_mode>;
+				interrupts = <4 4>;
+				ranges = <0x0 0x2014000 0x4000>;
+				reg = <0x2014000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+			};
+
+			ec_slice_2018000: ec_slice@2018000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic0_m_mode>;
+				interrupts = <6 4>;
+				ranges = <0x0 0x2018000 0x4000>;
+				reg = <0x2018000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+			};
+
+			ec_slice_201c000: ec_slice@201c000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic0_m_mode>;
+				interrupts = <8 4>;
+				ranges = <0x0 0x201c000 0x4000>;
+				reg = <0x201c000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+			};
+
+			ec_slice_22010000: ec_slice@22010000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic1_m_mode>;
+				interrupts = <2 4>;
+				ranges = <0x0 0x22010000 0x4000>;
+				reg = <0x22010000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+			};
+
+			ec_slice_22014000: ec_slice@22014000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic1_m_mode>;
+				interrupts = <4 4>;
+				ranges = <0x0 0x22014000 0x4000>;
+				reg = <0x22014000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+			};
+
+			ec_slice_22018000: ec_slice@22018000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic1_m_mode>;
+				interrupts = <6 4>;
+				ranges = <0x0 0x22018000 0x4000>;
+				reg = <0x22018000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+			};
+
+			ec_slice_2201c000: ec_slice@2201c000 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				cache-block-size = <64>;
+				cache-last-level = <0>;
+				cache-sets = <1024>;
+				cache-size = <1048576>;
+				cache-unified;
+				interrupt-parent = <&aplic1_m_mode>;
+				interrupts = <8 4>;
+				ranges = <0x0 0x2201c000 0x4000>;
+				reg = <0x2201c000 0x4000>;
+				sifive,bm-event-counters = <32>;
+				sifive,cache-ways = <36>;
+				sifive,ecc-granularity = <8>;
+				sifive,lock-regions = <4>;
+				sifive,n-data-banks = <4>;
+				sifive,n-tag-banks = <2>;
+				sifive,perfmon-counters = <8>;
+				sifive,slice-count = <4>;
+				sifive,slice-data-capacity = <1048576>;
+				sifive,slice-tag-capacity = <2359296>;
+			};
+		};
+
+		smc0: smc@3100000 {
+			compatible = "sifive,smc0", "sifive,slpc0";
+			reg = <0x0 0x3100000 0x0 0x1000>;
+		};
+
+		smc1: smc@23100000 {
+			compatible = "sifive,smc0", "sifive,slpc0";
+			reg = <0x0 0x23100000 0x0 0x1000>;
+		};
+
+		tmc0: tmc@3101000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x3101000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		tmc1: tmc@3102000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x3102000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		tmc2: tmc@3103000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x3103000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		tmc3: tmc@3104000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x3104000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		tmc4: tmc@23101000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x23101000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		tmc5: tmc@23102000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x23102000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		tmc6: tmc@23103000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x23103000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		tmc7: tmc@23104000 {
+			compatible = "sifive,tmc0";
+			reg = <0x0 0x23104000 0x0 0x1000>;
+			#power-domain-cells = <0>;
+		};
+
+		aplic0_m_mode: interrupt-controller@c004000 {
+			#interrupt-cells = <2>;
+			compatible = "qemu,aplic", "riscv,aplic";
+			interrupt-controller;
+			msi-parent = <&imsic0_m_mode>;
+			reg = <0x0 0xc004000 0x0 0x4000>;
+			riscv,children = <&aplic0_s_mode>;
+			riscv,delegation = <&aplic0_s_mode 1 181>;
+			riscv,num-sources = <181>;
+		};
+
+		aplic0_s_mode: interrupt-controller@c008000 {
+			#interrupt-cells = <2>;
+			compatible = "qemu,aplic", "riscv,aplic";
+			interrupt-controller;
+			msi-parent = <&imsic0_s_mode>;
+			reg = <0x0 0xc008000 0x0 0x4000>;
+			riscv,num-sources = <181>;
+		};
+
+		aplic1_m_mode: interrupt-controller@2c004000 {
+			#interrupt-cells = <2>;
+			compatible = "qemu,aplic", "riscv,aplic";
+			interrupt-controller;
+			msi-parent = <&imsic0_m_mode>;
+			reg = <0x0 0x2c004000 0x0 0x4000>;
+			riscv,children = <&aplic1_s_mode>;
+			riscv,delegation = <&aplic1_s_mode 1 181>;
+			riscv,num-sources = <181>;
+		};
+
+		aplic1_s_mode: interrupt-controller@2c008000 {
+			#interrupt-cells = <2>;
+			compatible = "qemu,aplic", "riscv,aplic";
+			interrupt-controller;
+			msi-parent = <&imsic0_s_mode>;
+			reg = <0x0 0x2c008000 0x0 0x4000>;
+			riscv,num-sources = <181>;
+		};
+
+		imsic0_m_mode: interrupt-controller@d000000 {
+			#interrupt-cells = <0>;
+			#msi-cells = <0>;
+			compatible = "qemu,imsics", "riscv,imsics";
+			interrupt-controller;
+			interrupts-extended = <&cpu0_intc 11>, <&cpu1_intc 11>,
+					<&cpu2_intc 11>, <&cpu3_intc 11>,
+					<&cpu4_intc 11>, <&cpu5_intc 11>,
+					<&cpu6_intc 11>, <&cpu7_intc 11>;
+			msi-controller;
+			reg = <0x0 0xd000000 0x0 0x1000>,
+				<0x0 0xd001000 0x0 0x1000>,
+				<0x0 0xd002000 0x0 0x1000>,
+				<0x0 0xd003000 0x0 0x1000>,
+				<0x0 0x2d000000 0x0 0x1000>,
+				<0x0 0x2d001000 0x0 0x1000>,
+				<0x0 0x2d002000 0x0 0x1000>,
+				<0x0 0x2d003000 0x0 0x1000>;
+			riscv,hart-index-bits = <2>;
+			riscv,group-index-bits = <1>;
+			riscv,group-index-shift = <29>;
+			riscv,num-ids = <1023>;
+		};
+
+		imsic0_s_mode: interrupt-controller@d100000 {
+			#interrupt-cells = <0>;
+			#msi-cells = <0>;
+			compatible = "qemu,imsics", "riscv,imsics";
+			interrupt-controller;
+			interrupts-extended = <&cpu0_intc 9>, <&cpu1_intc 9>,
+					<&cpu2_intc 9>, <&cpu3_intc 9>,
+					<&cpu4_intc 9>, <&cpu5_intc 9>,
+					<&cpu6_intc 9>, <&cpu7_intc 9>;
+			msi-controller;
+			reg = <0x0 0xd100000 0x0 0x8000>,
+				<0x0 0xd108000 0x0 0x8000>,
+				<0x0 0xd110000 0x0 0x8000>,
+				<0x0 0xd118000 0x0 0x8000>,
+				<0x0 0x2d100000 0x0 0x8000>,
+				<0x0 0x2d108000 0x0 0x8000>,
+				<0x0 0x2d110000 0x0 0x8000>,
+				<0x0 0x2d118000 0x0 0x8000>;
+			riscv,guest-index-bits = <3>;
+			riscv,hart-index-bits = <2>;
+			riscv,group-index-bits = <1>;
+			riscv,group-index-shift = <29>;
+			riscv,num-ids = <1023>;
+		};
+
+		pl2_10104000: pl2@10104000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x10104000 0x0 0x4000>;
+		};
+
+		pl2_10108000: pl2@10108000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x10108000 0x0 0x4000>;
+		};
+
+		pl2_1010c000: pl2@1010c000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x1010c000 0x0 0x4000>;
+		};
+
+		pl2_10110000: pl2@10110000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x10110000 0x0 0x4000>;
+		};
+
+		pl2_30104000: pl2@30104000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x30104000 0x0 0x4000>;
+		};
+
+		pl2_30108000: pl2@30108000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x30108000 0x0 0x4000>;
+		};
+
+		pl2_3010c000: pl2@3010c000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x3010c000 0x0 0x4000>;
+		};
+
+		pl2_30110000: pl2@30110000 {
+			compatible = "sifive,pl2cache0";
+			cache-block-size = <64>;
+			cache-level = <2>;
+			cache-sets = <512>;
+			cache-size = <262144>;
+			cache-unified;
+			next-level-cache = <&cache_controller_2010000>;
+			reg = <0x0 0x30110000 0x0 0x4000>;
+		};
+
+		gem0: ethernet@40004180000 {
+			compatible = "microchip,p64h-gem", "cdns,gem";
+			reg = <0x400 0x04180000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <55 4>;
+			clock-names = "pclk", "hclk";
+			clocks = <&Lpclk>, <&Lhclk>;
+			status = "disabled";
+		};
+
+		gem1: ethernet@40004182000 {
+			compatible = "microchip,p64h-gem", "cdns,gem";
+			reg = <0x400 0x04182000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <56 4>;
+			clock-names = "pclk", "hclk";
+			clocks = <&Lpclk>, <&Lhclk>;
+			status = "disabled";
+		};
+
+		gem2: ethernet@40004184000 {
+			compatible = "microchip,p64h-gem", "cdns,gem";
+			reg = <0x400 0x04184000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <57 4>;
+			clock-names = "pclk", "hclk";
+			clocks = <&Lpclk>, <&Lhclk>;
+			status = "disabled";
+		};
+
+		gem3: ethernet@40004186000 {
+			compatible = "microchip,p64h-gem", "cdns,gem";
+			reg = <0x400 0x04186000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <58 4>;
+			clock-names = "pclk", "hclk";
+			clocks = <&Lpclk>, <&Lhclk>;
+			status = "disabled";
+		};
+
+		uart0: serial@4000c216000 {
+			compatible = "snps,dw-apb-uart";
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <154 4>;
+			reg = <0x400 0xc216000 0x0 0x1000>;
+			clocks = <&svc_clk>;
+			reg-shift = <0x2>;
+			reg-offset = <0x0>;
+			reg-io-width = <0x4>;
+		};
+
+		i2c0: i2c@4000c21a000 {
+			compatible = "snps,designware-i2c";
+			reg = <0x400 0x0c21a000 0x0 0x1000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			clocks = <&svc_clk>;
+		};
+
+		i2c1: i2c@4000c21b000 {
+			compatible = "snps,designware-i2c";
+			reg = <0x400 0x0c21b000 0x0 0x1000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			clocks = <&svc_clk>;
+		};
+
+		i2c2: i2c@4000c21c000 {
+			compatible = "snps,designware-i2c";
+			reg = <0x400 0x0c21c000 0x0 0x1000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			clocks = <&svc_clk>;
+		};
+
+		i2c3: i2c@4000c21d000 {
+			compatible = "snps,designware-i2c";
+			reg = <0x400 0x0c21d000 0x0 0x1000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+			clocks = <&svc_clk>;
+		};
+
+		mdio0: mdio@4000c21e000 {
+			compatible = "microchip,p64h-mdio";
+			reg = <0x400 0x0c21e000 0x0 0x1000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+		};
+
+		mdio1: mdio@4000c21f000 {
+			compatible = "microchip,p64h-mdio";
+			reg = <0x400 0x0c21f000 0x0 0x1000>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+		};
+
+		timer_0: timer@4000c200000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc200000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <171 4>;
+		};
+
+		timer_1: timer@4000c202000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc202000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <170 4>;
+		};
+
+		timer_2: timer@4000c204000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc204000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <169 4>;
+		};
+
+		timer_3: timer@4000c206000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc206000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <168 4>;
+		};
+
+		timer_4: timer@4000c208000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc208000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <167 4>;
+		};
+
+		timer_5: timer@4000c20a000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc20a000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <166 4>;
+		};
+
+		timer_6: timer@4000c20c000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc20c000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <165 4>;
+		};
+
+		timer_7: timer@4000c20e000 {
+			compatible = "microchip,p64h-timer";
+			reg = <0x400 0xc20e000 0x0 0x2000>;
+			interrupt-parent = <&aplic0_s_mode>;
+			interrupts = <164 4>;
+		};
+
+		wdog_0: watchdog@4000c201000 {
+			compatible = "microchip,p64h-wdt";
+			reg = <0x400 0xc201000 0x0 0x2000>;
+		};
+	};
+};
+

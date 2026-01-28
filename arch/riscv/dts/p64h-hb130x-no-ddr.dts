@@ -1,0 +1,14 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/* (c) 2026 Microchip Technology Inc. */
+
+#include "p64h-hb130x.dts"
+
+// Delete the DRAM and declare the two OCR bank as the main memory.
+/delete-node/ &memory;
+
+/ {
+	memory: memory@47000000000 {
+	 	device_type = "memory";
+	 	reg = <0x470 0x00000000 0x0 0x100000>;
+	};
+};

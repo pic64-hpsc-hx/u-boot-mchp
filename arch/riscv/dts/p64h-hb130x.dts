@@ -1,0 +1,40 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/* (c) 2026 Microchip Technology Inc. */
+
+/dts-v1/;
+
+#include "p64h.dtsi"
+
+/ {
+	model = "Microchip P64H HB130x Evalkit";
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200";
+	};
+
+	memory: memory@4000000000 {
+	 	device_type = "memory";
+	 	reg = <0x40 0x00000000 0x1 0x00000000>;
+	};
+};
+
+&mdio1 {
+	phy0: ethernet-phy@0 {
+		reg = <0>;
+	};
+};
+
+&gem0 {
+	local-mac-address = [A2 92 D1 83 16 98];
+};
+
+&gem1 {
+	status = "okay";
+	phy-handle = <&phy0>;
+	local-mac-address = [A2 92 D1 83 16 99];
+	phy-mode = "rgmii-id";
+};
