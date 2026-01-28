@@ -1344,7 +1344,7 @@ static int macb_eth_probe(struct udevice *dev)
 		macb->bus = eth_phy_get_mdio_bus(dev);
 
 #if defined(CONFIG_CMD_MII) || defined(CONFIG_PHYLIB)
-	if (!macb->bus) {
+	if (!macb->bus && !(macb->config->caps & MACB_CAPS_NO_MDIO)) {
 		macb->bus = mdio_alloc();
 		if (!macb->bus)
 			return -ENOMEM;
@@ -1458,6 +1458,7 @@ static const struct macb_config sama7g5_emac_config = {
 };
 
 static const struct macb_config p64h_config = {
+	.caps = MACB_CAPS_NO_MDIO,
 	.dma_burst_length = 16,
 	.hw_dma_cap = HW_DMA_CAP_64B,
 	.usrio = &macb_default_usrio,
