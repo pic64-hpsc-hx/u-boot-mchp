@@ -20,9 +20,15 @@
 					"stdout=serial,vidconsole\0" \
 					"stderr=serial,vidconsole\0"
 
+#ifdef CONFIG_CMD_VIRTIO
+#define FUNC_VIRTIO(func, i)	func(VIRTIO, virtio, i)
+#else
+#define FUNC_VIRTIO(func, i)
+#endif
+
 #define BOOT_TARGET_DEVICES(func) \
-	func(VIRTIO, virtio, 0) \
-	func(VIRTIO, virtio, 1) \
+	FUNC_VIRTIO(func, 0) \
+	FUNC_VIRTIO(func, 1) \
 	func(DHCP, dhcp, na)
 
 #include <config_distro_bootcmd.h>

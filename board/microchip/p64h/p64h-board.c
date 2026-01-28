@@ -157,7 +157,9 @@ int board_late_init(void)
      * Make sure virtio bus is enumerated so that peripherals
      * on the virtio bus can be discovered by their drivers
      */
+#ifdef CONFIG_VIRTIO_NET
     virtio_init();
+#endif
 
     /* Initialize RPMI subsystem */
     board_rpmi_init();
