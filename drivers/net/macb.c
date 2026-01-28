@@ -36,6 +36,7 @@
 #include <malloc.h>
 #include <miiphy.h>
 #include <dm/of_extra.h>
+#include <eth_phy.h>
 
 #include <linux/mii.h>
 #include <asm/io.h>
@@ -172,6 +173,7 @@ static int macb_is_gem(struct macb_device *macb)
 #define cpu_is_sama5d4() 0
 #endif
 
+#ifndef CONFIG_PHYLIB
 static int gem_is_gigabit_capable(struct macb_device *macb)
 {
 	/*
@@ -186,6 +188,7 @@ static int macb_port_is_fixed_link(struct macb_device *macb)
 {
 	return macb->phy_addr > PHY_MAX_ADDR;
 }
+#endif
 
 static void macb_mdio_write(struct macb_device *macb, u8 phy_adr, u8 reg,
 			    u16 value)
@@ -525,6 +528,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 	}
 }
 
+#ifndef CONFIG_PHYLIB
 static void macb_phy_reset(struct macb_device *macb, const char *name)
 {
 	int i;
@@ -576,6 +580,7 @@ static int macb_phy_find(struct macb_device *macb, const char *name)
 
 	return -ENODEV;
 }
+#endif
 
 /**
  * macb_linkspd_cb - Linkspeed change callback function
@@ -665,6 +670,7 @@ int __weak macb_linkspd_cb(struct udevice *dev, unsigned int speed)
 	return 0;
 }
 
+#ifndef CONFIG_PHYLIB
 static int macb_phy_init(struct udevice *dev, const char *name)
 {
 	struct macb_device *macb = dev_get_priv(dev);
@@ -688,17 +694,6 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 			printf("%s: No PHY present\n", name);
 			return -ENODEV;
 		}
-
-#ifdef CONFIG_PHYLIB
-		macb->phydev = phy_connect(macb->bus, macb->phy_addr, dev,
-				     macb->phy_interface);
-		if (!macb->phydev) {
-			printf("phy_connect failed\n");
-			return -ENODEV;
-		}
-
-		phy_config(macb->phydev);
-#endif
 
 		status = macb_mdio_read(macb, macb->phy_addr, MII_BMSR);
 		if (!(status & BMSR_LSTATUS)) {
@@ -797,6 +792,56 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 
 	return 0;
 }
+#else
+static int macb_phy_init(struct udevice *dev, const char *name)
+{
+	struct macb_device *macb = dev_get_priv(dev);
+	u32 ncfgr;
+	int ret;
+
+	macb->phydev = dm_eth_phy_connect(dev);
+	if (!macb->phydev) {
+		printf("dm_eth_phy_connect failed\n");
+		return -ENODEV;
+	}
+
+	phy_config(macb->phydev);
+
+	ret = phy_startup(macb->phydev);
+	if (ret)
+		return ret;
+
+	if (!macb->phydev->link) {
+		printf("%s: No link.\n", macb->phydev->dev->name);
+		return -1;
+	}
+
+	ncfgr = macb_readl(macb, NCFGR);
+	ncfgr &= ~(MACB_BIT(SPD) | MACB_BIT(FD) | GEM_BIT(GBE));
+	switch (macb->phydev->speed) {
+	case SPEED_1000:
+		ncfgr |= GEM_BIT(GBE);
+		ret = macb_linkspd_cb(dev, _1000BASET);
+		break;
+	case SPEED_100:
+		ncfgr |= MACB_BIT(SPD);
+		ret = macb_linkspd_cb(dev, _100BASET);
+		break;
+	case SPEED_10:
+		ret = macb_linkspd_cb(dev, _10BASET);
+		break;
+	}
+
+	if (ret)
+		return ret;
+
+	if (macb->phydev->duplex)
+		ncfgr |= MACB_BIT(FD);
+	macb_writel(macb, NCFGR, ncfgr);
+
+	return 0;
+}
+#endif
 
 static int gmac_init_multi_queues(struct macb_device *macb)
 {
@@ -1295,18 +1340,26 @@ static int macb_eth_probe(struct udevice *dev)
 
 	_macb_eth_initialize(macb);
 
-#if defined(CONFIG_CMD_MII) || defined(CONFIG_PHYLIB)
-	macb->bus = mdio_alloc();
-	if (!macb->bus)
-		return -ENOMEM;
-	strlcpy(macb->bus->name, dev->name, MDIO_NAME_LEN);
-	macb->bus->read = macb_miiphy_read;
-	macb->bus->write = macb_miiphy_write;
+	if (IS_ENABLED(CONFIG_DM_ETH_PHY))
+		macb->bus = eth_phy_get_mdio_bus(dev);
 
-	ret = mdio_register(macb->bus);
-	if (ret < 0)
-		return ret;
-	macb->bus = miiphy_get_dev_by_name(dev->name);
+#if defined(CONFIG_CMD_MII) || defined(CONFIG_PHYLIB)
+	if (!macb->bus) {
+		macb->bus = mdio_alloc();
+		if (!macb->bus)
+			return -ENOMEM;
+		strlcpy(macb->bus->name, dev->name, MDIO_NAME_LEN);
+		macb->bus->read = macb_miiphy_read;
+		macb->bus->write = macb_miiphy_write;
+
+		ret = mdio_register(macb->bus);
+		if (ret < 0)
+			return ret;
+		macb->bus = miiphy_get_dev_by_name(dev->name);
+
+		if (IS_ENABLED(CONFIG_DM_ETH_PHY))
+			eth_phy_set_mdio_bus(dev, macb->bus);
+	}
 #endif
 
 	return 0;
