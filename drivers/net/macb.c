@@ -1446,6 +1446,12 @@ static const struct macb_config sama7g5_emac_config = {
 	.usrio = &sama7g5_usrio,
 };
 
+static const struct macb_config p64h_config = {
+	.dma_burst_length = 16,
+	.hw_dma_cap = HW_DMA_CAP_64B,
+	.usrio = &macb_default_usrio,
+};
+
 static const struct udevice_id macb_eth_ids[] = {
 	{ .compatible = "cdns,macb" },
 	{ .compatible = "cdns,at91sam9260-macb" },
@@ -1464,6 +1470,8 @@ static const struct udevice_id macb_eth_ids[] = {
 	{ .compatible = "cdns,zynq-gem" },
 	{ .compatible = "sifive,fu540-c000-gem",
 	  .data = (ulong)&sifive_config },
+	{ .compatible = "microchip,p64h-gem",
+	  .data = (ulong)&p64h_config },
 	{ }
 };
 
