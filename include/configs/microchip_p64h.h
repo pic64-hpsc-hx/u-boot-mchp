@@ -20,6 +20,8 @@
 #define CFG_SYS_INIT_RAM_ADDR        OCR_BASE_ADDR
 #define CFG_SYS_INIT_RAM_SIZE        OCR_BASE_SIZE
 
+#define __io
+
 /* Environment options */
 
 #define CFG_STD_DEVICES_SETTINGS	"stdin=serial,usbkbd\0" \
