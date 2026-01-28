@@ -14,6 +14,12 @@
 #define RISCV_MMODE_TIMER_FREQ		1000000
 #define RISCV_SMODE_TIMER_FREQ		1000000
 
+#define OCR_BASE_ADDR 0x7000000000
+#define OCR_BASE_SIZE (0x80000) // 512k
+
+#define CFG_SYS_INIT_RAM_ADDR        OCR_BASE_ADDR
+#define CFG_SYS_INIT_RAM_SIZE        OCR_BASE_SIZE
+
 /* Environment options */
 
 #define CFG_STD_DEVICES_SETTINGS	"stdin=serial,usbkbd\0" \
