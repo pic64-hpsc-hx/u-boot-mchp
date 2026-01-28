@@ -22,6 +22,10 @@
 
 #define __io
 
+#define CFG_SYS_BAUDRATE_TABLE  \
+	{300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, \
+		230400, 460800, 921600 }
+
 /* Environment options */
 
 #define CFG_STD_DEVICES_SETTINGS	"stdin=serial,usbkbd\0" \
