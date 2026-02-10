@@ -146,6 +146,28 @@ const p64h_sysc_handle_t* board_get_rpmi_handle(void)
    return handle_ptr;
 }
 
+int dram_init(void)
+{
+#if defined(CONFIG_P64H_NO_DDR)
+    gd->ram_base = OCR_BASE_ADDR;
+    gd->ram_size = 2 * OCR_BASE_SIZE;
+    return 0;
+#else
+	return fdtdec_setup_mem_size_base();
+#endif
+}
+
+int dram_init_banksize(void)
+{
+#if defined(CONFIG_P64H_NO_DDR)
+    gd->bd->bi_dram[0].start = OCR_BASE_ADDR;
+    gd->bd->bi_dram[0].size = 2 * OCR_BASE_SIZE;
+    return 0;
+#else
+	return fdtdec_setup_memory_banksize();
+#endif
+}
+
 int board_init(void)
 {
     return 0;

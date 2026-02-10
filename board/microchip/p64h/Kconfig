@@ -23,4 +23,12 @@ config BOARD_SPECIFIC_OPTIONS
 	imply BOARD_LATE_INIT
 	imply SYS_NS16550
 
+config P64H_NO_DDR
+	bool "No DDR mode for P64H"
+	default n
+	help
+	  Choose this option to enable the No DDR mode of P64H. This cause U-Boot
+	  to ignore the /memory node of the device tree and force itself into
+	  OCR 0 and 1 (1 MiB)
+
 endif
