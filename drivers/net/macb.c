@@ -35,6 +35,8 @@
 #include <net.h>
 #include <malloc.h>
 #include <miiphy.h>
+#include <dm/of_extra.h>
+#include <eth_phy.h>
 
 #include <linux/mii.h>
 #include <asm/io.h>
@@ -55,6 +57,7 @@ DECLARE_GLOBAL_DATA_PTR;
 #define RX_BUFFER_MULTIPLE		64
 
 #define MACB_RX_RING_SIZE		32
+#define GEM_RX_RING_SIZE		PKTBUFSRX
 #define MACB_TX_RING_SIZE		16
 
 #define MACB_TX_TIMEOUT		1000
@@ -91,9 +94,6 @@ struct macb_dma_desc_64 {
 
 #define DMA_DESC_SIZE		16
 #define DMA_DESC_BYTES(n)	((n) * DMA_DESC_SIZE)
-#define MACB_TX_DMA_DESC_SIZE	(DMA_DESC_BYTES(MACB_TX_RING_SIZE))
-#define MACB_RX_DMA_DESC_SIZE	(DMA_DESC_BYTES(MACB_RX_RING_SIZE))
-#define MACB_TX_DUMMY_DMA_DESC_SIZE	(DMA_DESC_BYTES(1))
 
 #define DESC_PER_CACHELINE_32	(ARCH_DMA_MINALIGN/sizeof(struct macb_dma_desc))
 #define DESC_PER_CACHELINE_64	(ARCH_DMA_MINALIGN/DMA_DESC_SIZE)
@@ -119,6 +119,7 @@ struct macb_device {
 	struct macb_dma_desc	*rx_ring;
 	struct macb_dma_desc	*tx_ring;
 	size_t			rx_buffer_size;
+	unsigned int		rx_ring_size;
 
 	unsigned long		rx_buffer_dma;
 	unsigned long		rx_ring_dma;
@@ -171,6 +172,7 @@ static int macb_is_gem(struct macb_device *macb)
 #define cpu_is_sama5d4() 0
 #endif
 
+#ifndef CONFIG_PHYLIB
 static int gem_is_gigabit_capable(struct macb_device *macb)
 {
 	/*
@@ -185,6 +187,7 @@ static int macb_port_is_fixed_link(struct macb_device *macb)
 {
 	return macb->phy_addr > PHY_MAX_ADDR;
 }
+#endif
 
 static void macb_mdio_write(struct macb_device *macb, u8 phy_adr, u8 reg,
 			    u16 value)
@@ -282,11 +285,11 @@ static inline void macb_invalidate_ring_desc(struct macb_device *macb, bool rx)
 {
 	if (rx)
 		invalidate_dcache_range(macb->rx_ring_dma,
-			ALIGN(macb->rx_ring_dma + MACB_RX_DMA_DESC_SIZE,
+			ALIGN(macb->rx_ring_dma + DMA_DESC_BYTES(macb->rx_ring_size),
 			      PKTALIGN));
 	else
 		invalidate_dcache_range(macb->tx_ring_dma,
-			ALIGN(macb->tx_ring_dma + MACB_TX_DMA_DESC_SIZE,
+			ALIGN(macb->tx_ring_dma + DMA_DESC_BYTES(MACB_TX_RING_SIZE),
 			      PKTALIGN));
 }
 
@@ -294,23 +297,23 @@ static inline void macb_flush_ring_desc(struct macb_device *macb, bool rx)
 {
 	if (rx)
 		flush_dcache_range(macb->rx_ring_dma, macb->rx_ring_dma +
-				   ALIGN(MACB_RX_DMA_DESC_SIZE, PKTALIGN));
+				   ALIGN(DMA_DESC_BYTES(macb->rx_ring_size), PKTALIGN));
 	else
 		flush_dcache_range(macb->tx_ring_dma, macb->tx_ring_dma +
-				   ALIGN(MACB_TX_DMA_DESC_SIZE, PKTALIGN));
+				   ALIGN(DMA_DESC_BYTES(MACB_TX_RING_SIZE), PKTALIGN));
 }
 
 static inline void macb_flush_rx_buffer(struct macb_device *macb)
 {
 	flush_dcache_range(macb->rx_buffer_dma, macb->rx_buffer_dma +
-			   ALIGN(macb->rx_buffer_size * MACB_RX_RING_SIZE,
+			   ALIGN(macb->rx_buffer_size * macb->rx_ring_size,
 				 PKTALIGN));
 }
 
 static inline void macb_invalidate_rx_buffer(struct macb_device *macb)
 {
 	invalidate_dcache_range(macb->rx_buffer_dma, macb->rx_buffer_dma +
-				ALIGN(macb->rx_buffer_size * MACB_RX_RING_SIZE,
+				ALIGN(macb->rx_buffer_size * macb->rx_ring_size,
 				      PKTALIGN));
 }
 
@@ -383,7 +386,10 @@ static int _macb_send(struct macb_device *macb, const char *name, void *packet,
 		if (ctrl & MACB_BIT(TX_BUF_EXHAUSTED))
 			printf("%s: TX buffers exhausted in mid frame\n", name);
 	} else {
-		printf("%s: TX timeout\n", name);
+		printf("%s: TX timeout: 0x%lx\n", name, ctrl);
+		printf("%s: TSR=0x%x\n", name, macb_readl(macb, TSR));
+		printf("%s: RSR=0x%x\n", name, macb_readl(macb, RSR));
+		printf("%s: NSR=0x%x\n", name, macb_readl(macb, NSR));
 	}
 
 	/* No one cares anyway */
@@ -434,7 +440,7 @@ static void reclaim_rx_buffers(struct macb_device *macb,
 	while (i > new_tail) {
 		reclaim_rx_buffer(macb, i);
 		i++;
-		if (i >= MACB_RX_RING_SIZE)
+		if (i >= macb->rx_ring_size)
 			i = 0;
 	}
 
@@ -488,7 +494,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 				unsigned int headlen, taillen;
 
 				headlen = macb->rx_buffer_size *
-					(MACB_RX_RING_SIZE - macb->rx_tail);
+					(macb->rx_ring_size - macb->rx_tail);
 				taillen = length - headlen;
 				memcpy((void *)net_rx_packets[0],
 				       buffer, headlen);
@@ -504,7 +510,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 					next_rx_tail = next_rx_tail / 2;
 			}
 
-			if (++next_rx_tail >= MACB_RX_RING_SIZE)
+			if (++next_rx_tail >= macb->rx_ring_size)
 				next_rx_tail = 0;
 			macb->next_rx_tail = next_rx_tail;
 			return length;
@@ -515,7 +521,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 				flag = false;
 			}
 
-			if (++next_rx_tail >= MACB_RX_RING_SIZE) {
+			if (++next_rx_tail >= macb->rx_ring_size) {
 				macb->wrapped = true;
 				next_rx_tail = 0;
 			}
@@ -524,6 +530,7 @@ static int _macb_recv(struct macb_device *macb, uchar **packetp)
 	}
 }
 
+#ifndef CONFIG_PHYLIB
 static void macb_phy_reset(struct macb_device *macb, const char *name)
 {
 	int i;
@@ -575,6 +582,7 @@ static int macb_phy_find(struct macb_device *macb, const char *name)
 
 	return -ENODEV;
 }
+#endif
 
 /**
  * macb_linkspd_cb - Linkspeed change callback function
@@ -664,6 +672,7 @@ int __weak macb_linkspd_cb(struct udevice *dev, unsigned int speed)
 	return 0;
 }
 
+#ifndef CONFIG_PHYLIB
 static int macb_phy_init(struct udevice *dev, const char *name)
 {
 	struct macb_device *macb = dev_get_priv(dev);
@@ -687,17 +696,6 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 			printf("%s: No PHY present\n", name);
 			return -ENODEV;
 		}
-
-#ifdef CONFIG_PHYLIB
-		macb->phydev = phy_connect(macb->bus, macb->phy_addr, dev,
-				     macb->phy_interface);
-		if (!macb->phydev) {
-			printf("phy_connect failed\n");
-			return -ENODEV;
-		}
-
-		phy_config(macb->phydev);
-#endif
 
 		status = macb_mdio_read(macb, macb->phy_addr, MII_BMSR);
 		if (!(status & BMSR_LSTATUS)) {
@@ -796,6 +794,56 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 
 	return 0;
 }
+#else
+static int macb_phy_init(struct udevice *dev, const char *name)
+{
+	struct macb_device *macb = dev_get_priv(dev);
+	u32 ncfgr;
+	int ret;
+
+	macb->phydev = dm_eth_phy_connect(dev);
+	if (!macb->phydev) {
+		printf("dm_eth_phy_connect failed\n");
+		return -ENODEV;
+	}
+
+	phy_config(macb->phydev);
+
+	ret = phy_startup(macb->phydev);
+	if (ret)
+		return ret;
+
+	if (!macb->phydev->link) {
+		printf("%s: No link.\n", macb->phydev->dev->name);
+		return -1;
+	}
+
+	ncfgr = macb_readl(macb, NCFGR);
+	ncfgr &= ~(MACB_BIT(SPD) | MACB_BIT(FD) | GEM_BIT(GBE));
+	switch (macb->phydev->speed) {
+	case SPEED_1000:
+		ncfgr |= GEM_BIT(GBE);
+		ret = macb_linkspd_cb(dev, _1000BASET);
+		break;
+	case SPEED_100:
+		ncfgr |= MACB_BIT(SPD);
+		ret = macb_linkspd_cb(dev, _100BASET);
+		break;
+	case SPEED_10:
+		ret = macb_linkspd_cb(dev, _10BASET);
+		break;
+	}
+
+	if (ret)
+		return ret;
+
+	if (macb->phydev->duplex)
+		ncfgr |= MACB_BIT(FD);
+	macb_writel(macb, NCFGR, ncfgr);
+
+	return 0;
+}
+#endif
 
 static int gmac_init_multi_queues(struct macb_device *macb)
 {
@@ -814,7 +862,7 @@ static int gmac_init_multi_queues(struct macb_device *macb)
 	macb->dummy_desc->ctrl = MACB_BIT(TX_USED);
 	macb->dummy_desc->addr = 0;
 	flush_dcache_range(macb->dummy_desc_dma, macb->dummy_desc_dma +
-			ALIGN(MACB_TX_DUMMY_DMA_DESC_SIZE, PKTALIGN));
+			ALIGN(DMA_DESC_BYTES(1), PKTALIGN));
 	paddr = macb->dummy_desc_dma;
 
 	for (i = 1; i < num_queues; i++) {
@@ -861,7 +909,7 @@ static void gmac_configure_dma(struct macb_device *macb)
 static int _macb_init(struct udevice *dev, const char *name)
 {
 	struct macb_device *macb = dev_get_priv(dev);
-	unsigned int val = 0;
+	unsigned int val = 0, mask;
 	unsigned long paddr;
 	int ret;
 	int i;
@@ -874,8 +922,8 @@ static int _macb_init(struct udevice *dev, const char *name)
 
 	/* initialize DMA descriptors */
 	paddr = macb->rx_buffer_dma;
-	for (i = 0; i < MACB_RX_RING_SIZE; i++) {
-		if (i == (MACB_RX_RING_SIZE - 1))
+	for (i = 0; i < macb->rx_ring_size; i++) {
+		if (i == (macb->rx_ring_size - 1))
 			paddr |= MACB_BIT(RX_WRAP);
 		if (macb->config->hw_dma_cap & HW_DMA_CAP_64B)
 			count = i * 2;
@@ -917,6 +965,11 @@ static int _macb_init(struct udevice *dev, const char *name)
 		macb_writel(macb, RBQPH, upper_32_bits(macb->rx_ring_dma));
 		macb_writel(macb, TBQPH, upper_32_bits(macb->tx_ring_dma));
 	}
+
+	debug("%s: rx_ring_dma=0x%lx\n", name, macb->rx_ring_dma);
+	debug("%s: tx_ring_dma=0x%lx\n", name, macb->tx_ring_dma);
+	debug("%s: rx_buffer_dma=0x%lx\n", name, macb->rx_buffer_dma);
+	debug("%s: rx_buffer_size=%li\n", name, macb->rx_buffer_size);
 
 	if (macb_is_gem(macb)) {
 		/* Initialize DMA properties */
@@ -973,6 +1026,48 @@ static int _macb_init(struct udevice *dev, const char *name)
 	if (ret)
 		return ret;
 
+#ifdef CONFIG_PHYLIB
+	if (macb->phy_interface == PHY_INTERFACE_MODE_SGMII) {
+		if (ofnode_eth_uses_inband_aneg(dev_ofnode(dev))) {
+			gem_writel(macb, PCSCTRL, gem_readl(macb, PCSCTRL) |
+				GEM_BIT(PCSCTRL_ANEG_ENBL));
+
+			/*
+			 * When the PHY link is already up, the PCS link needs
+			 * to get re-checked
+			 */
+			if (macb->phydev->link) {
+				int retry = 0;
+
+				while (retry < 1000) {
+					mask = GEM_BIT(PCSSTS_LINKUP) |
+						GEM_BIT(PCSSTS_ANEG_COMP);
+					ret = (gem_readl(macb, PCSSTS) & mask) == mask;
+					if (ret)
+						break;
+
+					udelay(10);
+					retry++;
+				}
+
+				if (!ret) {
+					printf("no PCS (SGMII) link\n");
+				} else {
+					/*
+					 * Some additional minimal delay seems
+					 * to be needed so that the first
+					 * packet will be sent correctly
+					 */
+					mdelay(1);
+				}
+			}
+		} else {
+			gem_writel(macb, PCSCTRL, gem_readl(macb, PCSCTRL) &
+				~GEM_BIT(PCSCTRL_ANEG_ENBL));
+		}
+	}
+#endif
+
 	/* Enable TX and RX */
 	macb_writel(macb, NCR, MACB_BIT(TE) | MACB_BIT(RE));
 
@@ -991,6 +1086,25 @@ static void _macb_halt(struct macb_device *macb)
 	do {
 		tsr = macb_readl(macb, TSR);
 	} while (tsr & MACB_BIT(TGO));
+
+	debug("TX OK packets %i\n", readl(macb->regs + 0x0108));
+	debug("TX OK bytes %lli\n", ((u64)readl(macb->regs + 0x0104) << 32) |
+					readl(macb->regs + 0x0100));
+	debug("RX OK packets %i\n", readl(macb->regs + 0x0158));
+	debug("RX OK bytes %lli\n", ((u64)readl(macb->regs + 0x0154) << 32) |
+					readl(macb->regs + 0x0150));
+	debug("RX undersize %i\n", readl(macb->regs + 0x0184));
+	debug("RX excessive length %i\n", readl(macb->regs + 0x0188));
+	debug("RX jabber %i\n", readl(macb->regs + 0x018c));
+	debug("RX FCS err %i\n", readl(macb->regs + 0x0190));
+	debug("RX length err %i\n", readl(macb->regs + 0x0194));
+	debug("RX symbol err %i\n", readl(macb->regs + 0x0198));
+	debug("RX alignment err %i\n", readl(macb->regs + 0x019c));
+	debug("RX resource err %i\n", readl(macb->regs + 0x01a0));
+	debug("RX overrun %i\n", readl(macb->regs + 0x01a4));
+	debug("RX IP CK errors %i\n", readl(macb->regs + 0x01a8));
+	debug("RX TCK CK errors %i\n", readl(macb->regs + 0x01ac));
+	debug("RX UDP CK errors %i\n", readl(macb->regs + 0x01b0));
 
 	/* Disable TX and RX, and clear statistics */
 	macb_writel(macb, NCR, MACB_BIT(CLRSTAT));
@@ -1083,22 +1197,6 @@ static void _macb_eth_initialize(struct macb_device *macb)
 {
 	int id = 0;	/* This is not used by functions we call */
 	u32 ncfgr;
-
-	if (macb_is_gem(macb))
-		macb->rx_buffer_size = GEM_RX_BUFFER_SIZE;
-	else
-		macb->rx_buffer_size = MACB_RX_BUFFER_SIZE;
-
-	/* TODO: we need check the rx/tx_ring_dma is dcache line aligned */
-	macb->rx_buffer = dma_alloc_coherent(macb->rx_buffer_size *
-					     MACB_RX_RING_SIZE,
-					     &macb->rx_buffer_dma);
-	macb->rx_ring = dma_alloc_coherent(MACB_RX_DMA_DESC_SIZE,
-					   &macb->rx_ring_dma);
-	macb->tx_ring = dma_alloc_coherent(MACB_TX_DMA_DESC_SIZE,
-					   &macb->tx_ring_dma);
-	macb->dummy_desc = dma_alloc_coherent(MACB_TX_DUMMY_DMA_DESC_SIZE,
-					   &macb->dummy_desc_dma);
 
 	/*
 	 * Do some basic initialization so that we at least can talk
@@ -1250,23 +1348,80 @@ static int macb_eth_probe(struct udevice *dev)
 		return ret;
 #endif
 
+	if (macb_is_gem(macb)) {
+		macb->rx_buffer_size = GEM_RX_BUFFER_SIZE;
+		macb->rx_ring_size = GEM_RX_RING_SIZE;
+	} else {
+		macb->rx_buffer_size = MACB_RX_BUFFER_SIZE;
+		macb->rx_ring_size = MACB_RX_RING_SIZE;
+	}
+
+	/* TODO: we need check the rx/tx_ring_dma is dcache line aligned */
+	macb->rx_buffer = dma_alloc_coherent(macb->rx_buffer_size *
+					     macb->rx_ring_size,
+					     &macb->rx_buffer_dma);
+	if (!macb->rx_buffer) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
+	macb->rx_ring = dma_alloc_coherent(DMA_DESC_BYTES(macb->rx_ring_size),
+					   &macb->rx_ring_dma);
+	if (!macb->rx_ring) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
+	macb->tx_ring = dma_alloc_coherent(DMA_DESC_BYTES(MACB_TX_RING_SIZE),
+					   &macb->tx_ring_dma);
+	if (!macb->tx_ring) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
+	macb->dummy_desc = dma_alloc_coherent(DMA_DESC_BYTES(1),
+					   &macb->dummy_desc_dma);
+	if (!macb->dummy_desc) {
+		ret = -ENOMEM;
+		goto err;
+	}
+
 	_macb_eth_initialize(macb);
 
-#if defined(CONFIG_CMD_MII) || defined(CONFIG_PHYLIB)
-	macb->bus = mdio_alloc();
-	if (!macb->bus)
-		return -ENOMEM;
-	strlcpy(macb->bus->name, dev->name, MDIO_NAME_LEN);
-	macb->bus->read = macb_miiphy_read;
-	macb->bus->write = macb_miiphy_write;
+	if (IS_ENABLED(CONFIG_DM_ETH_PHY))
+		macb->bus = eth_phy_get_mdio_bus(dev);
 
-	ret = mdio_register(macb->bus);
-	if (ret < 0)
-		return ret;
-	macb->bus = miiphy_get_dev_by_name(dev->name);
+#if defined(CONFIG_CMD_MII) || defined(CONFIG_PHYLIB)
+	if (!macb->bus && !(macb->config->caps & MACB_CAPS_NO_MDIO)) {
+		macb->bus = mdio_alloc();
+		if (!macb->bus)
+			return -ENOMEM;
+		strlcpy(macb->bus->name, dev->name, MDIO_NAME_LEN);
+		macb->bus->read = macb_miiphy_read;
+		macb->bus->write = macb_miiphy_write;
+
+		ret = mdio_register(macb->bus);
+		if (ret < 0)
+			return ret;
+		macb->bus = miiphy_get_dev_by_name(dev->name);
+
+		if (IS_ENABLED(CONFIG_DM_ETH_PHY))
+			eth_phy_set_mdio_bus(dev, macb->bus);
+	}
 #endif
 
 	return 0;
+
+err:
+	if (macb->rx_buffer)
+		dma_free_coherent(macb->rx_buffer);
+	if (macb->rx_ring)
+		dma_free_coherent(macb->rx_ring);
+	if (macb->tx_ring)
+		dma_free_coherent(macb->tx_ring);
+	if (macb->dummy_desc)
+		dma_free_coherent(macb->dummy_desc);
+	return ret;
 }
 
 static int macb_eth_remove(struct udevice *dev)
@@ -1278,6 +1433,11 @@ static int macb_eth_remove(struct udevice *dev)
 #endif
 	mdio_unregister(macb->bus);
 	mdio_free(macb->bus);
+
+	dma_free_coherent(macb->rx_buffer);
+	dma_free_coherent(macb->rx_ring);
+	dma_free_coherent(macb->tx_ring);
+	dma_free_coherent(macb->dummy_desc);
 
 	return 0;
 }
@@ -1361,6 +1521,13 @@ static const struct macb_config sama7g5_emac_config = {
 	.usrio = &sama7g5_usrio,
 };
 
+static const struct macb_config p64h_config = {
+	.caps = MACB_CAPS_NO_MDIO,
+	.dma_burst_length = 16,
+	.hw_dma_cap = HW_DMA_CAP_64B,
+	.usrio = &macb_default_usrio,
+};
+
 static const struct udevice_id macb_eth_ids[] = {
 	{ .compatible = "cdns,macb" },
 	{ .compatible = "cdns,at91sam9260-macb" },
@@ -1377,6 +1544,8 @@ static const struct udevice_id macb_eth_ids[] = {
 	{ .compatible = "cdns,zynq-gem" },
 	{ .compatible = "sifive,fu540-c000-gem",
 	  .data = (ulong)&sifive_config },
+	{ .compatible = "microchip,p64h-gem",
+	  .data = (ulong)&p64h_config },
 	{ }
 };
 
