@@ -1456,6 +1456,8 @@ int __weak macb_late_eth_of_to_plat(struct udevice *dev)
 static int macb_eth_of_to_plat(struct udevice *dev)
 {
 	struct eth_pdata *pdata = dev_get_plat(dev);
+	
+#ifndef CONFIG_PHYLIB
 	struct macb_device *macb = dev_get_priv(dev);
 	void *blob = (void *)gd->fdt_blob;
 	int node = dev_of_offset(dev);
@@ -1478,6 +1480,7 @@ static int macb_eth_of_to_plat(struct udevice *dev)
 			return -EINVAL;
 		}
 	}
+#endif
 
 	pdata->iobase = (uintptr_t)dev_remap_addr(dev);
 	if (!pdata->iobase)
