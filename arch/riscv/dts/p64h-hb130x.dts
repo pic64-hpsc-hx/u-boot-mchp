@@ -23,7 +23,7 @@
 };
 
 &mdio1 {
-	phy0: ethernet-phy@0 {
+	phy1_0: ethernet-phy@0 {
 		reg = <0>;
 	};
 };
@@ -34,7 +34,7 @@
 
 &gem1 {
 	status = "okay";
-	phy-handle = <&phy0>;
+	phy-handle = <&phy1_0>;
 	local-mac-address = [A2 92 D1 83 16 99];
 	phy-mode = "rgmii-id";
 };

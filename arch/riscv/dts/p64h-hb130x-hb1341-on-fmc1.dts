@@ -4,23 +4,23 @@
 #include "p64h-hb130x.dts"
 
 &mdio1 {
-	phy2: ethernet-phy@2 {
+	phy1_2: ethernet-phy@2 {
 		reg = <2>;
 	};
 
-	phy3: ethernet-phy@3 {
+	phy1_3: ethernet-phy@3 {
 		reg = <3>;
 	};
 };
 
 &gem0 {
 	status = "okay";
-	phy-handle = <&phy2>;
+	phy-handle = <&phy1_2>;
 	phy-mode = "sgmii";
 };
 
 &gem1 {
 	status = "okay";
-	phy-handle = <&phy3>;
+	phy-handle = <&phy1_3>;
 	phy-mode = "sgmii";
 };
