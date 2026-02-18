@@ -38,3 +38,12 @@
 	local-mac-address = [A2 92 D1 83 16 99];
 	phy-mode = "rgmii-id";
 };
+
+&gem2 {
+	local-mac-address = [A2 92 D1 83 16 9A];
+};
+
+&gem3 {
+	local-mac-address = [A2 92 D1 83 16 9B];
+};
+
