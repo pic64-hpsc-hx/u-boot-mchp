@@ -1029,7 +1029,7 @@ static int _macb_init(struct udevice *dev, const char *name)
 
 #ifdef CONFIG_PHYLIB
 	if (macb->phy_interface == PHY_INTERFACE_MODE_SGMII) {
-		if (ofnode_eth_uses_inband_aneg(dev_ofnode(dev))) {
+		if (macb->phydev->phy_id != PHY_FIXED_ID) {
 			gem_writel(macb, PCSCTRL, gem_readl(macb, PCSCTRL) |
 				GEM_BIT(PCSCTRL_ANEG_ENBL));
 
