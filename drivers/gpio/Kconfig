@@ -334,6 +334,13 @@ config PCF8575_GPIO
 	 Support for PCF8575 I2C 16-bit GPIO expander. Most of these
 	 chips are from NXP and TI.
 
+config PIC64HPSC_GPIO
+	bool "Microchip PIC64-HPSC/HX GPIO driver"
+	depends on DM_GPIO
+	help
+	 Support GPIO access on Microchip PIC64-HPSC/HX SoCs. Two banks of 32
+	 GPIOs are available.
+
 config RCAR_GPIO
 	bool "Renesas RCar GPIO driver"
 	depends on DM_GPIO && ARCH_RENESAS
