@@ -1401,6 +1401,8 @@ int gpio_get_number(const struct gpio_desc *desc)
 static int gpio_post_probe(struct udevice *dev)
 {
 	struct gpio_dev_priv *uc_priv = dev_get_uclass_priv(dev);
+	struct udevice *child;
+	int ret;
 
 	uc_priv->name = calloc(uc_priv->gpio_count, sizeof(char *));
 	if (!uc_priv->name)
@@ -1414,7 +1416,13 @@ static int gpio_post_probe(struct udevice *dev)
 		return -ENOMEM;
 	}
 
-	return gpio_renumber(NULL);
+	ret = gpio_renumber(NULL);
+
+	// Initialize child hogs.
+	list_for_each_entry(child, &dev->child_head, sibling_node)
+		device_probe(child);
+
+	return ret;
 }
 
 static int gpio_pre_remove(struct udevice *dev)
@@ -1538,8 +1546,11 @@ static int gpio_post_bind(struct udevice *dev)
 				 * Make sure gpio-hogs are probed after bind
 				 * since hogs can be essential to the hardware
 				 * system.
+				 *
+				 * cperry: doesn't work for my use case, it breaks
+				 * the device-driver binding.
 				 */
-				dev_or_flags(child, DM_FLAG_PROBE_AFTER_BIND);
+				//dev_or_flags(child, DM_FLAG_PROBE_AFTER_BIND);
 			}
 		}
 	}
