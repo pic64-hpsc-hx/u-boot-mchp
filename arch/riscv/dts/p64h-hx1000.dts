@@ -1,0 +1,210 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/* (c) 2026 Microchip Technology Inc. */
+
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include "p64h.dtsi"
+
+/ {
+	model = "Microchip P64H HX1000 Evalkit";
+
+	aliases {
+		serial0 = &uart0;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200";
+	};
+
+	memory: memory@4000000000 {
+	 	device_type = "memory";
+	 	reg = <0x40 0x00000000 0x0 0x40000000>;
+	};
+};
+
+&i2c2 {
+	mux@70 {
+		compatible = "nxp,pca9548";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x70>;
+
+		i2c@0 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0>;
+			gpioexp_u37: mcp23017@21 {
+				compatible = "microchip,mcp23017";
+				reg = <0x21>;
+			};
+
+			gpioexp_u38: mcp23017@22 {
+				compatible = "microchip,mcp23017";
+				reg = <0x22>;
+			};
+
+			gpioexp_u39: mcp23017@23 {
+				compatible = "microchip,mcp23017";
+				reg = <0x23>;
+			};
+		};
+
+		i2c@1 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <1>;
+
+			gpioexp_u40: mcp23017@24 {
+				compatible = "microchip,mcp23017";
+				reg = <0x24>;
+			};
+
+			gpioexp_u41: mcp23017@25 {
+				compatible = "microchip,mcp23017";
+				reg = <0x25>;
+			};
+		};
+
+		i2c_sfp0: i2c@4 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <4>;
+		};
+
+		i2c_sfp1: i2c@5 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <5>;
+		};
+
+		i2c_sfp2: i2c@6 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <6>;
+		};
+
+		i2c_sfp3: i2c@7 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <7>;
+		};
+	};
+
+	mux@71 {
+		compatible = "nxp,pca9548";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x71>;
+
+		i2c_sfp4: i2c@0 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0>;
+		};
+
+		i2c_sfp5: i2c@1 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <1>;
+		};
+
+		i2c_sfp6: i2c@2 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <2>;
+		};
+
+		i2c_sfp7: i2c@3 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <3>;
+		};
+
+		i2c_sfp8: i2c@4 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <4>;
+		};
+
+		i2c_sfp9: i2c@5 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <5>;
+		};
+
+		i2c_sfp10: i2c@6 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <6>;
+		};
+
+		i2c_sfp11: i2c@7 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <7>;
+		};
+	};
+};
+
+&i2c3 {
+	gpioexp_u36: mcp23017@20 {
+		compatible = "microchip,mcp23017";
+		reg = <0x20>;
+		gpio-controller;
+		#gpio-cells = <2>;
+
+		gpio-line-names = "USB_PW0_EN", "USB_PW0_FLG",
+			"USB_PW1_EN", "USB_PW1_FLG", "HX_FAN_TACH", "",
+			"PHY_NRESET", "PHY_LVL_SHIFT_EN", "CAN_0_INT",
+			"CAN_0_INT0", "CAN_0_INT1", "CAN_0_STBY", "CAN_1_INT",
+			"CAN_1_INT0", "CAN_1_INT1", "CAN_1_STBY";
+
+		phy-lvl-shift-en {
+			gpio-hog;
+			gpios = <7 GPIO_ACTIVE_HIGH>;
+			output-high;
+		};
+	};
+};
+
+&mdio0 {
+	/* VSC8572 QSGMII/SGMII dual port phy */
+	phy0_0: ethernet-phy@0 {
+		reg = <0>;
+		reset-gpios = <&gpioexp_u36 6 GPIO_ACTIVE_LOW>;
+		/* Datasheet table 3-31, 100ns pulse width, 105ms boot time */
+		reset-delay-us = <1>;
+		reset-post-delay-us = <120000>;
+	};
+
+	phy0_1: ethernet-phy@1 {
+		reg = <1>;
+		reset-gpios = <&gpioexp_u36 6 GPIO_ACTIVE_LOW>;
+		reset-delay-us = <1>;
+		reset-post-delay-us = <120000>;
+	};
+};
+
+&gem0 {
+	status = "okay";
+	phy-handle = <&phy0_0>;
+	local-mac-address = [A2 92 D1 83 16 98];
+	phy-mode = "sgmii";
+};
+
+&gem1 {
+	status = "okay";
+	phy-handle = <&phy0_1>;
+	local-mac-address = [A2 92 D1 83 16 99];
+	phy-mode = "sgmii";
+};
+
+&gem2 {
+	local-mac-address = [A2 92 D1 83 16 9A];
+};
+
+&gem3 {
+	local-mac-address = [A2 92 D1 83 16 9B];
+};
+
