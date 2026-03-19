@@ -808,11 +808,19 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 		return -ENODEV;
 	}
 
-	phy_config(macb->phydev);
+	ret = phy_config(macb->phydev);
+	if (ret) {
+		printf("%s: Phy config failed (%i).\n",
+			macb->phydev->dev->name, ret);
+		return ret;
+	}
 
 	ret = phy_startup(macb->phydev);
-	if (ret)
+	if (ret) {
+		printf("%s: Phy startup failed, (%i).\n",
+			macb->phydev->dev->name, ret);
 		return ret;
+	}
 
 	if (!macb->phydev->link) {
 		printf("%s: No link.\n", macb->phydev->dev->name);
