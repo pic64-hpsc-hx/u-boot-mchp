@@ -1084,6 +1084,9 @@ static int _macb_init(struct udevice *dev, const char *name)
 
 			ncfgr |= GEM_BIT(SGMIIEN) | GEM_BIT(PCSSEL);
 			macb_writel(macb, NCFGR, ncfgr);
+
+			gem_writel(macb, PCSCTRL, gem_readl(macb, PCSCTRL) |
+				GEM_BIT(PCSCTRL_ANEG_ENBL));
 		}
 	} else {
 	/* choose RMII or MII mode. This depends on the board */
@@ -1109,42 +1112,28 @@ static int _macb_init(struct udevice *dev, const char *name)
 
 #ifdef CONFIG_PHYLIB
 	if (macb->phy_interface == PHY_INTERFACE_MODE_SGMII) {
-		if (macb->phydev->phy_id != PHY_FIXED_ID) {
-			gem_writel(macb, PCSCTRL, gem_readl(macb, PCSCTRL) |
-				GEM_BIT(PCSCTRL_ANEG_ENBL));
+		int retry = 0;
 
-			/*
-			 * When the PHY link is already up, the PCS link needs
-			 * to get re-checked
-			 */
-			if (macb->phydev->link) {
-				int retry = 0;
+		while (retry < 1000) {
+			mask = GEM_BIT(PCSSTS_LINKUP) |
+				GEM_BIT(PCSSTS_ANEG_COMP);
+			ret = (gem_readl(macb, PCSSTS) & mask) == mask;
+			if (ret)
+				break;
 
-				while (retry < 1000) {
-					mask = GEM_BIT(PCSSTS_LINKUP) |
-						GEM_BIT(PCSSTS_ANEG_COMP);
-					ret = (gem_readl(macb, PCSSTS) & mask) == mask;
-					if (ret)
-						break;
+			udelay(10);
+			retry++;
+		}
 
-					udelay(10);
-					retry++;
-				}
-
-				if (!ret) {
-					printf("no PCS (SGMII) link\n");
-				} else {
-					/*
-					 * Some additional minimal delay seems
-					 * to be needed so that the first
-					 * packet will be sent correctly
-					 */
-					mdelay(1);
-				}
-			}
+		if (!ret) {
+			printf("no PCS (SGMII) link\n");
 		} else {
-			gem_writel(macb, PCSCTRL, gem_readl(macb, PCSCTRL) &
-				~GEM_BIT(PCSCTRL_ANEG_ENBL));
+			/*
+			 * Some additional minimal delay seems
+			 * to be needed so that the first
+			 * packet will be sent correctly
+			 */
+			mdelay(1);
 		}
 	}
 #endif
