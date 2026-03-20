@@ -174,15 +174,15 @@
 		reg = <0>;
 		reset-gpios = <&gpioexp_u36 6 GPIO_ACTIVE_LOW>;
 		/* Datasheet table 3-31, 100ns pulse width, 105ms boot time */
-		reset-delay-us = <1>;
-		reset-post-delay-us = <120000>;
+		reset-assert-us = <10000>;
+		reset-deassert-us = <120000>;
 	};
 
 	phy0_1: ethernet-phy@1 {
 		reg = <1>;
 		reset-gpios = <&gpioexp_u36 6 GPIO_ACTIVE_LOW>;
-		reset-delay-us = <1>;
-		reset-post-delay-us = <120000>;
+		reset-assert-us = <10000>;
+		reset-deassert-us = <120000>;
 	};
 };
 
