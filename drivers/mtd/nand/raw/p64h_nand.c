@@ -2228,7 +2228,7 @@ static void p64h_nand_write_byte(struct mtd_info *mtd, u8 byte)
 }
 
 static int p64h_nand_chip_init(struct p64h_nand_info *info,
-                                  ofnode node)
+                                  ofnode node, int index)
 {
     struct p64h_nand_chip *p64h_chip;
     struct nand_chip *chip;
@@ -2312,7 +2312,7 @@ static int p64h_nand_chip_init(struct p64h_nand_info *info,
         goto free_buf;
     }
 
-    ret = nand_register(0, mtd);
+    ret = nand_register(index, mtd);
     if (ret) {
         dev_err(info->dev, "Failed to register MTD: %d\n", ret);
         goto free_buf;
@@ -2331,7 +2331,7 @@ static int p64h_nand_chips_init(struct p64h_nand_info *info)
     ofnode node = dev_ofnode(dev);
     ofnode nand_node;
     int max_cs = info->caps2.max_banks;
-    int nchips, ret;
+    int nchips, ret, index = 0;
 
     nchips = of_get_child_count(node);
 
@@ -2345,7 +2345,7 @@ static int p64h_nand_chips_init(struct p64h_nand_info *info)
 
     ofnode_for_each_subnode(nand_node, node)
     {
-        ret = p64h_nand_chip_init(info, nand_node);
+        ret = p64h_nand_chip_init(info, nand_node, index++);
         if (ret)
             return ret;
     }
