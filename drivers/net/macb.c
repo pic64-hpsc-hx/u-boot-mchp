@@ -868,6 +868,14 @@ static int gmac_init_multi_queues(struct macb_device *macb)
 		if (queue_mask & (1 << i))
 			num_queues++;
 
+	if (macb->config->caps & MACB_CAPS_QUEUE_DISABLE) {
+		for (i = 1; i < num_queues; i++) {
+			gem_writel_queue_RBQP(macb, MACB_BIT(QUEUE_DISABLE), i - 1);
+			gem_writel_queue_TBQP(macb, MACB_BIT(QUEUE_DISABLE), i - 1);
+		}
+		return 0;
+	}
+
 	macb->dummy_desc->ctrl = MACB_BIT(TX_USED);
 	macb->dummy_desc->addr = 0;
 	flush_dcache_range(macb->dummy_desc_dma, macb->dummy_desc_dma +
@@ -1520,7 +1528,7 @@ static const struct macb_config sama7g5_emac_config = {
 };
 
 static const struct macb_config p64h_config = {
-	.caps = MACB_CAPS_NO_MDIO,
+	.caps = MACB_CAPS_NO_MDIO | MACB_CAPS_QUEUE_DISABLE,
 	.dma_burst_length = 16,
 	.hw_dma_cap = HW_DMA_CAP_64B,
 	.usrio = &macb_default_usrio,
