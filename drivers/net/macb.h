@@ -69,6 +69,7 @@
 #define GEM_USRIO		0x000c /* User IO */
 #define GEM_DMACFG		0x0010 /* DMA Configuration */
 #define GEM_JML			0x0048 /* Jumbo Max Length */
+#define GEM_AMP			0x0054 /* AXI Max Pipeline */
 #define GEM_HRB			0x0080 /* Hash Bottom */
 #define GEM_HRT			0x0084 /* Hash Top */
 #define GEM_SA1B		0x0088 /* Specific1 Bottom */
@@ -489,6 +490,8 @@
 #define GEM_SCR2CMP_SIZE			8
 
 /* Bitfields in DCFG10 */
+#define GEM_AXI_ACCESS_PIPELINE_OFFSET		16
+#define GEM_AXI_ACCESS_PIPELINE_SIZE		4
 #define GEM_TXBD_RDBUFF_OFFSET			12
 #define GEM_TXBD_RDBUFF_SIZE			4
 #define GEM_RXBD_RDBUFF_OFFSET			8
