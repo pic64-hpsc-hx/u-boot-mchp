@@ -982,6 +982,15 @@ static void gmac_configure_dma(struct macb_device *macb)
 	gem_writel(macb, DMACFG, dmacfg);
 }
 
+static void gmac_configure_axi(struct macb_device *macb)
+{
+	u32 aap, max_trans;
+
+	aap = GEM_BFEXT(AXI_ACCESS_PIPELINE, gem_readl(macb, DCFG10));
+	max_trans = ((aap >= 2) ? (1 << (aap - 2)) : 1) & 0xFF;
+	gem_writel(macb, AMP, max_trans | (max_trans << 8));
+}
+
 static int _macb_init(struct udevice *dev, const char *name)
 {
 	struct macb_device *macb = dev_get_priv(dev);
@@ -1050,6 +1059,8 @@ static int _macb_init(struct udevice *dev, const char *name)
 	if (macb_is_gem(macb)) {
 		/* Initialize DMA properties */
 		gmac_configure_dma(macb);
+		/* Initialize AXI properties */
+		gmac_configure_axi(macb);
 		/* Check the multi queue and initialize the queue for tx */
 		gmac_init_multi_queues(macb);
 
