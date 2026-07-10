@@ -26,7 +26,8 @@
 #define P64H_SYSC_MAX_APPC_BINARIES            30u ///< number of max appc image binaries (maybe more need to update)
 #define P64H_SYSC_APPC_METADATA_COPIES         3u  ///< number of metadata copies in appc image binary
 #define P64H_SYSC_APPC_COMPACT_MAGIC_NUMBER    (0x0123456789abcdefULL)
-#define P64H_SYSC_APPC_REDUNDANT_MAGIC_NUMBER  (0xfedcba9876543210ULL)
+#define P64H_SYSC_APPC_NORMAL_MAGIC_NUMBER     (0xfedcba9876543210ULL)
+#define P64H_SYSC_APPC_PPL_UTILIZATION_MAX     8u ///< define the maximum ID of pipeline utilization
 
 // Forward declarations to get the size
 struct p64h_sysc_appc_boot_script_t;
@@ -107,11 +108,9 @@ typedef struct {
  *   Defines boot action of a bootscript execution specified by p64h_sysc_psm_command_t
  */
 typedef enum {
-    P64H_SYSC_PSM_ACTION_START,     ///< Start an Appc Config
-    P64H_SYSC_PSM_ACTION_STOP,      ///< Stop an Appc Config
-    P64H_SYSC_PSM_ACTION_SUSPEND,   ///< Suspend an Appc Config
-    P64H_SYSC_PSM_ACTION_STATUS_GET ///< Get status
-    // TODO: add more actions (status_get, etc.)
+    P64H_SYSC_PSM_ACTION_START,   ///< Start an Appc Config
+    P64H_SYSC_PSM_ACTION_STOP,    ///< Stop an Appc Config
+    P64H_SYSC_PSM_ACTION_SUSPEND, ///< Suspend an Appc Config
 } p64h_sysc_psm_action_t;
 
 /**
@@ -136,20 +135,10 @@ typedef enum {
 
 /**
  * @brief
- *   Defines the load state of either appc static configruation an appc partiton
- */
-typedef enum {
-    P64H_SYSC_CTXT_CLEARED = 0, ///< reset state, applicable to static appc cfg and appc partition
-    P64H_SYSC_CTXT_LOADED       ///< state boot, only applicable to appc partition
-} p64h_sysc_appc_load_state_t;
-
-/**
- * @brief
  *   Defines the both the boot and load status of the static_cfg or appc_cfg
  */
 typedef struct {
-    p64h_sysc_appc_cfg_state_t  boot;
-    p64h_sysc_appc_load_state_t load;
+    p64h_sysc_appc_cfg_state_t boot; ///< whether the boot command has been executed successfully for this config
 } p64h_sysc_appc_component_status_t;
 
 /**
@@ -215,6 +204,16 @@ typedef struct {
     uint32_t                        opensbi_option;      ///< opensbi option (verbosity, ...)
     uint32_t                        opensbi_next_mode_s; ///< opensbi next_mode (ex: supervisor for linux, vxwork, machine mode for uboot)
 } p64h_sysc_appc_boot_params_cfg_t;
+
+/**
+ * @brief
+ *   Specifies the zsbl parameter config, used for zsbl
+ */
+typedef struct {
+    const uint8_t* zsbl_ptr;                               ///< zsbl address
+    const uint8_t* rnmi_ptr;                               ///< rnmi address
+    uint8_t        pipeline_utilization[APPC_CLUSTER_NUM]; ///< power cluster configuration
+} p64h_sysc_appc_init_params_cfg_t;
 
 /**
  * @brief
@@ -404,8 +403,8 @@ typedef struct {
  *   to the appc_cfg in order to configure some worldguard core configurations
  */
 typedef struct p64h_sysc_appc_partition_t {
-    p64h_sysc_appc_static_cfg_t* appc_static_cfg; /// pointer to the appc static configuration
-    p64h_sysc_appc_cfg_t*        appc_cfg;        /// pointer to the appc configuration
+    const p64h_sysc_appc_static_cfg_t* appc_static_cfg; /// pointer to the appc static configuration
+    const p64h_sysc_appc_cfg_t*        appc_cfg;        /// pointer to the appc configuration
 } p64h_sysc_appc_partition_t;
 
 /**
@@ -415,6 +414,7 @@ typedef struct p64h_sysc_appc_partition_t {
 typedef struct {
     uint64_t offset; ///< offset of the binary
     uint64_t size;   ///< size of the binary
+    uint64_t checksum;
 } p64h_sysc_section_desc_t;
 
 /**
@@ -466,7 +466,7 @@ typedef struct {
     uint32_t appc_section_valid; ///< Bit mask specifying which appc binary section descriptor structs are valid. The least-significant bit applies to
                                  ///< the first appc binary and so on. Only the first P64H_SYSC_MAX_APPC_BINARIES bits are used
     bool has_side_AB;            ///< Indicates if A/B side is present
-} p64h_sysc_appc_cfg_metadata_redundant_t;
+} p64h_sysc_appc_cfg_metadata_normal_t;
 
 /**
  * @brief

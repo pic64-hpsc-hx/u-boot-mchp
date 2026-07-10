@@ -1,5 +1,10 @@
 /* (c) 2025 Microchip Technology Inc. */
-/* SPDX-License-Identifier: MIT */
+/*    SPDX-License-Identifier: MIT    */
+
+/* ======================================= */
+/*  This file is generated and should not  */
+/*              be modified!               */
+/* ======================================= */
 
 /**
  * @file  p64h_sysc_serdes.h
@@ -15,7 +20,8 @@
 #include <rpmi/librpmi_sysc.h>
 #include <types/p64h_sysc_serdes_types.h>
 
-p64h_err_t p64h_sysc_serdes_grp_list_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t* sids_ptr, bool shmem_xfer);
+p64h_err_t p64h_sysc_serdes_grp_list_get(const p64h_sysc_handle_t* handle_ptr, uint32_t list_num, p64h_sysc_serdes_grp_id_t* sids_ptr,
+                                         bool shmem_xfer);
 p64h_err_t p64h_sysc_serdes_grp_num_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_serdes_grp_id_ptr);
 p64h_err_t p64h_sysc_serdes_attr_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id, p64h_sysc_serdes_grp_attr_t* attr_ptr);
 p64h_err_t p64h_sysc_serdes_cfg_set(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_serdes_grp_id_t id,

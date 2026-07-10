@@ -23,45 +23,56 @@
 #define P64H_SYSC_EDAC_SMALL_SKIP_SLOTS       8u ///< define the maximum number of slots for SRAM patrol srubbing small skip range
 #define P64H_SYSC_NUM_CONNECTOR_PAIR          2u ///< define the maximum number of connector pair
 #define P64H_SYSC_NUM_CONNECTOR_PER_PAIR      2u ///< define the number of connector per pair
-#define P64H_SYSC_NUM_SRAM_EDAC_PER_PAIR      2u ///< define the maximum number of SRAM EDAC per pair
+#define P64H_SYSC_NUM_SRAM_EDAC               3u ///< define the number of EDAC instance in SRAM EDAC
+#define P64H_SYSC_MAX_NUM_SRAM_EDAC_PER_PAIR  2u ///< define the maximum number of SRAM EDAC per pair
 #define P64H_SYSC_NUM_NVM_CTRL_PER_PAIR       2u ///< define the number of NVM CTRL per pair
 #define P64H_SYSC_NVM_NOC_IF_SRAM_EDAC        0u ///< define a SRAM EDAC interface
 #define P64H_SYSC_NVM_NOC_IF_NVM_EDAC         1u ///< define a NVM EDAC interface
-#define PFLASH_CTRL_DEVICE_MAX                8u ///< Number of external drives behind each PFLASH Controller.
-#define PFLASH_CFG_CS_PAGE_RANGE_INDICES      2u ///< Number of upper and lower set of address in cs_page_range
 
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_INITIAL                                                                                                         \
-    0x00000001u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the initial test
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_WRITE_READ_PAGE                                                                                                 \
-    0x00000002u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the write read page test
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_SECTOR_ERASE                                                                                                    \
-    0x00000004u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the sector erase test
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_BLOCK_LOCK                                                                                                      \
-    0x00000008u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to enable the block lock test
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_0                                                                                                            \
-    0x00000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 0
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_1                                                                                                            \
-    0x08000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 1
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_2                                                                                                            \
-    0x10000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 2
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_3                                                                                                            \
-    0x18000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 3
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_4                                                                                                            \
-    0x20000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 4
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_5                                                                                                            \
-    0x28000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 5
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_6                                                                                                            \
-    0x30000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 6
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_7                                                                                                            \
-    0x38000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to run tests on chip select 7
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_ERASE_BTW                                                                                                       \
-    0x40000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to erase blocks between tests
-#define P64H_SYSC_NVM_XSPI_DIAG_TEST_VERBOSE                                                                                                         \
-    0x80000000u ///< define used in conjuction with the p64h_sysc_spi_flash_diag_xspi_cfg_struct_t to add more print messages.
-#define P64H_SYSC_NVM_XSPI_DIAG_NUM_TESTS         4u ///< Total number of tests that can be run in a single RPMI call
+/// PFlash diagnostic test bitmask defines (used with p64h_sysc_pflash_diag_pflash_cfg_struct_t)
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_ID_CFI_READ         0x00000001u ///< Read ID/CFI per chip select to confirm device communication
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_SECTOR_ERASE        0x00000002u ///< Erase sectors at bottom, middle, and top addresses and verify
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_WORD_PROG_ADDR_WALK 0x00000004u ///< Word program walking 1 pattern across address bits
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_BUFF_PROG_DATA_WALK 0x00000008u ///< Buffer program walking 0 pattern across data bits
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CHIP_ERASE          0x00000010u ///< Full chip erase and global readback verification
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_STATUS_REG_READ     0x00000020u ///< Read and log the device status register (debug only, no pass/fail)
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_0                0x00000000u ///< Run tests on chip select 0
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_1                0x08000000u ///< Run tests on chip select 1
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_2                0x10000000u ///< Run tests on chip select 2
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_3                0x18000000u ///< Run tests on chip select 3
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_4                0x20000000u ///< Run tests on chip select 4
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_5                0x28000000u ///< Run tests on chip select 5
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_6                0x30000000u ///< Run tests on chip select 6
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_CS_7                0x38000000u ///< Run tests on chip select 7
+#define P64H_SYSC_NVM_PFLASH_DIAG_TEST_VERBOSE             0x80000000u ///< Increase output to aid debugging
+#define P64H_SYSC_NVM_PFLASH_DIAG_NUM_TESTS                5u          ///< Total number of PFlash tests that can be run in a single RPMI call
 
-#define P64H_SYSC_NVM_XSPI_STIG_INIT_CMD_ARR_SIZE 8 ///< Max size of the stig commands
-#define P64H_SYSC_NVM_XSPI_SUBSECTOR_ARR_SIZE     4 ///< Max size of the subsector array
+#define PFLASH_CTRL_DEVICE_MAX                             8u ///< Number of external drives behind each PFLASH Controller.
+#define PFLASH_CFG_CS_PAGE_RANGE_INDICES                   2u ///< Number of upper and lower set of address in cs_page_range
+
+/// xSPI diagnostic test bitmask defines (used with p64h_sysc_spi_flash_diag_xspi_cfg_struct_t)
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_INITIAL         0x00000001u ///< Single byte write/read test
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_SECTOR_ERASE    0x00000004u ///< Sector erase and readback verification
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_WRITE_READ_PAGE 0x00000002u ///< Single page write/read test
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_BLOCK_LOCK      0x00000008u ///< Block lock protection test
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CHIP_ERASE      0x00000010u ///< Full chip erase and global readback verification
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_0            0x00000000u ///< Run tests on chip select 0
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_1            0x08000000u ///< Run tests on chip select 1
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_2            0x10000000u ///< Run tests on chip select 2
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_3            0x18000000u ///< Run tests on chip select 3
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_4            0x20000000u ///< Run tests on chip select 4
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_5            0x28000000u ///< Run tests on chip select 5
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_6            0x30000000u ///< Run tests on chip select 6
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_CS_7            0x38000000u ///< Run tests on chip select 7
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_ERASE_BTW       0x40000000u ///< Erase sectors between tests
+#define P64H_SYSC_NVM_XSPI_DIAG_TEST_VERBOSE         0x80000000u ///< Increase output to aid debugging
+#define P64H_SYSC_NVM_XSPI_DIAG_NUM_TESTS            5u          ///< Total number of xSPI tests that can be run in a single RPMI call
+
+#define P64H_SYSC_NVM_XSPI_STIG_INIT_CMD_ARR_SIZE    8 ///< Max size of the stig commands
+#define P64H_SYSC_NVM_XSPI_SUBSECTOR_ARR_SIZE        4 ///< Max size of the subsector array
+
+/// NOTE: Must be = max(P64H_SYSC_NVM_XSPI_DIAG_NUM_TESTS, P64H_SYSC_NVM_PFLASH_DIAG_NUM_TESTS). Plain literal required for SWIG compatibility.
+#define P64H_SYSC_NVM_DIAG_NUM_TESTS_MAX 5u ///< Maximum number of diagnostic test results across all NVM controller types
 
 /* Public Structs and Enums --------------------------------------- */
 
@@ -95,11 +106,12 @@ typedef enum {
  *  Enumeration of NVM CTRL for APPc boot
  */
 typedef enum {
-    P64H_SYSC_NVM_CTRL_PARALLEL = 0u, ///< Parallel CTRL
-    P64H_SYSC_NVM_CTRL_XSPI,          ///< xSPI CTRL
-    P64H_SYSC_NVM_CTRL_SD_EMMC,       ///< SD/eMMC CTRL
-    P64H_SYSC_NVM_CTRL_NAND,          ///< NAND CTRL
-    P64H_SYSC_LAST_NVM_CTRL           ///< invalid used for error checking
+    P64H_SYSC_NVM_CTRL_NOT_CFG = 0u, ///< Controller not used
+    P64H_SYSC_NVM_CTRL_PARALLEL,     ///< Parallel CTRL
+    P64H_SYSC_NVM_CTRL_XSPI,         ///< xSPI CTRL
+    P64H_SYSC_NVM_CTRL_SD_EMMC,      ///< SD/eMMC CTRL
+    P64H_SYSC_NVM_CTRL_NAND,         ///< NAND CTRL
+    P64H_SYSC_LAST_NVM_CTRL          ///< invalid used for error checking
 } p64h_sysc_nvm_ctrl_type_t;
 
 /**
@@ -195,6 +207,33 @@ typedef struct {
 
 /**
  * @brief
+ *  Struct for the possible PFlash diagnostic tests that can
+ *  be run.
+ */
+typedef union {
+    struct {
+        // enables for the various tests
+        unsigned en_id_cfi_read_test         : 1; ///< ID/CFI read per chip select
+        unsigned en_sector_erase_test        : 1; ///< sector erase and readback at bottom/mid/top
+        unsigned en_word_prog_addr_walk_test : 1; ///< word program walking 1 pattern across address bits
+        unsigned en_buff_prog_data_walk_test : 1; ///< buffer program walking 0 pattern across data bits (erased NOR = all 1s)
+        unsigned en_chip_erase_test          : 1; ///< full chip erase and global readback
+        unsigned en_status_reg_read_test     : 1; ///< read and log device status register (debug only)
+
+        unsigned reserved0                   : 21; ///< bits 6-26 reserved for future use
+
+        // Options to change how the run is done
+        unsigned chip_select : 3; ///< which chip select to use for the testing
+        unsigned reserved1   : 1; ///< bit 30 reserved for future use
+        unsigned verbose     : 1; ///< Increase output to aid debugging
+
+    } bits;        ///< individual bits representing tests to run
+    uint32_t mask; ///< Mask for the above bits
+
+} p64h_sysc_pflash_diag_pflash_cfg_struct_t;
+
+/**
+ * @brief
  *  Enumeration of SPI flash AXI source interface
  */
 typedef enum {
@@ -212,11 +251,12 @@ typedef union {
     struct {
         // enables for the various tests.
         unsigned en_initial_test         : 1; ///< single byte write/read test
-        unsigned en_write_read_page_test : 1; ///< single page write/read test
         unsigned en_sector_erase_test    : 1; ///< sector erase test
+        unsigned en_write_read_page_test : 1; ///< single page write/read test
         unsigned en_block_lock_test      : 1; ///< block lock protection test
+        unsigned en_chip_erase_test      : 1; ///< full chip erase and global readback
 
-        unsigned reserved                : 23; ///< bits 4-26 reserved for future use
+        unsigned reserved                : 22; ///< bits 5-26 reserved for future use
 
         // Options to change how the run is done
         unsigned chip_select         : 3; ///< which chip select to use for the testing
@@ -232,12 +272,25 @@ typedef union {
 
 /**
  * @brief
- *  This struct packages a test info struct containing what tests should be run with an
- *  array of test results from the test that were run
+ *  Union of controller-specific diagnostic test configuration structs.
+ *  The caller sets the appropriate member based on the NVM controller type
+ *  (PFLASH or XSPI) determined from the connector pair configuration.
+ */
+typedef union {
+    p64h_sysc_pflash_diag_pflash_cfg_struct_t  pflash; ///< PFlash diagnostic test configuration
+    p64h_sysc_spi_flash_diag_xspi_cfg_struct_t xspi;   ///< xSPI diagnostic test configuration
+    uint32_t                                   mask;   ///< Raw mask access (common across both)
+} p64h_sysc_nvm_diag_test_info_t;
+
+/**
+ * @brief
+ *  This struct packages a test info union containing what tests should be run with an
+ *  array of test results from the tests that were run. Generalized across XSPI and PFlash.
  */
 typedef struct {
-    p64h_sysc_spi_flash_diag_xspi_cfg_struct_t test_info; ///< struct containing what tests should be run and other controls
-    p64h_err_t                                 test_errs[P64H_SYSC_NVM_XSPI_DIAG_NUM_TESTS]; ///< array of test results
+    p64h_sysc_nvm_diag_test_info_t test_info;                                   ///< union containing what tests should be run and other controls
+    p64h_err_t                     test_errs[P64H_SYSC_NVM_DIAG_NUM_TESTS_MAX]; ///< array of test results
+    p64h_sysc_nvm_ctrl_type_t      ctrl_type;                                   ///< controller type that was tested (set by FW)
 } p64h_sysc_nvm_diag_test_t;
 
 /**
@@ -974,6 +1027,10 @@ typedef struct {
                                              ///<   T10: 16, 48, 112, 240
                                              ///<   T18: 37, 101, 229
                                              ///<   T24: 93
+    bool rcmd_drop_hold_en; ///< This enables the EDAC to drop all transactions after a command or address uncorrectable bus secded error.
+    bool wcmd_drop_hold_en; ///< Some uncorrectable bus ecc command errors can cause corruption to propagate to other transactions.
+                            ///< This bit enables the edac to drop all transactions after a command or address uncorrectable bus error.
+                            ///< Deassert this bit to disable the function.
     ///< The SRAM EDAC has a data width of 64bits; these configurations result in a DATA+ECC sectors or 128, 256, 512,1024,
     ///< 2048, 4096 Bytes.
     ///< For SECDED Mode, this register doubles as the patrol scrubber length request. Allowed values are 0
@@ -983,10 +1040,6 @@ typedef struct {
                              ///< default settings will be used defined in this register will be used.
     p64h_sysc_sram_fec_addr_range_t fec_addr_map[P64H_SYSC_SRAM_FEC_ADDR_MAP_NUM_SLOTS]; ///< Up to 8 regions can be configured for one EDAC.
     bool                            always_rmw_en; ///< If a full SECDED/BCH block is detected, still invoke a RMW operation.
-    bool rcmd_drop_hold_en; ///< This enables the EDAC to drop all transactions after a command or address uncorrectable bus secded error.
-    bool wcmd_drop_hold_en; ///< Some uncorrectable bus ecc command errors can cause corruption to propagate to other transactions.
-                            ///< This bit enables the edac to drop all transactions after a command or address uncorrectable bus error.
-                            ///< Deassert this bit to disable the function.
 } p64h_sysc_sram_edac_fec_cfg_t;
 
 /// NVM EDAC Fec configuration
@@ -1059,11 +1112,11 @@ typedef struct {
 
 /// NVM connector pair configuration (configuration is paired 0/1 and 2/3 to enable DMR configuration)
 typedef struct {
-    p64h_sysc_nvm_cmode_t     cmode[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];         ///< mode for connector 0 and 1, it shall be the same if DMR is used
-    p64h_sysc_nvm_edac_cfg_t  nvm_edac_cfg;                                    ///< NVM EDAC configuration
-    p64h_sysc_sram_edac_cfg_t sram_edac_cfg[P64H_SYSC_NUM_SRAM_EDAC_PER_PAIR]; ///< SRAM EDAC configurations
-    p64h_sysc_nvm_ctrl_cfg_t  nvm_ctrl_cfg[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];  ///< NVM ctrl configuration, it shall be the same if DMR is used
-    bool                      sd_enable[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];     ///< SD enable
+    p64h_sysc_nvm_cmode_t     cmode[P64H_SYSC_NUM_CONNECTOR_PER_PAIR]; ///< mode for connector 0 and 1, it shall be the same if DMR is used
+    p64h_sysc_nvm_edac_cfg_t  nvm_edac_cfg;                            ///< NVM EDAC configuration
+    p64h_sysc_sram_edac_cfg_t sram_edac_cfg[P64H_SYSC_MAX_NUM_SRAM_EDAC_PER_PAIR]; ///< SRAM EDAC configurations
+    p64h_sysc_nvm_ctrl_cfg_t  nvm_ctrl_cfg[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];      ///< NVM ctrl configuration, it shall be the same if DMR is used
+    bool                      sd_enable[P64H_SYSC_NUM_CONNECTOR_PER_PAIR];         ///< SD enable
 } p64h_sysc_nvm_cpair_cfg_t;
 
 #endif // P64H_SYSC_NVM_TYPE_H

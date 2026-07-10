@@ -17,16 +17,29 @@
 #define NUM_XPLIC_INTRS 127
 /// @brief Number of XPLIC assignable interrupts
 #define NUM_PLIC_INTRS 189
-/// @brief Number of non-dynamically assigned interrupts
-#define NUM_NONDYNAMIC_INTRS 99
-/// @brief Number of dynamically assigned interrupts
-#define NUM_DYNAMIC_INTRS NUM_XPLIC_INTRS - NUM_NONDYNAMIC_INTRS
 /// @brief Number of plic-only assignable interrupts
-#define NUM_PLIC_UNIQUE_INTRS NUM_PLIC_INTRS - NUM_XPLIC_INTRS
-/// @brief Maximum number of groups in a non-dynamic interrupt configuration
-#define NUM_NONDYN_INTR_CFG_GROUPS 4
+#define NUM_PLIC_UNIQUE_INTRS (NUM_PLIC_INTRS - NUM_XPLIC_INTRS)
 /// @brief Number of groups in a dynamic interrupt configuration
 #define NUM_DYN_INTR_CFG_GROUPS 6
+
+/// @brief Number of non-dynamically assigned interrupts
+#define HW_NUM_NONDYNAMIC_INTRS 99
+/// @brief Maximum number of groups in a non-dynamic interrupt configuration
+#define HW_NUM_NONDYN_INTR_CFG_GROUPS 4
+/// @brief Number of dynamically assigned interrupts
+#define HW_NUM_DYNAMIC_INTRS NUM_XPLIC_INTRS - HW_NUM_NONDYNAMIC_INTRS
+
+/// @brief Number of non-dynamically assigned interrupts
+#define QEMU_NUM_NONDYNAMIC_INTRS 103
+/// @brief Maximum number of groups in a non-dynamic interrupt configuration
+#define QEMU_NUM_NONDYN_INTR_CFG_GROUPS 6
+/// @brief Number of dynamically assigned interrupts
+#define QEMU_NUM_DYNAMIC_INTRS      QEMU_NUM_XPLIC_INTRS - QEMU_NUM_NONDYNAMIC_INTRS
+
+#define MAX_NUM_NONDYNAMIC_INTRS    103
+#define MAX_NUM_INTR_CFG_GROUPS     6
+#define MAX_NUM_DYN_INTR_CFG_GROUPS 6
+#define MAX_NUM_DYNAMIC_INTRS       127 - 99
 
 /* Public Structs and Enums --------------------------------------------------- */
 
@@ -47,8 +60,10 @@ typedef enum p64h_sysc_intr_ctrl_type_t {
  *        interrupts 0 to 126
  */
 typedef struct p64h_sysc_xplic_cfg {
-    uint32_t nondynamic_intr[NUM_NONDYNAMIC_INTRS][NUM_NONDYN_INTR_CFG_GROUPS];
-    uint32_t dynamic_intr[NUM_DYNAMIC_INTRS][NUM_DYN_INTR_CFG_GROUPS];
+    //    uint32_t nondynamic_intr[NUM_NONDYNAMIC_INTRS][NUM_NONDYN_INTR_CFG_GROUPS];
+    //    uint32_t dynamic_intr[NUM_DYNAMIC_INTRS][NUM_DYN_INTR_CFG_GROUPS];
+    uint32_t nondynamic_intr[MAX_NUM_NONDYNAMIC_INTRS][MAX_NUM_INTR_CFG_GROUPS];
+    uint32_t dynamic_intr[MAX_NUM_DYNAMIC_INTRS][MAX_NUM_INTR_CFG_GROUPS];
 } p64h_sysc_xplic_cfg_t;
 
 /**

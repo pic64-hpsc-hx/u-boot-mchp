@@ -38,6 +38,15 @@ enum rpmi_error rpmi_io_write(struct rpmi_io* io, const void* out, rpmi_uint32_t
     return io->ops->write(io->ops_priv, out, len);
 }
 
+enum rpmi_error rpmi_io_flush_rx(struct rpmi_io* io)
+{
+    if (!io) {
+        DPRINTF("%s: invalid parameters\n", __func__);
+        return RPMI_ERR_INVALID_PARAM;
+    }
+    return io->ops->flush_rx(io->ops_priv);
+}
+
 rpmi_bool_t rpmi_io_is_empty(struct rpmi_io* io)
 {
     if (!io) {

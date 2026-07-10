@@ -12,6 +12,7 @@
 #ifndef P64H_SYSC_CRYPTO_TYPE_H
 #define P64H_SYSC_CRYPTO_TYPE_H
 
+#include "p64h_sysc_common_types.h"
 #include <generated/p64h_sysc_errors.h>
 #include <zsbl/sysc_flash_helper.h>
 

@@ -17,12 +17,14 @@
 #include <generated/p64h_sysc_ras_data_defs.h>
 
 /* Public Defines ------------------------------------------------- */
+#define P64H_SYSC_RAS_EM_PROF_MAX 10UL ///<  Maximum number of Error Monitoring profiles
 
 /* Public Structs and Enums --------------------------------------- */
 
 /// Enum listing all possible notifications supported by the EM RAS service
 typedef enum {
     P64H_SYSC_RAS_EM_NOTIF_EVT_ERROR_EVT = 0, ///< Error events notification ID
+    P64H_SYSC_RAS_EM_NOTIF_EVT_HEST_EVT  = 1, ///< HEST events notification ID
     P64H_SYSC_RAS_EM_NOTIF_EVT_LAST           ///< Last ID
 } p64h_sysc_ras_em_evt_id_t;
 
@@ -30,14 +32,9 @@ typedef enum {
 typedef struct {
     p64h_sysc_ras_em_evt_id_t evt_id;       ///< Notification event ID
     p64h_sysc_psm_id_t        partition_id; ///< Partition ID for which notification events should be enabled
-    /// cperlite
+    uint32_t                  reserved;     ///< reserved
+    p64h_sysc_ras_erte_t evt_data; ///< Error event data for P64H_SYSC_RAS_EM_NOTIF_EVT_ERROR_EVT, invalid for P64H_SYSC_RAS_EM_NOTIF_EVT_HEST_EVT
 } p64h_sysc_ras_em_evt_t;
-
-/// RAS EM notification state
-typedef enum {
-    RAS_EM_EVT_ACTIVE   = 0, ///< Notification event ID
-    RAS_EM_EVT_INACTIVE = 1, ///< Notification event ID
-} p64h_sysc_ras_em_evt_state_t;
 
 /// Data request to get notifications
 typedef struct {
@@ -55,7 +52,8 @@ typedef struct {
 
 /// Error monitoring profile
 typedef struct {
-    uint32_t placeholder; ///< Placeholder variable until profiles are defined
+    uint32_t filter_bitmap[(P64H_RAS_ERR_ID_NUM + 31UL)
+                           / 32UL]; ///< Error event filter bitmap. Each bit corresponds to one error event in p64h_ras_err_id_t.
 } p64h_sysc_ras_em_prof_t;
 
 /// EM serial log identifying characteristics

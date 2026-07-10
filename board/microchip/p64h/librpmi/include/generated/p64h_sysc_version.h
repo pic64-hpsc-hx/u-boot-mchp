@@ -22,11 +22,11 @@
 #endif
 // API minor version
 #ifndef P64H_SYSC_FW_VERSION_MINOR
-#define P64H_SYSC_FW_VERSION_MINOR 0
+#define P64H_SYSC_FW_VERSION_MINOR 1
 #endif
 // API patch version 
 #ifndef P64H_SYSC_FW_VERSION_PATCH
-#define P64H_SYSC_FW_VERSION_PATCH 0
+#define P64H_SYSC_FW_VERSION_PATCH 1
 #endif
 
 // Bit offset for the major from version values

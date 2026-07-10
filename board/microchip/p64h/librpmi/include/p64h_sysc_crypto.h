@@ -1,5 +1,10 @@
 /* (c) 2025 Microchip Technology Inc. */
-/* SPDX-License-Identifier: MIT */
+/*    SPDX-License-Identifier: MIT    */
+
+/* ======================================= */
+/*  This file is generated and should not  */
+/*              be modified!               */
+/* ======================================= */
 
 /**
  * @file  p64h_sysc_crypto.h
@@ -19,12 +24,13 @@
 p64h_err_t p64h_sysc_crypto_evt_enable(p64h_sysc_handle_t* handle_ptr, const p64h_sysc_crypto_evt_id_t eid,
                                        const p64h_sysc_crypto_evt_fct_t sys_evt_fct);
 p64h_err_t p64h_sysc_crypto_evt_disable(p64h_sysc_handle_t* handle_ptr, const p64h_sysc_crypto_evt_id_t eid);
-p64h_err_t p64h_sysc_crypto_evt_state_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_crypto_evt_id_t eid, bool* enabled_ptr);
+p64h_err_t p64h_sysc_crypto_evt_state_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_crypto_evt_id_t eid,
+                                          p64h_sysc_evt_notification_state_t* evt_state_ptr);
 
 // key management
 p64h_err_t p64h_sysc_crypto_key_num_get(const p64h_sysc_handle_t* handle_ptr, const bool get_configured, uint32_t* num_key_ptr);
-p64h_err_t p64h_sysc_crypto_key_list_get(const p64h_sysc_handle_t* handle_ptr, const bool get_configured, p64h_sysc_crypto_key_id_t* kids_ptr,
-                                         bool shmem_xfer);
+p64h_err_t p64h_sysc_crypto_key_list_get(const p64h_sysc_handle_t* handle_ptr, const bool get_configured, uint32_t list_num,
+                                         p64h_sysc_crypto_key_id_t* kids_ptr, bool shmem_xfer);
 p64h_err_t p64h_sysc_crypto_key_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_crypto_key_id_t key_id,
                                     const p64h_sysc_crypto_key_cfg_t* cfg_ptr);
 

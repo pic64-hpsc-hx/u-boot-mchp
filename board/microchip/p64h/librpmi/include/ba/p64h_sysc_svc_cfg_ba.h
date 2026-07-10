@@ -10,12 +10,32 @@
 #define P64H_SYSC_SVC_CFG_BA_H
 
 #include "p64h_sysc_appc_ba.h"
+#include "types/p64h_sysc_ras_em_types.h"
 #include <generated/p64h_sysc_components.h>
+#include "types/p64h_sysc_trace_types.h"
 
-#define P64H_SYSC_APPC_BOOT_CFG_PIN_MAP_MAX 8u    ///< maximun number of AppC boot configuration mappable to boot_cfg pins
-#define P64H_SYSC_APPC_BOOT_CFG_MAX         16u   ///< maximun number of AppC boot configuration
-#define P64H_SYSC_NUM_METADATA_MAX          3u    ///< maximun number of metadata
-#define P64H_SYSC_APPC_BOOT_CFG_STRING_MAX  256UL ///< maximun string size for appc boot cfg name
+#define P64H_SYSC_APPC_BOOT_CFG_PIN_MAP_MAX 8u    ///< maximum number of AppC boot configuration mappable to boot_cfg pins
+#define P64H_SYSC_APPC_BOOT_CFG_MAX         16u   ///< maximum number of AppC boot configuration
+#define P64H_SYSC_NUM_METADATA_MAX          3u    ///< maximum number of metadata
+#define P64H_SYSC_APPC_BOOT_CFG_STRING_MAX  256UL ///< maximum string size for appc boot cfg name
+#define P64H_SYSC_NUM_NOC_TRACE_CFG         32U   ///< maximum number of noc trace datapath that can be set up during boot
+
+/// maximum content length (excluding NUL terminator) of the master passphrase
+/// used to gate p64h_sysc_psm_perms_set. Storage buffers must be sized
+/// P64H_PSM_PASSPHRASE_MAX_LEN + 1 to hold the content plus a trailing NUL.
+#define P64H_PSM_PASSPHRASE_MAX_LEN 64u
+
+/// Core clock frequency (Hz)
+#define P64H_CORE_CLK_FREQ_NA     0U          ///< Core clock frequency is not available.
+#define P64H_CORE_CLK_FREQ_25MHZ  25000000U   ///< Core clock frequency set to 25 MHz.
+#define P64H_CORE_CLK_FREQ_100MHZ 100000000U  ///< Core clock frequency set to 100 MHz.
+#define P64H_CORE_CLK_FREQ_500MHZ 500000000U  ///< Core clock frequency set to 500 MHz.
+#define P64H_CORE_CLK_FREQ_900MHZ 900000000U  ///< Core clock frequency set to 900 MHz.
+#define P64H_CORE_CLK_FREQ_1GHZ   1000000000U ///< Core clock frequency set to 1 GHz.
+
+/* psm_types.h transitively pulls in sysc_ba.h, which uses P64H_SYSC_APPC_BOOT_CFG_MAX
+ * from this file — keep this include below the macro definitions above. */
+#include "types/p64h_sysc_psm_types.h"
 
 /// Sysc power frequency mode
 typedef enum {
@@ -24,7 +44,8 @@ typedef enum {
     P64H_SYSC_PWR_FREQ_MODE_PM2,        ///< performance mode mode 2
     P64H_SYSC_PWR_FREQ_MODE_PM3,        ///< performance mode mode 3
     P64H_SYSC_PWR_FREQ_MODE_PM4,        ///< performance mode mode 4
-    P64H_SYSC_PWR_FREQ_MODE_SLEEP       ///< sleep mode
+    P64H_SYSC_PWR_FREQ_MODE_SLEEP,      ///< sleep mode
+    LAST_P64H_SYSC_PWR_FREQ_MODE,       ///< range check
 } p64h_sysc_pwr_freq_mode_t;
 
 /// Sysc health check mode
@@ -33,13 +54,6 @@ typedef enum {
     P64H_SYSC_HEALTH_CHK_CHECK_NO_FIXUP, ///< health check enable but no attempt to fixup
     P64H_SYSC_HEALTH_CHK_CHECK_FIXUP     ///< health check enable, sysc will try to fixup
 } p64h_sysc_health_chk_mode_t;
-
-/// sysc RAS notification type
-typedef enum {
-    RAS_NOTIF_TYPE_NONE = 0,  ///< notification disabled
-    RAS_NOTIF_TYPE_POLLING,   ///< polling
-    RAS_NOTIF_TYPE_INTERRUPT, ///< interrupt driven
-} p64h_sysc_ras_notif_type_t;
 
 /// RPMI queue interrupt mode
 typedef enum {
@@ -90,7 +104,8 @@ typedef struct {
 typedef struct p64h_sysc_svc_rpmi_client_t {
     bool                            enable;             ///< enable
     p64h_sysc_svc_buf_desc_t        memory_region;      ///< memory_region
-    uint32_t                        slot_size;          ///< slot size
+    uint32_t                        a2p_slot_size;      ///< A2P slot size
+    uint32_t                        p2a_slot_size;      ///< P2A slot size
     uint32_t                        p2a_queue_size;     ///< Platform 2 app queue size
     uint32_t                        a2p_queue_size;     ///< App 2 platform queue size
     uint32_t                        io_type;            ///< rpmi peripheral type
@@ -107,6 +122,7 @@ typedef struct {
     bool                crypto_enable; ///< Enable the Cryptographic Engine.
                                        ///< Required to support secure and to provide cryptographic service to AppC.
                                        ///< Only valid when op_mode is NORMAL
+    bool debug_mode;                   ///< debug mode
 } p64h_sysc_op_cfg_t;
 
 /// sysc power cluster configuration
@@ -127,14 +143,30 @@ typedef enum {
     LAST_P64H_SYSC_PWR_WAKEUP_TYPE
 } p64h_sysc_pwr_wakeup_type_t;
 
+/// Individual wakeup configuration
+typedef struct {
+    bool enable; ///< Whether this wakeup type is enabled
+    union {
+        struct {
+            uint64_t interval; ///< Timer interval, 0 means disabled
+            uint8_t  id;       ///< Timer identifier
+        } timer;
+        struct {
+            uint8_t id;         ///< GPIO identifier
+            uint8_t level_high; ///< GPIO level high triggers wakeup
+        } gpio;
+        struct {
+            // API-specific fields can be added here
+        } api;
+        struct {
+            uint8_t profile_id; ///< RAS profile identifier
+        } ras;
+    } cfg;
+} p64h_sysc_pwr_wakeup_entry_t;
+
 /// sysc power wakeup configuration
 typedef struct {
-    bool     enable[LAST_P64H_SYSC_PWR_WAKEUP_TYPE]; ///< determine which wakeup is enabled
-    uint64_t timer_interval;                         ///< timer interval, 0 means is disabled
-    uint8_t  timer_id;                               ///< timer identifier
-    uint8_t  gpio_id;                                ///< gpio identifier
-    uint8_t  gpio_level_high;                        ///< gpio level high trigger the wake up
-    uint8_t  ras_profile_id;                         ///< ras profile identifier
+    p64h_sysc_pwr_wakeup_entry_t entry[LAST_P64H_SYSC_PWR_WAKEUP_TYPE]; ///< entries of wakeup types
 } p64h_sysc_pwr_wakeup_cfg_t;
 
 /// sysc power configuration
@@ -157,48 +189,45 @@ typedef struct {
 ///< firmware update configuration
 typedef struct {
     p64h_sysc_svc_buf_desc_t memory_region; ///< memory_region
-    uint32_t                 max_pkg_size;  ///< max firmware update package size
 } p64h_sysc_svc_fw_update_cfg_t;
+
+///< appc boot dma config
+typedef struct {
+    p64h_sysc_svc_buf_desc_t memory_region; ///< memory_region
+} p64h_sysc_appc_boot_dma_cfg_t;
+
+///< enet switch dma config
+typedef struct {
+    p64h_sysc_svc_buf_desc_t memory_region; ///< memory_region
+} p64h_sysc_enet_switch_cfg_t;
 
 /// system service configuration
 typedef struct {
-    p64h_sysc_op_cfg_t            op_cfg;          ///< sysc operation configuration
-    p64h_sysc_svc_fw_update_cfg_t fw_update;       ///< firmware update configuration
-    p64h_sysc_health_chk_mode_t   health_chk_mode; ///< health check configuration
-    p64h_sysc_wg_cfg_t            wg;              ///< wguard configuration
-    p64h_sysc_pwr_cfg_t           power;           ///< power configuration
+    p64h_sysc_op_cfg_t            op_cfg;            ///< sysc operation configuration
+    p64h_sysc_svc_fw_update_cfg_t fw_update;         ///< firmware update configuration
+    p64h_sysc_appc_boot_dma_cfg_t appc_boot_dma_cfg; ///< appc boot dma configuration
+    p64h_sysc_health_chk_mode_t   health_chk_mode;   ///< health check configuration
+    p64h_sysc_wg_cfg_t            wg;                ///< wguard configuration
+    p64h_sysc_pwr_cfg_t           power;             ///< power configuration
 } p64h_sysc_svc_system_cfg_t;
 
 /// com service configuration
 typedef struct {
-    p64h_sysc_svc_rpmi_client_t rpmi_client;       ///< rpmi_client
-    bool                        serial_com_enable; ///< enable serial communication
-    p64h_sysc_uart_inst_id_t    uart_id;           ///< UART identifier
+    p64h_sysc_svc_rpmi_client_t rpmi_client;                                  ///< rpmi_client
+    bool                        serial_com_enable;                            ///< enable serial communication
+    p64h_sysc_uart_inst_id_t    uart_id;                                      ///< UART identifier
+    uint32_t                    baudrate;                                     ///< UART baudrate
+    char                        passphrase[P64H_PSM_PASSPHRASE_MAX_LEN + 1u]; ///< master passphrase gating PSM access level changes;
+                                                                              ///< storage is MAX_LEN content chars + 1 NUL byte;
+                                                                              ///< empty string disables elevation (deny-by-default)
 } p64h_sysc_svc_com_cfg_t;
 
 /// system trace service configuration
 typedef struct {
-    p64h_sysc_svc_buf_desc_t buf; ///< buf
+    bool                      trace_enable;                               /// configure the device trace funnel
+    p64h_sysc_trace_dev_cfg_t trace_dev_cfg;                              ///< device trace configuration
+    p64h_sysc_noc_trace_cfg_t noc_trace_cfg[P64H_SYSC_NUM_NOC_TRACE_CFG]; ///< set up noc trace for up to NUM_NOC_TRACE_CFG datapath
 } p64h_sysc_svc_trace_cfg_t;
-
-/// @brief IO port type used by EM service to serialize errors
-typedef enum {
-    RAS_EM_IO_PORT_NONE = 0, ///< UART io port
-    RAS_EM_IO_PORT_UART,     ///< UART io port
-    RAS_EM_IO_PORT_ENET_EP,  ///< ENET EP io port
-} p64h_sysc_ras_em_io_port_type_t;
-
-/// @brief IO port ID used by EM service to serialize errors
-typedef union {
-    p64h_sysc_enet_ep_inst_id_t uart_id;    ///< ENET EP ID
-    p64h_sysc_uart_inst_id_t    enet_ep_id; ///< UART ID
-} p64h_sysc_ras_em_io_port_id_t;
-
-/// @brief IO port cfg for EM service
-typedef struct {
-    p64h_sysc_ras_em_io_port_type_t type; ///< IO port type
-    p64h_sysc_ras_em_io_port_id_t   id;   ///< IO port ID
-} p64h_sysc_ras_em_io_port_cfg_t;
 
 /// @brief Persistent storage file management policy
 typedef enum {
@@ -216,10 +245,10 @@ typedef struct {
 
 /// system error monitor RAS service configuration
 typedef struct {
-    p64h_sysc_ras_em_io_port_cfg_t io_port;            ///< IO port configuration
-    p64h_sysc_ras_em_persist_cfg_t persistent_storage; ///< Persistent storage
-    uint32_t                       init_profile_id;    ///< Initial error monitoring profile ID for the SysC
-    p64h_sysc_svc_buf_desc_t       ras_priv;           ///< RAS private buffer
+    p64h_sysc_ras_em_persist_cfg_t persistent_storage;                  ///< Persistent storage
+    uint32_t                       init_profile_id;                     ///< Initial error monitoring profile ID for the SysC
+    p64h_sysc_svc_buf_desc_t       ras_priv;                            ///< RAS private buffer
+    p64h_sysc_ras_em_prof_t        profiles[P64H_SYSC_RAS_EM_PROF_MAX]; ///< EM profiles
 } p64h_sysc_svc_em_ras_cfg_t;
 
 /// system error response RAS service configuration
@@ -236,54 +265,54 @@ typedef struct {
     uint32_t second_window_hi; ///< Second window expiry configuration (higher bits)
 } p64h_sysc_sysc_wdog_cfg_t;
 
-/// @brief Scrubber base configuration fields
+/// @brief configuration of a specifc scrubber instance (specified in microsecond)
 typedef struct {
-    bool                     auto_scrubbing_en;   ///< auto scrubbing enabled (periodic)
-    uint32_t                 scrubbing_period_lo; ///< Scrubbing period (lower bits)
-    uint32_t                 scrubbing_period_hi; ///< Scrubbing period (higher bits)
-    p64h_sysc_svc_buf_desc_t range;               ///< Scrubbing range
-    p64h_sysc_svc_buf_desc_t excl_range[5];       ///< Exclusion regions within range (up to 5)
-} p64h_sysc_scrubber_base_cfg_t;
+    bool     enable;    ///< Enable or disable the scrubber
+    uint64_t period_us; ///< Scrubbing event period in microseconds.
+} p64h_sysc_mem_scrubber_inst_cfg_t;
 
-/// @brief SW scrubber configuration
+/// @brief configuration of a specifc scrubber instance (DDR/NVM EDAC)
 typedef struct {
-    p64h_sysc_scrubber_base_cfg_t scrubber_base_cfg; ///< Base configuration
-} p64h_sysc_sw_scrubber_cfg_t;
-
-/// @brief HW scrubber configuration
-typedef struct {
-    p64h_sysc_scrubber_base_cfg_t scrubber_base_cfg;    ///< Base configuration
-    uint32_t                      priority;             ///< Scrubber priority over transaction
-    uint32_t                      correction_threshold; ///< Correction threshold
-    uint32_t                      correction_mask;      ///< Correction mask
-} p64h_sysc_hw_scrubber_cfg_t;
+    bool     enable; ///< Enable or disable the scrubber
+    uint64_t period; ///< Scrubbing event period defined by:
+                     ///<   scrubing read period = EDAC_CLK_PERIOD * 2^(period+1) + EDAC_CLK_PERIOD
+                     ///< where EDAC_CLK_PERIOD is clock of the EDAC (DDR=900Mhz, NVM = depend on memory ctrl configuration)
+                     ///< Valid value for period is 0 to 35 where 0 is as fast as possible
+                     ///< Examples for DDR:
+                     ///< period | scrubbing period
+                     ///<   0    | 3.33  ns
+                     ///<   13   | 18.20 ps
+                     ///<   24   | 37.28 ms
+                     ///<   35   | 76.35 seconds
+} p64h_sysc_mem_scrubber_edac_inst_cfg_t;
 
 /// @brief Scrubbers defaults
 typedef struct {
-    p64h_sysc_sw_scrubber_cfg_t itim;              ///< ITIM scrubber type default configuration
-    p64h_sysc_sw_scrubber_cfg_t dls;               ///< DLS scrubber type default configuration
-    p64h_sysc_sw_scrubber_cfg_t l1i;               ///< L1I scrubber type default configuration
-    p64h_sysc_sw_scrubber_cfg_t l1d;               ///< L1D scrubber type default configuration
-    p64h_sysc_sw_scrubber_cfg_t pl2;               ///< PL2 scrubber type default configuration
-    p64h_sysc_sw_scrubber_cfg_t ec3;               ///< EC3 scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t nvm_sram;          ///< NVM_SRAM scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t ddr;               ///< DDR scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t appc_ocr;          ///< APPC_OCR scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t sysc_ocr;          ///< SYSC_OCR scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t secc_ocr;          ///< SECC_OCR scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t secc_pqcrypto_mem; ///< SECC_PQCRYPTO_MEM scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t appdma_fifo;       ///< APPDMA_FIFO scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t enet_tcam;         ///< ENET_TCAM scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t secc_pqcrypto;     ///< SECC_PQCRYPTO scrubber type default configuration
-    p64h_sysc_hw_scrubber_cfg_t secc_mbox;         ///< SECC_MBOX scrubber type default configuration
+    /// secure controller scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t secc_itim; ///< secure controller ITIM scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t secc_l1i;  ///< secure controller L1 instruction cache scrubber
+    /// system controller
+    p64h_sysc_mem_scrubber_inst_cfg_t sysc_itim; ///< system controller ITIM scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t sysc_dtim; ///< system controller DTIM scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t sysc_l1i;  ///< system controller L1 instruction cache scrubber
+    /// application complex
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_itim; ///< application complex ITIM scrubber type default configuration
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_dls;  ///< application complex DLS scrubber type default configuration
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_l1i;  ///< application complex L1 instruction cache scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_l1d;  ///< application complex L1 data cache scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_pl2;  ///< application complex L2 cache scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_ec3;  ///< application complex L3 cache scrubber
 } p64h_sysc_def_scrubber_cfg_t;
 
 /// system health RAS service configuration
 typedef struct {
-    uint32_t                     init_profile_id;   ///< Initial error response profile ID for the SysC
-    p64h_sysc_sysc_wdog_cfg_t    wdog;              ///< WDOG configuration
-    bool                         boot_hc_enable;    ///< Execute boot health check sequence;
-    p64h_sysc_def_scrubber_cfg_t def_scrubbers_cfg; ///< Default configuration for scrubber types
+    uint32_t                     init_profile_id;             ///< Initial error response profile ID for the SysC
+    p64h_sysc_sysc_wdog_cfg_t    wdog;                        ///< WDOG configuration
+    bool                         boot_hc_enable;              ///< Execute boot health check sequence;
+    p64h_sysc_def_scrubber_cfg_t def_scrubbers_cfg;           ///< Default configuration for scrubber types
+    uint64_t                     sysc_heart_beat_interval_us; ///< toggle sysc heartbeat BOOT_STAT;
+    uint64_t                     secc_heart_beat_interval_us; ///< send 'alive' message to secure controller
+    uint64_t                     secc_heart_beat_timeout_us;  ///< ask secure controller to reboot if 'alive' message not seen
 } p64h_sysc_svc_health_ras_cfg_t;
 
 /// system controller service configurations
@@ -295,6 +324,7 @@ typedef struct {
     p64h_sysc_svc_em_ras_cfg_t     em_ras;                              ///< system em_ras service configuration
     p64h_sysc_svc_er_ras_cfg_t     er_ras;                              ///< system er_ras service configuration
     p64h_sysc_svc_health_ras_cfg_t health_ras;                          ///< system health_ras service configuration
+    p64h_sysc_enet_switch_cfg_t    enet_switch;                         ///< enet switch dma configuration
 } p64h_sysc_svc_cfg_t;
 
 typedef struct {
@@ -303,21 +333,23 @@ typedef struct {
 
 /// trace service partition configuration
 typedef struct {
-    uint32_t cfg0; ///< cfg0
+    bool                       trace_enable;                           ///< partition-level master switch; if false, partition opts out of tracing
+    uint16_t                   auto_start_te_mask;                     ///< TEs to enable at boot (bits outside owned set are ignored)
+    p64h_sysc_trace_te_cfg_t   te_cfg[P64H_SYSC_TRACE_TE_LAST];        ///< per-TE config (only owned TEs are consumed)
+    p64h_sysc_trace_sink_cfg_t sink_cfg[P64H_SYSC_TRACE_SINK_ID_LAST]; ///< per-sink config (first qualifying partition wins on shared sinks)
 } p64h_sysc_svc_part_trace_cfg_t;
 
 /// appc trace service configuration
 typedef struct {
-    p64h_sysc_svc_buf_desc_t       buf;                                             ///< Trace buffer
-    p64h_sysc_svc_part_trace_cfg_t partition_cfg[P64H_SYSC_APPC_CFG_PARTITION_MAX]; ///< Per-partition configuration
+    p64h_sysc_svc_part_trace_cfg_t partition_cfg[P64H_SYSC_APPC_CFG_PARTITION_MAX]; ///< Per-partition configuration (APPC PSMs)
+    p64h_sysc_svc_part_trace_cfg_t sysc_cfg;                                        ///< SYSC PSM trace defaults
 } p64h_sysc_soc_svc_trace_cfg_t;
 
 /// appc error monitor RAS service configuration
 typedef struct {
-    bool                       agent_active;    ///< Partition RAS agent supports error reporting
-    p64h_sysc_ras_notif_type_t notif;           ///< Notification method
-    p64h_sysc_svc_buf_desc_t   appc_em;         ///< Buffer region to configure if agent_active
-    uint32_t                   init_profile_id; ///< Initial error monitoring profile ID for the partition
+    bool                     agent_active;    ///< Partition RAS agent supports error reporting
+    p64h_sysc_svc_buf_desc_t appc_em;         ///< Buffer region to configure if agent_active
+    uint32_t                 init_profile_id; ///< Initial error monitoring profile ID for the partition
 } p64h_sysc_svc_part_em_ras_cfg_t;
 
 /// appc error monitor RAS service configuration
@@ -328,10 +360,9 @@ typedef struct {
 
 /// error response RAS service partition configuration
 typedef struct {
-    bool                       agent_active;    ///< Partition RAS agent supports error response reporting
-    p64h_sysc_ras_notif_type_t notif;           ///< Notification method
-    p64h_sysc_svc_buf_desc_t   appc_er;         ///< Buffer region to configure if agent_active
-    uint32_t                   init_profile_id; ///< Initial error monitoring profile ID for the partition
+    bool                     agent_active;    ///< Partition RAS agent supports error response reporting
+    p64h_sysc_svc_buf_desc_t appc_er;         ///< Buffer region to configure if agent_active
+    uint32_t                 init_profile_id; ///< Initial error monitoring profile ID for the partition
 } p64h_sysc_svc_part_er_ras_cfg_t;
 
 /// error response RAS service configuration

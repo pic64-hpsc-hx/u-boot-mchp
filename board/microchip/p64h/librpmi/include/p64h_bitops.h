@@ -15,30 +15,37 @@
 #ifndef BITS_PER_BYTE
 #define BITS_PER_BYTE (8) ///< Number of bits per byte
 #endif
-#define BITS_PER_LONG                        (BITS_PER_BYTE * sizeof(long))      ///< Number of bits per long
-#define BITS_PER_LONG_LONG                   (BITS_PER_BYTE * sizeof(long long)) ///< Number of bits per long long
+#define BITS_PER_LONG      (BITS_PER_BYTE * sizeof(long))      ///< Number of bits per long
+#define BITS_PER_LONG_LONG (BITS_PER_BYTE * sizeof(long long)) ///< Number of bits per long long
 
-#define BIT(n)                               (1UL << (n))            ///< unsigned long with bit n  to '1' and the rest set to '0'
-#define BIT_ULL(n)                           (1ULL << (n))           ///< unsigned long long with bit n set to '1' and the rest set to '0'
-#define BIT_SET(x, n)                        ((x) |= (1ULL << (n)))  ///< Set bit n of x to '1'
-#define BIT_UNSET(x, n)                      ((x) &= ~(1ULL << (n))) ///< Set bit n of x to '0'
-#define BIT_CHECK(x, n)                      ((x) & (1ULL << (n)))   ///< Check if bit n of x is set to '1'
+#define BIT(n)             (1UL << (n))            ///< unsigned long with bit n  to '1' and the rest set to '0'
+#define BIT_ULL(n)         (1ULL << (n))           ///< unsigned long long with bit n set to '1' and the rest set to '0'
+#define BIT_SET(x, n)      ((x) |= (1ULL << (n)))  ///< Set bit n of x to '1'
+#define BIT_UNSET(x, n)    ((x) &= ~(1ULL << (n))) ///< Set bit n of x to '0'
+#define BIT_CHECK(x, n)    ((x) & (1ULL << (n)))   ///< Check if bit n of x is set to '1'
 
-#define BIT32(n)                             ((uint32_t)BIT(n)) ///< unsigned with bit n  to '1' and the rest set to '0'
-#define BIT32_SET(x, n)                      ((x) |= BIT32(n))  ///< Set bit n of x(uint32_t) to '1'
-#define BIT32_UNSET(x, n)                    ((x) &= ~BIT32(n)) ///< Set bit n of x(uint32_t) to '0'
-#define BIT32_CHECK(x, n)                    ((x) & BIT32(n))   ///< Check if bit n of x(uint32_t) is set to '1'
+#define BIT32(n)           ((uint32_t)BIT(n)) ///< unsigned with bit n  to '1' and the rest set to '0'
+#define BIT32_SET(x, n)    ((x) |= BIT32(n))  ///< Set bit n of x(uint32_t) to '1'
+#define BIT32_UNSET(x, n)  ((x) &= ~BIT32(n)) ///< Set bit n of x(uint32_t) to '0'
+#define BIT32_CHECK(x, n)  ((x) & BIT32(n))   ///< Check if bit n of x(uint32_t) is set to '1'
 
-#define BIT8(n)                              ((uint8_t)BIT(n))                 ///< unsigned with bit n  to '1' and the rest set to '0'
-#define BIT8_SET(x, n)                       ((x) = (uint8_t)((x) | BIT8(n)))  ///< Set bit n of x(uint8_t) to '1'
-#define BIT8_UNSET(x, n)                     ((x) = (uint8_t)((x) & ~BIT8(n))) ///< Set bit n of x(uint8_t) to '0'
-#define BIT8_CHECK(x, n)                     ((x) & BIT8(n))                   ///< Check if bit n of x(uint8_t) is set to '1'
+#define BIT16(n)           ((uint16_t)BIT(n)) ///< unsigned with bit n  to '1' and the rest set to '0'
+#define BIT16_SET(x, n)    ((x) |= BIT16(n))  ///< Set bit n of x(uint16_t) to '1'
+#define BIT16_UNSET(x, n)  ((x) &= ~BIT16(n)) ///< Set bit n of x(uint16_t) to '0'
+#define BIT16_CHECK(x, n)  ((x) & BIT16(n))   ///< Check if bit n of x(uint16_t) is set to '1'
 
+#define BIT8(n)            ((uint8_t)BIT(n))                 ///< unsigned with bit n  to '1' and the rest set to '0'
+#define BIT8_SET(x, n)     ((x) = (uint8_t)((x) | BIT8(n)))  ///< Set bit n of x(uint8_t) to '1'
+#define BIT8_UNSET(x, n)   ((x) = (uint8_t)((x) & ~BIT8(n))) ///< Set bit n of x(uint8_t) to '0'
+#define BIT8_CHECK(x, n)   ((x) & BIT8(n))                   ///< Check if bit n of x(uint8_t) is set to '1'
+
+#ifndef CONTAINER_OF
 #define CONTAINER_OF(_ptr_, _type_, _field_) ((_type_*)(((uint64_t)(_ptr_)) - offsetof(_type_, _field_)))
+#endif
 
-#define LONG_LO_MASK                         (0x00000000FFFFFFFFULL)
-#define LONG_HI_MASK                         (0xFFFFFFFF00000000ULL)
-#define LONG_HI_SHIFT                        (32UL)
+#define LONG_LO_MASK  (0x00000000FFFFFFFFULL)
+#define LONG_HI_MASK  (0xFFFFFFFF00000000ULL)
+#define LONG_HI_SHIFT (32UL)
 
 #define GENMASK(h, l)                                                                                                                                \
     (((~0UL) - (1UL << (l)) + 1) & (~0UL >> (BITS_PER_LONG - 1 - (h)))) /**<                                                                         \
@@ -51,6 +58,8 @@
                                 Create a contiguous bitmask starting at bit position l and ending at                                                 \
                                 position h. For example                                                                                              \
                                 GENMASK_ULL(39, 21) gives us the 64bit vector 0x000000ffffe00000.*/
+
+#define ALIGN_UP_TO_UINT64(value) (((value) + (sizeof(uint64_t)) - 1) & ~(sizeof(uint64_t) - 1))
 
 /**
  * @brief

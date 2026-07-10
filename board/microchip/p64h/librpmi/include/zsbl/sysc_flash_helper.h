@@ -41,7 +41,8 @@ typedef struct {
   uint32_t image_ec_signed:1;   ///< flag to indicate if image is EC signed.
   uint32_t image_pq_signed:1;   ///< flag to indicate if image is PQ signed.
   uint32_t secc_fsbl_load_from_zsbl:1; ///< flag to indicate if secc fsbl is loaded from sysc zsbl
-  uint32_t rsvd:28;             ///< reserved
+  uint32_t checksum_included:1;       ///< flag to indicate if checksum is included in the image
+  uint32_t rsvd:27;             ///< reserved
 } flash_header_flags_t;
 
 /** 

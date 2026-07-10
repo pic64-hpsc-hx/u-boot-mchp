@@ -16,9 +16,8 @@
 
 /* Public Defines ------------------------------------------------- */
 #define P64H_SYSC_STRING_MAX            256UL
-#define P64H_SYSC_EDAC_LARGE_SKIP_SLOTS 2u      ///< define the maximum number of slots for SRAM patrol srubbing large skip range
-#define P64H_SYSC_EDAC_SMALL_SKIP_SLOTS 8u      ///< define the maximum number of slots for SRAM patrol srubbing small skip range
-#define ONE_HOT(x)                      1u << x ///< one hot encoding for bit mask
+#define P64H_SYSC_EDAC_LARGE_SKIP_SLOTS 2u ///< define the maximum number of slots for SRAM patrol srubbing large skip range
+#define P64H_SYSC_EDAC_SMALL_SKIP_SLOTS 8u ///< define the maximum number of slots for SRAM patrol srubbing small skip range
 /* Public Structs and Enums --------------------------------------- */
 
 /// partition identifier
@@ -35,12 +34,18 @@ typedef enum {
     P64H_SYSC_PSM_ID_COUNT        ///< Number of partitions (not a valid ID)
 } p64h_sysc_psm_id_t;
 
-/// Enum for selecting the memory buffer mode of operation
+/// ACPI partition identifier
 typedef enum {
-    P64H_SYSC_TRACE_MEM_STOP_ON_WRAP_MODE = 0, ///< When Trace RAM is full, the incoming trace stream is stalled.
-    P64H_SYSC_TRACE_MEM_CIRCULAR_BUFFER_MODE
-        = 1, ///< When the trace memory is full, incoming trace data continues to be overwritten into the trace memory.
-} p64h_sysc_trace_mem_mode_t;
+    P64H_SYSC_ACPI_PID_APPC_P0 = 0, ///< AppC Partition 0
+    P64H_SYSC_ACPI_PID_APPC_P1,     ///< AppC Partition 1
+    P64H_SYSC_ACPI_PID_APPC_P2,     ///< AppC Partition 2
+    P64H_SYSC_ACPI_PID_APPC_P3,     ///< AppC Partition 3
+    P64H_SYSC_ACPI_PID_APPC_P4,     ///< AppC Partition 4
+    P64H_SYSC_ACPI_PID_APPC_P5,     ///< AppC Partition 5
+    P64H_SYSC_ACPI_PID_APPC_P6,     ///< AppC Partition 6
+    P64H_SYSC_ACPI_PID_APPC_P7,     ///< AppC Partition 7
+    P64H_SYSC_ACPI_PID_COUNT        ///< Number of ACPI partitions (not a valid ID)
+} p64h_sysc_acpi_pid_t;
 
 /// enumerate of EDAC FEC mode
 typedef enum {
@@ -50,13 +55,11 @@ typedef enum {
     P64H_SYSC_FEC_MODE_DEECE        ///< DEECE (Reed Solomon) fec mode (DDR only)
 } p64h_sysc_mem_fec_mode_t;
 
-/// trace system memory configurations
-typedef struct {
-    p64h_sysc_trace_mem_mode_t trace_mem_mode;      ///< trace buffer mode of operation (FIFO or CB); see trace_mem_mode_t
-    uint32_t                   trace_mem_addr_high; ///< the high 32-bits of the mem buffer addr
-    uint32_t                   trace_mem_addr_low;  ///< the low 32-bits of the mem buffer addr
-    uint32_t                   trace_mem_size;      ///< the size of the mem buffer
-} p64h_sysc_trace_mem_cfg_t;
+/// enumerate of notification state
+typedef enum {
+    P64H_SYSC_EVT_NOTIFICATION_ACTIVE   = 0, ///< Notification active
+    P64H_SYSC_EVT_NOTIFICATION_INACTIVE = 1, ///< Notification inactive
+} p64h_sysc_evt_notification_state_t;
 
 /// Demand srubbing configuration
 typedef struct {

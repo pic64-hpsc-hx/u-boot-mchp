@@ -26,12 +26,6 @@ typedef enum {
     P64H_SYSC_RAS_ER_NOTIF_EVT_LAST                ///< Last ID
 } p64h_sysc_ras_er_evt_id_t;
 
-/// RAS ER notification state
-typedef enum {
-    RAS_EE_EVT_ACTIVE   = 0, ///< Notification event ID
-    RAS_EE_EVT_INACTIVE = 1, ///< Notification event ID
-} p64h_sysc_ras_er_evt_state_t;
-
 /// RAS ER notification event received
 typedef struct {
     p64h_sysc_ras_er_evt_id_t evt_id;       ///< Notification event ID

@@ -16,8 +16,6 @@
 #include <ba/p64h_sysc_sysc_ba.h>
 #include <ba/p64h_sysc_appc_ba.h>
 
-/* Public Defines ------------------------------------------------- */
-
 /* Public Structs and Enums --------------------------------------- */
 
 /// partition event identifier
@@ -28,18 +26,12 @@ typedef enum {
 /// partition status
 typedef struct {
     p64h_sysc_appc_cfg_state_t boot; ///< boot status
+    p64h_sysc_appc_status_t    core; ///< core status
 } p64h_sysc_psm_status_t;
-
-///< union to provide appc and sysc view
-typedef union {
-    p64h_sysc_appc_cfg_t appc; ///< appc partition configuration
-    p64h_sysc_soc_cfg_t  sysc; ///< sysc partition configuration
-} p64h_sysc_partition_cfg;
 
 /// partition attributes
 typedef struct {
-    bool                    is_sysc; ///< is sysc or appc partition
-    p64h_sysc_partition_cfg cfg;     ///< partition configuration
+    p64h_sysc_appc_cfg_t appc; ///< appc partition configuration
 } p64h_sysc_psm_attr_t;
 
 /// partition event

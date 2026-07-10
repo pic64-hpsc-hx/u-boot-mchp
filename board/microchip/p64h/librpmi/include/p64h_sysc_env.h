@@ -302,6 +302,14 @@ rpmi_error_t rpmi_env_io_read(void* priv, void* in, rpmi_uint32_t len);
 rpmi_error_t rpmi_env_io_write(void* priv, const void* out, rpmi_uint32_t len);
 
 /**
+ * @brief Flush the rx buffer
+ *
+ * @param[in] priv     Descriptor reference
+ * @return enum rpmi_error
+ */
+rpmi_error_t rpmi_env_io_flush_rx(void* priv);
+
+/**
  * @brief Poll the IO to see if it is empty
  *
  * @param[in] priv     Descriptor reference

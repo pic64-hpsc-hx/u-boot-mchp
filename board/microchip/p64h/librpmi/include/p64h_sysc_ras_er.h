@@ -1,5 +1,10 @@
 /* (c) 2025 Microchip Technology Inc. */
-/* SPDX-License-Identifier: MIT */
+/*    SPDX-License-Identifier: MIT    */
+
+/* ======================================= */
+/*  This file is generated and should not  */
+/*              be modified!               */
+/* ======================================= */
 
 /**
  * @file  p64h_sysc_ras_er.h
@@ -19,11 +24,9 @@ p64h_err_t p64h_sysc_ras_er_evt_enable(p64h_sysc_handle_t* handle_ptr, p64h_sysc
                                        const p64h_sysc_ras_er_evt_fct_t* er_evt_fct_ptr);
 p64h_err_t p64h_sysc_ras_er_evt_disable(p64h_sysc_handle_t* handle_ptr, p64h_sysc_ras_er_evt_id_t em_evt, const p64h_sysc_psm_id_t pid);
 p64h_err_t p64h_sysc_ras_er_evt_state_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_ras_er_evt_id_t em_evt, const p64h_sysc_psm_id_t pid,
-                                          p64h_sysc_ras_er_evt_state_t* state_ptr);
+                                          p64h_sysc_evt_notification_state_t* evt_state_ptr);
 p64h_err_t p64h_sysc_ras_er_num_err_resp_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_err_resp_ptr);
-p64h_err_t p64h_sysc_ras_er_id_list_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* id_list_ptr, bool shmem_xfer);
-p64h_err_t p64h_sysc_ras_er_desc_get(const p64h_sysc_handle_t* handle_ptr, uint32_t err_resp_id, const size_t desc_size, char* desc_ptr,
-                                     bool shmem_xfer);
+p64h_err_t p64h_sysc_ras_er_id_list_get(const p64h_sysc_handle_t* handle_ptr, uint32_t list_num, uint32_t* id_list_ptr, bool shmem_xfer);
 p64h_err_t p64h_sysc_ras_er_attr_get(const p64h_sysc_handle_t* handle_ptr, uint32_t err_resp_id, p64h_sysc_ras_er_attr_desc_t* attr_desc_ptr);
 p64h_err_t p64h_sysc_ras_er_trigger(const p64h_sysc_handle_t* handle_ptr, uint32_t err_resp_id, const p64h_sysc_ras_er_attr_t attr);
 p64h_err_t p64h_sysc_ras_er_table_info_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_psm_id_t pid, uint64_t* table_addr_ptr);

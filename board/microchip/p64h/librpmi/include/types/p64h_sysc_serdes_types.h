@@ -89,7 +89,9 @@
 #define P64H_SYSC_SERDES_RT_CFG_MASK_DLOS              0x00800000U ///< Bitmask for DLOS
 #define P64H_SYSC_SERDES_RT_CFG_MASK_LPBK              0x01000000U ///< Bitmask for LPBK
 #define P64H_SYSC_SERDES_RT_CFG_MASK_TX_DRVR           0x02000000U ///< Bitmask for TX DRIVER
-#define P64H_SYSC_SERDES_RT_CFG_MASK_ALL_FIELDS        0x03FFFFFFU ///< Bitmask for ALL_FIELDS
+#define P64H_SYSC_SERDES_RT_CFG_MASK_DTEST             0x04000000U ///< Bitmask for DTEST
+#define P64H_SYSC_SERDES_RT_CFG_MASK_RXRTRIM           0x08000000U ///< Bitmask for RXRTRIM
+#define P64H_SYSC_SERDES_RT_CFG_MASK_ALL_FIELDS        0x0FFFFFFFU ///< Bitmask for ALL_FIELDS
 
 /// Some recommended RX calibration sequences preprocessed into uint64_t's
 #define P64H_SYSC_SERDES_RX_FULLCALIB 0x00000004BD876521U ///< Full calibration sequence, should be run once on initial SerDes bringup
@@ -104,14 +106,17 @@
 #define ERR_INJ_MODE_NUM_BYTES          10u ///< Error injection mode 80 bits
 #define SQUELCH_NUM_BYTES               10u ///< Squelch 80 bits
 /// Bitmask for SerDes Diagnostic Fields
-#define P64H_SYSC_SERDES_DIAG_MASK_RATE       0b000001U ///< Bitmask for RATE
-#define P64H_SYSC_SERDES_DIAG_MASK_TXPLL_LOCK 0b000010U ///< Bitmask for TXPLL_LOCK
-#define P64H_SYSC_SERDES_DIAG_MASK_TRANSCOND  0b000100U ///< Bitmask for TRANSCOND
-#define P64H_SYSC_SERDES_DIAG_MASK_DLOS       0b001000U ///< Bitmask for DLOS
-#define P64H_SYSC_SERDES_DIAG_MASK_PATTMON    0b010000U ///< Bitmask for PATTMON
-#define P64H_SYSC_SERDES_DIAG_MASK_RX_CALIB   0b100000U ///< Bitmask for RX_CALIB
-#define P64H_SYSC_SERDES_DIAG_MASK_ALL_FIELDS 0b111111U ///< Bitmask for ALL_FIELDS
+#define P64H_SYSC_SERDES_DIAG_MASK_RATE       0b0000001U ///< Bitmask for RATE
+#define P64H_SYSC_SERDES_DIAG_MASK_TXPLL_LOCK 0b0000010U ///< Bitmask for TXPLL_LOCK
+#define P64H_SYSC_SERDES_DIAG_MASK_TRANSCOND  0b0000100U ///< Bitmask for TRANSCOND
+#define P64H_SYSC_SERDES_DIAG_MASK_DLOS       0b0001000U ///< Bitmask for DLOS
+#define P64H_SYSC_SERDES_DIAG_MASK_PATTMON    0b0010000U ///< Bitmask for PATTMON
+#define P64H_SYSC_SERDES_DIAG_MASK_RX_CALIB   0b0100000U ///< Bitmask for RX_CALIB
+#define P64H_SYSC_SERDES_DIAG_MASK_WINDOW     0b1000000U ///< Bitmask for RX_CALIB
+#define P64H_SYSC_SERDES_DIAG_MASK_ALL_FIELDS 0b1111111U ///< Bitmask for ALL_FIELDS
 
+#define P64H_SYSC_SERDES_NUM_PKDETOUT_VALS    8u    /// Peak detector output is a 7 bit thermo-coded value, meaning there are 8 possible values
+#define P64H_SYSC_SERDES_DIAG_WINDOW_MAX      5000u /// Maximum number of samples to take for a windowed diagnostic measurement
 /* Public Structs and Enums --------------------------------------- */
 
 /// enumerate serdes groups
@@ -321,6 +326,196 @@ typedef struct {
     uint32_t txrtrim    : 3;
 } p64h_sysc_serdes_if_tx_drvr_t;
 
+/// Both SHI and serdes_x4 have dtest bus, the following 0 - 171 are inside serdes_x4 for both dtest bus 1 and dtest bus 2, 172 - 175 are inside SHI
+/// for dtestin0 bus, 176 - 182 are inside SHI for dtestin1 bus SHI clock signals can be selected from SHI dtest bus and set serdes_x4 dtest bus sel
+/// to 28 or 29 serdes_x4 internal dtest mux selection for DTEST_OUT0/1, note that DTEST_IN0 is tied to 28, and DTEST_IN0 is tied to 29
+typedef enum {
+    P64H_SYSC_SERDES_DONE_AREA_COMPUTEA            = 0u,
+    P64H_SYSC_SERDES_DONE_AREA_COMPUTEB            = 1u,
+    P64H_SYSC_SERDES_DONE_AREA_COMPUTEC            = 2u,
+    P64H_SYSC_SERDES_DONE_AREA_COMPUTED            = 3u,
+    P64H_SYSC_SERDES_DONE_CHANNEL_ALIGNA           = 4u,
+    P64H_SYSC_SERDES_DONE_CHANNEL_ALIGNB           = 5u,
+    P64H_SYSC_SERDES_DONE_CHANNEL_ALIGNC           = 6u,
+    P64H_SYSC_SERDES_DONE_CHANNEL_ALIGND           = 7u,
+    P64H_SYSC_SERDES_DONE_CTLE_OFFSET_CALA         = 8u,
+    P64H_SYSC_SERDES_DONE_CTLE_OFFSET_CALB         = 9u,
+    P64H_SYSC_SERDES_DONE_CTLE_OFFSET_CALC         = 10u,
+    P64H_SYSC_SERDES_DONE_CTLE_OFFSET_CALD         = 11u,
+    P64H_SYSC_SERDES_DONE_DFECALA                  = 12u,
+    P64H_SYSC_SERDES_DONE_DFECALB                  = 13u,
+    P64H_SYSC_SERDES_DONE_DFECALC                  = 14u,
+    P64H_SYSC_SERDES_DONE_DFECALD                  = 15u,
+    P64H_SYSC_SERDES_DONE_FEDFE_CALA               = 16u,
+    P64H_SYSC_SERDES_DONE_FEDFE_CALB               = 17u,
+    P64H_SYSC_SERDES_DONE_FEDFE_CALC               = 18u,
+    P64H_SYSC_SERDES_DONE_FEDFE_CALD               = 19u,
+    P64H_SYSC_SERDES_DONE_FE_CALIBRATIONA          = 20u,
+    P64H_SYSC_SERDES_DONE_FE_CALIBRATIONB          = 21u,
+    P64H_SYSC_SERDES_DONE_FE_CALIBRATIONC          = 22u,
+    P64H_SYSC_SERDES_DONE_FE_CALIBRATIOND          = 23u,
+    P64H_SYSC_SERDES_DONE_FULL_CALA                = 24u,
+    P64H_SYSC_SERDES_DONE_FULL_CALB                = 25u,
+    P64H_SYSC_SERDES_DONE_FULL_CALC                = 26u,
+    P64H_SYSC_SERDES_DONE_FULL_CALD                = 27u,
+    P64H_SYSC_SERDES_DTEST_IN0                     = 28u, /// This is the serdes_x4 dtest input port
+    P64H_SYSC_SERDES_DTEST_IN1                     = 29u, /// This is the serdes_x4 dtest input port
+    P64H_SYSC_SERDES_PRBSERROR_DETA                = 30u,
+    P64H_SYSC_SERDES_PRBSERROR_DETB                = 31u,
+    P64H_SYSC_SERDES_PRBSERROR_DETC                = 32u,
+    P64H_SYSC_SERDES_PRBSERROR_DETD                = 33u,
+    P64H_SYSC_SERDES_RUN_AREA_COMPUTE_USERA        = 34u,
+    P64H_SYSC_SERDES_RUN_AREA_COMPUTE_USERB        = 35u,
+    P64H_SYSC_SERDES_RUN_AREA_COMPUTE_USERC        = 36u,
+    P64H_SYSC_SERDES_RUN_AREA_COMPUTE_USERD        = 37u,
+    P64H_SYSC_SERDES_RUN_CHANNEL_ALIGN_USERA       = 38u,
+    P64H_SYSC_SERDES_RUN_CHANNEL_ALIGN_USERB       = 39u,
+    P64H_SYSC_SERDES_RUN_CHANNEL_ALIGN_USERC       = 40u,
+    P64H_SYSC_SERDES_RUN_CHANNEL_ALIGN_USERD       = 41u,
+    P64H_SYSC_SERDES_RUN_FEDFE_CAL_USERA           = 42u,
+    P64H_SYSC_SERDES_RUN_FEDFE_CAL_USERB           = 43u,
+    P64H_SYSC_SERDES_RUN_FEDFE_CAL_USERC           = 44u,
+    P64H_SYSC_SERDES_RUN_FEDFE_CAL_USERD           = 45u,
+    P64H_SYSC_SERDES_RUN_FULL_CAL_USERA            = 46u,
+    P64H_SYSC_SERDES_RUN_FULL_CAL_USERB            = 47u,
+    P64H_SYSC_SERDES_RUN_FULL_CAL_USERC            = 48u,
+    P64H_SYSC_SERDES_RUN_FULL_CAL_USERD            = 49u,
+    P64H_SYSC_SERDES_RXCDRCLKA_TO_RTL              = 50u,
+    P64H_SYSC_SERDES_RXCDRCLKB_TO_RTL              = 51u,
+    P64H_SYSC_SERDES_RXCDRCLKC_TO_RTL              = 52u,
+    P64H_SYSC_SERDES_RXCDRCLKD_TO_RTL              = 53u,
+    P64H_SYSC_SERDES_RXCDRCLK_DIV2A_TO_RTL         = 54u,
+    P64H_SYSC_SERDES_RXCDRCLK_DIV2B_TO_RTL         = 55u,
+    P64H_SYSC_SERDES_RXCDRCLK_DIV2C_TO_RTL         = 56u,
+    P64H_SYSC_SERDES_RXCDRCLK_DIV2D_TO_RTL         = 57u,
+    P64H_SYSC_SERDES_RXCLK_TO_COREA_TO_RTL         = 58u,
+    P64H_SYSC_SERDES_RXCLK_TO_COREB_TO_RTL         = 59u,
+    P64H_SYSC_SERDES_RXCLK_TO_COREC_TO_RTL         = 60u,
+    P64H_SYSC_SERDES_RXCLK_TO_CORED_TO_RTL         = 61u,
+    P64H_SYSC_SERDES_RXDETOUTA                     = 62u,
+    P64H_SYSC_SERDES_RXDETOUTB                     = 63u,
+    P64H_SYSC_SERDES_RXDETOUTC                     = 64u,
+    P64H_SYSC_SERDES_RXDETOUTD                     = 65u,
+    P64H_SYSC_SERDES_RXDFECLKA_TO_RTL              = 66u,
+    P64H_SYSC_SERDES_RXDFECLKB_TO_RTL              = 67u,
+    P64H_SYSC_SERDES_RXDFECLKC_TO_RTL              = 68u,
+    P64H_SYSC_SERDES_RXDFECLKD_TO_RTL              = 69u,
+    P64H_SYSC_SERDES_RXDFECLK_DIV2A_TO_RTL         = 70u,
+    P64H_SYSC_SERDES_RXDFECLK_DIV2B_TO_RTL         = 71u,
+    P64H_SYSC_SERDES_RXDFECLK_DIV2C_TO_RTL         = 72u,
+    P64H_SYSC_SERDES_RXDFECLK_DIV2D_TO_RTL         = 73u,
+    P64H_SYSC_SERDES_RXEMCLKA_TO_RTL               = 74u,
+    P64H_SYSC_SERDES_RXEMCLKB_TO_RTL               = 75u,
+    P64H_SYSC_SERDES_RXEMCLKC_TO_RTL               = 76u,
+    P64H_SYSC_SERDES_RXEMCLKD_TO_RTL               = 77u,
+    P64H_SYSC_SERDES_RXEMCLK_DIV2A_TO_RTL          = 78u,
+    P64H_SYSC_SERDES_RXEMCLK_DIV2B_TO_RTL          = 79u,
+    P64H_SYSC_SERDES_RXEMCLK_DIV2C_TO_RTL          = 80u,
+    P64H_SYSC_SERDES_RXEMCLK_DIV2D_TO_RTL          = 81u,
+    P64H_SYSC_SERDES_RXPKDETOUTA_0                 = 82u,
+    P64H_SYSC_SERDES_RXPKDETOUTA_1                 = 83u,
+    P64H_SYSC_SERDES_RXPKDETOUTA_2                 = 84u,
+    P64H_SYSC_SERDES_RXPKDETOUTA_3                 = 85u,
+    P64H_SYSC_SERDES_RXPKDETOUTA_4                 = 86u,
+    P64H_SYSC_SERDES_RXPKDETOUTA_5                 = 87u,
+    P64H_SYSC_SERDES_RXPKDETOUTA_6                 = 88u,
+    P64H_SYSC_SERDES_RXPKDETOUTB_0                 = 89u,
+    P64H_SYSC_SERDES_RXPKDETOUTB_1                 = 90u,
+    P64H_SYSC_SERDES_RXPKDETOUTB_2                 = 91u,
+    P64H_SYSC_SERDES_RXPKDETOUTB_3                 = 92u,
+    P64H_SYSC_SERDES_RXPKDETOUTB_4                 = 93u,
+    P64H_SYSC_SERDES_RXPKDETOUTB_5                 = 94u,
+    P64H_SYSC_SERDES_RXPKDETOUTB_6                 = 95u,
+    P64H_SYSC_SERDES_RXPKDETOUTC_0                 = 96u,
+    P64H_SYSC_SERDES_RXPKDETOUTC_1                 = 97u,
+    P64H_SYSC_SERDES_RXPKDETOUTC_2                 = 98u,
+    P64H_SYSC_SERDES_RXPKDETOUTC_3                 = 99u,
+    P64H_SYSC_SERDES_RXPKDETOUTC_4                 = 100u,
+    P64H_SYSC_SERDES_RXPKDETOUTC_5                 = 101u,
+    P64H_SYSC_SERDES_RXPKDETOUTC_6                 = 102u,
+    P64H_SYSC_SERDES_RXPKDETOUTD_0                 = 103u,
+    P64H_SYSC_SERDES_RXPKDETOUTD_1                 = 104u,
+    P64H_SYSC_SERDES_RXPKDETOUTD_2                 = 105u,
+    P64H_SYSC_SERDES_RXPKDETOUTD_3                 = 106u,
+    P64H_SYSC_SERDES_RXPKDETOUTD_4                 = 107u,
+    P64H_SYSC_SERDES_RXPKDETOUTD_5                 = 108u,
+    P64H_SYSC_SERDES_RXPKDETOUTD_6                 = 109u,
+    P64H_SYSC_SERDES_RXPLL_CDRMODEA                = 110u,
+    P64H_SYSC_SERDES_RXPLL_CDRMODEB                = 111u,
+    P64H_SYSC_SERDES_RXPLL_CDRMODEC                = 112u,
+    P64H_SYSC_SERDES_RXPLL_CDRMODED                = 113u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKDIVA_TO_RTL       = 114u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKDIVB_TO_RTL       = 115u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKDIVC_TO_RTL       = 116u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKDIVD_TO_RTL       = 117u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKREFA_TO_RTL       = 118u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKREFB_TO_RTL       = 119u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKREFC_TO_RTL       = 120u,
+    P64H_SYSC_SERDES_RXPLL_CKLOCKREFD_TO_RTL       = 121u,
+    P64H_SYSC_SERDES_RXPLL_FLOCKA                  = 122u,
+    P64H_SYSC_SERDES_RXPLL_FLOCKB                  = 123u,
+    P64H_SYSC_SERDES_RXPLL_FLOCKC                  = 124u,
+    P64H_SYSC_SERDES_RXPLL_FLOCKD                  = 125u,
+    P64H_SYSC_SERDES_RXPLL_LOCKA                   = 126u,
+    P64H_SYSC_SERDES_RXPLL_LOCKB                   = 127u,
+    P64H_SYSC_SERDES_RXPLL_LOCKC                   = 128u,
+    P64H_SYSC_SERDES_RXPLL_LOCKD                   = 129u,
+    P64H_SYSC_SERDES_RXPLL_REFCLK_TO_SERDESA       = 130u,
+    P64H_SYSC_SERDES_RXPLL_REFCLK_TO_SERDESB       = 131u,
+    P64H_SYSC_SERDES_RXPLL_REFCLK_TO_SERDESC       = 132u,
+    P64H_SYSC_SERDES_RXPLL_REFCLK_TO_SERDESD       = 133u,
+    P64H_SYSC_SERDES_RXSEOUTA                      = 134u,
+    P64H_SYSC_SERDES_RXSEOUTB                      = 135u,
+    P64H_SYSC_SERDES_RXSEOUTC                      = 136u,
+    P64H_SYSC_SERDES_RXSEOUTD                      = 137u,
+    P64H_SYSC_SERDES_RXSEOUT_DIVA                  = 138u,
+    P64H_SYSC_SERDES_RXSEOUT_DIVB                  = 139u,
+    P64H_SYSC_SERDES_RXSEOUT_DIVC                  = 140u,
+    P64H_SYSC_SERDES_RXSEOUT_DIVD                  = 141u,
+    P64H_SYSC_SERDES_SD_CLKA_TO_RTL                = 142u,
+    P64H_SYSC_SERDES_SD_CLKB_TO_RTL                = 143u,
+    P64H_SYSC_SERDES_SD_CLKC_TO_RTL                = 144u,
+    P64H_SYSC_SERDES_SD_CLKD_TO_RTL                = 145u,
+    P64H_SYSC_SERDES_SD_DONEA                      = 146u,
+    P64H_SYSC_SERDES_SD_DONEB                      = 147u,
+    P64H_SYSC_SERDES_SD_DONEC                      = 148u,
+    P64H_SYSC_SERDES_SD_DONED                      = 149u,
+    P64H_SYSC_SERDES_SD_RX_IDLEA                   = 150u,
+    P64H_SYSC_SERDES_SD_RX_IDLEB                   = 151u,
+    P64H_SYSC_SERDES_SD_RX_IDLEC                   = 152u,
+    P64H_SYSC_SERDES_SD_RX_IDLED                   = 153u,
+    P64H_SYSC_SERDES_TXCLK10A_TO_RTL               = 154u,
+    P64H_SYSC_SERDES_TXCLK10B_TO_RTL               = 155u,
+    P64H_SYSC_SERDES_TXCLK10C_TO_RTL               = 156u,
+    P64H_SYSC_SERDES_TXCLK10D_TO_RTL               = 157u,
+    P64H_SYSC_SERDES_TXCLK20A_TO_RTL               = 158u,
+    P64H_SYSC_SERDES_TXCLK20B_TO_RTL               = 159u,
+    P64H_SYSC_SERDES_TXCLK20C_TO_RTL               = 160u,
+    P64H_SYSC_SERDES_TXCLK20D_TO_RTL               = 161u,
+    P64H_SYSC_SERDES_TXCLKA_TO_RTL                 = 162u,
+    P64H_SYSC_SERDES_TXCLKB_TO_RTL                 = 163u,
+    P64H_SYSC_SERDES_TXCLKC_TO_RTL                 = 164u,
+    P64H_SYSC_SERDES_TXCLKD_TO_RTL                 = 165u,
+    P64H_SYSC_SERDES_TXPLL_CLKSSCG_TO_RTL          = 166u,
+    P64H_SYSC_SERDES_TXPLL_FOUTAUXDIV1_TO_RTL      = 167u,
+    P64H_SYSC_SERDES_TXPLL_FOUTAUXDIV2_TO_RTL      = 168u,
+    P64H_SYSC_SERDES_TXPLL_FREF_CML_TO_CORE_TO_RTL = 169u,
+    P64H_SYSC_SERDES_TXPLL_LOCK                    = 170u,
+    P64H_SYSC_SERDES_TXPLL_REFCLK_TO_SERDES        = 171u, /// ----------- The below is from dtest bus inside SHI -----------
+    P64H_SYSC_SERDES_TXCLK_MUX0
+        = 172u, /// -------------- dtest_in0_shi ------------------ lane 0 ---> lane A, so TXCLK_MUX0 is the TXCLK_MUX for lane A
+    P64H_SYSC_SERDES_TXCLK_MUX1    = 173u,
+    P64H_SYSC_SERDES_TXCLK_MUX2    = 174u,
+    P64H_SYSC_SERDES_TXCLK_MUX3    = 175u, /// -------------- dtest_in0_shi ----------------------
+    P64H_SYSC_SERDES_PRE_LP_RXCLK0 = 176u, /// -------------- dtest_in1_shi ----------------------
+    P64H_SYSC_SERDES_PRE_LP_RXCLK1 = 177u,
+    P64H_SYSC_SERDES_PRE_LP_RXCLK2 = 178u,
+    P64H_SYSC_SERDES_PRE_LP_RXCLK3 = 179u,
+    P64H_SYSC_SERDES_PIPE_CLK_EXT  = 180u,
+    P64H_SYSC_SERDES_DTEST_IN0_SHI = 181u, /// This is the SHI_SOK input port
+    P64H_SYSC_SERDES_DTEST_IN1_SHI = 182u  /// This is the SHI_SOK input port
+} p64h_sysc_serdes_dtest_sel_t;
+
 /// RX Calibration sequence options
 typedef enum {
     P64H_SYSC_SERDES_RXCALIB_END_OF_SEQ = 0u,     ///< 0x0: End of sequence - termination code
@@ -408,6 +603,16 @@ typedef enum {
     P64H_SYSC_SERDES_PATTMODE_USER,       ///< User Specified Pattern
     P64H_SYSC_SERDES_PATTMODE_LAST        ///< invalid, used for error checking
 } p64h_sysc_serdes_pattgenmon_mode_t;
+
+/// Configuration values for PRBS generator/monitor housed within the PMA macro
+typedef enum {
+    P64H_SYSC_SERDES_PMA_PRBS7 = 0u, ///< PRBS 7
+    P64H_SYSC_SERDES_PMA_PRBS9,      ///< PRBS 9
+    P64H_SYSC_SERDES_PMA_PRBS15,     ///< PRBS 15
+    P64H_SYSC_SERDES_PMA_PRBS23,     ///< PRBS 23
+    P64H_SYSC_SERDES_PMA_PRBS31,     ///< PRBS 31
+    P64H_SYSC_SERDES_PMA_PRBS_LAST   ///< invalid, used for error checking
+} p64h_sysc_serdes_pma_prbs_poly_t;
 
 /// Error Injection Mode of Operation
 typedef enum {
@@ -570,7 +775,35 @@ typedef struct {
     uint32_t eye_area;     ///< eye area at end of calibration
                            ///< Nonzero value: Calibration successful
                            ///< 0: Eye Closed Calibration failed
+    /// Add more status that may be useful for debug
+    uint32_t offset_cdr;           ///< DC Calibration offset for the CDR CTLE
+    uint32_t eye_center_vertical;  ///< Vertical (DC-offset) center of the Eye openning
+    uint32_t eye_cener_horizontal; ///< Horizontal (Phase) center of the Eye openning.
+    uint32_t choice_dfeem; ///< Look-up table index for the CDR CTLE setting chosen by FE Calibration. The DFE/EM CTLE settings are selected by the
+                           ///< combination of frequency (set by user) and by choice_dfeem (Chosen by FE Calibration)
+    uint32_t choice_cdr;   ///< Look-up table index for the CDR CTLE setting chosen by FE Calibration. The CDR CTLE settings are selected by the
+                           ///< combination of frequency (set by user) and by choice_cdr (Chosen by FE Calibration)
+
+    uint32_t offset_dfe; ///< DC Calibration offset for the DFE CTLE
+
+    uint32_t phase_dfe; ///< Phase of the sampling clock in the DFE receiver
+    uint32_t offset_em; ///< DC Calibration offset for the EM CTLE
+
+    uint32_t phase_em; ///< Phase of the sampling clock in the DFE receiver
+
+    uint32_t cdr_h0; ///< Actual H0 position for CDR path
+
 } p64h_sysc_serdes_rx_calib_stat_t;
+
+/// serdes diagnostic values that may want to be measured over some window interval
+typedef struct {
+    uint32_t window_width;   ///< Number of samples to take for diagnostic. If left at zero, P64H_SERDES_DIAG_WINDOW_MAX samples will be taken
+    uint32_t txpll_lock_cnt; ///< Count over diagnostic window where TXPLL was locked
+    uint32_t rxpll_lock_cnt; ///< Count over diagnostic window where RXPLL was locked
+    uint32_t dlos_cnt;       ///< Count over diagnostic window where DLOS was asserted
+    uint32_t pkdetout_tot;   ///< Total value of the Peak Detector (input to Signal Detector) over all samples over the window
+    uint32_t pkdetout_hist[P64H_SYSC_SERDES_NUM_PKDETOUT_VALS]; ///< Histogram of recoreded Peak Detector Outputs over the window
+} p64h_sysc_serdes_diag_window_t;
 
 /// Reference Clock Mux Logic Select Configuration
 typedef struct {
@@ -632,6 +865,10 @@ typedef struct {
     p64h_sysc_serdes_lpbk_t       lpbk; ///< Loopback point (if specified) for the lane
 
     p64h_sysc_serdes_if_tx_drvr_t tx_drvr; ///< TX driver configuration for the lane
+
+    p64h_sysc_serdes_dtest_sel_t  dtest_sel; ///< dtest_sel for DTEST bus for the lane
+
+    uint8_t                       rxrtrim; ///< Trim resistance value to set for the RX path
 } p64h_sysc_serdes_if_rt_cfg_t;
 
 /// serdes grp peripheral configuration
@@ -654,6 +891,7 @@ typedef struct {
     bool                             dlos;        ///< Current status of DLOS for the lane
     p64h_sysc_serdes_pattmon_sync_t  pattmon;     ///< Current Pattern Monitor status for the lane
     p64h_sysc_serdes_rx_calib_stat_t rx_calib;    ///< Current Rx Calibration status for the lane
+    p64h_sysc_serdes_diag_window_t   window;
 } p64h_sysc_serdes_if_diag_t;
 
 /// serdes group diagnostic

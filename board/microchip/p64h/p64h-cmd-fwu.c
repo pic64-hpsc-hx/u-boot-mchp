@@ -78,7 +78,6 @@ static int p64h_rpmi_fwu_cmd(struct cmd_tbl *cmdtp,
 
     cfg.uncompressed_pkg_size = data_size;
     cfg.pkg_size = data_size;
-    cfg.apply_pkg = false;
 
     printf("Upgrade firmware command: ");
     ret = p64h_sysc_sys_fw_pkg_upgrade_upload(handle_ptr, &cfg, data, data_size, true);

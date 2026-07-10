@@ -61,6 +61,10 @@ typedef struct {
     uint8_t                payload[1024];
 } p64h_sysc_sec_sig_ec_pq_verify_params_t;
 
+typedef struct {
+    uint16_t timeout_ms;
+} p64h_sysc_sec_alive_msg_params_t;
+
 // Request parameter for svc_mbox request event
 typedef union {
     bootcfg_otp_t                                     otp_boot_cfg;
@@ -74,6 +78,7 @@ typedef union {
     p64h_sysc_sec_download_component_params_t sec_download_component_params;
     p64h_sysc_sec_m1_misc_feature_params_t    sec_m1_misc_feature_params;
     p64h_sysc_sec_sig_ec_pq_verify_params_t   sec_sig_ec_pq_verify_params;
+    p64h_sysc_sec_alive_msg_params_t          sec_alive_msg_params;
 } p64h_sysc_sec_cmd_req_params_t;
 
 // Data received by svc_mbox from secC, to be sent to calling service

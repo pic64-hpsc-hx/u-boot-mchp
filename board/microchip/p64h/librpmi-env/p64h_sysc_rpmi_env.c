@@ -6,10 +6,12 @@
  * Copyright (c) 2024 Ventana Micro Systems Inc.
  */
 
+#include <stdlib.h>
 #include <rpmi/librpmi_p64h_types.h>
 #include <rpmi/librpmi_mchp.h>
 #include <p64h_sysc_env.h>
-#include <env/p64h_sysc_os_specific.h>
+
+#define SLEEP_THRESHOLD ((uint32_t)1000000UL)
 
 /**
  * \defgroup STRING_ENV String Environment Functions
@@ -422,6 +424,11 @@ rpmi_error_t rpmi_env_io_write(void* priv, const void* out, rpmi_uint32_t len)
     return RPMI_SUCCESS;
 }
 
+rpmi_error_t rpmi_env_io_flush_rx(void* priv)
+{
+    return RPMI_SUCCESS;
+}
+
 rpmi_bool_t rpmi_env_io_is_empty(void* priv)
 {
     return true;
@@ -456,6 +463,22 @@ rpmi_client_ctxt_t* rpmi_ctxt_malloc(void)
     return (rpmi_client_ctxt_t*)rpmi_env_zalloc(sizeof(rpmi_client_ctxt_t));
 #endif
 }
+
+/**
+ * @brief Environment implementation of microseconds sleep
+ *
+ * @param[in] msec Number of microseconds to sleep
+ * @return false upon failure, true upon success
+ */
+rpmi_bool_t rpmi_env_msec_sleep(const uint32_t msec)
+{
+    uint32_t itr = 0L;
+    while (SLEEP_THRESHOLD > itr) {
+        itr++;
+    }
+    return true;
+}
+
 /** @} */
 
 /******************************************************************************/

@@ -299,7 +299,7 @@ typedef struct {
     p64h_sysc_appc_wg_checker_slot_cfg_t        nvm_sram_edac_1_1_wgc[APPC_WG_CHECKER_NUM_SLOT_32]; ///< NVM_SRAM_EDAC_1_1 32 slot WGC
     p64h_sysc_appc_wg_checker_slot_cfg_t        nvm_sram_edac_2_0_wgc[APPC_WG_CHECKER_NUM_SLOT_32]; ///< NVM_SRAM_EDAC_2_0 32 slot WGC
     p64h_sysc_appc_wg_checker_slot_cfg_t        nvm_sram_edac_2_1_wgc[APPC_WG_CHECKER_NUM_SLOT_32]; ///< NVM_SRAM_EDAC_2_1 32 slot WGC
-    p64h_sysc_appc_wg_checker_slot_cfg_t        nvm_ss_cfg_wgc[APPC_WG_CHECKER_NUM_SLOT_32];        ///< NVM_SS_CFG 32 slot WGC
+    p64h_sysc_appc_wg_periph_checker_slot_cfg_t nvm_ss_cfg_wgc[APPC_WG_CHECKER_NUM_SLOT_32];        ///< NVM_SS_CFG 32 slot WGC
 
     p64h_sysc_appc_wg_marker_cfg_t              nvm_dma0_wgm;    ///< NVM_DMA0 WGM
     p64h_sysc_appc_wg_marker_cfg_t              nvm_dma1_wgm;    ///< NVM_DMA1 WGM

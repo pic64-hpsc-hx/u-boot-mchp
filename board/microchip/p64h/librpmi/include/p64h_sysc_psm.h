@@ -1,5 +1,10 @@
 /* (c) 2025 Microchip Technology Inc. */
-/* SPDX-License-Identifier: MIT */
+/*    SPDX-License-Identifier: MIT    */
+
+/* ======================================= */
+/*  This file is generated and should not  */
+/*              be modified!               */
+/* ======================================= */
 
 /**
  * @file  p64h_sysc_psm.h
@@ -18,16 +23,21 @@
 // PSM event notification interface
 p64h_err_t p64h_sysc_psm_evt_enable(p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_evt_id_t eid, const p64h_sysc_psm_evt_fct_t psm_evt_fct);
 p64h_err_t p64h_sysc_psm_evt_disable(p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_evt_id_t eid);
-p64h_err_t p64h_sysc_psm_evt_state_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_evt_id_t eid, bool* enabled_ptr);
+p64h_err_t p64h_sysc_psm_evt_state_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_evt_id_t eid,
+                                       p64h_sysc_evt_notification_state_t* evt_state_ptr);
+
 // PSM APIs
-p64h_err_t p64h_sysc_psm_list_num_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_partition);
-p64h_err_t p64h_sysc_psm_list_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_psm_id_t* pids, bool shmem_xfer);
+p64h_err_t p64h_sysc_psm_list_info_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* pid_mask);
 p64h_err_t p64h_sysc_psm_status_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_id_t pid, p64h_sysc_psm_status_t* status_ptr);
 p64h_err_t p64h_sysc_psm_attr_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_id_t pid, p64h_sysc_psm_attr_t* attr_ptr,
                                   bool shmem_xfer);
 p64h_err_t p64h_sysc_psm_start(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_id_t pid);
 p64h_err_t p64h_sysc_psm_stop(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_id_t pid);
 p64h_err_t p64h_sysc_psm_suspend(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_id_t pid);
+
+// PSM access control interface
+p64h_err_t p64h_sysc_psm_perms_set(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_psm_id_t pid, p64h_sysc_rpmi_access_control_t access_level,
+                                   const char* passphrase);
 
 #endif // P64H_SYSC_PSM_H
 /// @}

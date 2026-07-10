@@ -19,11 +19,12 @@
 #include <zsbl/sec_api_types.h>
 #include <zsbl/sec_smb_types.h>
 #include <zsbl/scratchreg.h>
+#include <zsbl/boot_cfg_helper.h>
 #include <p64h_sysc_math.h>
 
 /* Public Defines ------------------------------------------------- */
-#define P64H_SYSC_CFM_CH_NUM        8u ///< define the maximum number of channels in the CFM
-#define SYS_TRACE_NUM_CROSS_TRIGGER 78 ///< Number of cross trigger matrix instances
+#define P64H_SYSC_CFM_CH_NUM 8u         ///< define the maximum number of channels in the CFM
+#define P64H_SYSC_LOG_MAGIC  0xDEADBEEF ///< magic number to identify a stringless entry in the log buffer
 ///< Number of mask SYSC Log ID
 #define P64H_SYSC_LOG_ID_MASK_NUM DIV_ROUND_UP(P64H_SYSC_LOG_ID_LAST, 8 * sizeof(uint64_t))
 
@@ -35,7 +36,7 @@
 
 /// Enum for sysc cfg dump component selection
 typedef enum {
-    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG = 0U,          ///< Dump whole sysc config - will ignore individual selection of artifacts below
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_FLASH_HDR = 0U,    ///< Dump whole sysc config - will ignore individual selection of artifacts below
     P64H_SYSC_SYSC_CFG_DUMP_COMP_FSBL,              ///< SysC FSBL
     P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG0,              ///< SysC cfg0
     P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_SYSC_SOC_CFG, ///< System-on-Chip configuration
@@ -47,19 +48,33 @@ typedef enum {
     P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_PQ_FW,        ///< PQ firmware
     P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_APPC_ZSBL,    ///< AppC ZSBL
     P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG1_APPC_RNMI,    ///< AppC RNMI
-    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG2,              ///< TODO: add this?
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_CFG2,              ///< SysC cfg2
+    P64H_SYSC_SYSC_CFG_DUMP_COMP_SECC_FW,           ///< SecC fw
     P64H_SYSC_SYSC_CFG_DUMP_COMP_LAST
 } p64h_sysc_sysc_cfg_dump_comp_t;
 
 /// Enum for appc cfg dump component selection
 typedef enum {
-    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_CFG = 0U,           ///< Dump whole appc config - will ignore individual selection of artifacts below
-    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_APPC_BOOTSCRIPT,    ///< Appc bootscript
-    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_APPC_STATIC_CFG,    ///< Appc static config
-    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_SW_SV_CFG,          ///< Appc bootcfg software service configuration
-    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_PARTITION_APPC_CFG, ///< AppC partition config
-    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_PARTITION_APPC_DTB, ///< AppC partition dtb
-    P64H_SYSC_APPC_CFG_DUMP_COMP_LAST
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_CFG = 0U,        ///< Dump whole appc config - will ignore individual selection of artifacts below
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_APPC_BOOTSCRIPT, ///< Appc bootscript
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_APPC_STATIC_CFG, ///< Appc static config
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_SW_SV_CFG,       ///< Appc bootcfg software service configuration
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P0_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P0_APPC_CFG,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P1_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P1_APPC_CFG,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P2_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P2_APPC_CFG,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P3_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P3_APPC_CFG,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P4_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P4_APPC_CFG,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P5_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P5_APPC_CFG,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P6_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P6_APPC_CFG,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P7_APPC_DTB,
+    P64H_SYSC_APPC_CFG_DUMP_COMP_BOOTCFG_P7_APPC_CFG,
 } p64h_sysc_appc_cfg_dump_comp_t;
 
 /// system event identifier
@@ -123,142 +138,8 @@ typedef enum {
     P64H_SYSC_APPC_BOOT_CFG_13,     ///< appc boot configuration 13
     P64H_SYSC_APPC_BOOT_CFG_14,     ///< appc boot configuration 14
     P64H_SYSC_APPC_BOOT_CFG_15,     ///< appc boot configuration 15
+    P64H_SYSC_APPC_BOOT_CFG_LAST
 } p64h_sysc_boot_cfg_id_t;
-
-/* ---------------------------------------------------------------*/
-//  ### Stuct and Enums for Device Level Trace configuration such as Trace Sok Funnel Destination ###
-/* ---------------------------------------------------------------*/
-
-/**
- * Enum for defining trace data source
- */
-
-typedef enum {
-    P64H_SYSC_TRACE_SRC_SYSC      = ONE_HOT(0), ///< Trace data is coming from System Controller ATB funnel
-    P64H_SYSC_TRACE_SRC_APPC_0    = ONE_HOT(1), ///< Trace data is coming from app cluster 0 ATB funnel
-    P64H_SYSC_TRACE_SRC_APPC_1    = ONE_HOT(2), ///< Trace data is coming from app cluster 1 ATB funnel
-    P64H_SYSC_TRACE_SRC_SYS_NOC   = ONE_HOT(3), ///< Trace data is coming from SYS_NOC
-    P64H_SYSC_TRACE_SRC_APP_NOC   = ONE_HOT(4), ///< Trace data is coming from APP_NOC
-    P64H_SYSC_TRACE_SRC_DDR_NOC   = ONE_HOT(5), ///< Trace data is coming from DDR_NOC
-    P64H_SYSC_TRACE_SRC_ALL_NOCS  = 0b111000,   ///< Trace data is coming from all NOC
-    P64H_SYSC_TRACE_SRC_APPC_SYSC = 0b000111,   ///< Trace data is coming from both appc and sysc
-    P64H_SYSC_TRACE_SRC_ALL       = 0b111111    ///< Trace data is coming from all available sources
-
-} p64h_sysc_trace_src_t;
-
-/**
- * Enum for selecting the trace system timestamp source
- */
-typedef enum {
-    P64H_SYSC_TRACE_TIMESTAMP_SRC_INTERNAL = 0, ///< use internal timestamper
-    P64H_SYSC_TRACE_TIMESTAMP_SRC_SYSC_TS       ///< use sysc elapsed timer
-} p64h_sysc_trace_timestamp_src_t;
-
-/**
- * Enum to define cross trigger matrix source 0
- */
-typedef enum {
-    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_0               = ONE_HOT(0),  ///< Cluster 0 Core 0
-    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_1               = ONE_HOT(1),  ///< Cluster 0 Core 1
-    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_2               = ONE_HOT(2),  ///< Cluster 0 Core 2
-    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_3               = ONE_HOT(3),  ///< Cluster 0 Core 3
-    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_0               = ONE_HOT(4),  ///< Cluster 1 Core 0
-    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_1               = ONE_HOT(5),  ///< Cluster 1 Core 1
-    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_2               = ONE_HOT(6),  ///< Cluster 1 Core 2
-    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_3               = ONE_HOT(7),  ///< Cluster 1 Core 3
-    P64H_SYSC_TRACE_XTRG_S7_SYS_CTRL_TRIG_0             = ONE_HOT(8),  ///< S7 Sys Ctrl
-    P64H_SYSC_TRACE_XTRG_S7_SYS_CTRL_TRIG_1             = ONE_HOT(9),  ///< S7 Sys Ctrl
-    P64H_SYSC_TRACE_XTRG_DDR_NOC_LATENCY_TRIG_0         = ONE_HOT(10), ///< DDR NOC Latency
-    P64H_SYSC_TRACE_XTRG_DDR_NOC_LATENCY_TRIG_1         = ONE_HOT(11), ///< DDR NOC Latency
-    P64H_SYSC_TRACE_XTRG_DDR_NOC_PACKET_0_TRIG_0        = ONE_HOT(12), ///< DDR NOC Packet 0
-    P64H_SYSC_TRACE_XTRG_DDR_NOC_PACKET_0_TRIG_1        = ONE_HOT(13), ///< DDR NOC Packet 0
-    P64H_SYSC_TRACE_XTRG_DDR_NOC_PACKET_1_TRIG_0        = ONE_HOT(14), ///< DDR NOC Packet 1
-    P64H_SYSC_TRACE_XTRG_DDR_NOC_PACKET_1_TRIG_1        = ONE_HOT(15), ///< DDR NOC Packet 1
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_1_TRIG_0         = ONE_HOT(16), ///< SYS NOC Probe 1
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_1_TRIG_1         = ONE_HOT(17), ///< SYS NOC Probe 1
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_2_TRIG_0         = ONE_HOT(18), ///< SYS NOC Probe 2
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_2_TRIG_1         = ONE_HOT(19), ///< SYS NOC Probe 2
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_3_TRIG_0         = ONE_HOT(20), ///< SYS NOC Probe 3
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_3_TRIG_1         = ONE_HOT(21), ///< SYS NOC Probe 3
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_4_TRIG_0         = ONE_HOT(22), ///< SYS NOC Probe 4
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_4_TRIG_1         = ONE_HOT(23), ///< SYS NOC Probe 4
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_5_TRIG_0         = ONE_HOT(24), ///< SYS NOC Probe 5
-    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_5_TRIG_1         = ONE_HOT(25), ///< SYS NOC Probe 5
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_0_TRIG_0       = ONE_HOT(26), ///< APP NOC Pkt CPU 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_0_TRIG_1       = ONE_HOT(27), ///< APP NOC Pkt CPU 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_1_TRIG_0       = ONE_HOT(28), ///< APP NOC Pkt CPU 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_1_TRIG_1       = ONE_HOT(29), ///< APP NOC Pkt CPU 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_DDR_ENCRYPT_TRIG_0 = ONE_HOT(30), ///< APP NOC Pkt DDR ENCRYPT
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_DDR_ENCRYPT_TRIG_1 = ONE_HOT(31)  ///< APP NOC Pkt DDR ENCRYPT
-} p64h_sysc_trace_cross_trigger_out_select_0_t;
-
-/**
- * Enum to define cross trigger matrix source 1
- *
- *
- */
-typedef enum {
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_EP_TRIG_0       = ONE_HOT(0),  ///< APP NOC Pkt ENET EP
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_EP_TRIG_1       = ONE_HOT(1),  ///< APP NOC Pkt ENET EP
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_SWR_TRIG_0      = ONE_HOT(2),  ///< APP NOC Pkt ENET SWR
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_SWR_TRIG_1      = ONE_HOT(3),  ///< APP NOC Pkt ENET SWR
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_IOMMU_TRIG_0         = ONE_HOT(4),  ///< APP NOC Pkt IOMMU
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_IOMMU_TRIG_1         = ONE_HOT(5),  ///< APP NOC Pkt IOMMU
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M2_TRIG_0            = ONE_HOT(6),  ///< APP NOC Pkt M2
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M2_TRIG_1            = ONE_HOT(7),  ///< APP NOC Pkt M2
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M3_TRIG_0            = ONE_HOT(8),  ///< APP NOC Pkt M3
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M3_TRIG_1            = ONE_HOT(9),  ///< APP NOC Pkt M3
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_NVM_TRIG_0           = ONE_HOT(10), ///< APP NOC Pkt NVM
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_NVM_TRIG_1           = ONE_HOT(11), ///< APP NOC Pkt NVM
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_0_TRIG_0        = ONE_HOT(12), ///< APP NOC Pkt PCIE 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_0_TRIG_1        = ONE_HOT(13), ///< APP NOC Pkt PCIE 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_1_TRIG_0        = ONE_HOT(14), ///< APP NOC Pkt PCIE 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_1_TRIG_1        = ONE_HOT(15), ///< APP NOC Pkt PCIE 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_SYS_NOC_TRIG_0       = ONE_HOT(16), ///< APP NOC Pkt SYS NOC
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_SYS_NOC_TRIG_1       = ONE_HOT(17), ///< APP NOC Pkt SYS NOC
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_USER_CRYPTO_TRIG_0   = ONE_HOT(18), ///< APP NOC Pkt USER CRYPTO
-    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_USER_CRYPTO_TRIG_1   = ONE_HOT(19), ///< APP NOC Pkt USER CRYPTO
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_0_TRIG_0       = ONE_HOT(20), ///< APP NOC Trans CPU 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_0_TRIG_1       = ONE_HOT(21), ///< APP NOC Trans CPU 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_1_TRIG_0       = ONE_HOT(22), ///< APP NOC Trans CPU 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_1_TRIG_1       = ONE_HOT(23), ///< APP NOC Trans CPU 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_DDR_ENCRYPT_TRIG_0 = ONE_HOT(24), ///< APP NOC Trans DDR ENCRYPT
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_DDR_ENCRYPT_TRIG_1 = ONE_HOT(25), ///< APP NOC Trans DDR ENCRYPT
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_EP_TRIG_0     = ONE_HOT(26), ///< APP NOC Trans ENET EP
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_EP_TRIG_1     = ONE_HOT(27), ///< APP NOC Trans ENET EP
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_SWR_TRIG_0    = ONE_HOT(28), ///< APP NOC Trans ENET SWR
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_SWR_TRIG_1    = ONE_HOT(29), ///< APP NOC Trans ENET SWR
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_IOMMU_TRIG_0       = ONE_HOT(30), ///< APP NOC Trans IOMMU
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_IOMMU_TRIG_1       = ONE_HOT(31)  ///< APP NOC Trans IOMMU
-} p64h_sysc_trace_cross_trigger_out_select_1_t;
-
-/**
- * Enum to define cross trigger matrix source 2
- */
-typedef enum {
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M2_TRIG_0          = ONE_HOT(0),  ///< APP NOC Trans M2
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M2_TRIG_1          = ONE_HOT(1),  ///< APP NOC Trans M2
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M3_TRIG_0          = ONE_HOT(2),  ///< APP NOC Trans M3
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M3_TRIG_1          = ONE_HOT(3),  ///< APP NOC Trans M3
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_NVM_TRIG_0         = ONE_HOT(4),  ///< APP NOC Trans NVM
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_NVM_TRIG_1         = ONE_HOT(5),  ///< APP NOC Trans NVM
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_0_TRIG_0      = ONE_HOT(6),  ///< APP NOC Trans PCIE 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_0_TRIG_1      = ONE_HOT(7),  ///< APP NOC Trans PCIE 0
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_1_TRIG_0      = ONE_HOT(8),  ///< APP NOC Trans PCIE 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_1_TRIG_1      = ONE_HOT(9),  ///< APP NOC Trans PCIE 1
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_SYS_NOC_TRIG_0     = ONE_HOT(10), ///< APP NOC Trans SYS NOC
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_SYS_NOC_TRIG_1     = ONE_HOT(11), ///< APP NOC Trans SYS NOC
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_USER_CRYPTO_TRIG_0 = ONE_HOT(12), ///< APP NOC Trans USER CRYPTO
-    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_USER_CRYPTO_TRIG_1 = ONE_HOT(13)  ///< APP NOC Trans USER CRYPTO
-} p64h_sysc_trace_cross_trigger_out_select_2_t;
-
-/**
- * Enum for selecting the trace data path at system level
- */
-typedef enum {
-    P64H_SYSC_TRACE_DEST_SERDES     = 0, ///< Trace data is directed to external trace debugger via SERDES
-    P64H_SYSC_TRACE_DEST_SYSTEM_MEM = 1  ///< Trace data is directed to the AXI4 initiator Interface
-} p64h_sysc_trace_dest_t;
 
 /// system event
 typedef struct {
@@ -272,17 +153,79 @@ typedef struct {
     uint32_t patch; ///< sysc patch version
 } p64h_sysc_sys_version_t;
 
+/// Data related to the OS error
+typedef struct {
+    uint32_t src;  ///< OS error source ID
+    uint32_t code; ///< OS error code
+    uint64_t addr; ///< Address reported with OS error (optional)
+} p64h_sysc_os_err_t;
+
+/// Information on the reset request reason
+typedef struct {
+    uint32_t fw_err_valid : 1;  ///< fw_err + comp are valid
+    uint32_t hw_err_valid : 1;  ///< hw_err is valid
+    uint32_t os_err_valid : 1;  ///< os_err is valid
+    uint32_t fill         : 29; ///< padding bits
+} p64h_sysc_fsbl_rst_req_ctxt_t;
+
+/// Content of a reset request containing information on the reason for reset
+typedef struct {
+    p64h_sysc_fsbl_rst_req_ctxt_t rst_req_ctxt; ///< Context of reset request
+    p64h_err_t                    fw_err;       ///< FW error reported
+    p64h_comp_t                   comp;         ///< Component reporting FW error
+    p64h_sysc_ras_error_code_t    hw_err;       ///< HW error reported
+    p64h_sysc_os_err_t            os_err;       ///< OS error reported
+} p64h_sysc_fsbl_rst_req_t;
+
+/// FSBL boot context bit description
+typedef struct {
+    uint32_t clk_rampup           : 1;  ///< Clock ramp-up was acheived
+    uint32_t blob_fetch           : 1;  ///< CFG1 BLOB was fetched from SysC image
+    uint32_t sys_health_chk       : 1;  ///< SysC health check executed
+    uint32_t com_active           : 1;  ///< External communication is brought up
+    uint32_t full_nvm_intf_active : 1;  ///< Opened full NVM interface
+    uint32_t phase_1              : 1;  ///< Phase 1 successfully passed
+    uint32_t svc_start            : 1;  ///< Started all required services
+    uint32_t app_health_chk       : 1;  ///< AppC health check executed
+    uint32_t safe_mode            : 1;  ///< Safe mode engaged
+    uint32_t fill                 : 21; ///< Padding bits
+} p64h_sysc_fsbl_boot_ctxt_bits_t;
+
+/// FSBL boot context for the current boot
+typedef union {
+    uint32_t                        w; ///< Word accessor
+    p64h_sysc_fsbl_boot_ctxt_bits_t b; ///< Bitfield accessor
+} p64h_sysc_fsbl_boot_ctxt_t;
+
+/**
+ * @brief M1 dump data contents
+ */
+typedef struct {
+    scratchpad_boot_mode_t       boot_mode;      ///< Sticky register for boot control
+    scratchpad_boot_ctxt_t       boot_ctxt;      ///< Sticky register capturing the history of boot sequences across multiple boots/reboots
+    uint32_t                     boot_cnt;       ///< boot counter (16 bits counter)
+    sysc_scratchreg_exc_sticky_t exc_handler;    ///< exception handler context
+    p64h_sysc_fsbl_rst_req_t     fsbl_rst_req;   ///< FSBL reset request sticky data
+    p64h_sysc_fsbl_boot_ctxt_t   fsbl_boot_info; ///< FSBL boot info including reset request and boot context
+} p64h_sysc_m1_dump_t;
+
 /// This struct defines system information
 typedef struct {
-    p64h_sysc_dev_cfg_node_t dev_cfg;    ///< dev_cfg dtb node used to boot sysc firmware
-    p64h_sysc_sys_version_t  fw_version; ///< sysc firmware version
+    p64h_sysc_dev_cfg_node_t dev_cfg;            ///< dev_cfg dtb node used to boot sysc firmware
+    p64h_sysc_sys_version_t  fw_version;         ///< sysc firmware version
+    tvs_mon_stat_t           tvs_mon_data;       ///< Temperature and Voltage Sensor readout
+    uint64_t                 dsn[DSN_DWORD_LEN]; ///< Device Serial number
+    uint32_t                 mac_oui;            ///< MAC addr Organizationally Unique Identifier
+    uint32_t                 mac_base;           ///< Starting MAC addr
+    uint32_t                 num_mac;            ///< Total MAC addresses
+    uint16_t                 pcie_device_id;     ///< PCIe Device ID
+    uint16_t                 pcie_vendor_id;     ///< PCIe Vendor ID
+    uint32_t                 core_frequency;     ///< core frequency
+    uint32_t                 time_frequency;     ///< time frequency
+    uint32_t                 img_id;             ///< image id
+    otp_image_table_entry_t  img_entry;          ///< image entry
+    p64h_sysc_m1_dump_t      m1_dump;            ///< M1 scratchpad register dump
 } p64h_sysc_sys_info_t;
-
-/// System attributes
-typedef struct {
-    tvs_mon_stat_t tvs_mon_data;       ///< Temparture and Voltage Sensor readout
-    uint64_t       dsn[DSN_DWORD_LEN]; ///< Device Serial number
-} p64h_sysc_sys_attr_t;
 
 /// logger information
 typedef struct {
@@ -322,115 +265,35 @@ typedef struct {
 so temporarily creating a contiguous response buffer and doing an extra copy. */
 typedef struct {
     p64h_sysc_sys_log_data_resp_header_t header;
-    uint8_t data[4000]; ///< this field currently is smaller than the 4K buffer used in the rpmi buffer, but hopefully this structure is temporary.
+    uint8_t*                             data;
 } p64h_sysc_sys_log_data_resp_t;
 
-/**
- * trace serdes configurations (example, not complete)
- */
+// payload data in a stringless log entry
 typedef struct {
-    uint32_t frame_size; ///< Aurora Frame Size. TWP Sync packets must be disabled. 0: 2 TWP Frames 1: 4 TWP Frames 2: 8 TWP Frames 3: 16 TWP Frames
-    uint32_t crc_en;     ///< Enable to include CRC in Aurora Frames
-    uint32_t endframe;   ///< Ends any ongoing frame and adds CRC as required
-    uint8_t  twp_cnt;    ///< Number of Aurora frames sent before inserting 4 bytes of TWP sync
-} p64h_sysc_trace_serdes_cfg_t;
+    uint64_t code;      ///< error code defined in enum p64h_err_t
+    uint64_t timestamp; ///< A 64-bit timestamp
+    uint64_t arg0;      ///< 64-bit log word 0
+    uint64_t arg1;      ///< 64-bit log word 1
+    uint64_t arg2;      ///< 64-bit log word 2
+    uint64_t arg3;      ///< 64-bit log word 3
+} p64h_sysc_log_payload_t;
 
-/**
- * trace destination configurations
- */
+// header for a stringless log entry
 typedef struct {
-    p64h_sysc_trace_dest_t       trace_dest_select; ///< select trace data path
-    p64h_sysc_trace_mem_cfg_t    mem_cfg;           ///< if trace_dest_select == SYSTEM_MEM, set up trace buffer
-    p64h_sysc_trace_serdes_cfg_t serdes_cfg;        ///< if trace_dest_select == SERDES, set up serdes
-} p64h_sysc_trace_dest_cfg_t;
+    uint64_t magic; ///< 64-bit magic number to marker a stringless log entry
+} p64h_sysc_log_hdr_t;
 
-/**
- * @brief M1 dump data contents
- */
+// stringless log entry
 typedef struct {
-    scratchpad_boot_mode_t       boot_mode;   ///< Sticky register for boot control
-    scratchpad_boot_ctxt_t       boot_ctxt;   ///< Sticky register capturing the history of boot sequences across multiple boots/reboots
-    uint32_t                     boot_cnt;    ///< boot counter (16 bits counter)
-    sysc_scratchreg_exc_sticky_t exc_handler; ///< exception handler context
-} p64h_sysc_m1_dump_t;
-
-/**
- * system level trace timestamp configuration
- */
-typedef struct {
-    uint32_t sync_count;   ///< 12-bit counter value to send periodic synchronization requests to the ATB initiator using syncreq.
-                           // It also indicates the number of complete frames between TWP synchronization packets.
-                           // If this field is programmed as 0x0, the synchronization counter is disabled.
-                           // If this field is programmed with 0x1-0x7 the programmed value is 0x8.
-    uint32_t flush_normal; ///< This bit, when clear, allows target ports that are already flushed to
-                           // receive further data even if there are other ports that have not
-                           // completed flush. If set, a port that has completed flush is not be
-                           // allowed to receive further data until all ports have completed
-                           // flush.
-    uint32_t hold_time;    ///< Hold time. Value sets the minimum hold time before switching trace
-                           // sources (funnel inputs) based on the ID. Value used is programmed
-                           // value + 1. 0x0 - 1 transaction hold time. 0x1 - 2 transactions hold
-                           // time. 0x2 - 3 transactions hold time. 0x3 - Reserved.
-
-} p64h_sysc_trace_twp_fmt_cfg_t;
-
-/**
- * system level trace timestamp configuration
- */
-typedef struct {
-    p64h_sysc_trace_timestamp_src_t timestamp_src; ///< source of timestamp
-} p64h_sysc_trace_timestamp_cfg_t;
-
-/**
- * CORE_N_ETR_groupA_t
- */
-typedef struct {
-    uint32_t xtrig_out_select_0; ///< mask for selecting out trig, each bit represents which of the 32  bits of TRIGGER_IN gets 'or'ed together for
-                                 ///< TRIGGER_OUT
-    uint32_t xtrig_out_select_1; ///< mask for selecting out trig, each bit represents which of the 32  bits of TRIGGER_IN gets 'or'ed together for
-                                 ///< TRIGGER_OUT
-    uint32_t xtrig_out_select_2; ///< mask for selecting out trig, each bit represents which of the 14  bits of TRIGGER_IN gets 'or'ed together for
-                                 ///< TRIGGER_OUT
-} p64h_sysc_cross_matrix_single_entry_t;
-
-/**
- *  cross trigger matrix configuration
- *  There are 78 trig in -> trig out.
- *  Each trig out can be configured to activate to each trig in by setting that bit to one
- */
-typedef struct {
-    p64h_sysc_cross_matrix_single_entry_t xtrig_out[SYS_TRACE_NUM_CROSS_TRIGGER]; ///< CROSS_TRIGGER_OUT_SELECT_0
-                                                                                  ///< CROSS_TRIGGER_OUT_SELECT_1
-                                                                                  ///< CROSS_TRIGGER_OUT_SELECT_2
-} p64h_sysc_trace_xtrig_matrix_cfg_t;
-
-/**
- * @brief
- *   Specifies any information required to configure the tracing system of the device
- */
-typedef struct {
-    uint32_t                           trace_srcs_msk;    ///< bitmask for sources to activate, p64h_sysc_trace_src_t
-    p64h_sysc_trace_twp_fmt_cfg_t      trace_twp_fmt_cfg; ///< twp formatter configurations
-    p64h_sysc_trace_dest_cfg_t         trace_dest_cfg;    ///< trace data-path configuration
-    p64h_sysc_trace_timestamp_cfg_t    timestamp_cfg;     ///< system level timestamp configurations
-    p64h_sysc_trace_xtrig_matrix_cfg_t xtrig_cfg;         ///< cross trigger matrix configurations
-
-} p64h_sysc_trace_dev_cfg_t;
-
-/**Trace Memory Controller Status register** */
-typedef struct {
-    uint32_t trace_buffer_full;     ///< Trace buffer is full
-    uint32_t trace_mem_ctrl_ready;  ///< Trace capture has stopped and flushed &
-                                    // The TMC is not tracing because of the DrainBuffer bit of the FFCR being set & he AXI interface is not busy &
-                                    // the AXI interface is not busy
-    uint32_t trace_pipelines_empty; ///< This bit is set when trace capture has stopped, and all internal pipelines and buffers have drained.
-    uint32_t trace_buffer_empty;    ///< If set, this bit indicates that the TMC does not contain any valid trace data
-    uint32_t trace_mem_err;         ///<   This bit indicates that an error has occurred on the AXI master interface.
-} p64h_sysc_trace_mem_ctrl_status_t;
+    p64h_sysc_log_hdr_t     hdr;     ///< header
+    p64h_sysc_log_payload_t payload; ///< payload
+} p64h_sysc_log_entry_t;
 
 /// appc boot configuration status
 typedef struct {
-    uint32_t placeholder; ///< placeholder for appc boot configuration status
+    p64h_sysc_boot_cfg_id_t    boot_cfg_id;                                 ///< Active AppC boot configuration ID
+    p64h_sysc_appc_cfg_state_t static_cfg;                                  ///< state of appc static cfg
+    p64h_sysc_appc_cfg_state_t partition[P64H_SYSC_APPC_CFG_PARTITION_MAX]; ///< state of appc cfg partition
 } p64h_sysc_appc_boot_cfg_status_t;
 
 /// device trace attributes
@@ -451,38 +314,33 @@ typedef struct {
     p64h_sysc_fw_pkg_data_cfg_t pkg_data_cfg; ///< Package data config
     uint64_t                    pkg_size;     ///< The length of the pkg sent over rpmi.
     uint64_t uncompressed_pkg_size; ///< The length of the decompressed fw upgrade package. (equal to pkg_size if fw_pkg_cfg.compress == false)
-    bool     apply_pkg;             ///< Whether we should apply the package right after an upload, or wait the apply command
 } p64h_sysc_fw_pkg_cfg_t;
 
-/// firmware dump config
+/// firmware dump config (user request)
 typedef struct {
+    uint16_t sysc_cfg_artifact_msk[P64H_SYSC_SYSC_BOOT_CFG_MAX]; ///< mask (p64h_sysc_sysc_cfg_dump_comp_t) specifying what to dump from each sysc cfg
+    uint32_t appc_cfg_artifact_msk[P64H_SYSC_NUM_APPC_HW_PROF];  ///< mask (p64h_sysc_appc_cfg_dump_comp_t) specifying what to dump from each appc cfg
     uint32_t appc_cfg_binaries_msk[P64H_SYSC_NUM_APPC_HW_PROF];  ///< mask specifying what appc binaries to dump from each appc cfg. appc binary 0 as
                                                                  ///< the least significant bit, etc.
-    uint16_t sysc_cfg_artifact_msk[P64H_SYSC_SYSC_BOOT_CFG_MAX]; ///< mask (p64h_sysc_sysc_cfg_dump_comp_t) specifying what to dump from each sysc cfg
-    uint8_t  appc_cfg_artifact_msk[P64H_SYSC_NUM_APPC_HW_PROF];  ///< mask (p64h_sysc_appc_cfg_dump_comp_t) specifying what to dump from each appc cfg
-                                                                 ///< artifacts to dump for each appc cfg
-    // uint8_t sysc_cfg_msk; ///< System controller image mask (bitmask, valid range: 0x00 to 0xFF for images 0..7)
-    // uint8_t appc_cfg_msk;   ///< Boot configuration mask (bitmask, valid range: 0x00 to 0xFF for boot configs 0..7)
-    p64h_sysc_fw_pkg_data_cfg_t fw_pkt_cfg; ///< Package data configuration options
+    uint64_t                    nth_request;
+    p64h_sysc_fw_pkg_data_cfg_t fw_pkg_data_cfg; ///< Package data configuration options (unused, TODO: used for compressed or encrypted response)
 } p64h_sysc_fw_dump_cfg_t;
 
+/// firmware dump package (response with data)
 typedef struct {
-    uint64_t offset;
-    uint64_t size;
-} p64h_sysc_fw_dump_comp_info_t;
-
-/// firmware dump configuration
-typedef struct {
-    // uint32_t appc_cfg_binaries_msk[P64H_SYSC_NUM_APPC_HW_PROF];          ///< One-hot encoded appc binaries for each appc cfg. appc binary 0 as the
-    // least significant bit, etc. uint16_t sysc_cfg_msk[P64H_SYSC_SYSC_BOOT_CFG_MAX];          ///< One-hot encoded (p64h_sysc_fw_dump_comp_t)
-    // artifacts to dump for each sysc cfg uint8_t appc_cfg_msk[P64H_SYSC_NUM_APPC_HW_PROF];          ///< One-hot encoded
-    // (p64h_sysc_appc_cfg_dump_comp_t) artifacts to dump for each appc cfg (excluding appc binaries)
-    uint8_t dump_data[0]; ///< List of p64h_sysc_fw_dump_comp_info_t, one for each bit set to one in the masks.
+    uint16_t sysc_cfg_artifact_msk[P64H_SYSC_SYSC_BOOT_CFG_MAX]; ///< mask (p64h_sysc_sysc_cfg_dump_comp_t) specifying what to dump from each sysc cfg
+    uint32_t appc_cfg_artifact_msk[P64H_SYSC_NUM_APPC_HW_PROF];  ///< mask (p64h_sysc_appc_cfg_dump_comp_t) specifying what to dump from each appc cfg
+    uint32_t appc_cfg_binaries_msk[P64H_SYSC_NUM_APPC_HW_PROF];  ///< mask specifying what appc binaries to dump from each appc cfg. appc binary 0 as
+    uint64_t nth_download;
+    bool     last_download;
+    uint64_t download_size;
+    uint8_t  dump_data[0] __attribute__((aligned(8))); ///< single or partial instance of p64h_sysc_fw_dump_comp_info_t, corresponding to the bit set
+                                                       ///< to one in the masks. followed by the contents of the dump components
 } p64h_sysc_fw_dump_pkg_t;
 
-// Firmware dump status configuration
+// Firmware dump status
 typedef struct {
-    uint32_t size;      ///< size of firmware dump to receive
+    uint64_t size;      ///< size of firmware dump to receive
     bool     completed; ///< completion flag of firmware dump
 } p64h_sysc_fw_dump_status_t;
 
@@ -556,6 +414,7 @@ typedef enum {
 typedef struct {
     uint64_t test_timestamp;
     uint64_t master_timestamp;
+    uint64_t master_timestamp2;
     uint64_t measurement_count;
 } p64h_sysc_fw_pll_timestamp_t;
 
@@ -566,5 +425,33 @@ typedef struct {
     uint64_t                   test_val;   ///< 40-bit value, sets the starting value for the reference counter
     uint64_t                   wdog_val;   ///< 40-bit value, sets the watchdog timeout value for the compared clock
 } p64h_sysc_fw_pll_cfg_t;
+
+/// PTP Time-of-Day value, IEEE-1588 timecode layout
+typedef struct {
+    uint32_t sec_hi;    ///< integer seconds, upper 16 bits (48-bit seconds total)
+    uint32_t sec_lo;    ///< integer seconds, lower 32 bits
+    uint32_t nsec;      ///< integer nanoseconds (0..999,999,999)
+    uint32_t frac_nsec; ///< fractional nanoseconds in 1/16 ns units (valid range 0..15)
+} p64h_sysc_tod_t;
+
+typedef enum {
+    P64H_SYSC_TMON_INST_R = 0x0, ///< Temperature monitor instance (right)
+    P64H_SYSC_TMON_INST_L = 0x1, ///< Temperature monitor instance (left)
+    P64H_SYSC_TMON_INST_LAST
+} p64h_sysc_tmon_inst_t;
+
+typedef struct {
+    uint16_t threshold_low;
+    uint16_t threshold_high;
+} p64h_sysc_tmon_threshold_t;
+
+typedef struct {
+    uint16_t tvs_val_vdd;   ///< Converted value for channel 0 VDD.
+    uint16_t tvs_val_vdd18; ///< Converted value for channel 1 VDD18.
+    uint16_t tvs_val_adc;   ///< Converted value for channel 2 ADC.
+    uint16_t tvs_val_temp;  ///< Converted value for channel 3 Temperature.
+    uint8_t  chvalid;       ///< Indicates which measured value is valid
+} top_tvs_mon_stat_t;
+
 #endif // P64H_SYSC_SYSTEM_TYPES_H
 /// @}

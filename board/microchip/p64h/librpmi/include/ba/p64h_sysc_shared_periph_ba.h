@@ -37,6 +37,10 @@
 #define APPC_PERIPH_DMA_NUM_CHNL 8u
 /// number of ENET end-point instance
 #define APPC_PERIPH_ENET_EP_INST_NUM 4u
+/// number of XMII instance
+#define APPC_PERIPH_XMII_INST_NUM 2u
+/// number of ENET end-point instance
+#define APPC_PERIPH_ENET_EP_FRER_INST_NUM 2u
 /// number of GPIO blocks
 #define APPC_PERIPH_GPIO_BLOCK_NUM 2u
 /// number of channels for GPIO
@@ -76,6 +80,12 @@
 #define APPC_PERIPH_NVM_EDAC_INST_NUM 2u
 /// number of NVM IOB instances
 #define APPC_PERIPH_NVM_IOB_INST_NUM 4u
+/// number of nand instances
+#define APPC_PERIPH_NAND_INST_NUM 4u
+/// number of xspi instances
+#define APPC_PERIPH_XSPI_INST_NUM 4u
+/// number of sd instances
+#define APPC_PERIPH_SD_INST_NUM 4u
 /// number of spacewire iobridge instances
 #define APPC_PERIPH_SPW_IOB_INST_NUM 2u
 /// Number of SpW router logical addresses
@@ -109,7 +119,8 @@ typedef struct {
     uint64_t enet_pie     : 2;  ///< PIE Instances
     uint64_t appdma       : 2;  ///< DMA Instances
     uint64_t user_crypto  : 2;  ///< USER_CRYPTO Instances
-    uint64_t nand         : 2;  ///< NAND Instances
+    uint64_t nand         : 4;  ///< NAND Instances
+    uint64_t sd           : 4;  ///< SD Instances
     uint64_t nor          : 2;  ///< NOR Instances
     uint64_t iommu        : 2;  ///< IOMMU Instances
     uint64_t spw          : 1;  ///< SPW instances
@@ -130,12 +141,12 @@ typedef struct {
     uint64_t ocr        : 2;  ///< OCR instances
     uint64_t ddr        : 2;  ///< DDR instances
     uint64_t nvm        : 4;  ///< NVM instances
+    uint64_t xspi       : 4;  ///< XSPI instances
     uint64_t ipc        : 2;  ///< IPC instances
     uint64_t jtag_host  : 1;  ///< JTAG_HOST instance
     uint64_t nmra       : 2;  ///< NMRA instances
     uint64_t boot_stat  : 8;  ///< Boot stat instances
-    uint64_t trace      : 1;  ///< Boot stat instances
-    uint64_t fill_52_64 : 12; ///< Padding
+    uint64_t fill_53_64 : 11; ///< Padding
 } p64h_sysc_appc_periph_subordinate_inst_t;
 
 /// Define channels used by an application
@@ -459,6 +470,28 @@ typedef enum {
     P64H_SYSC_LAST_IPC    ///< Invalid, used for error checking
 } p64h_sysc_ipc_inst_id_t;
 
+typedef enum {
+    P64H_SYSC_NAND_0 = 0u, ///< Represents ID of the first NAND instance
+    P64H_SYSC_NAND_1,      ///< Represents ID of the second NAND instance
+    P64H_SYSC_NAND_2,      ///< Represents ID of the third NAND instance
+    P64H_SYSC_NAND_3,      ///< Represents ID of the fourth NAND instance
+    P64H_SYSC_LAST_NAND    ///< Invalid, used for error checking
+} p64h_sysc_nand_inst_id_t;
+
+typedef enum {
+    P64H_SYSC_XSPI_0 = 0u, ///< Represents ID of the first XSPI instance
+    P64H_SYSC_XSPI_1,      ///< Represents ID of the second XSPI instance
+    P64H_SYSC_XSPI_2,      ///< Represents ID of the third XSPI instance
+    P64H_SYSC_XSPI_3,      ///< Represents ID of the fourth XSPI instance
+    P64H_SYSC_LAST_XSPI    ///< Invalid, used for error checking
+} p64h_sysc_xspi_inst_id_t;
+
+typedef enum {
+    P64H_SYSC_SD_0 = 0u, ///< Represents ID of the first SD instance
+    P64H_SYSC_SD_1,      ///< Represents ID of the second SD instance
+    P64H_SYSC_LAST_SD    ///< Invalid, used for error checking
+} p64h_sysc_sd_inst_id_t;
+
 /// ENET EP id instance
 typedef enum {
     P64H_SYSC_ENET_EP_0 = 0u, ///< Represents ID of the first ENET EP instance
@@ -543,11 +576,26 @@ typedef struct {
     p64h_sysc_ipc_inst_id_t inst; ///< Instance of the ID enumeration
 } p64h_sysc_ipc_cfg_t;
 
+typedef struct {
+    p64h_sysc_nand_inst_id_t inst; ///< instance of the ID enumeration
+} p64h_sysc_appc_nand_cfg_t;
+
+typedef struct {
+    p64h_sysc_xspi_inst_id_t inst; ///< instance of the ID enumeration
+} p64h_sysc_appc_xspi_cfg_t;
+
+typedef struct {
+    p64h_sysc_sd_inst_id_t inst; ///< instance of the ID enumeration
+} p64h_sysc_appc_sd_cfg_t;
+
 /// NVM configuration
 typedef struct {
-    p64h_sysc_iobridge_cfg_t iob_cfg_sd[APPC_PERIPH_NVM_IOB_INST_NUM];   ///< iobridge inside the SD
-    p64h_sysc_iobridge_cfg_t iob_cfg_edac[APPC_PERIPH_NVM_IOB_INST_NUM]; ///< iobridge inside the EDAC
-    p64h_sysc_iobridge_cfg_t iob_cfg_nand[APPC_PERIPH_NVM_IOB_INST_NUM]; ///< iobridge inside the NAND
+    p64h_sysc_appc_nand_cfg_t nand_cfg[APPC_PERIPH_NAND_INST_NUM];        ///< NAND CFG
+    p64h_sysc_appc_xspi_cfg_t xspi_cfg[APPC_PERIPH_XSPI_INST_NUM];        ///< XSPI CFG
+    p64h_sysc_appc_sd_cfg_t   sd_cfg[APPC_PERIPH_SD_INST_NUM];            ///< SD CFG
+    p64h_sysc_iobridge_cfg_t  iob_cfg_sd[APPC_PERIPH_NVM_IOB_INST_NUM];   ///< iobridge inside the SD
+    p64h_sysc_iobridge_cfg_t  iob_cfg_edac[APPC_PERIPH_NVM_IOB_INST_NUM]; ///< iobridge inside the EDAC
+    p64h_sysc_iobridge_cfg_t  iob_cfg_nand[APPC_PERIPH_NVM_IOB_INST_NUM]; ///< iobridge inside the NAND
 } p64h_sysc_appc_nvm_cfg_t;
 
 /// USER CRYPTO configuration
@@ -560,7 +608,7 @@ typedef struct {
     bool    enabled;                                       ///< true - SPW Router is required; false - SPW Router is not required
     bool    enable_logical_addressing;                     ///< Logical Addressing enabled
     bool    enable_fallback;                               ///< Use Fallback Addressing
-    bool    disable_timeout;                               ///< Timeout Disabled
+    bool    enable_timeout;                                ///< Timeout Enabled
     uint8_t router_table[APP_PERIPH_SPW_ROUTER_TABLE_MAX]; ///< Router Table logical address entries
 } p64h_sysc_spw_router_cfg_t;
 

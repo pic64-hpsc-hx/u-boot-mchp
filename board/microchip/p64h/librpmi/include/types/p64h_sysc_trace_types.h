@@ -13,10 +13,10 @@
 #include "p64h_sysc_common_types.h"
 #include <ba/p64h_sysc_shared_ba.h>
 
-/// Define number of NoC's for statistics collection
-#define NOC_NUM 3u
-/// Define the number of trace encoder in appc
-#define NUM_APPC_TRACE_ENCODERS 4u
+#define ONE_HOT(x)                  1u << x ///< one hot encoding for bit mask
+#define NOC_NUM                     3u      ///< Define number of NoC's for statistics collection
+#define NUM_APPC_TRACE_ENCODERS     4u      ///< Define the number of trace encoder in appc
+#define SYS_TRACE_NUM_CROSS_TRIGGER 86u     ///< Number of cross trigger matrix instances
 
 /// Macro for defining a packet route of interest
 #define NOC_ROUTE(initiator_id_probe_index, target_id) ((target_id << 24) | initiator_id_probe_index)
@@ -34,13 +34,30 @@
 /* ---------------------------------------------------------------*/
 
 /**
- * trace data destination for sources of trace
+ * Trace encoder ID
  */
 typedef enum {
-    P64H_SYSC_TRACE_SRC_SINK_SRAM,          ///< Send trace data to local SRAM of source
-    P64H_SYSC_TRACE_SRC_SINK_SYSTEM_MEMORY, ///< Send trace data to system memory directly from source sink
-    P64H_SYSC_TRACE_SRC_SINK_ATB,           ///< Send trace data to ATB funnel and Trace SOK
-} p64h_sysc_trace_source_sink_t;
+    P64H_SYSC_TRACE_TE_APPC_HART0 = 0u,
+    P64H_SYSC_TRACE_TE_APPC_HART1 = 1u,
+    P64H_SYSC_TRACE_TE_APPC_HART2 = 2u,
+    P64H_SYSC_TRACE_TE_APPC_HART3 = 3u,
+    P64H_SYSC_TRACE_TE_APPC_HART4 = 4u,
+    P64H_SYSC_TRACE_TE_APPC_HART5 = 5u,
+    P64H_SYSC_TRACE_TE_APPC_HART6 = 6u,
+    P64H_SYSC_TRACE_TE_APPC_HART7 = 7u,
+    P64H_SYSC_TRACE_TE_SYSC       = 8u,
+    P64H_SYSC_TRACE_TE_LAST       = 9u
+} p64h_sysc_trace_te_id_t;
+
+/// TE trace attributes
+typedef struct {
+    uint32_t TE_Active;          ///< Master enable for trace system
+    uint32_t TE_Enable;          ///< Allows teTracing to turn all tracing on and off
+    uint32_t TE_Tracing;         ///< 1=Trace is being generated
+    uint32_t TE_Empty;           ///< Reads as 1 when all generated trace has been emitted
+    uint32_t TE_StallOrOverflow; ///< 1=hardware generated an overflow message or requested a core stall (trace may be lost)
+    uint32_t TE_SinkError;       ///< 1=hardware detected a trace sink transaction error
+} p64h_sysc_trace_te_attr_t;
 
 /**
  * @brief
@@ -126,6 +143,22 @@ typedef enum {
     P64H_SYSC_TRACE_TS_INSTRUMENTATION_OWNERSHIP_ONLY, ///< Timestamp added to ownership messages
     P64H_SYSC_TRACE_TS_INSTRUMENTATION_ALL             ///< Timestamp added to all instrumentation messages
 } p64h_sysc_trace_te_itc_timestamp_t;
+
+/// Enum for selecting the memory buffer mode of operation
+typedef enum {
+    P64H_SYSC_TRACE_MEM_STOP_ON_WRAP_MODE = 0, ///< When Trace RAM is full, the incoming trace stream is stalled.
+    P64H_SYSC_TRACE_MEM_CIRCULAR_BUFFER_MODE
+        = 1, ///< When the trace memory is full, incoming trace data continues to be overwritten into the trace memory.
+} p64h_sysc_trace_mem_mode_t;
+
+/// enumerate trace sink instances
+typedef enum {
+    P64H_SYSC_TRACE_SINK_ID_APPC_HART_0_3 = 0, ///< sink for APPC HART0..3
+    P64H_SYSC_TRACE_SINK_ID_APPC_HART_4_7,     ///< sink for APPC HART4..7
+    P64H_SYSC_TRACE_SINK_ID_SYSC,              ///< sink for SYSC hart
+    P64H_SYSC_TRACE_SINK_ID_LAST
+} p64h_sysc_trace_sink_id_t;
+
 /**
  * ATB sink configuration for trace encoder
  */
@@ -140,6 +173,23 @@ typedef struct {
     p64h_sysc_trace_mem_mode_t mem_buff_mode; ///< memory buffer mode, circular buffer or stop on wrap
 } p64h_sysc_trace_sram_sink_cfg_t;
 
+/// trace system memory configurations
+typedef struct {
+    p64h_sysc_trace_mem_mode_t trace_mem_mode;      ///< trace buffer mode of operation (FIFO or CB); see trace_mem_mode_t
+    uint32_t                   trace_mem_addr_high; ///< the high 32-bits of the mem buffer addr
+    uint32_t                   trace_mem_addr_low;  ///< the low 32-bits of the mem buffer addr
+    uint32_t                   trace_mem_size;      ///< the size of the mem buffer
+} p64h_sysc_trace_mem_cfg_t;
+
+/**
+ * trace data destination for sources of trace
+ */
+typedef enum {
+    P64H_SYSC_TRACE_SRC_SINK_SRAM,          ///< Send trace data to local SRAM of source
+    P64H_SYSC_TRACE_SRC_SINK_SYSTEM_MEMORY, ///< Send trace data to system memory directly from source sink
+    P64H_SYSC_TRACE_SRC_SINK_ATB,           ///< Send trace data to ATB funnel and Trace SOK
+} p64h_sysc_trace_source_sink_t;
+
 /**
  * sink configuration for trace encoder
  */
@@ -148,7 +198,7 @@ typedef struct {
     p64h_sysc_trace_atb_sink_cfg_t  atb_sink_cfg;  ///< atb sink cfg
     p64h_sysc_trace_sram_sink_cfg_t sram_sink_cfg; ///< sram sink cfg
     p64h_sysc_trace_mem_cfg_t       sys_mem_cfg;   ///< sys mem sink cfg
-} p64h_sysc_trace_te_sink_cfg_t;
+} p64h_sysc_trace_sink_cfg_t;
 
 /**
  * configuration for trace encoder instruction trace
@@ -170,44 +220,38 @@ typedef struct {
 } p64h_sysc_trace_te_itc_cfg_t;
 
 /**
+ * Enum for TE cfg command
+ */
+typedef enum {
+    P64H_SYSC_TRACE_TE_SET_SINK = ONE_HOT(0), ///< configure the sink for this source
+    P64H_SYSC_TRACE_TE_SET_ITC  = ONE_HOT(1), ///< configure the ITC trace system for hart 0
+    P64H_SYSC_TRACE_TE_SET_HTM  = ONE_HOT(2), ///< configure the BTM trace system for hart 0
+} p64h_sysc_trace_te_cfg_cmd_t;
+
+/**
  * Source level configuration for Trace Encoder
  */
 typedef struct {
+    p64h_sysc_trace_te_cfg_cmd_t cmd_msk; ///< command mask for which cfg to set
     p64h_sysc_trace_te_btm_cfg_t btm_cfg; ///< configuration for instruction trace
     p64h_sysc_trace_te_itc_cfg_t itc_cfg; ///< configuration for instrumentation trace
 } p64h_sysc_trace_te_cfg_t;
 
 /**
- * Enum for TE cfg command
- */
-typedef enum {
-    P64H_SYSC_TRACE_TE_SET_SINK      = ONE_HOT(0), ///< configure the sink for this source
-    P64H_SYSC_TRACE_TE_HART0_SET_ITC = ONE_HOT(1), ///< configure the ITC trace system for hart 0
-    P64H_SYSC_TRACE_TE_HART0_SET_HTM = ONE_HOT(2), ///< configure the BTM trace system for hart 0
-    P64H_SYSC_TRACE_TE_HART1_SET_ITC = ONE_HOT(3), ///< configure the ITC trace system for hart 1 (if available)
-    P64H_SYSC_TRACE_TE_HART1_SET_HTM = ONE_HOT(4), ///< configure the BTM trace system for hart 1 (if available)
-    P64H_SYSC_TRACE_TE_HART2_SET_ITC = ONE_HOT(5), ///< configure the ITC trace system for hart 2 (if available)
-    P64H_SYSC_TRACE_TE_HART2_SET_HTM = ONE_HOT(6), ///< configure the BTM trace system for hart 2 (if available)
-    P64H_SYSC_TRACE_TE_HART3_SET_ITC = ONE_HOT(7), ///< configure the ITC trace system for hart 3 (if available)
-    P64H_SYSC_TRACE_TE_HART3_SET_HTM = ONE_HOT(8)  ///< configure the BTM trace system for hart 3 (if available)
-} p64h_sysc_trace_te_cfg_cmd_t;
-
-/**
  * Struct to configure APPC Trace sources
  */
 typedef struct {
-    p64h_sysc_trace_te_cfg_cmd_t  cmd_msk;                               ///< command mask for which cfg to set
-    p64h_sysc_trace_te_cfg_t      core_te_cfgs[NUM_APPC_TRACE_ENCODERS]; ///< Core 0-3 trace encoder per cluster
-    p64h_sysc_trace_te_sink_cfg_t sink_cfg;                              ///< sink cfg per cluster
+    p64h_sysc_trace_te_cfg_t   core_te_cfgs[NUM_APPC_TRACE_ENCODERS]; ///< Core 0-3 trace encoder per cluster
+    p64h_sysc_trace_sink_cfg_t sink_cfg;                              ///< sink cfg per cluster
 } p64h_sysc_trace_appc_cfg_t;
 
 /**
  * Struct to configure SYSC Trace sources
  */
 typedef struct {
-    p64h_sysc_trace_te_cfg_cmd_t  cmd_msk;     ///< command mask for which cfg to set
-    p64h_sysc_trace_te_cfg_t      core_te_cfg; ///< Core 0 trace encoder
-    p64h_sysc_trace_te_sink_cfg_t sink_cfg;    ///< sink cfg for sysc
+    p64h_sysc_trace_te_cfg_cmd_t cmd_msk;     ///< command mask for which cfg to set
+    p64h_sysc_trace_te_cfg_t     core_te_cfg; ///< Core 0 trace encoder
+    p64h_sysc_trace_sink_cfg_t   sink_cfg;    ///< sink cfg for sysc
 } p64h_sysc_trace_sysc_cfg_t;
 
 // NoC Statistics enumerations , structures and APIs
@@ -255,6 +299,10 @@ typedef struct {
     p64h_sysc_trace_sysc_cfg_t sysc_trace_cfg;         ///< configuration for TE of sysc
     p64h_sysc_noc_obs_cfg_t    noc_trace_cfg[NOC_NUM]; ///< configuration for ddr noc trace system (APP_NOC - 0, SYSC_NOC - 1, DDR_NOC - 2)
 } p64h_sysc_trace_sources_cfg_t;
+
+/* ---------------------------------------------------------------*/
+// ### Structs and Enums for NOC tracing configuration  ###
+/* ---------------------------------------------------------------*/
 
 /**
  * @brief
@@ -950,7 +998,8 @@ typedef union {
 
 /// trace event identifier
 typedef enum {
-    P64H_SYSC_TRACE_EVD_ID_AVAILABLE = 1 ///< trace available
+    P64H_SYSC_TRACE_EVD_ID_AVAILABLE = 0, ///< trace available
+    P64H_SYSC_TRACE_EVD_ID_LAST
 } p64h_sysc_trace_evt_id_t;
 
 /// trace event
@@ -958,39 +1007,25 @@ typedef struct {
     p64h_sysc_trace_evt_id_t eid; ///< event identifier
 } p64h_sysc_trace_evt_t;
 
-/// enumerate trace sink
-typedef enum {
-    P64H_SYSC_TRACE_SINK_ID_LOCAL_SRAM = 0, ///< SRAM trace sink
-    P64H_SYSC_TRACE_SINK_ID_MEM,            ///< Memory trace sink
-    P64H_SYSC_TRACE_SINK_ID_HSIO            ///< High-Speed IO sink
-} p64h_sysc_trace_sink_id_t;
-
 /// enumerate system trace
 typedef enum {
     P64H_SYSC_SYS_TRACE_APP_NOC = 0, ///< App NOC trace
     P64H_SYSC_SYS_TRACE_SYS_NOC,     ///< Syc NOC trace
     P64H_SYSC_SYS_TRACE_DDR_NOC,     ///< DDR NOC trace
+    P64H_SYSC_SYS_TRACE_LAST
 } p64h_sysc_sys_trace_id_t;
 
 /// enumerate software trace
 typedef enum {
-    P64H_SYSC_SW_TRACE_SVC_EVT = 0 ///< software service event trace
+    P64H_SYSC_SW_TRACE_SVC_EVT = 0, ///< runtime software service-event trace (reserved, not yet implemented)
+    P64H_SYSC_SW_TRACE_BOOT,        ///< DTIM software boot-stage sw trace
+    P64H_SYSC_SW_TRACE_LAST
 } p64h_sysc_sw_trace_id_t;
-
-/// enumerate RISCV trace-encoder trace
-typedef enum {
-    P64H_SYSC_TE_TRACE_INST = 0 ///< instruction tracing
-} p64h_sysc_te_trace_id_t;
 
 /// trace sink attributes
 typedef struct {
     uint32_t placeholder; ///< placeholder for trace sink attributes
 } p64h_sysc_trace_sink_attr_t;
-
-/// trace sink configuration
-typedef struct {
-    uint32_t placeholder; ///< placeholder for trace sink configuration
-} p64h_sysc_trace_sink_cfg_t;
 
 /// system trace attributes
 typedef struct {
@@ -1003,27 +1038,390 @@ typedef struct {
     p64h_sysc_noc_trace_cfg_t noc_trace_cfg;
 } p64h_sysc_sys_trace_cfg_t;
 
-/// software trace attributes
+/// software trace attributes (read-only live state of a software-trace object).
+/// For P64H_SYSC_SW_TRACE_BOOT these mirror the DTIM attributes, so
+/// the host knows the GET_TRACE_DATA size and the mtime timebase.
 typedef struct {
-    uint32_t placeholder; ///< placeholder for software trace attributes
+    uint32_t magic;      ///< ring magic (TRACE_SW_MAGIC once initialized, else 0)
+    uint32_t wr_index;   ///< next write slot, in [0, count)
+    uint32_t wrap_count; ///< number of times the ring has wrapped
+    uint32_t count;      ///< number of slots (== TRACE_SW_NUM_ENTRIES)
+    uint32_t entry_size; ///< bytes per tracepoint (sizeof(p64h_sysc_sw_tracepoint_t))
+    uint32_t mtime_hz;   ///< timestamp counter frequency in Hz (TRACE_SW_MTIME_HZ)
+    uint32_t buf_size;   ///< total ring size in bytes (sizeof(p64h_sysc_sw_trace_buffer_t))
 } p64h_sysc_sw_trace_attr_t;
 
-/// software trace configuration
+/// software-trace buffer fill mode (what happens when the ring fills).
+typedef enum {
+    P64H_SYSC_SW_TRACE_MODE_CIRCULAR_BUFFER = 0, ///< ring buffer: overwrite oldest entries on wrap (default)
+    P64H_SYSC_SW_TRACE_MODE_STOP_ON_WRAP,        ///< stop recording once the ring is full (keep the first N entries)
+} p64h_sysc_sw_trace_mode_t;
+
+/// software trace configuration (control for a software-trace object).
 typedef struct {
-    uint32_t placeholder; ///< placeholder for software trace configuration
+    uint32_t enable; ///< 1 = recording enabled, 0 = paused (gates new tracepoints)
+    uint32_t clear;  ///< set-only: write 1 to reset/empty the ring (reads back 0)
+    uint32_t mode;   ///< p64h_sysc_sw_trace_mode_t: WRAP (ring, default) or STOP_ON_WRAP
 } p64h_sysc_sw_trace_cfg_t;
-
-/// TE trace attributes
-typedef struct {
-    uint32_t placeholder; ///< placeholder for TE trace attributes
-} p64h_sysc_te_trace_attr_t;
-
-/// TE trace configuration
-typedef struct {
-    uint32_t placeholder; ///< placeholder for TE trace configuration
-} p64h_sysc_te_trace_cfg_t;
 
 /// function pointer type for TRACE event notification
 typedef void (*p64h_sysc_trace_evt_fct_t)(const p64h_sysc_trace_evt_t* trace_evt_ptr);
+
+/* ---------------------------------------------------------------*/
+//  ### Stuct and Enums for Device Level Trace configuration such as Trace Sok Funnel Destination ###
+/* ---------------------------------------------------------------*/
+
+/**
+ * Enum for defining trace data source
+ */
+
+typedef enum {
+    P64H_SYSC_TRACE_SRC_SYSC      = ONE_HOT(0), ///< Trace data is coming from System Controller ATB funnel
+    P64H_SYSC_TRACE_SRC_APPC_0    = ONE_HOT(1), ///< Trace data is coming from app cluster 0 ATB funnel
+    P64H_SYSC_TRACE_SRC_APPC_1    = ONE_HOT(2), ///< Trace data is coming from app cluster 1 ATB funnel
+    P64H_SYSC_TRACE_SRC_SYS_NOC   = ONE_HOT(3), ///< Trace data is coming from SYS_NOC
+    P64H_SYSC_TRACE_SRC_APP_NOC   = ONE_HOT(4), ///< Trace data is coming from APP_NOC
+    P64H_SYSC_TRACE_SRC_DDR_NOC   = ONE_HOT(5), ///< Trace data is coming from DDR_NOC
+    P64H_SYSC_TRACE_SRC_ALL_NOCS  = 0b111000,   ///< Trace data is coming from all NOC
+    P64H_SYSC_TRACE_SRC_APPC      = 0b000110,   ///< Trace data is coming from both appc and sysc
+    P64H_SYSC_TRACE_SRC_APPC_SYSC = 0b000111,   ///< Trace data is coming from both appc and sysc
+    P64H_SYSC_TRACE_SRC_ALL       = 0b111111    ///< Trace data is coming from all available sources
+
+} p64h_sysc_trace_src_t;
+
+/**
+ * Enum to define cross trigger matrix source 0
+ */
+typedef enum {
+    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_0                 = ONE_HOT(0),  ///< Cluster 0 Core 0
+    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_1                 = ONE_HOT(1),  ///< Cluster 0 Core 1
+    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_2                 = ONE_HOT(2),  ///< Cluster 0 Core 2
+    P64H_SYSC_TRACE_XTRG_CLUSTER_0_HART_3                 = ONE_HOT(3),  ///< Cluster 0 Core 3
+    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_0                 = ONE_HOT(4),  ///< Cluster 1 Core 0
+    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_1                 = ONE_HOT(5),  ///< Cluster 1 Core 1
+    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_2                 = ONE_HOT(6),  ///< Cluster 1 Core 2
+    P64H_SYSC_TRACE_XTRG_CLUSTER_1_HART_3                 = ONE_HOT(7),  ///< Cluster 1 Core 3
+    P64H_SYSC_TRACE_XTRG_S7_SYS_CTRL_TRIG_0               = ONE_HOT(8),  ///< S7 Sys Ctrl
+    P64H_SYSC_TRACE_XTRG_S7_SYS_CTRL_TRIG_1               = ONE_HOT(9),  ///< S7 Sys Ctrl
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_LATENCY_TRIG_0           = ONE_HOT(10), ///< DDR NOC Latency
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_LATENCY_TRIG_1           = ONE_HOT(11), ///< DDR NOC Latency
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_REQUEST_PACKET_0_TRIG_0  = ONE_HOT(12), ///< DDR NOC request Packet 0
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_REQUEST_PACKET_0_TRIG_1  = ONE_HOT(13), ///< DDR NOC request Packet 0
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_RESPONSE_PACKET_0_TRIG_0 = ONE_HOT(14), ///< DDR NOC response Packet 0
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_RESPONSE_PACKET_0_TRIG_1 = ONE_HOT(15), ///< DDR NOC response Packet 0
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_REQUEST_PACKET_1_TRIG_0  = ONE_HOT(16), ///< DDR NOC request Packet 1
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_REQUEST_PACKET_1_TRIG_1  = ONE_HOT(17), ///< DDR NOC request Packet 1
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_RESPONSE_PACKET_1_TRIG_0 = ONE_HOT(18), ///< DDR NOC response Packet 1
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_RESPONSE_PACKET_1_TRIG_1 = ONE_HOT(19), ///< DDR NOC response Packet 1
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_1_TRIG_0           = ONE_HOT(20), ///< SYS NOC Probe 1
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_1_TRIG_1           = ONE_HOT(21), ///< SYS NOC Probe 1
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_2_TRIG_0           = ONE_HOT(22), ///< SYS NOC Probe 2
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_2_TRIG_1           = ONE_HOT(23), ///< SYS NOC Probe 2
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_3_TRIG_0           = ONE_HOT(24), ///< SYS NOC Probe 3
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_3_TRIG_1           = ONE_HOT(25), ///< SYS NOC Probe 3
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_4_TRIG_0           = ONE_HOT(26), ///< SYS NOC Probe 4
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_4_TRIG_1           = ONE_HOT(27), ///< SYS NOC Probe 4
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_5_TRIG_0           = ONE_HOT(28), ///< SYS NOC Probe 5
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_PROBE_5_TRIG_1           = ONE_HOT(29), ///< SYS NOC Probe 5
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_0_TRIG_0         = ONE_HOT(30), ///< APP NOC Pkt CPU 0
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_0_TRIG_1         = ONE_HOT(31), ///< APP NOC Pkt CPU 0
+} p64h_sysc_trace_cross_trigger_out_select_0_t;
+
+/**
+ * Enum to define cross trigger matrix source 1
+ *
+ *
+ */
+typedef enum {
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_1_TRIG_0         = ONE_HOT(0),  ///< APP NOC Pkt CPU 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_CPU_1_TRIG_1         = ONE_HOT(1),  ///< APP NOC Pkt CPU 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_DDR_ENCRYPT_TRIG_0   = ONE_HOT(2),  ///< APP NOC Pkt DDR ENCRYPT
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_DDR_ENCRYPT_TRIG_1   = ONE_HOT(3),  ///< APP NOC Pkt DDR ENCRYPT
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_EP_TRIG_0       = ONE_HOT(4),  ///< APP NOC Pkt ENET EP
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_EP_TRIG_1       = ONE_HOT(5),  ///< APP NOC Pkt ENET EP
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_SWR_TRIG_0      = ONE_HOT(6),  ///< APP NOC Pkt ENET SWR
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_ENET_SWR_TRIG_1      = ONE_HOT(7),  ///< APP NOC Pkt ENET SWR
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_IOMMU_TRIG_0         = ONE_HOT(8),  ///< APP NOC Pkt IOMMU
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_IOMMU_TRIG_1         = ONE_HOT(9),  ///< APP NOC Pkt IOMMU
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M2_TRIG_0            = ONE_HOT(10), ///< APP NOC Pkt M2
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M2_TRIG_1            = ONE_HOT(11), ///< APP NOC Pkt M2
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M3_TRIG_0            = ONE_HOT(12), ///< APP NOC Pkt M3
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_M3_TRIG_1            = ONE_HOT(13), ///< APP NOC Pkt M3
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_NVM_TRIG_0           = ONE_HOT(14), ///< APP NOC Pkt NVM
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_NVM_TRIG_1           = ONE_HOT(15), ///< APP NOC Pkt NVM
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_0_TRIG_0        = ONE_HOT(16), ///< APP NOC Pkt PCIE 0
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_0_TRIG_1        = ONE_HOT(17), ///< APP NOC Pkt PCIE 0
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_1_TRIG_0        = ONE_HOT(18), ///< APP NOC Pkt PCIE 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_PCIE_1_TRIG_1        = ONE_HOT(19), ///< APP NOC Pkt PCIE 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_SYS_NOC_TRIG_0       = ONE_HOT(20), ///< APP NOC Pkt SYS NOC
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_SYS_NOC_TRIG_1       = ONE_HOT(21), ///< APP NOC Pkt SYS NOC
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_USER_CRYPTO_TRIG_0   = ONE_HOT(22), ///< APP NOC Pkt USER CRYPTO
+    P64H_SYSC_TRACE_XTRG_APP_NOC_PKT_USER_CRYPTO_TRIG_1   = ONE_HOT(23), ///< APP NOC Pkt USER CRYPTO
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_0_TRIG_0       = ONE_HOT(24), ///< APP NOC Trans CPU 0
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_0_TRIG_1       = ONE_HOT(25), ///< APP NOC Trans CPU 0
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_1_TRIG_0       = ONE_HOT(26), ///< APP NOC Trans CPU 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_CPU_1_TRIG_1       = ONE_HOT(27), ///< APP NOC Trans CPU 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_DDR_ENCRYPT_TRIG_0 = ONE_HOT(28), ///< APP NOC Trans DDR ENCRYPT
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_DDR_ENCRYPT_TRIG_1 = ONE_HOT(29), ///< APP NOC Trans DDR ENCRYPT
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_EP_TRIG_0     = ONE_HOT(30), ///< APP NOC Trans ENET EP
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_EP_TRIG_1     = ONE_HOT(31), ///< APP NOC Trans ENET EP
+} p64h_sysc_trace_cross_trigger_out_select_1_t;
+
+/**
+ * Enum to define cross trigger matrix source 2
+ */
+typedef enum {
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_SWR_TRIG_0    = ONE_HOT(0),  ///< APP NOC Trans ENET SWR
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_ENET_SWR_TRIG_1    = ONE_HOT(1),  ///< APP NOC Trans ENET SWR
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_IOMMU_TRIG_0       = ONE_HOT(2),  ///< APP NOC Trans IOMMU
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_IOMMU_TRIG_1       = ONE_HOT(3),  ///< APP NOC Trans IOMMU
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M2_TRIG_0          = ONE_HOT(4),  ///< APP NOC Trans M2
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M2_TRIG_1          = ONE_HOT(5),  ///< APP NOC Trans M2
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M3_TRIG_0          = ONE_HOT(6),  ///< APP NOC Trans M3
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_M3_TRIG_1          = ONE_HOT(7),  ///< APP NOC Trans M3
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_NVM_TRIG_0         = ONE_HOT(8),  ///< APP NOC Trans NVM
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_NVM_TRIG_1         = ONE_HOT(9),  ///< APP NOC Trans NVM
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_0_TRIG_0      = ONE_HOT(10), ///< APP NOC Trans PCIE 0
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_0_TRIG_1      = ONE_HOT(11), ///< APP NOC Trans PCIE 0
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_1_TRIG_0      = ONE_HOT(12), ///< APP NOC Trans PCIE 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_PCIE_1_TRIG_1      = ONE_HOT(13), ///< APP NOC Trans PCIE 1
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_SYS_NOC_TRIG_0     = ONE_HOT(14), ///< APP NOC Trans SYS NOC
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_SYS_NOC_TRIG_1     = ONE_HOT(15), ///< APP NOC Trans SYS NOC
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_USER_CRYPTO_TRIG_0 = ONE_HOT(16), ///< APP NOC Trans USER CRYPTO
+    P64H_SYSC_TRACE_XTRG_APP_NOC_TRANS_USER_CRYPTO_TRIG_1 = ONE_HOT(17), ///< APP NOC Trans USER CRYPTO
+    P64H_SYSC_TRACE_XTRG_SYNCREQ_TRIG                     = ONE_HOT(18), ///< syncreq trigger
+    P64H_SYSC_TRACE_XTRG_APP_NOC_SYNCREQ_TRIG             = ONE_HOT(19), ///< app_noc syncreq trigger
+    P64H_SYSC_TRACE_XTRG_DDR_NOC_SYNCREQ_TRIG             = ONE_HOT(20), ///< ddr noc syncreq trigger
+    P64H_SYSC_TRACE_XTRG_SYS_NOC_SYNCREQ_TRIG             = ONE_HOT(21), ///< sys noc syncreq trigger
+} p64h_sysc_trace_cross_trigger_out_select_2_t;
+
+/**
+ * Enum for selecting the trace data path at system level
+ */
+typedef enum {
+    P64H_SYSC_TRACE_DEST_NONE       = 0, ///< Do not configure the trace destination
+    P64H_SYSC_TRACE_DEST_SERDES     = 1, ///< Trace data is directed to external trace debugger via SERDES
+    P64H_SYSC_TRACE_DEST_SYSTEM_MEM = 2  ///< Trace data is directed to the AXI4 initiator Interface
+} p64h_sysc_trace_dest_t;
+
+/**
+ *  bit mask for serdes configuration command
+ */
+typedef enum {
+    P64H_SYSC_TRACE_SERDES_CFG_PWR_UP     = ONE_HOT(0),  ///< power cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_EN         = ONE_HOT(1),  ///< enable cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_TEST_MODE  = ONE_HOT(2),  ///< test mode cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_LAN_SEL    = ONE_HOT(3),  ///< lane sel cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_FRAME_SIZE = ONE_HOT(4),  ///< frame size cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_CRC_EN     = ONE_HOT(5),  ///< crc enable cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_TWP_CNT    = ONE_HOT(6),  ///< twp cnt cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_SYNC_COUNT = ONE_HOT(7),  ///< sync count cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_ALIGN_LEN  = ONE_HOT(8),  ///< align len cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_BOND_LEN   = ONE_HOT(9),  ///< bond len cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_VERIFY_LEN = ONE_HOT(10), ///< verify len cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_ALIGN_MUL  = ONE_HOT(11), ///< align cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_BOND_MUL   = ONE_HOT(12), ///< bond cfg set mask
+    P64H_SYSC_TRACE_SERDES_CFG_VERIFY_MUL = ONE_HOT(13), ///< verify cfg set mask
+} p64h_sysc_trace_serdes_cfg_cmd_t;
+
+/**
+ * trace serdes configurations (example, not complete)
+ */
+typedef struct {
+    uint32_t cmd_mask;  ///< bit mask for cfg cmd; see p64h_sysc_trace_serdes_cfg_cmd_t
+    uint32_t pwr_up;    ///< Power up the HTI hardware
+    uint32_t enable;    ///< Power up and enable the HTI hardware
+    uint32_t test_mode; ///< Put the HTI hardware in test mode, test_mode and enable are exclusive
+    uint32_t lane_sel;  ///< Controls the number of active lanes used for transmitting trace data. 0: Lane 1 active. 1: Lanes 1 to 2 active.
+
+    uint32_t frame_size; ///< Aurora Frame Size. TWP Sync packets must be disabled. 0: 2 TWP Frames 1: 4 TWP Frames 2: 8 TWP Frames 3: 16 TWP Frames
+    uint32_t crc_en;     ///< Enable to include CRC in Aurora Frames
+    uint8_t  twp_cnt;    ///< Number of Aurora frames sent before inserting 4 bytes of TWP sync
+
+    ///< Control register for adjusting the period between clock compensation sequences.
+    uint32_t sync_count; ///< The number of symbols transmitted between clock compensation sequences generated by the link layer.
+
+    ///< Following cfg specifies the clock cycles used at the various stages of link initialization.
+    uint32_t align_len; ///< The number of bytes of the Aurora alignment pattern that are sent by the TS. Number of bytes = align_mul*(align_len + 1).
+    uint32_t bond_len;  ///< The number of bytes of the Aurora bonding pattern that are sent by the TS. Number of bytes = bond_mul*(bond_len + 1).
+    uint32_t verify_len; ///< The number of bytes of the Aurora verification pattern that are sent by the TS. Number of bytes = verify_mul*(verify_len
+                         ///< + 1).
+    uint32_t align_mul;  ///< Defines the multiplier used in conjunction with align_len when performing link initialization
+    uint32_t bond_mul;   ///< Defines the multiplier used in conjunction with bond_len when performing link initialization
+    uint32_t verify_mul; ///< Defines the multiplier used in conjunction with verify_len when performing link initialization
+
+} p64h_sysc_trace_serdes_cfg_t;
+
+/**
+ * trace etr axi configurations cmd mask
+ */
+typedef enum {
+    P64H_SYSC_TRACE_ETR_AXI_CFG_OUTSTANDING_LIMIT = ONE_HOT(0), ///< outstanding limit set mask
+    P64H_SYSC_TRACE_ETR_AXI_CFG_STOP_ON_ERROR     = ONE_HOT(1), ///< stop_on_error cfg set mask
+} p64h_sysc_trace_etr_axi_cfg_cmd_t;
+
+/**
+ * trace etr axi configurations
+ */
+typedef struct {
+    uint32_t cmd_mask;          ///< bit mask for cfg cmd; see p64h_sysc_trace_etr_axi_cfg_cmd_t
+    uint32_t outstanding_limit; ///< outstanding_limit
+    uint32_t stop_on_error;     ///< stop_on_error
+} p64h_sysc_trace_etr_axi_cfg_t;
+
+/**
+ * trace destination configurations
+ */
+typedef struct {
+    p64h_sysc_trace_dest_t        trace_dest_select; ///< select trace data path
+    p64h_sysc_trace_mem_cfg_t     mem_cfg;           ///< if trace_dest_select == SYSTEM_MEM, set up trace buffer
+    p64h_sysc_trace_etr_axi_cfg_t etr_axi_cfg;       ///< if trace_dest_select == SYSTEM_MEM, optional axi cfg
+    p64h_sysc_trace_serdes_cfg_t  serdes_cfg;        ///< if trace_dest_select == SERDES, set up serdes
+} p64h_sysc_trace_dest_cfg_t;
+
+/**
+ *  bit mask for twp formatter configuration command
+ */
+typedef enum {
+    P64H_SYSC_TRACE_TWP_FMT_CFG_SYNC_COUNT   = ONE_HOT(0), ///< sync count cfg set mask
+    P64H_SYSC_TRACE_TWP_FMT_CFG_FLUSH_NORMAL = ONE_HOT(1), ///< flush normal cfg set mask
+    P64H_SYSC_TRACE_TWP_FMT_CFG_HOLD_TIME    = ONE_HOT(2), ///< hold time cfg set mask
+} p64h_sysc_trace_twp_fmt_cfg_cmd_t;
+
+/**
+ * system level trace tracce port configuration
+ */
+typedef struct {
+    uint32_t twp_fmt_cmd_mask;    ///< Cmd mask for twp formatter cfg; see p64h_sysc_trace_twp_fmt_cfg_cmd_t
+    uint32_t atb_sync_count;      ///< 12-bit counter value to send periodic synchronization requests to the ATB initiator using syncreq.
+                                  // It also indicates the number of complete frames between TWP synchronization packets.
+                                  // If this field is programmed as 0x0, the synchronization counter is disabled.
+                                  // If this field is programmed with 0x1-0x7 the programmed value is 0x8.
+    uint32_t funnel_flush_normal; ///< This bit, when clear, allows target ports that are already flushed to
+                                  // receive further data even if there are other ports that have not
+                                  // completed flush. If set, a port that has completed flush is not be
+                                  // allowed to receive further data until all ports have completed
+                                  // flush.
+    uint32_t funnel_hold_time;    ///< Hold time. Value sets the minimum hold time before switching trace
+                                  // sources (funnel inputs) based on the ID. Value used is programmed
+                                  // value + 1. 0x0 - 1 transaction hold time. 0x1 - 2 transactions hold
+                                  // time. 0x2 - 3 transactions hold time. 0x3 - Reserved.
+
+} p64h_sysc_trace_twp_fmt_cfg_t;
+
+/**
+ * CORE_N_ETR_groupA_t
+ */
+typedef struct {
+    uint32_t xtrig_out_select_0; ///< mask for selecting out trig, each bit represents which of the 32  bits of TRIGGER_IN gets 'or'ed together for
+                                 ///< TRIGGER_OUT
+    uint32_t xtrig_out_select_1; ///< mask for selecting out trig, each bit represents which of the 32  bits of TRIGGER_IN gets 'or'ed together for
+                                 ///< TRIGGER_OUT
+    uint32_t xtrig_out_select_2; ///< mask for selecting out trig, each bit represents which of the 14  bits of TRIGGER_IN gets 'or'ed together for
+                                 ///< TRIGGER_OUT
+} p64h_sysc_cross_matrix_single_entry_t;
+
+/**
+ *  cross trigger matrix configuration
+ *  There are 78 trig in -> trig out.
+ *  Each trig out can be configured to activate to each trig in by setting that bit to one
+ */
+typedef struct {
+    p64h_sysc_cross_matrix_single_entry_t xtrig_out[SYS_TRACE_NUM_CROSS_TRIGGER]; ///< CROSS_TRIGGER_OUT_SELECT_0
+                                                                                  ///< CROSS_TRIGGER_OUT_SELECT_1
+                                                                                  ///< CROSS_TRIGGER_OUT_SELECT_2
+} p64h_sysc_trace_xtrig_matrix_cfg_t;
+
+/**
+ * @brief
+ *   Specifies any information required to configure the tracing system of the device
+ */
+typedef struct {
+    uint32_t                           enable;            ///< enable or disable the trace sok
+    uint32_t                           trace_srcs_msk;    ///< bitmask for sources to activate, p64h_sysc_trace_src_t
+    p64h_sysc_trace_twp_fmt_cfg_t      trace_twp_fmt_cfg; ///< twp formatter configurations
+    p64h_sysc_trace_dest_cfg_t         trace_dest_cfg;    ///< trace data-path configuration
+    p64h_sysc_trace_xtrig_matrix_cfg_t xtrig_cfg;         ///< cross trigger matrix configurations
+
+} p64h_sysc_trace_dev_cfg_t;
+
+/**Trace Memory Controller Status register** */
+typedef struct {
+    uint32_t trace_buffer_full;     ///< Trace buffer is full
+    uint32_t trace_mem_ctrl_ready;  ///< Trace capture has stopped and flushed &
+                                    // The TMC is not tracing because of the DrainBuffer bit of the FFCR being set & he AXI interface is not busy &
+                                    // the AXI interface is not busy
+    uint32_t trace_pipelines_empty; ///< This bit is set when trace capture has stopped, and all internal pipelines and buffers have drained.
+    uint32_t trace_buffer_empty;    ///< If set, this bit indicates that the TMC does not contain any valid trace data
+    uint32_t trace_mem_err;         ///<   This bit indicates that an error has occurred on the AXI master interface.
+} p64h_sysc_trace_mem_ctrl_status_t;
+
+/**
+ * @brief Selects which trace data p64h_sysc_trace_data_get() returns.
+ */
+typedef enum {
+    P64H_SYSC_TRACE_DATA_TYPE_SINK = 0, ///< Hardware trace-sink data
+    P64H_SYSC_TRACE_DATA_TYPE_DTIM_SW,  ///< Software boot-trace ring in DTIM (HPSC-7775)
+    P64H_SYSC_TRACE_DATA_TYPE_LAST      ///< marker / count
+} p64h_sysc_trace_data_type_t;
+
+/* ============================================================================
+ *  Low-overhead boot-stage tracepoints captured into a ring buffer at a fixed
+ *  address in the SysC core-internal DTIM. Firmware records points via
+ *  p64h_sysc_trace_record(); the entire ring can be retrieved with p64h_sysc_trace_data_get()
+ *  (type P64H_SYSC_TRACE_DATA_TYPE_DTIM_SW) and decoded by the host using the
+ *  p64h_sysc_sw_trace_buffer_t / p64h_sysc_sw_tracepoint_t layout.
+ * ==========================================================================*/
+
+/** Ring-header magic ("SWTR"); distinguishes an initialized ring from zeroed DTIM. */
+#define TRACE_SW_MAGIC 0x53575452UL
+/** Number of tracepoint slots in the ring (12 B each; well within 64 KB DTIM). */
+#define TRACE_SW_NUM_ENTRIES 256u
+/** Frequency (Hz) of the CLINT mtime used for tracepoint timestamps (DTB
+ *  timebase-frequency); lets the host convert tick deltas to time. */
+#define TRACE_SW_MTIME_HZ 50000000u
+
+/**
+ * @brief Boot-stage discriminator for a software tracepoint.
+ *
+ * Per-partition stages carry the partition id (0..7) in sw_tracepoint_t.data.
+ * BOOT_STAGE_SVC_SYSTEM_HEALTH_CHK and BOOT_STAGE_PSM_STATUS_SET are reserved
+ * placeholders (not yet instrumented).
+ */
+typedef enum {
+    P64H_SYSC_BOOT_STAGE_NULL = 0,                  ///< Null boot stage
+    P64H_SYSC_BOOT_STAGE_BSP_START,                 ///< RTEMS BSP entry (bsp_start)
+    P64H_SYSC_BOOT_STAGE_FW_START,                  ///< RTEMS Init() entry
+    P64H_SYSC_BOOT_STAGE_SVC_SYSTEM_PHASE0,         ///< system service phase 0 complete
+    P64H_SYSC_BOOT_STAGE_SVC_SYSTEM_PHASE1,         ///< system service phase 1 complete
+    P64H_SYSC_BOOT_STAGE_SVC_SYSTEM_PHASE2,         ///< system service phase 2 complete
+    P64H_SYSC_BOOT_STAGE_SVC_SYSTEM_DDR_TRAINING,   ///< DDR training/config
+    P64H_SYSC_BOOT_STAGE_SVC_SYSTEM_HEALTH_CHK,     ///< reserved (not yet instrumented)
+    P64H_SYSC_BOOT_STAGE_SVC_APPC_BS_APPC_STATIC,   ///< AppC static config
+    P64H_SYSC_BOOT_STAGE_SVC_APPC_BS_APPC_CFG,      ///< AppC partition config   (data = partition id)
+    P64H_SYSC_BOOT_STAGE_SVC_APPC_BS_APPC_BOOT,     ///< AppC partition boot     (data = partition id)
+    P64H_SYSC_BOOT_STAGE_SVC_APPC_BS_APPC_CMD_LOAD, ///< AppC artifact load      (data = partition id)
+    P64H_SYSC_BOOT_STAGE_PSM_STATUS_SET,            ///< reserved (PSM API out of scope)
+    P64H_SYSC_BOOT_STAGE_LAST                       ///< marker / count
+} p64h_sysc_boot_stage_t;
+
+/** @brief A single software tracepoint record (12 bytes). */
+typedef struct {
+    uint32_t               mtime;      ///< hardware timestamp (CLINT mtime low word; ITC TBD)
+    p64h_sysc_boot_stage_t boot_stage; ///< stage discriminator
+    uint32_t               data;       ///< stage-specific payload (partition id, artifact size, rc, ...)
+} p64h_sysc_sw_tracepoint_t;
+
+/**
+ * @brief DTIM software-trace region: ring header + tracepoint slots.
+ *
+ */
+typedef struct {
+    uint32_t                  magic;      ///< TRACE_SW_MAGIC once initialized
+    uint32_t                  wr_index;   ///< next write slot, in [0, count)
+    uint32_t                  wrap_count; ///< number of times the ring has wrapped
+    uint32_t                  count;      ///< number of slots (== TRACE_SW_NUM_ENTRIES)
+    p64h_sysc_sw_tracepoint_t entries[TRACE_SW_NUM_ENTRIES];
+} p64h_sysc_sw_trace_buffer_t;
 
 #endif // P64H_SYSC_TRACE_TYPES_H

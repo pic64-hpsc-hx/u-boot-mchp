@@ -108,6 +108,14 @@ void rpmi_shmem_destroy(struct rpmi_shmem* shmem);
 enum rpmi_error rpmi_io_read(struct rpmi_io* io, void* in, rpmi_uint32_t len);
 
 /**
+ * @brief Flush the rx buffer
+ *
+ * @param[in] priv     Descriptor reference
+ * @return enum rpmi_error
+ */
+enum rpmi_error rpmi_io_flush_rx(struct rpmi_io* io);
+
+/**
  * @brief Write a buffer to io
  *
  * @param[in] io    	pointer to io instance

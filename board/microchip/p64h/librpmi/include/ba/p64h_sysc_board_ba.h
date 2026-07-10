@@ -35,7 +35,17 @@
 #define MAX_SERDES_GRPS 27u
 
 /// Number of MII Configs
-#define MAX_MII_CFGS 4u
+#define MAX_MII_CFGS                    4u
+
+#define DAUGHTER_CARD_HINT_MAGIC_NUMBER 0x12345678u
+
+/// Daughter card hint
+typedef struct __attribute__((packed)) {
+    uint32_t magic_number;
+    uint32_t hb1363_is_v2 : 1;
+    uint32_t hb1364_is_v2 : 1;
+    uint32_t reserved     : 30;
+} p64h_sysc_daughter_card_hint_t;
 
 /// Reference clock type
 typedef enum {
@@ -91,6 +101,27 @@ typedef enum {
     NVM_DEVICE_NAND_LEGACY,     ///< NAND Legacy device
     LAST_NVM_DEVICE             ///< invalid, used for error checking
 } p64h_sysc_nvm_device_t;
+
+typedef enum {
+    NVM_DEVICE_GROUP_NONE = 0,
+    /* Serial NOR family */
+    NVM_DEVICE_GROUP_SERIAL_NOR,
+    /* Parallel NOR only */
+    NVM_DEVICE_GROUP_PFLASH_NOR,
+    /* (future groups) */
+    // NVM_DEVICE_GROUP_SERIAL_NAND,
+    // NVM_DEVICE_GROUP_PFLASH_SRAM,
+} p64h_sysc_nvm_device_group_t;
+
+/**
+ * @brief Resolve the NVM device family wired to a given (connector mode, SRAM EDAC) pair.
+ *        Implementation in remote/src/board/p64h_sysc_nvm_lookup.c.
+ * @param m    NVM connector mode.
+ * @param edac SRAM EDAC index (0..P64H_SYSC_NUM_SRAM_EDAC-1).
+ * @return The NVM device family, or NVM_DEVICE_GROUP_NONE if the inputs are out of range or unmapped.
+ */
+p64h_sysc_nvm_device_group_t nvm_sram_edac_dev_lookup(p64h_sysc_nvm_cmode_t m, uint8_t edac);
+bool                         nvm_device_matches_group(p64h_sysc_nvm_device_t dev, p64h_sysc_nvm_device_group_t grp);
 
 /// SYSC Interface ID
 typedef enum p64h_sysc_if_id_t {
@@ -161,11 +192,13 @@ typedef struct {
 
 /// NVM's connector configuration
 typedef struct {
-    uint64_t               chip_select_msk; ///< chip-select memory
-    p64h_sysc_nvm_device_t nvm_device;      ///< NVM device
-    uint32_t               reset_msk;       ///< chip-select memory
-    uint64_t               sector_size;     ///< sector memory size
-    uint64_t               size;            ///< memory size
+    uint64_t               chip_select_msk;  ///< chip-select memory
+    p64h_sysc_nvm_device_t nvm_device;       ///< NVM device
+    uint32_t               reset_msk;        ///< chip-select memory
+    uint64_t               sector_size;      ///< sector memory size
+    uint64_t               size;             ///< memory size
+    uint8_t                needs_erase;      ///< if erase is needed for writes 0 for false, 1 for true
+    uint64_t               chip_select_size; ///< per-chip-select region size in bytes (from nvm_config.yaml cs_memory); base += chip_select_size * cs
 } p64h_sysc_nvm_cfg_t;
 
 typedef struct {

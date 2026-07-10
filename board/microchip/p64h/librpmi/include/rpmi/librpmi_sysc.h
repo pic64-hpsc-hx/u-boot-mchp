@@ -14,6 +14,20 @@
 #include <rpmi/librpmi_mchp.h>
 #include <generated/p64h_sysc_errors.h>
 
+/**
+ * @brief
+ *   The condition is checked and if FALSE then we return an error
+ *   @param[in] condition - check to perform
+ *   @param[in] err_code - the error code to return
+ *
+ */
+#define P64H_SYSC_ASSERT(condition, err_code)                                                                                                        \
+    do {                                                                                                                                             \
+        if (__builtin_expect(!(condition), 0)) {                                                                                                     \
+            return (err_code);                                                                                                                       \
+        }                                                                                                                                            \
+    } while (false)
+
 /// Configuration of log to fetch
 typedef struct {
     void*    log_ptr;       ///< Pointer to the memory space of the log
@@ -27,7 +41,7 @@ p64h_err_t p64h_sysc_rpmi_req_resp(const p64h_sysc_handle_t* handle_ptr, const u
                                    const size_t resp_size);
 
 p64h_err_t p64h_sysc_rpmi_resp_list(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
-                                    const uint32_t id1, const uint32_t id2, void* list_ptr, size_t entry_size, bool shmem_xfer);
+                                    const uint32_t id1, const uint32_t id2, void* list_ptr, uint32_t list_num, size_t entry_size, bool shmem_xfer);
 
 p64h_err_t p64h_sysc_rpmi_req_with_data(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
                                         const void* req_data_ptr, const size_t req_size, const void* buf_ptr, const size_t buf_size, bool shmem_xfer);

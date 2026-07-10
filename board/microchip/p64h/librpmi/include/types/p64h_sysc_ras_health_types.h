@@ -2,8 +2,8 @@
 /* SPDX-License-Identifier: MIT */
 
 /**
- * @file  p64h_sysc_types.h
- * @brief API type
+ * @file  p64h_sysc_ras_health_types.h
+ * @brief RAS Health API type
  * @addtogroup API
  * @ingroup p64h_sysc_api
  * @{
@@ -13,79 +13,51 @@
 #define P64H_SYSC_RAS_HEALTH_TYPE_H
 
 #include "p64h_sysc_common_types.h"
+#include <ba/p64h_sysc_svc_cfg_ba.h>
 #include <generated/p64h_sysc_ras_error_sources.h>
 #include <generated/p64h_sysc_ras_data_defs.h>
+#include <generated/bist_generated.h>
 
 /* Public Defines ------------------------------------------------- */
 
 /* Public Structs and Enums --------------------------------------- */
-/// enumerate mem scrubber ids
-typedef enum {
-    NVM_SRAM = 0,
-    DDR_MEM,
-    APPC_OCR,
-    SYSC_OCR,
-    SECC_OCR,
-    SECC_PQCRYPTO,
-    APP_DMA_FIFO,
-    ETHERNET_TCAM_VCAP,
-    SECC_PQ_CRYPTO,
-    SECC_MBOX,
-    APPC_CORE_0_ITIM,
-    APPC_CORE_0_DLS,
-    APPC_CORE_1_ITIM,
-    APPC_CORE_1_DLS,
-    APPC_CORE_2_ITIM,
-    APPC_CORE_2_DLS,
-    APPC_CORE_3_ITIM,
-    APPC_CORE_3_DLS,
-    APPC_CORE_4_ITIM,
-    APPC_CORE_4_DLS,
-    APPC_CORE_5_ITIM,
-    APPC_CORE_5_DLS,
-    APPC_CORE_6_ITIM,
-    APPC_CORE_6_DLS,
-    APPC_CORE_7_ITIM,
-    APPC_CORE_7_DLS,
-    SYSC_ITIM,
-    SYSC_DLS,
-    SECC_ITIM,
-    SECC_DLS,
-    APPC_CORE_0_L1I,
-    APPC_CORE_0_L1D,
-    APPC_CORE_0_PL2,
-    APPC_CORE_1_L1I,
-    APPC_CORE_1_L1D,
-    APPC_CORE_1_PL2,
-    APPC_CORE_2_L1I,
-    APPC_CORE_2_L1D,
-    APPC_CORE_2_PL2,
-    APPC_CORE_3_L1I,
-    APPC_CORE_3_L1D,
-    APPC_CORE_3_PL2,
-    APPC_CORE_4_L1I,
-    APPC_CORE_4_L1D,
-    APPC_CORE_4_PL2,
-    APPC_CORE_5_L1I,
-    APPC_CORE_5_L1D,
-    APPC_CORE_5_PL2,
-    APPC_CORE_6_L1I,
-    APPC_CORE_6_L1D,
-    APPC_CORE_6_PL2,
-    APPC_CORE_7_L1I,
-    APPC_CORE_7_L1D,
-    APPC_CORE_7_PL2,
-    APPC_EC3,
-    SYSC_L1I,
-    SYSC_L1D,
-    IOMMU_0_TLB,
-    IOMMU_1_TLB,
-    P64H_MEMSCRUBBER_ID_COUNT, ///< Number of ids (not a valid ID)
-} p64h_sysc_mem_scrubber_id_t;
 
 /// Description of the configuration fields for a specified memory scrubber
 typedef struct {
-    uint32_t placeholder; ///< Placeholder variable for the memory scrubber configuration
+    /// secure controller scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t secc_ocr;    ///< secure controller OCR scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t secc_pq_ocr; ///< secure controller OCR scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t secc_pq_ram; ///< secure controller PQ OCR scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t secc_itim;   ///< secure controller ITIM scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t secc_l1i;    ///< secure controller L1 instruction cache scrubber
+    /// system controller
+    p64h_sysc_mem_scrubber_inst_cfg_t sysc_itim; ///< system controller ITIM scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t sysc_dtim; ///< system controller DTIM scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t sysc_ocr;  ///< system controller OCR scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t sysc_l1i;  ///< system controller L1 instruction cache scrubber
+    /// application complex
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_itim; ///< application complex ITIM scrubber type default configuration
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_dls;  ///< application complex DLS scrubber type default configuration
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_l1i;  ///< application complex L1 instruction cache scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_l1d;  ///< application complex L1 data cache scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_pl2;  ///< application complex L2 cache scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_ec3;  ///< application complex L3 cache scrubber
+    /// SOC memories (OCR)
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_ocr_0; ///< AppC OCR 0 scrubber
+    p64h_sysc_mem_scrubber_inst_cfg_t appc_ocr_1; ///< AppC OCR 1 scrubber
+    /// External memories (DDR/NVM)
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t ddr_0;        ///< DDR controller 0 scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t ddr_1;        ///< DDR controller 1 scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_sram_0_0; ///< SRAM scrubber 0 (EDAC instance 0) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_sram_0_1; ///< SRAM scrubber 0 (EDAC instance 1) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_sram_1_0; ///< SRAM scrubber 1 (EDAC instance 0) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_sram_1_1; ///< SRAM scrubber 1 (EDAC instance 1) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_sram_2_0; ///< SRAM scrubber 2 (EDAC instance 0) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_sram_2_1; ///< SRAM scrubber 2 (EDAC instance 1) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_nvm_0_0;  ///< NVM scrubber 0 (EDAC instance 0) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_nvm_0_1;  ///< NVM scrubber 0 (EDAC instance 1) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_nvm_1_0;  ///< NVM scrubber 1 (EDAC instance 0) scrubber
+    p64h_sysc_mem_scrubber_edac_inst_cfg_t nvm_nvm_1_1;  ///< NVM scrubber 1 (EDAC instance 1) scrubber
 } p64h_sysc_mem_scrubber_cfg_t;
 
 /// Memory scrubbing profile
@@ -110,9 +82,22 @@ typedef struct {
     uint64_t secc_application : 1;   ///< Placeholder variable for the SW health report
 } p64h_sysc_sw_health_report_t;
 
+/// Test execution status
+typedef enum {
+    TEST_STATUS_PASS    = 0, ///< Test passed
+    TEST_STATUS_FAIL    = 1, ///< Test failed
+    TEST_STATUS_NOT_RUN = 2, ///< Test not run
+    TEST_STATUS_ID_LAST      ///< Last value for ID type test_status
+} p64h_sysc_hw_test_status_t;
+
+typedef struct {
+    p64h_sysc_bist_test_t      bist_test_id;   ///< Identifier for the BIST test
+    p64h_sysc_hw_test_status_t bist_test_stat; ///< bist test status
+} p64h_sysc_bist_test_result_t;
+
 /// HW health report
 typedef struct {
-    uint32_t placeholder; ///< Placeholder variable for the HW health report
+    p64h_sysc_bist_test_result_t bist_test_result[P64H_SYSC_BIST_TEST_LAST]; ///< Array of BIST test reports for all hardware tests
 } p64h_sysc_hw_health_report_t;
 
 /// HW health check configuration

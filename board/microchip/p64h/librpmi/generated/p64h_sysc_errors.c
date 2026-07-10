@@ -1,3 +1,4 @@
+
 /* (c) 2026 Microchip Technology Inc. */
 /*    SPDX-License-Identifier: MIT    */
 
@@ -9,37 +10,45 @@
 #include <generated/p64h_sysc_errors.h>
 
 
-static char* p64h_svc_system_names[7] = {
+static const char* p64h_components[P64H_COMP_LAST] = {
+    "svc_system", "svc_appc", "svc_com", "svc_test", "svc_trace", "svc_crypto", "svc_secc_mbox", "svc_hw", "svc_switch", "svc_em", "svc_health", "core", "core_osal", "core_intr_handler", "core_shared", "core_evt", "lib_baal", "lib_power", "lib_usr_crypto", "lib_bist", "lib_appc_soc_cfg", "lib_api", "lib_sysc_soc_cfg", "lib_raslib", "lib_anlt_sm", "lib_zlib_helper", "lib_xxhash", "lib_ring_buf", "lib_sec", "lib_spw_test", "lib_utest", "lib_einjlib", "lib_rpmi", "lib_fw_upgrade", "lib_ipc", "lib_log", "drv_app_wrap", "drv_app_periph", "drv_ddr", "drv_top", "drv_noc_core", "drv_iobridge", "drv_wguard", "drv_acsu", "drv_pgmrclk", "drv_cfm", "drv_app_ipc", "drv_ddr_ctrl", "drv_ddr_edac", "drv_ddr_training", "drv_ddr_phy", "drv_dma", "drv_ocr", "drv_serdes_if", "drv_anlt", "drv_m1_core", "drv_sys_top", "drv_sys_spi_flash", "drv_sys_hpt", "drv_nvm", "drv_nvm_ctrl_pflash_diag", "drv_edac", "drv_x288_ras", "drv_arm_n_fire", "drv_debug", "drv_app_spw", "drv_ddr_noc", "drv_pier", "drv_pcie_cxl", "drv_zsbl", "drv_trace", "drv_wdog", "drv_lsio", "drv_app_dma", "drv_gpio", "drv_mdio", "drv_mbox", "drv_app_pier", "drv_beu", "drv_fttm"
+};
+
+static char* p64h_svc_system_err_names[10] = {
     "P64H_ERR_SVC_SYSTEM_CTXT_INIT",
     "P64H_ERR_SVC_SYSTEM_SERVICE_START",
     "P64H_ERR_SVC_SYSTEM_ERR",
     "P64H_ERR_SVC_SYSTEM_INVALID_API",
     "P64H_ERR_SVC_SYSTEM_UNEXPECTED_EVENT",
     "P64H_ERR_SVC_SYSTEM_DEV_CFG_VERSION_INIT",
-    "P64H_ERR_SVC_SYSTEM_ACOT_ENTRY_INVALID"
+    "P64H_ERR_SVC_SYSTEM_ACOT_ENTRY_INVALID",
+    "P64H_ERR_SVC_SYSTEM_BOOT_MODE_INVALID",
+    "P64H_ERR_SVC_SYSTEM_SEC_MEM_SCRUB_FAILED",
+    "P64H_ERR_SVC_SYSTEM_SERVICE_HANDSHAKE_FAILED"
 };
 
-static char* p64h_svc_appc_names[10] = {
+static char* p64h_svc_appc_err_names[10] = {
     "P64H_ERR_SVC_APPC_INVALID_API",
     "P64H_ERR_SVC_APPC_UNEXPECTED_EVENT",
-    "P64H_ERR_SVC_APPC_NOT_LOADED_APPC_CFG",
-    "P64H_ERR_SVC_APPC_NOT_LOADED_STATIC_CFG",
     "P64H_ERR_SVC_APPC_INVALID_CTXT_SIGNATURE",
     "P64H_ERR_SVC_APPC_OUT_OF_RANGE_PARTITIONID",
     "P64H_ERR_SVC_APPC_UNEXPECTED_CMD",
     "P64H_ERR_SVC_APPC_NO_CMD_IN_BOOTSCRIPT",
     "P64H_ERR_SVC_APPC_BOOTSCRIPT_CMD_LOAD",
-    "P64H_ERR_SVC_APPC_BOOTSCRIPT_CMD_GET"
+    "P64H_ERR_SVC_APPC_BOOTSCRIPT_CMD_GET",
+    "P64H_ERR_SVC_APPC_INVALID_PIPELINE_UTILIZATION",
+    "P64H_ERR_SVC_APPC_TRACE_CFG_ACK_TIMEOUT"
 };
 
-static char* p64h_svc_com_names[4] = {
+static char* p64h_svc_com_err_names[5] = {
     "P64H_ERR_SVC_COM_ERR",
     "P64H_ERR_SVC_COM_INVALID_API",
     "P64H_ERR_SVC_COM_UNEXPECTED_EVENT",
-    "P64H_ERR_SVC_COM_ERR2"
+    "P64H_ERR_SVC_COM_ERR2",
+    "P64H_ERR_SVC_COM_NOTIF_FAIL"
 };
 
-static char* p64h_svc_test_names[9] = {
+static char* p64h_svc_test_err_names[9] = {
     "P64H_ERR_SVC_TEST_ERR",
     "P64H_ERR_SVC_TEST_INVALID_API",
     "P64H_ERR_SVC_TEST_UNEXPECTED_EVENT",
@@ -51,30 +60,34 @@ static char* p64h_svc_test_names[9] = {
     "P64H_ERR_SVC_TEST_NO_ACTIVE_UTEST"
 };
 
-static char* p64h_svc_trace_names[7] = {
+static char* p64h_svc_trace_err_names[10] = {
     "P64H_ERR_SVC_TRACE_ERR",
     "P64H_ERR_SVC_TRACE_INVALID_API",
     "P64H_ERR_SVC_TRACE_UNEXPECTED_EVENT",
     "P64H_ERR_SVC_TRACE_ERR2",
     "P64H_ERR_SVC_TRACE_INVALID_DATA",
     "P64H_ERR_SVC_TRACE_SW_TRACING_UNSUPPORTED_TYPE",
-    "P64H_ERR_SVC_TRACE_SW_TRACING_OUT_OF_ENTRIES"
+    "P64H_ERR_SVC_TRACE_SW_TRACING_OUT_OF_ENTRIES",
+    "P64H_ERR_SVC_TRACE_SYNCREQ_ACK_TIMEOUT",
+    "P64H_ERR_SVC_TRACE_FUNNEL_NOT_READY",
+    "P64H_ERR_SVC_TRACE_SINK_BUSY"
 };
 
-static char* p64h_svc_crypto_names[4] = {
+static char* p64h_svc_crypto_err_names[4] = {
     "P64H_ERR_SVC_CRYPTO_ERR",
     "P64H_ERR_SVC_CRYPTO_INVALID_API",
     "P64H_ERR_SVC_CRYPTO_UNEXPECTED_EVENT",
     "P64H_ERR_SVC_CRYPTO_ERR2"
 };
 
-static char* p64h_svc_secc_mbox_names[3] = {
+static char* p64h_svc_secc_mbox_err_names[4] = {
     "P64H_ERR_SVC_SECC_MBOX_INVALID_CMD",
     "P64H_ERR_SVC_SECC_MBOX_SMB_BUSY",
-    "P64H_ERR_SVC_SECC_MBOX_FALSE_RESP"
+    "P64H_ERR_SVC_SECC_MBOX_FALSE_RESP",
+    "P64H_ERR_SVC_SECC_MBOX_ALIVE_MSG_ERR"
 };
 
-static char* p64h_svc_hw_names[9] = {
+static char* p64h_svc_hw_err_names[9] = {
     "P64H_ERR_SVC_HW_CTXT_UNINIT",
     "P64H_ERR_SVC_HW_DDR_BINARY_LOAD",
     "P64H_ERR_SVC_HW_HANDLE_UNINIT",
@@ -86,12 +99,14 @@ static char* p64h_svc_hw_names[9] = {
     "P64H_ERR_SVC_HW_UNEXPECTED_EVENT"
 };
 
-static char* p64h_svc_switch_names[2] = {
+static char* p64h_svc_switch_err_names[4] = {
     "P64H_ERR_SVC_SWITCH_INVALID_API",
-    "P64H_ERR_SVC_SWITCH_UNEXPECTED_EVENT"
+    "P64H_ERR_SVC_SWITCH_UNEXPECTED_EVENT",
+    "P64H_ERR_SVC_SWITCH_ASYNC_TASK_CREATE",
+    "P64H_ERR_SVC_SWITCH_SYSTEM_ERROR"
 };
 
-static char* p64h_svc_em_names[11] = {
+static char* p64h_svc_em_err_names[11] = {
     "P64H_ERR_SVC_EM_INVALID_API",
     "P64H_ERR_SVC_EM_UNEXPECTED_EVENT",
     "P64H_ERR_SVC_EM_UNIT_TEST_FAIL",
@@ -105,12 +120,14 @@ static char* p64h_svc_em_names[11] = {
     "P64H_ERR_SVC_EM_INVALID_APPC_PARTITION"
 };
 
-static char* p64h_svc_health_names[2] = {
+static char* p64h_svc_health_err_names[4] = {
     "P64H_ERR_SVC_HEALTH_INVALID_API",
-    "P64H_ERR_SVC_HEALTH_UNEXPECTED_EVENT"
+    "P64H_ERR_SVC_HEALTH_UNEXPECTED_EVENT",
+    "P64H_ERR_SVC_HEALTH_BIST_PARTITION_ACTIVE",
+    "P64H_ERR_SVC_HEALTH_SEC_MEM_SCRUB_FAILED"
 };
 
-static char* p64h_core_names[30] = {
+static char* p64h_core_err_names[34] = {
     "P64H_ERR_OK",
     "P64H_ERR_GENERAL",
     "P64H_ERR_BOOT_CONFIG_FILE",
@@ -140,16 +157,22 @@ static char* p64h_core_names[30] = {
     "P64H_ERR_VERSION_MISMATCH",
     "P64H_ERR_NOT_IMPLEMENTED",
     "P64H_ERR_MEMCPY_FAIL",
-    "P64H_ERR_DWORD_UNALIGNED"
+    "P64H_ERR_DWORD_UNALIGNED",
+    "P64H_ERR_INVALID_OS_EXCEPT",
+    "P64H_ERR_NOT_SET",
+    "P64H_ERR_UNKNOWN_ECALL_REQUEST",
+    "P64H_ERR_CHECKSUM_FAIL"
 };
 
-static char* p64h_P64H_COMP_CORE_OSAL_names[0] = {};
+static char* p64h_core_osal_err_names[0] = {};
 
-static char* p64h_P64H_COMP_CORE_INTR_HANDLER_names[0] = {};
+static char* p64h_core_intr_handler_err_names[0] = {};
 
-static char* p64h_P64H_COMP_CORE_SHARED_names[0] = {};
+static char* p64h_core_shared_err_names[0] = {};
 
-static char* p64h_lib_baal_names[17] = {
+static char* p64h_core_evt_err_names[0] = {};
+
+static char* p64h_lib_baal_err_names[20] = {
     "P64H_ERR_LIB_BAAL_INVALID_SIMG_ID",
     "P64H_ERR_LIB_BAAL_METADATA_ERR",
     "P64H_ERR_LIB_BAAL_APPC_NOT_INIT",
@@ -166,10 +189,13 @@ static char* p64h_lib_baal_names[17] = {
     "P64H_ERR_LIB_BAAL_OTP_READ_FAIL",
     "P64H_ERR_LIB_BAAL_SECC_FSBL_DWNLD",
     "P64H_ERR_LIB_BAAL_INVALID_FSBL_SIZE",
-    "P64H_ERR_LIB_BAAL_READ_TRUNC"
+    "P64H_ERR_LIB_BAAL_READ_TRUNC",
+    "P64H_ERR_LIB_BAAL_FEC_MODE_FAIL",
+    "P64H_ERR_LIB_BAAL_INVALID_FEC_MODE_FAIL",
+    "P64H_ERR_LIB_BAAL_FEC_MODE_UNSUPPORTED_FAIL"
 };
 
-static char* p64h_lib_power_names[5] = {
+static char* p64h_lib_power_err_names[5] = {
     "P64H_ERR_LIB_POWER_CFG_ERROR",
     "P64H_ERR_LIB_POWER_HANDLE_ERROR",
     "P64H_ERR_LIB_POWER_UNSUPPORTED_BOOT_SRC",
@@ -177,7 +203,7 @@ static char* p64h_lib_power_names[5] = {
     "P64H_ERR_LIB_POWER_INVALID_NVM_CTRL"
 };
 
-static char* p64h_lib_usr_crypto_names[102] = {
+static char* p64h_lib_usr_crypto_err_names[102] = {
     "P64H_ERR_LIB_USR_CRYPTO_NULL_CFG",
     "P64H_ERR_LIB_USR_CRYPTO_NULL_HANDLE",
     "P64H_ERR_LIB_USR_CRYPTO_INIT_ERR",
@@ -282,14 +308,14 @@ static char* p64h_lib_usr_crypto_names[102] = {
     "P64H_ERR_LIB_USR_CRYPTO_PQS_ERROR_NOT_SUPPORTED_YET"
 };
 
-static char* p64h_lib_bist_names[4] = {
+static char* p64h_lib_bist_err_names[4] = {
     "P64H_ERR_LIB_BIST_NULL_HANDLE",
     "P64H_ERR_LIB_BIST_INVALID_TEST",
     "P64H_ERR_LIB_BIST_INVALID_INST_N",
     "P64H_ERR_LIB_BIST_INVALID_ALGORITHM"
 };
 
-static char* p64h_lib_appc_soc_cfg_names[6] = {
+static char* p64h_lib_appc_soc_cfg_err_names[6] = {
     "P64H_ERR_LIB_APPC_SOC_CFG_NULL_CFG",
     "P64H_ERR_LIB_APPC_SOC_CFG_NULL_HANDLE",
     "P64H_ERR_LIB_APPC_SOC_CFG_NULL_M2_HANDLE",
@@ -298,7 +324,7 @@ static char* p64h_lib_appc_soc_cfg_names[6] = {
     "P64H_ERR_LIB_APPC_SOC_CFG_RNMI_TIMEOUT"
 };
 
-static char* p64h_lib_api_names[29] = {
+static char* p64h_lib_api_err_names[34] = {
     "P64H_ERR_LIB_API_NULL_POINTER",
     "P64H_ERR_LIB_API_BAD_SIZE",
     "P64H_ERR_LIB_API_CID_INVALID",
@@ -327,25 +353,34 @@ static char* p64h_lib_api_names[29] = {
     "P64H_ERR_LIB_API_RESP_PENDING",
     "P64H_ERR_LIB_API_INVALID_REQ_STATE",
     "P64H_ERR_LIB_API_CHECKSUM_MISMATCH",
-    "P64H_ERR_LIB_API_CALLBACK_UNSET"
+    "P64H_ERR_LIB_API_HEADER_CORRUPT",
+    "P64H_ERR_LIB_API_TIMEOUT_DATA_DROPPED",
+    "P64H_ERR_LIB_API_CALLBACK_UNSET",
+    "P64H_ERR_LIB_API_NOT_INITIALIZED",
+    "P64H_ERR_LIB_API_IPC_INIT_FAIL",
+    "P64H_ERR_LIB_API_POWER_FREQUENCY_MODE_CAN_ONLY_BE_APPLIED_INDEPENDENTLY"
 };
 
-static char* p64h_lib_sysc_soc_cfg_names[5] = {
+static char* p64h_lib_sysc_soc_cfg_err_names[6] = {
     "P64H_ERR_LIB_SYSC_SOC_CFG_NULL_CFG",
     "P64H_ERR_LIB_SYSC_SOC_CFG_NULL_HANDLE",
     "P64H_ERR_LIB_SYSC_SOC_CFG_INVALID_FS_INSTANCE",
     "P64H_ERR_LIB_SYSC_SOC_CFG_INVALID_FS_CONFIG",
-    "P64H_ERR_LIB_SYSC_SOC_CFG_MOUNT_FAIL"
+    "P64H_ERR_LIB_SYSC_SOC_CFG_MOUNT_FAIL",
+    "P64H_ERR_LIB_SYSC_SOC_CFG_INVALID_FREQ_MODE"
 };
 
-static char* p64h_lib_raslib_names[4] = {
+static char* p64h_lib_raslib_err_names[7] = {
     "P64H_ERR_LIB_RASLIB_NO_ERR_FROM_HER",
     "P64H_ERR_LIB_RASLIB_NO_BERT_ERROR",
     "P64H_ERR_LIB_RASLIB_ERT_INVALID_READ",
-    "P64H_ERR_LIB_RASLIB_INVALID_HER_DATA"
+    "P64H_ERR_LIB_RASLIB_INVALID_HER_DATA",
+    "P64H_ERR_LIB_RASLIB_INVALID_ERR_ID",
+    "P64H_ERR_LIB_RASLIB_EMON_COR_DATA_LOSS",
+    "P64H_ERR_LIB_RASLIB_EMON_UNCOR_DATA_LOSS"
 };
 
-static char* p64h_lib_anlt_sm_names[6] = {
+static char* p64h_lib_anlt_sm_err_names[6] = {
     "P64H_ERR_LIB_ANLT_SM_ERR",
     "P64H_ERR_LIB_ANLT_SM_MISCFG",
     "P64H_ERR_LIB_ANLT_SM_AN_ARB_FAIL",
@@ -354,46 +389,56 @@ static char* p64h_lib_anlt_sm_names[6] = {
     "P64H_ERR_LIB_ANLT_SM_INVALID_LT_UPD_STATE"
 };
 
-static char* p64h_lib_tar_zip_helper_names[4] = {
-    "P64H_ERR_LIB_TAR_ZIP_HELPER_COMPRESS",
-    "P64H_ERR_LIB_TAR_ZIP_HELPER_DECOMPRESS",
-    "P64H_ERR_LIB_TAR_ZIP_HELPER_ZLIB_HEADER",
-    "P64H_ERR_LIB_TAR_ZIP_HELPER_MTAR_OPEN"
+static char* p64h_lib_zlib_helper_err_names[4] = {
+    "P64H_ERR_LIB_ZLIB_HELPER_COMPRESS",
+    "P64H_ERR_LIB_ZLIB_HELPER_DECOMPRESS",
+    "P64H_ERR_LIB_ZLIB_HELPER_ZLIB_HEADER",
+    "P64H_ERR_LIB_ZLIB_HELPER_MTAR_OPEN"
 };
 
-static char* p64h_lib_ring_buf_names[3] = {
+static char* p64h_lib_xxhash_err_names[0] = {};
+
+static char* p64h_lib_ring_buf_err_names[3] = {
     "P64H_ERR_LIB_RING_BUF_FULL",
     "P64H_ERR_LIB_RING_BUF_EMPTY",
     "P64H_ERR_LIB_RING_BUF_INVALID_READ"
 };
 
-static char* p64h_P64H_COMP_LIB_BIAL_names[0] = {};
+static char* p64h_lib_sec_err_names[0] = {};
 
-static char* p64h_P64H_COMP_LIB_SEC_names[0] = {};
+static char* p64h_lib_spw_test_err_names[0] = {};
 
-static char* p64h_P64H_COMP_LIB_SPW_TEST_names[0] = {};
+static char* p64h_lib_utest_err_names[0] = {};
 
-static char* p64h_P64H_COMP_LIB_UTEST_names[0] = {};
-
-static char* p64h_P64H_COMP_LIB_EINJLIB_names[0] = {};
-
-static char* p64h_P64H_COMP_LIB_RPMI_names[0] = {};
-
-static char* p64h_lib_fw_upgrade_names[2] = {
-    "P64H_ERR_LIB_FW_UPGRADE_UPLOAD_FAIL",
-    "P64H_ERR_LIB_FW_UPGRADE_APPLY_FAIL"
+static char* p64h_lib_einjlib_err_names[2] = {
+    "P64H_ERR_LIB_EINJLIB_UNSUPPORTED_ERRINJ_TYPE",
+    "P64H_ERR_LIB_EINJLIB_DCLS_NOT_CFG"
 };
 
-static char* p64h_P64H_COMP_LIB_IPC_names[0] = {};
+static char* p64h_lib_rpmi_err_names[0] = {};
 
-static char* p64h_drv_app_wrap_names[4] = {
+static char* p64h_lib_fw_upgrade_err_names[7] = {
+    "P64H_ERR_LIB_FW_UPGRADE_OFFSET_ERROR",
+    "P64H_ERR_LIB_FW_UPGRADE_INVALID_CMD",
+    "P64H_ERR_LIB_FW_UPGRADE_INVALID_TYPE",
+    "P64H_ERR_LIB_FW_UPGRADE_INVALID_ARTIFACT",
+    "P64H_ERR_LIB_FW_UPGRADE_UPLOAD_INCOMPLETE",
+    "P64H_ERR_LIB_FW_UPGRADE_REBOOT_FAIL",
+    "P64H_ERR_LIB_FW_UPGRADE_BUFFER_ERROR"
+};
+
+static char* p64h_lib_ipc_err_names[0] = {};
+
+static char* p64h_lib_log_err_names[0] = {};
+
+static char* p64h_drv_app_wrap_err_names[4] = {
     "P64H_ERR_DRV_APP_WRAP_DCLS_TIMEOUT",
     "P64H_ERR_DRV_APP_WRAP_NULL_HANDLE",
     "P64H_ERR_DRV_APP_WRAP_NULL_CFG",
     "P64H_ERR_DRV_APP_WRAP_INVALID_INST"
 };
 
-static char* p64h_drv_app_periph_names[84] = {
+static char* p64h_drv_app_periph_err_names[85] = {
     "P64H_ERR_DRV_APP_PERIPH_GPIO_NULL_HANDLE",
     "P64H_ERR_DRV_APP_PERIPH_GPIO_NULL_CFG",
     "P64H_ERR_DRV_APP_PERIPH_GPIO_INVALID_INSTANCE",
@@ -426,6 +471,7 @@ static char* p64h_drv_app_periph_names[84] = {
     "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NULL_CFG",
     "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_NO_INTR_FOUND",
     "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_INVALID_PARAM",
+    "P64H_ERR_DRV_APP_PERIPH_ENET_SWR_VCAP_WRITE_TIMEOUT",
     "P64H_ERR_DRV_APP_PERIPH_NULL_HANDLE",
     "P64H_ERR_DRV_APP_PERIPH_NULL_CFG",
     "P64H_ERR_DRV_APP_PERIPH_UART_NULL_HANDLE",
@@ -480,7 +526,7 @@ static char* p64h_drv_app_periph_names[84] = {
     "P64H_ERR_DRV_APP_PERIPH_USER_CRYPTO_NULL_CFG"
 };
 
-static char* p64h_drv_ddr_names[5] = {
+static char* p64h_drv_ddr_err_names[5] = {
     "P64H_ERR_DRV_DDR_INVALID_INSTANCE",
     "P64H_ERR_DRV_DDR_PHY_IN_RESET",
     "P64H_ERR_DRV_DDR_PHY_INVALID_DQ_WITDH",
@@ -488,7 +534,7 @@ static char* p64h_drv_ddr_names[5] = {
     "P64H_ERR_DRV_DDR_DDR_DLL_LOCK_TIMEOUT"
 };
 
-static char* p64h_drv_top_names[18] = {
+static char* p64h_drv_top_err_names[19] = {
     "P64H_ERR_DRV_TOP_AF_ERR",
     "P64H_ERR_DRV_TOP_INVALID_INSTANCE",
     "P64H_ERR_DRV_TOP_LOWPOWER_SET_FAILED",
@@ -506,10 +552,11 @@ static char* p64h_drv_top_names[18] = {
     "P64H_ERR_DRV_TOP_INVALID_ENET_EP_D_CLK_SEL",
     "P64H_ERR_DRV_TOP_PSC_INVALID",
     "P64H_ERR_DRV_TOP_PSC_TIMEOUT_ERROR",
-    "P64H_ERR_DRV_TOP_PSC_STAT_ERROR"
+    "P64H_ERR_DRV_TOP_PSC_STAT_ERROR",
+    "P64H_ERR_DRV_TOP_TMON_THRESHOLD_CFG_ERROR"
 };
 
-static char* p64h_drv_noc_core_names[29] = {
+static char* p64h_drv_noc_core_err_names[29] = {
     "P64H_ERR_DRV_NOC_CORE_UNSUPPORTED_EVENT_TYPE",
     "P64H_ERR_DRV_NOC_CORE_INVALID_OBSERVED_PORT_INDEX",
     "P64H_ERR_DRV_NOC_CORE_INVALID_DUMP_SELECTION",
@@ -541,11 +588,11 @@ static char* p64h_drv_noc_core_names[29] = {
     "P64H_ERR_DRV_NOC_CORE_INVALID_PARAM"
 };
 
-static char* p64h_drv_iobridge_names[1] = {
+static char* p64h_drv_iobridge_err_names[1] = {
     "P64H_ERR_DRV_IOBRIDGE_NULL_PARAMS"
 };
 
-static char* p64h_drv_wguard_names[8] = {
+static char* p64h_drv_wguard_err_names[8] = {
     "P64H_ERR_DRV_WGUARD_NULL_WGC_SLOT_CFG",
     "P64H_ERR_DRV_WGUARD_NULL_WGM_CFG",
     "P64H_ERR_DRV_WGUARD_NULL_WGM_DID_CFG",
@@ -556,7 +603,7 @@ static char* p64h_drv_wguard_names[8] = {
     "P64H_ERR_DRV_WGUARD_INVALID_ERROR_STATE"
 };
 
-static char* p64h_drv_acsu_names[8] = {
+static char* p64h_drv_acsu_err_names[8] = {
     "P64H_ERR_DRV_ACSU_NULL_HANDLE",
     "P64H_ERR_DRV_ACSU_INVALID_PRESET",
     "P64H_ERR_DRV_ACSU_INVALID_INST",
@@ -567,13 +614,14 @@ static char* p64h_drv_acsu_names[8] = {
     "P64H_ERR_DRV_ACSU_OUT_OF_RANGE_POST_DIV_VALUE"
 };
 
-static char* p64h_drv_pgmrclk_names[3] = {
+static char* p64h_drv_pgmrclk_err_names[4] = {
     "P64H_ERR_DRV_PGMRCLK_NULL_CFG",
     "P64H_ERR_DRV_PGMRCLK_INVALID_CLOCK_ID",
+    "P64H_ERR_DRV_PGMRCLK_INVALID_CLOCK_SEL",
     "P64H_ERR_DRV_PGMRCLK_FREQUENCY_NOT_SUPPORTED"
 };
 
-static char* p64h_drv_cfm_names[5] = {
+static char* p64h_drv_cfm_err_names[5] = {
     "P64H_ERR_DRV_CFM_MEAS_DISABLED",
     "P64H_ERR_DRV_CFM_INVALID_INST",
     "P64H_ERR_DRV_CFM_INVALID_CHNL",
@@ -581,17 +629,17 @@ static char* p64h_drv_cfm_names[5] = {
     "P64H_ERR_DRV_CFM_BUSY_MONITORING"
 };
 
-static char* p64h_drv_app_ipc_names[1] = {
+static char* p64h_drv_app_ipc_err_names[1] = {
     "P64H_ERR_DRV_APP_IPC_NULL_HANDLE"
 };
 
-static char* p64h_drv_ddr_ctrl_names[3] = {
+static char* p64h_drv_ddr_ctrl_err_names[3] = {
     "P64H_ERR_DRV_DDR_CTRL_NULL_HANDLE",
     "P64H_ERR_DRV_DDR_CTRL_UNSUPPORTED_TYPE",
     "P64H_ERR_DRV_DDR_CTRL_INVALID_CTRL_INSTANCE"
 };
 
-static char* p64h_drv_ddr_edac_names[7] = {
+static char* p64h_drv_ddr_edac_err_names[7] = {
     "P64H_ERR_DRV_DDR_EDAC_INVALID_FEC_MODE",
     "P64H_ERR_DRV_DDR_EDAC_INVALID_READ_PERIOD",
     "P64H_ERR_DRV_DDR_EDAC_INVALID_WDRESP_VAL",
@@ -601,7 +649,117 @@ static char* p64h_drv_ddr_edac_names[7] = {
     "P64H_ERR_DRV_DDR_EDAC_INVALID_RCMD_VAL"
 };
 
-static char* p64h_drv_dma_names[10] = {
+static char* p64h_drv_ddr_training_err_names[102] = {
+    "P64H_ERR_DRV_DDR_TRAINING_TDFI_READ_EN_GATE_DDR0",
+    "P64H_ERR_DRV_DDR_TRAINING_TDFI_READ_EN_GATE_DDR1",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR0_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_RDGT_SWEEP_DDR1_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR0_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQ_DDR1_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR0_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_READ_DATABUS_DQS_DDR1_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR0_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_LEVELING_DDR1_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR0_LANE9",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE0",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE1",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE2",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE3",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE4",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE5",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE6",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE7",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE8",
+    "P64H_ERR_DRV_DDR_TRAINING_WRITE_DATABUS_DDR1_LANE9"
+};
+
+static char* p64h_drv_ddr_phy_err_names[2] = {
+    "P64H_ERR_DRV_DDR_PHY_INVALID_PHY_INSTANCE",
+    "P64H_ERR_DRV_DDR_PHY_INVALID_HSIO_INSTANCE"
+};
+
+static char* p64h_drv_dma_err_names[10] = {
     "P64H_ERR_DRV_DMA_NULL_POINTER",
     "P64H_ERR_DRV_DMA_INVALID_MASK",
     "P64H_ERR_DRV_DMA_TIMEOUT",
@@ -614,14 +772,15 @@ static char* p64h_drv_dma_names[10] = {
     "P64H_ERR_DRV_DMA_DMAC_BLK_XFER_FAIL"
 };
 
-static char* p64h_drv_ocr_names[4] = {
+static char* p64h_drv_ocr_err_names[5] = {
     "P64H_ERR_DRV_OCR_FIFO_MEL_RD_ERR",
     "P64H_ERR_DRV_OCR_INIT_BUSY",
     "P64H_ERR_DRV_OCR_INIT_FAIL",
-    "P64H_ERR_DRV_OCR_INVALID_PARAM"
+    "P64H_ERR_DRV_OCR_INVALID_PARAM",
+    "P64H_ERR_DRV_OCR_INVALID_SCRUB_PERIOD"
 };
 
-static char* p64h_drv_serdes_if_names[8] = {
+static char* p64h_drv_serdes_if_err_names[8] = {
     "P64H_ERR_DRV_SERDES_IF_ERR",
     "P64H_ERR_DRV_SERDES_IF_INVALID_LANE",
     "P64H_ERR_DRV_SERDES_IF_INVALID_RATE",
@@ -632,13 +791,13 @@ static char* p64h_drv_serdes_if_names[8] = {
     "P64H_ERR_DRV_SERDES_IF_TXPLL_LOCK_TIMEOUT"
 };
 
-static char* p64h_drv_anlt_names[3] = {
+static char* p64h_drv_anlt_err_names[3] = {
     "P64H_ERR_DRV_ANLT_ERR",
     "P64H_ERR_DRV_ANLT_FAILED_LOOKUP",
     "P64H_ERR_DRV_ANLT_INVALID_AN_ARB_STATE"
 };
 
-static char* p64h_drv_m1_core_names[10] = {
+static char* p64h_drv_m1_core_err_names[12] = {
     "P64H_ERR_DRV_M1_CORE_APB2JTAG_NULL_HANDLE",
     "P64H_ERR_DRV_M1_CORE_APB2JTAG_NULL_CFG",
     "P64H_ERR_DRV_M1_CORE_APB2JTAG_CFG_INVALID_NBITS",
@@ -648,18 +807,21 @@ static char* p64h_drv_m1_core_names[10] = {
     "P64H_ERR_DRV_M1_CORE_APB2JTAG_FSM_ERR",
     "P64H_ERR_DRV_M1_CORE_APB2JTAG_TDO_MISCOMPARE",
     "P64H_ERR_DRV_M1_CORE_NULL_HANDLE",
-    "P64H_ERR_DRV_M1_CORE_FW_PLL_NULL_CFG"
+    "P64H_ERR_DRV_M1_CORE_FW_PLL_NULL_CFG",
+    "P64H_ERR_DRV_M1_CORE_FW_PLL_TIMEOUT",
+    "P64H_ERR_DRV_M1_CORE_FW_PLL_INVALID_CFG"
 };
 
-static char* p64h_drv_sys_top_names[5] = {
+static char* p64h_drv_sys_top_err_names[6] = {
     "P64H_ERR_DRV_SYS_TOP_AF_ERR",
     "P64H_ERR_DRV_SYS_TOP_INVALID_REGISTER",
     "P64H_ERR_DRV_SYS_TOP_NULL_RETURN",
     "P64H_ERR_DRV_SYS_TOP_HANDLE_ERROR",
-    "P64H_ERR_DRV_SYS_TOP_CFG_ERROR"
+    "P64H_ERR_DRV_SYS_TOP_CFG_ERROR",
+    "P64H_ERR_DRV_SYS_TOP_INVALID_INSTANCE"
 };
 
-static char* p64h_drv_sys_spi_flash_names[5] = {
+static char* p64h_drv_sys_spi_flash_err_names[5] = {
     "P64H_ERR_DRV_SYS_SPI_FLASH_CFG_NULL",
     "P64H_ERR_DRV_SYS_SPI_FLASH_INIT_ERR",
     "P64H_ERR_DRV_SYS_SPI_FLASH_PROG_ERR",
@@ -667,13 +829,13 @@ static char* p64h_drv_sys_spi_flash_names[5] = {
     "P64H_ERR_DRV_SYS_SPI_FLASH_ERASE_ERR"
 };
 
-static char* p64h_drv_sys_hpt_names[3] = {
+static char* p64h_drv_sys_hpt_err_names[3] = {
     "P64H_ERR_DRV_SYS_HPT_INVALID_PARAM",
     "P64H_ERR_DRV_SYS_HPT_EXCEED_MAX_LOOP",
     "P64H_ERR_DRV_SYS_HPT_MTIME_ERROR"
 };
 
-static char* p64h_drv_nvm_names[56] = {
+static char* p64h_drv_nvm_err_names[56] = {
     "P64H_ERR_DRV_NVM_CTRL_AF_ERR",
     "P64H_ERR_DRV_NVM_SS_NULL_HANDLE",
     "P64H_ERR_DRV_NVM_CFG_NULL",
@@ -732,19 +894,23 @@ static char* p64h_drv_nvm_names[56] = {
     "P64H_ERR_DRV_NVM_DIAG_TEST_FAIL"
 };
 
-static char* p64h_drv_edac_names[4] = {
+static char* p64h_drv_nvm_ctrl_pflash_diag_err_names[0] = {};
+
+static char* p64h_drv_edac_err_names[6] = {
     "P64H_ERR_DRV_EDAC_NULL_HANDLE",
     "P64H_ERR_DRV_EDAC_INVALID_CFG",
     "P64H_ERR_DRV_EDAC_INVALID_EDAC_INSTANCE",
-    "P64H_ERR_DRV_EDAC_EMON_RD_TIMEOUT"
+    "P64H_ERR_DRV_EDAC_EMON_RD_TIMEOUT",
+    "P64H_ERR_DRV_EDAC_EMON_ZERO_CORR_BUF_CNT",
+    "P64H_ERR_DRV_EDAC_EMON_ZERO_UNCORR_BUF_CNT"
 };
 
-static char* p64h_drv_x288_ras_names[2] = {
+static char* p64h_drv_x288_ras_err_names[2] = {
     "P64H_ERR_DRV_X288_RAS_NO_SIGNAL",
     "P64H_ERR_DRV_X288_RAS_INVALID_INST_ID"
 };
 
-static char* p64h_drv_arm_n_fire_names[123] = {
+static char* p64h_drv_arm_n_fire_err_names[123] = {
     "P64H_ERR_DRV_ARM_N_FIRE_NULL_HANDLE",
     "P64H_ERR_DRV_ARM_N_FIRE_OPERATION_FAIL",
     "P64H_ERR_DRV_ARM_N_FIRE_UNKNOWN_ERROR",
@@ -870,406 +1036,454 @@ static char* p64h_drv_arm_n_fire_names[123] = {
     "P64H_ERR_DRV_ARM_N_FIRE_SIGNATURE_TOP1_M1_SOK_SECC_PCBI"
 };
 
-static char* p64h_P64H_COMP_DRV_DEBUG_names[0] = {};
+static char* p64h_drv_debug_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_APP_SPW_names[0] = {};
+static char* p64h_drv_app_spw_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_DDR_NOC_names[0] = {};
+static char* p64h_drv_ddr_noc_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_PIER_names[0] = {};
+static char* p64h_drv_pier_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_PCIE_CXL_names[0] = {};
+static char* p64h_drv_pcie_cxl_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_ZSBL_names[0] = {};
+static char* p64h_drv_zsbl_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_TRACE_names[0] = {};
+static char* p64h_drv_trace_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_WDOG_names[0] = {};
+static char* p64h_drv_wdog_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_LSIO_names[0] = {};
+static char* p64h_drv_lsio_err_names[0] = {};
 
-static char* p64h_P64H_COMP_DRV_APP_DMA_names[0] = {};
+static char* p64h_drv_app_dma_err_names[0] = {};
 
-static char* p64h_drv_gpio_names[2] = {
+static char* p64h_drv_gpio_err_names[2] = {
     "P64H_ERR_DRV_GPIO_NULL_HANDLE",
     "P64H_ERR_DRV_GPIO_INVALID_PIN_INDEX"
 };
 
-static char** p64h_err_names[P64H_COMP_LAST] = {
-    p64h_svc_system_names,
-    p64h_svc_appc_names,
-    p64h_svc_com_names,
-    p64h_svc_test_names,
-    p64h_svc_trace_names,
-    p64h_svc_crypto_names,
-    p64h_svc_secc_mbox_names,
-    p64h_svc_hw_names,
-    p64h_svc_switch_names,
-    p64h_svc_em_names,
-    p64h_svc_health_names,
-    p64h_core_names,
-    p64h_P64H_COMP_CORE_OSAL_names,
-    p64h_P64H_COMP_CORE_INTR_HANDLER_names,
-    p64h_P64H_COMP_CORE_SHARED_names,
-    p64h_lib_baal_names,
-    p64h_lib_power_names,
-    p64h_lib_usr_crypto_names,
-    p64h_lib_bist_names,
-    p64h_lib_appc_soc_cfg_names,
-    p64h_lib_api_names,
-    p64h_lib_sysc_soc_cfg_names,
-    p64h_lib_raslib_names,
-    p64h_lib_anlt_sm_names,
-    p64h_lib_tar_zip_helper_names,
-    p64h_lib_ring_buf_names,
-    p64h_P64H_COMP_LIB_BIAL_names,
-    p64h_P64H_COMP_LIB_SEC_names,
-    p64h_P64H_COMP_LIB_SPW_TEST_names,
-    p64h_P64H_COMP_LIB_UTEST_names,
-    p64h_P64H_COMP_LIB_EINJLIB_names,
-    p64h_P64H_COMP_LIB_RPMI_names,
-    p64h_lib_fw_upgrade_names,
-    p64h_P64H_COMP_LIB_IPC_names,
-    p64h_drv_app_wrap_names,
-    p64h_drv_app_periph_names,
-    p64h_drv_ddr_names,
-    p64h_drv_top_names,
-    p64h_drv_noc_core_names,
-    p64h_drv_iobridge_names,
-    p64h_drv_wguard_names,
-    p64h_drv_acsu_names,
-    p64h_drv_pgmrclk_names,
-    p64h_drv_cfm_names,
-    p64h_drv_app_ipc_names,
-    p64h_drv_ddr_ctrl_names,
-    p64h_drv_ddr_edac_names,
-    p64h_drv_dma_names,
-    p64h_drv_ocr_names,
-    p64h_drv_serdes_if_names,
-    p64h_drv_anlt_names,
-    p64h_drv_m1_core_names,
-    p64h_drv_sys_top_names,
-    p64h_drv_sys_spi_flash_names,
-    p64h_drv_sys_hpt_names,
-    p64h_drv_nvm_names,
-    p64h_drv_edac_names,
-    p64h_drv_x288_ras_names,
-    p64h_drv_arm_n_fire_names,
-    p64h_P64H_COMP_DRV_DEBUG_names,
-    p64h_P64H_COMP_DRV_APP_SPW_names,
-    p64h_P64H_COMP_DRV_DDR_NOC_names,
-    p64h_P64H_COMP_DRV_PIER_names,
-    p64h_P64H_COMP_DRV_PCIE_CXL_names,
-    p64h_P64H_COMP_DRV_ZSBL_names,
-    p64h_P64H_COMP_DRV_TRACE_names,
-    p64h_P64H_COMP_DRV_WDOG_names,
-    p64h_P64H_COMP_DRV_LSIO_names,
-    p64h_P64H_COMP_DRV_APP_DMA_names,
-    p64h_drv_gpio_names
+static char* p64h_drv_mdio_err_names[0] = {};
+
+static char* p64h_drv_mbox_err_names[0] = {};
+
+static char* p64h_drv_app_pier_err_names[0] = {};
+
+static char* p64h_drv_beu_err_names[0] = {};
+
+static char* p64h_drv_fttm_err_names[6] = {
+    "P64H_ERR_DRV_FTTM_NULL_POINTER",
+    "P64H_ERR_DRV_FTTM_INVALID_DOMAIN",
+    "P64H_ERR_DRV_FTTM_INVALID_MODE",
+    "P64H_ERR_DRV_FTTM_INVALID_TIME_SOURCE",
+    "P64H_ERR_DRV_FTTM_INVALID_SLAVE_SOURCE",
+    "P64H_ERR_DRV_FTTM_UNIMPLEMENTED"
 };
 
-static char* p64h_svc_system_descs[7] = {
+static char** p64h_err_names[P64H_COMP_LAST] = {
+    p64h_svc_system_err_names,
+    p64h_svc_appc_err_names,
+    p64h_svc_com_err_names,
+    p64h_svc_test_err_names,
+    p64h_svc_trace_err_names,
+    p64h_svc_crypto_err_names,
+    p64h_svc_secc_mbox_err_names,
+    p64h_svc_hw_err_names,
+    p64h_svc_switch_err_names,
+    p64h_svc_em_err_names,
+    p64h_svc_health_err_names,
+    p64h_core_err_names,
+    p64h_core_osal_err_names,
+    p64h_core_intr_handler_err_names,
+    p64h_core_shared_err_names,
+    p64h_core_evt_err_names,
+    p64h_lib_baal_err_names,
+    p64h_lib_power_err_names,
+    p64h_lib_usr_crypto_err_names,
+    p64h_lib_bist_err_names,
+    p64h_lib_appc_soc_cfg_err_names,
+    p64h_lib_api_err_names,
+    p64h_lib_sysc_soc_cfg_err_names,
+    p64h_lib_raslib_err_names,
+    p64h_lib_anlt_sm_err_names,
+    p64h_lib_zlib_helper_err_names,
+    p64h_lib_xxhash_err_names,
+    p64h_lib_ring_buf_err_names,
+    p64h_lib_sec_err_names,
+    p64h_lib_spw_test_err_names,
+    p64h_lib_utest_err_names,
+    p64h_lib_einjlib_err_names,
+    p64h_lib_rpmi_err_names,
+    p64h_lib_fw_upgrade_err_names,
+    p64h_lib_ipc_err_names,
+    p64h_lib_log_err_names,
+    p64h_drv_app_wrap_err_names,
+    p64h_drv_app_periph_err_names,
+    p64h_drv_ddr_err_names,
+    p64h_drv_top_err_names,
+    p64h_drv_noc_core_err_names,
+    p64h_drv_iobridge_err_names,
+    p64h_drv_wguard_err_names,
+    p64h_drv_acsu_err_names,
+    p64h_drv_pgmrclk_err_names,
+    p64h_drv_cfm_err_names,
+    p64h_drv_app_ipc_err_names,
+    p64h_drv_ddr_ctrl_err_names,
+    p64h_drv_ddr_edac_err_names,
+    p64h_drv_ddr_training_err_names,
+    p64h_drv_ddr_phy_err_names,
+    p64h_drv_dma_err_names,
+    p64h_drv_ocr_err_names,
+    p64h_drv_serdes_if_err_names,
+    p64h_drv_anlt_err_names,
+    p64h_drv_m1_core_err_names,
+    p64h_drv_sys_top_err_names,
+    p64h_drv_sys_spi_flash_err_names,
+    p64h_drv_sys_hpt_err_names,
+    p64h_drv_nvm_err_names,
+    p64h_drv_nvm_ctrl_pflash_diag_err_names,
+    p64h_drv_edac_err_names,
+    p64h_drv_x288_ras_err_names,
+    p64h_drv_arm_n_fire_err_names,
+    p64h_drv_debug_err_names,
+    p64h_drv_app_spw_err_names,
+    p64h_drv_ddr_noc_err_names,
+    p64h_drv_pier_err_names,
+    p64h_drv_pcie_cxl_err_names,
+    p64h_drv_zsbl_err_names,
+    p64h_drv_trace_err_names,
+    p64h_drv_wdog_err_names,
+    p64h_drv_lsio_err_names,
+    p64h_drv_app_dma_err_names,
+    p64h_drv_gpio_err_names,
+    p64h_drv_mdio_err_names,
+    p64h_drv_mbox_err_names,
+    p64h_drv_app_pier_err_names,
+    p64h_drv_beu_err_names,
+    p64h_drv_fttm_err_names
+};
+
+static char* p64h_svc_system_err_descs[10] = {
     "ctxt_init error",
     "service_start error",
     "err error",
     "invalid_api error",
     "unexpected_event error",
     "dev_cfg_version_init error",
-    "ACOT entry invalid"
+    "ACOT entry invalid",
+    "Invalid ACOT boot mode configuration",
+    "Error occurred when scrubbing secc memories",
+    "Service handshake failed"
 };
 
-static char* p64h_svc_appc_descs[10] = {
+static char* p64h_svc_appc_err_descs[10] = {
     "invalid_api error",
     "unexpected_event error",
-    "not_loaded_appc_cfg error",
-    "not_loaded_static_cfg error",
-    "invalid_ctxt_signature error",
-    "out_of_range_partitionid error",
-    "unexpected_cmd error",
-    "no_cmd_in_bootscript error",
-    "bootscript_cmd_load error",
-    "bootscript_cmd_get error"
+    "invalid value for ctxt component address struct signature",
+    "out of range partition id given",
+    "unexpected cmd id passed in the appc_bootscript",
+    "No commands were found in the bootscript attempted for boot",
+    "Failed to load the requested appc binary specified in the booscript",
+    "Failed to fetch the requested command indexed from bootscript",
+    "Invalid pipeline utilization ID",
+    "Timed out waiting for the trace service to ack a per-partition trace cfg request"
 };
 
-static char* p64h_svc_com_descs[4] = {
+static char* p64h_svc_com_err_descs[5] = {
     "err error",
     "invalid_api error",
     "unexpected_event error",
-    "err2 error"
+    "err2 error",
+    "Notification failure"
 };
 
-static char* p64h_svc_test_descs[9] = {
+static char* p64h_svc_test_err_descs[9] = {
     "err error",
     "invalid_api error",
     "unexpected_event error",
     "utest_unexpected_event error",
     "unit_test_fail error",
     "err2 error",
-    "Invalid request source for event intercept set",
-    "Tried to start utest while another is running",
-    "Tried to stop utest while none running"
+    "Error: Invalid request source for event intercept set",
+    "Error: Only one unit test can run",
+    "A unit test was requested to stop but none are running."
 };
 
-static char* p64h_svc_trace_descs[7] = {
+static char* p64h_svc_trace_err_descs[10] = {
     "err error",
     "invalid_api error",
     "unexpected_event error",
     "err2 error",
     "invalid_data error",
     "sw_tracing_unsupported_type error",
-    "sw_tracing_out_of_entries error"
+    "sw_tracing_out_of_entries error",
+    "Trace funnel SYNCREQ pulse was issued but HW never asserted SYNCREQ_TRIGGER_ACK",
+    "ATB sink requested but device trace funnel is not enabled / source not active",
+    "Sink config rejected: a Trace Encoder feeding this sink is still enabled (sink not quiesced)"
 };
 
-static char* p64h_svc_crypto_descs[4] = {
+static char* p64h_svc_crypto_err_descs[4] = {
     "err error",
     "invalid_api error",
     "unexpected_event error",
     "err2 error"
 };
 
-static char* p64h_svc_secc_mbox_descs[3] = {
-    "invalid_cmd error",
-    "smb_busy error",
-    "false_resp error"
+static char* p64h_svc_secc_mbox_err_descs[4] = {
+    "Invalid SMB command was received",
+    "SMB busy with other command",
+    "False positive response detected through interrupt event from SMB",
+    "Error returned while sending ALIVE message."
 };
 
-static char* p64h_svc_hw_descs[9] = {
+static char* p64h_svc_hw_err_descs[9] = {
     "context accessed prior to initialization",
-    "ddr_binary_load error",
+    "Trying to load sysc_ddr_cfg binary into hw context",
     "Trying to access hw handle prior initialization",
-    "ID Invalid",
-    "SerDes Not Configured",
+    "HW RPMI Call made with invalid ID",
+    "Attempted to call an RPMI function on a SerDes group which does not have a static configuration",
     "intr_registration_failed error",
-    "intr_disable_failed error",
-    "intr_enable_failed error",
+    "Failed to disable the interrupt",
+    "Failed to enable the interrupt",
     "unexpected_event error"
 };
 
-static char* p64h_svc_switch_descs[2] = {
+static char* p64h_svc_switch_err_descs[4] = {
     "invalid_api error",
-    "unexpected_event error"
+    "unexpected_event error",
+    "failed creating async task",
+    "system error occurred"
 };
 
-static char* p64h_svc_em_descs[11] = {
+static char* p64h_svc_em_err_descs[11] = {
     "invalid_api error",
     "unexpected_event error",
     "unit_test_fail error",
-    "cper_buffer error",
-    "cperlib_make_cper error",
-    "cperlib_handle_cper error",
-    "hest_insufficient_mem error",
-    "bert_insufficient_mem error",
-    "rb_insufficient_mem error",
-    "err_buf_idx_out_of_range status",
-    "Appc partition id out of range"
+    "Failed to complete add, remove, init, or destroy operations on the GHES CPER buffer",
+    "Failed to convert a error event into a CPER record",
+    "Failed to forward and handle a hardware error event into a CPER record",
+    "Not enough memory was allocated for the HEST of a partition",
+    "Not enough memory was allocated for the BERT of a partition",
+    "Not enough memory was allocated for the ring buffers used in error logging",
+    "Index of error record in ERT for fetch is invalid",
+    "Index of appc partition is invalid"
 };
 
-static char* p64h_svc_health_descs[2] = {
+static char* p64h_svc_health_err_descs[4] = {
     "invalid_api error",
-    "unexpected_event error"
+    "unexpected_event error",
+    "Error returned when BIST test is requested when a partition is currently active",
+    "Error occurred when scrubbing secc memories"
 };
 
-static char* p64h_core_descs[30] = {
-    "ok error",
-    "general error",
-    "boot_config_file error",
-    "memory_fail error",
-    "init_fail error",
-    "ipc_data_null error",
-    "ipc_wrong_message error",
-    "ipc_message_size error",
-    "ipc_send_fail error",
-    "ipc_get_msg_fail error",
+static char* p64h_core_err_descs[34] = {
+    "This is the status to indicate successful completion",
+    "INFO General message type",
+    "boot config related errors",
+    "memory malloc errors",
+    "Initialization operation errors.",
+    "IPC data returned NULL error",
+    "IPC wrong message type error",
+    "IPC message size error.",
+    "IPC send fail",
+    "IPC get fail",
     "IPC channel not found",
     "IPC channel ID invalid",
-    "rpmsg_fail error",
-    "ddr_init_fail error",
-    "config_populate_fail error",
-    "pflash_init_fail error",
-    "pflash_soc_undefined error",
-    "pflash_flash_undefined error",
-    "pflash_cell_size error",
-    "fdt_not_found error",
-    "fdt_bad_formatting error",
-    "fdt_dev_cfg_node error",
-    "pointer is null",
-    "handle is 0",
-    "handle is not pointing to whitelisted address",
-    "input is invalid",
-    "version mismatch error",
-    "function is not yet implement",
-    "memcpy_fail value",
-    "Unaligned buffer to DWORD error"
+    "RPMSG API related failure",
+    "DDR initialization failed",
+    "Populating config failure",
+    "PFLASH initialization failed",
+    "PFLASH DTS expects to find a SOC element",
+    "PFLASH DTS expects to find a FLASH element",
+    "PFLASH DTS expects cell size of some elements",
+    "FDT file header check failed or not found",
+    "Unexpected FDT format",
+    "Missing dev_cfg node",
+    "NULL pointer argument",
+    "Handle argument not set",
+    "Invalid base address for peripheral handle",
+    "Invalid function parameter",
+    "dev_cfg & sysc_fw version mismatch",
+    "Function not implemented",
+    "Failed to copy memory",
+    "Table address not DWORD aligned",
+    "An invalid or unknown OS exception was reported in exception handler",
+    "The cfg was not set. It can be set with remote api",
+    "Unknown environment call request",
+    "Checksum verification failed, data integrity compromised"
 };
 
-static char* p64h_P64H_COMP_CORE_OSAL_descs[0] = {};
+static char* p64h_core_osal_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_CORE_INTR_HANDLER_descs[0] = {};
+static char* p64h_core_intr_handler_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_CORE_SHARED_descs[0] = {};
+static char* p64h_core_shared_err_descs[0] = {};
 
-static char* p64h_lib_baal_descs[17] = {
-    "invalid sysc image identifier",
-    "AppC image metadata error",
-    "AppC Boot Articats initialization error",
-    "baal_not_impl error",
-    "baal_init_fail error",
-    "baal_deinit_fail error",
-    "get artifact error",
-    "baal read artifact error",
-    "dma error",
-    "upgrade error",
-    "overwrite error",
-    "sector erase error",
-    "update error",
-    "otp read fail error",
-    "secc_fsbl_dwnld error",
-    "invalid_fsbl_size error",
-    "read_trunc error"
+static char* p64h_core_evt_err_descs[0] = {};
+
+static char* p64h_lib_baal_err_descs[20] = {
+    "Error returned when the sysc image identifier is invalid",
+    "Error returned when there was an issue accessing or reading from an AppC image metadata",
+    "Error returned when baal was not properly initialized to access AppC Boot Articats",
+    "BAAL not implemented error.",
+    "BAAL init fail.",
+    "BAAL deinit fail.",
+    "BAAL failed to get an artifact",
+    "BAAL failed to read an artifact",
+    "baal failed to write to an artifact with dma",
+    "baal failed to upgrade an AppC artifact",
+    "baal failed to overwrite artifact",
+    "baal failed to erase a sector",
+    "baal failed to update an AppC artifact",
+    "BAAL failed to read data from otp",
+    "BAAL failed to load secc fsbl image",
+    "BAAL invalid fsbl size error.",
+    "Read from baal truncated to fit local storage",
+    "BAAL failed due to an error related to FEC mode",
+    "BAAL failed due to an invalid FEC mode",
+    "baal failed to upgrade an AppC artifact due to unsupported FEC mode"
 };
 
-static char* p64h_lib_power_descs[5] = {
-    "cfg_error error",
-    "handle_error error",
+static char* p64h_lib_power_err_descs[5] = {
+    "configuration error",
+    "handle error",
     "unsupported boot source",
-    "Invalid ACSU clock",
-    "Invalid NVM controller"
+    "Error returned when trying to configure Invalid ACSU clock",
+    "Error returned when trying to configure invalid NVM controller"
 };
 
-static char* p64h_lib_usr_crypto_descs[102] = {
-    "pointer to configuration is null",
-    "pointer to handle is null",
-    "User crypto initialization failed",
-    "SK crypto library returned succcess",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library Key Guard error",
-    "SK crypto library KG/Resource Returns",
-    "SK crypto library KG/Resource Returns",
-    "SK crypto library KG/Resource Returns",
-    "SK crypto library KG/Resource Returns",
-    "SK crypto library KG/Resource Returns",
-    "SK crypto library KG/Resource Returns",
-    "SK crypto library KG/Resource Returns",
-    "SK crypto library SecBoot Returns",
-    "SK crypto library SecBoot Returns",
-    "SK crypto library SecBoot Returns",
-    "SK crypto library SecBoot Returns",
-    "SK crypto library SecBoot Returns",
-    "SK crypto library SecBoot Returns",
-    "SK crypto library Resource Returns",
-    "SK crypto library Resource Returns",
-    "SK crypto library Context Returns",
-    "SK crypto library Context Returns",
-    "SK crypto library Context Returns",
-    "SK crypto library Context Returns",
-    "SK crypto library Context Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "SK crypto library General Returns",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    ""
+static char* p64h_lib_usr_crypto_err_descs[102] = {
+    "Error returned when a pointer argument to a configuration is NULL.",
+    "Error returned when a pointer argument to a handle is NULL.",
+    "Error returned due to crypto blocks(SHA, AES, EC, KeyGuard) init &/or  root key gen failure.",
+    "skc crypto API passed",
+    "KeyGuard external interface timeout",
+    "Key destination does not match key use type",
+    "Key load source is not available",
+    "Key distribute destination is not available",
+    "Scratch I/O is too small for the operation size",
+    "Current state does not allow requested operation",
+    "Key unwrap operation resulted in an invalid key",
+    "KeyGuard selected key cannot be exported",
+    "KeyGuard operation is not available",
+    "KeyGuard mode for the given operation is not available",
+    "KeyGuard key load cannot allocate the given KID with the requested size",
+    "KeyGuard KID invalid",
+    "KeyGuard purge verification failed",
+    "KeyGuard NRBG health monitoring error",
+    "KeyGuard encrypted key store MAC validation error",
+    "KeyGuard cannot clear the given KID. It either has the NOCLEAR attribute, or is a root key",
+    "The requested attributes are invalid for the given operation",
+    "The requested key size is invalid for given operation",
+    "Power-on self-test failed",
+    "Zero bits in POST NRGB data",
+    "Busy",
+    "No pending operation",
+    "Initialization failed",
+    "Initialization failed - bad core type",
+    "Initialization failed - core config = 0",
+    "Operation successfully paused",
+    "ECDSA Verification failed",
+    "AES GCM MAC authentication failed",
+    "Intermediate hash comparison failed",
+    "Hash comparison failed",
+    "Tried to resume when already complete",
+    "Invalid type for the requested resource",
+    "Unavailable, not present, resource",
+    "Uninitialized context",
+    "Context state unallocated",
+    "Context state invalid",
+    "Context is not finalized",
+    "Context switching would cause loss of unprocessed data",
+    "Mode is disabled and cannot be used",
+    "Invalid data length",
+    "Invalid parameter",
+    "Parameter value out of range",
+    "Invalid even modulus",
+    "Operation does not support curve type",
+    "Point decompression with modulus not of the form 4n+3",
+    "EC point at infinity",
+    "Invalid EC point, not on curve",
+    "Data from entropy source is zero or not unique",
+    "Signature failure",
+    "Signature or tag verification failure",
+    "Transfer count exceeds allocated",
+    "HW to SW error code translation error",
+    "Double bit error detected",
+    "Function implementation not populated",
+    "Function has been deprecated",
+    "DMA operation returned a bus error",
+    "No available memory to allocate",
+    "SKC resource timed out",
+    "FIFO is empty",
+    "FIFO is full",
+    "General failure",
+    "Signature verification failed",
+    "Service checks failed",
+    "Service not present in the system",
+    "Exception occurred, resetting itself",
+    "Detected memory corruption, resetting itself",
+    "Unexpected failure occurred, need external reset",
+    "Download of FW is not allowed",
+    "Error occurred during data transfer",
+    "Error occurred during data transfer",
+    "PQSubSys not yet boot-up",
+    "Unexpected Error",
+    "ROM Self test failed",
+    "Zeroisation triggered",
+    "PQSubSys is already busy running a service, can't accept new request",
+    "PQSubSys is idle, no response is expected",
+    "No memory left for a new key",
+    "No memory left for a new context",
+    "No memory left for IO buffers",
+    "Incompatible IRAM binary",
+    "Key is not compatible for the intended usage",
+    "Context ID is invalid",
+    "Key ID is invalid",
+    "Host memory buffer size is insufficient for the data to be received",
+    "Algorithm not supported by the PQSubSys",
+    "Algorithm parameter is not supported by the PQSubSys",
+    "Provided key type not supported for the given purpose",
+    "Provided key format not supported for the given purpose",
+    "Provided data interface not supported for the given purpose",
+    "Provided security strength is not supported",
+    "Invalid input parameter",
+    "Provided interface for the entropy is locked during initialization",
+    "Invalid digest size, bigger than the expected size",
+    "API called in an order in which didn't satisfy the condition to execute the service",
+    "entropy depleted, DRBG needs to be reseeded via pqs_reseed() API, before performing an operation",
+    "WrapQ requires a public key to be present when deserialising a secret key",
+    "KEK is not set for the wrapq format",
+    "Feature is not supported yet"
 };
 
-static char* p64h_lib_bist_descs[4] = {
-    "BIST NULL Handle",
-    "Unsupported BIST Test",
-    "Invalid BIST Test Instance N",
-    "Invalid BIST Test Algorithm"
+static char* p64h_lib_bist_err_descs[4] = {
+    "Error due to NULL BIST handle.",
+    "Unsupported BIST test type passed to BIST library.",
+    "Error due to BIST block not having instance N.",
+    "Error due to BIST test not having the given BIST algorithm."
 };
 
-static char* p64h_lib_appc_soc_cfg_descs[6] = {
-    "pointer to configuration is null",
-    "pointer to handle is null",
-    "pointer to m2 handle is null",
-    "hpt status is not OK",
-    "rnmi status is not OK",
-    "Timeout on executing rnmi action"
+static char* p64h_lib_appc_soc_cfg_err_descs[6] = {
+    "Error returned when a pointer argument to a configuration is NULL.",
+    "Error returned when a pointer argument to a handle is NULL.",
+    "Error returned when a pointer argument to a m2 handle is NULL.",
+    "Error returned when HPT status is not OK",
+    "Error returned when RNMI status is not OK",
+    "Error returned when executing RNMI action is taking too long"
 };
 
-static char* p64h_lib_api_descs[29] = {
-    "RPMI NULL pointer",
-    "RPMI size cannot be zero",
-    "RPMI Client identifier is invalid",
-    "RPMI shared-memory initialization failed",
-    "RPMI remote initialization failed",
-    "RPMI Client not initialized",
+static char* p64h_lib_api_err_descs[34] = {
+    "Error returned when a pointer is NULL",
+    "Error returned when size is zero",
+    "Error returned when RPMI Client identifier is invalid",
+    "Error returned when RPMI shared-memory initialization fails",
+    "Error returned when RPMI remote initialization fails",
+    "Error returned when RPMI client is not not initialized",
     "API not yet implemented",
     "One or more parameters passed are invalid",
     "Bad or invalid range",
     "Invalid state",
     "Requested operation denied due to insufficient permissions or failed dependency check",
-    "One or more addresses are invalid",
+    "One or more addresses are invalidd",
     "Failed due to hardware fault",
     "Operation already in progress or state changed already for which the operation was performed",
     "Service cannot be completed due to system or device is busy",
@@ -1278,177 +1492,197 @@ static char* p64h_lib_api_descs[29] = {
     "Failed due to general error.",
     "Service or feature is not supported.",
     "Data not available",
-    "Error in extension implementation that violates the extension specification or the extension version mismatchd",
-    "version mismatch error",
-    "too_many_entries_returned error",
-    "invalid_entries_returned error",
-    "req_busy error",
-    "resp_pending error",
-    "invalid_req_state error",
-    "checksum_mismatched error",
-    "callback_unset error"
+    "Error in extension implementation that violates the extension specification or the extension version mismatch",
+    "Versions between remote and system FW are not the same",
+    "Too many log entries were returned on a log fetch transaction",
+    "Invalid entries were returned on a log fetch transaction",
+    "There is already an outstanding posted request",
+    "Response is not ready",
+    "Invalid request state is returned",
+    "Checksum mismatched, data is corrupted",
+    "There was a transmission error and the header was corrupted",
+    "There was missed data that caused a timeout",
+    "The callback function is unset",
+    "Error returned when API is called before initialization",
+    "Error returned when RPMI IPC initialization fails",
+    "Error returned when power frequency mode switching is applied together with other changes"
 };
 
-static char* p64h_lib_sysc_soc_cfg_descs[5] = {
-    "pointer to configuration is null",
-    "pointer to handle is null",
-    "Invalid filesystem instance",
-    "Invalid filesystem configuration",
-    "Failed to mount the filesystem"
+static char* p64h_lib_sysc_soc_cfg_err_descs[6] = {
+    "Error returned when a pointer argument to a configuration is NULL.",
+    "Error returned when a pointer argument to a handle is NULL.",
+    "Error returned when trying to use invalid filesystem instance",
+    "Error returned when trying to use invalid filesystem config",
+    "Error returned when there is a failure to mount the filesystem",
+    "Error returned when input power frequency mode is invalid"
 };
 
-static char* p64h_lib_raslib_descs[4] = {
-    "No error detected in HER",
-    "BERT entry returned no error",
-    "ert_invalid_read status",
-    "invalid_her_data status"
+static char* p64h_lib_raslib_err_descs[7] = {
+    "No error was detected in the parsing of the HER",
+    "No error to report for the requested BERT entry",
+    "Request to read the ERT at a buffer offset beyond the history of the buffer entries",
+    "Unexpected and invalid data extracted from parsing HER",
+    "The err_id does not match a value in p64h_ras_err_id_t",
+    "Data was lost when fetching from the EMON due to RAS architecture limitations. Only one correctable error can be reported per event.",
+    "Data was lost when fetching from the EMON due to RAS architecture limitations. Only one uncorrectable error can be reported per event."
 };
 
-static char* p64h_lib_anlt_sm_descs[6] = {
-    "error in the ANLT State Machine",
-    "ANLT instance is Misconfigured",
-    "AN Arbitration has failed",
-    "invalid ANLT State Machine state",
-    "invalid Send Training substate",
-    "invalid Link Training Far End Update substate"
+static char* p64h_lib_anlt_sm_err_descs[6] = {
+    "generic error from unexpected source in the ANLT State Machine",
+    "The ANLT State Machine has detected that the ANLT instance it is associated with has somehow been configured incorrectly during ANLT operation",
+    "The AN_ARB state machine in hardware has transitioned back to AN_TRANS_DIS indicating loss of frame and AN failing to complete",
+    "ANLT State Machine called with state larger than P64H_SYSC_ANLT_SM_STATE_LAST",
+    "ANLT State Machine called while in the ANLT_SM_STATE_LT_SEND_TRAINING with an lt_train_state larger than P64H_SYSC_LT_TRAIN_STATE_LAST",
+    "ANLT State Machine called with lt_upd_state larger than P64H_SYSC_LT_TRAIN_STATE_LAST"
 };
 
-static char* p64h_lib_tar_zip_helper_descs[4] = {
-    "compress tar file",
-    "decompress tgz file",
-    "Zlib header checksum",
-    "opening tar file"
+static char* p64h_lib_zlib_helper_err_descs[4] = {
+    "Error returned when compressing a tar file fails.",
+    "Error returned when decompressing a tgz file fails.",
+    "Error returned when Invalid Zlib header checksum",
+    "Error returned when opening a tar file fails."
 };
 
-static char* p64h_lib_ring_buf_descs[3] = {
-    "ring buffer is full",
-    "ring buffer is empty",
-    "invalid read in ring buffer"
+static char* p64h_lib_xxhash_err_descs[0] = {};
+
+static char* p64h_lib_ring_buf_err_descs[3] = {
+    "ring buffer is full and action cannot be processed",
+    "ring buffer is empty and action cannot be processed",
+    "read at an invalid index was requested"
 };
 
-static char* p64h_P64H_COMP_LIB_BIAL_descs[0] = {};
+static char* p64h_lib_sec_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_LIB_SEC_descs[0] = {};
+static char* p64h_lib_spw_test_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_LIB_SPW_TEST_descs[0] = {};
+static char* p64h_lib_utest_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_LIB_UTEST_descs[0] = {};
-
-static char* p64h_P64H_COMP_LIB_EINJLIB_descs[0] = {};
-
-static char* p64h_P64H_COMP_LIB_RPMI_descs[0] = {};
-
-static char* p64h_lib_fw_upgrade_descs[2] = {
-    "firmware upgrade upload fail",
-    "firmware upgrade apply fail"
+static char* p64h_lib_einjlib_err_descs[2] = {
+    "Error returned when trying to use an unsupported error injection type",
+    "Lockstep pair targeted for error injection was not configured in DCLS mode"
 };
 
-static char* p64h_P64H_COMP_LIB_IPC_descs[0] = {};
+static char* p64h_lib_rpmi_err_descs[0] = {};
 
-static char* p64h_drv_app_wrap_descs[4] = {
-    "Timeout on executing dcls action",
-    "pointer to app_wrap handle is null",
-    "pointer to app_wrap configuration is null",
-    "invalid app_wrap instance"
+static char* p64h_lib_fw_upgrade_err_descs[7] = {
+    "Error returned when an offset provided for an upgrade operation is out of bounds or misaligned",
+    "Error returned when an unexpected artifact upgrade request is received",
+    "Error returned when an invalid package type is provided for an upgrade operation",
+    "Error returned when an invalid artifact is provided for an upgrade operation",
+    "Error returned when a firmware upgrade apply operation is attempted but the upload of the firmware image was not completed successfully",
+    "firmware upgrade reboot fail",
+    "Error returned when there is an issue with the buffer provided for firmware upgrade, such as it being too small or not properly aligned"
 };
 
-static char* p64h_drv_app_periph_descs[84] = {
-    "pointer to gpio handle is null",
-    "pointer to gpio configuration is null",
-    "invalid GPIO instance",
-    "Arm and Fire error",
-    "pointer to gpio mux handle is null",
-    "null gpio mux configuration",
-    "invalid gpio mux configuration",
-    "i2c invalid instance",
-    "i2c null handle",
-    "i2c null configuration",
-    "pointer to IPC handle is null",
-    "pointer to IPC configuration is null",
-    "invalid IPC instance",
-    "pointer to App HPT handle is null",
-    "pointer to App HPT configuration is null",
-    "invalid App HPT instance",
-    "pointer to App WDT handle is null",
-    "pointer to App WDT configuration is null",
-    "invalid App WDT instance",
-    "pointer to App timers handle is null",
-    "argument is invalid",
-    "pointer to ENET EP handle is null",
-    "pointer to ENET EP configuration is null",
-    "invalid Ethernet Endpoint instance",
-    "invalid Ethernet Endpoint rate",
-    "pointer to DDR handle is null",
-    "pointer to DDR configuration is null",
-    "invalid DDR instance",
-    "pointer to ENET Switch handle is null",
-    "pointer to ENET Switch configuration is null",
-    "no interrupt status bit was set",
-    "invalid function parameters passed",
-    "pointer to app_periph handle is null",
-    "pointer to app_periph configuration is null",
-    "pointer to UART handle is null",
-    "pointer to UART configuration is null",
-    "invalid UART instance",
-    "pointer to APPDMA handle is null",
-    "pointer to APPDMA configuration is null",
-    "invalid APPDMA instance",
-    "pointer to OCR handle is null",
-    "pointer to OCR configuration is null",
-    "invalid OCR instance",
-    "pointer to BOOT STAT handle is null",
-    "pointer to BOOT STAT configuration is null",
-    "Invalid EDAC instance",
-    "pointer to SPW handle is null",
-    "pointer to SPW configuration is null",
-    "invalid SPW instance",
-    "invalid SPW Router table address",
-    "invalid SPW port",
-    "pointer to PCIE handle is null",
-    "pointer to PCIE configuration is null",
-    "invalid PCIE instance",
-    "invalid PCIe configuration",
-    "PCIE arm and fire error",
-    "pointer to MDIO handle is null",
-    "pointer to MDIO configuration is null",
-    "invalid MDIO instance",
-    "MDIO arm and fire error",
-    "MDIO timeout error",
-    "pointer to SPI handle is null",
-    "pointer to SPI configuration is null",
-    "invalid SPI instance",
-    "SPI arm and fire error",
-    "pointer to IOMMU handle is null",
-    "pointer to IOMMU configuration is null",
-    "pointer to IOMMU WGC configuration is null",
-    "invalid IOMMU instance",
-    "IOMMU arm and fire error",
-    "pointer to nmra handle is null",
-    "pointer to nmra configuration is null",
-    "invalid nmra instance",
-    "nmra arm and fire error",
-    "pointer to USB handle is null",
-    "pointer to USB configuration is null",
-    "invalid USB instance",
-    "USB arm and fire error",
-    "pointer to JTAG HOST handle is null",
-    "pointer to JTAG HOST configuration is null",
-    "pointer to TRACE handle is null",
-    "TRACE arm and fire error",
-    "pointer to User Crypto handle is null",
-    "pointer to User Crypto configuration is null"
+static char* p64h_lib_ipc_err_descs[0] = {};
+
+static char* p64h_lib_log_err_descs[0] = {};
+
+static char* p64h_drv_app_wrap_err_descs[4] = {
+    "Error returned when executing DCLS action is taking too long",
+    "Error returned when a pointer argument to an APP_WRAP handle is null.",
+    "Error returned when a pointer argument to an APP_WRAP configuration is null.",
+    "Error returned when trying to configure an invalid APP_WRAP instance."
 };
 
-static char* p64h_drv_ddr_descs[5] = {
-    "Invalid DDR instance",
-    "Trying accessing PHY while in reset",
-    "Invalid DDR DQ width",
-    "DDR_PLL failed to lock",
-    "DDR_DLL failed to lock"
+static char* p64h_drv_app_periph_err_descs[85] = {
+    "Error: a pointer argument to a gpio handle is NULL",
+    "Error: a pointer argument to a gpio configuration is NULL",
+    "Error: trying to configure an invalid number of GPIO instances",
+    "Error: trying to configure arm and fire GPIO register",
+    "Error: a pointer argument to a gpio mux handle is NULL",
+    "Error: a pointer to the gpio mux configuration structure is null",
+    "Error: the gpio mux configuration is invalid",
+    "Error: i2c id is invalid",
+    "Error: a pointer to the handle is null",
+    "Error: a pointer to the configuration structure is null",
+    "Error: a pointer to the handle is null",
+    "Error: a pointer argument to an IPC configuration is null",
+    "Error: trying to configure an invalid IPC instance",
+    "Error: a pointer to the handle is null",
+    "Error: a pointer argument to an App HPT configuration is null",
+    "Error: trying to configure an invalid App HPT instance",
+    "Error: a pointer to the handle is null",
+    "Error: a pointer argument to an App WDT configuration is null",
+    "Error: trying to configure an invalid App WDT instance",
+    "Error: a pointer to the handle is null",
+    "Error: the argument is invalid",
+    "Error: a pointer argument to an ENET EP handle is null",
+    "Error: a pointer argument to an ENET EP configuration is null",
+    "Error: trying to configure an invalid ENET EP instance",
+    "Error: trying to configure ENET EP with an invalid rate",
+    "Error: a pointer argument to an DDR handle is null",
+    "Error: a pointer argument to an DDR configuration is null",
+    "Error: trying to configure an invalid DDR instance",
+    "Error: a pointer argument to an ENET Switch configuration is null",
+    "Error: a pointer argument to an ENET Switch configuration is null",
+    "Error: no interrupt status bit was set",
+    "Error: invalid function parameters passed",
+    "Error: VCAP_UPDATE_CTRL.UPDATE_SHOT did not auto-clear within poll limit",
+    "Error: a pointer to the app_periph handle is null",
+    "Error: a pointer to the app_periph configuration is null",
+    "Error: a pointer argument to an UART handle is null",
+    "Error: a pointer argument to an UART configuration is null",
+    "Error: trying to configure an invalid UART instance",
+    "Error: a pointer argument to an APPDMA handle is null",
+    "Error: a pointer argument to an APPDMA configuration is null",
+    "Error: trying to configure an invalid APPDMA instance",
+    "Error: a pointer argument to an OCR handle is null",
+    "Error: a pointer argument to an OCR configuration is null",
+    "Error: trying to configure an invalid OCR instance",
+    "Error: a pointer argument to a BOOT STAT handle is null",
+    "Error: a pointer argument to a BOOT STAT configuration is null",
+    "Error: trying to configure an invalid EDAC instance",
+    "Error: a pointer argument to a SPW handle is null",
+    "Error: a pointer argument to a SPW configuration is null",
+    "Error returned when trying to configure an invalid SPW instance.",
+    "Error returned when trying to read/write to an invalid SPW Router table address.",
+    "Error returned when trying to write with an invalid SPW port.",
+    "Error: a pointer argument to an PCIE handle is null",
+    "Error: a pointer argument to an PCIE configuration is null",
+    "Error: trying to configure an invalid PCIE instance",
+    "Error: the given configuration for a PCIe instance is invalid",
+    "Error: the arm and fire operation on PCIE failed",
+    "Error: a pointer argument to a mdio handle is NULL",
+    "Error: a pointer argument to a mdio configuration is NULL",
+    "Error: trying to configure an invalid number of mdio instances",
+    "Error: trying to configure arm and fire mdio register",
+    "Error: mdio operation failed",
+    "Error: a pointer argument to a spi handle is NULL",
+    "Error: a pointer argument to a spi configuration is NULL",
+    "Error: trying to configure an invalid number of spi instances",
+    "Error: trying to configure arm and fire spi register",
+    "Error: a pointer argument to a iommu handle is NULL",
+    "Error: a pointer argument to a iommu configuration is NULL",
+    "Error: a pointer argument to a iommu wgc configuration is NULL",
+    "Error: trying to configure an invalid number of iommu instances",
+    "Error: trying to configure arm and fire iommu register",
+    "Error: a pointer argument to a nmra handle is NULL",
+    "Error: a pointer argument to a nmra configuration is NULL",
+    "Error: trying to configure an invalid number of nmra instances",
+    "Error: trying to configure arm and fire nmra register",
+    "Error: a pointer argument to an USB handle is null",
+    "Error: a pointer argument to an USB configuration is null",
+    "Error: trying to configure an invalid USB instance",
+    "Error: the arm and fire operation on USB failed",
+    "Error: a pointer argument to an JTAG HOST configuration is null",
+    "Error: a pointer argument to an JTAG HOST configuration is null",
+    "Error: a pointer argument to a trace handle is NULL",
+    "Error: trying to configure arm and fire trace register",
+    "Error: a pointer argument to an User Crypto configuration is null",
+    "Error returned when a pointer argument to an User Crypto configuration is null."
 };
 
-static char* p64h_drv_top_descs[18] = {
-    "TOP arm and fire error",
+static char* p64h_drv_ddr_err_descs[5] = {
+    "Error returned when trying to configure an invalid DDR instance (0 or 1 are valid value)",
+    "Error returned when trying to access DDR PHY when it is in reset",
+    "Error returned when trying to cofigure an invalid DDR DQ width",
+    "Error: DDR_PLL failed to lock",
+    "Error: DDR_DLL failed to lock"
+};
+
+static char* p64h_drv_top_err_descs[19] = {
+    "Error returned when trying to configure arm and fire TOP register",
     "instance id provided is invalid",
     "failed to set block lowpower",
     "failed to clear block lowpower",
@@ -1456,486 +1690,644 @@ static char* p64h_drv_top_descs[18] = {
     "failed to clear block reset",
     "handle error",
     "invalid instance id",
-    "invalid NVM Edac mux selection",
-    "invalid NVM controller type",
-    "Invalid NVM connector instance",
-    "Invalid NVM controller clock selection",
-    "Invalid NVM EDAC clock selection",
-    "Invalid NVM BCH clock selection",
-    "Invalid ENET_EP D_CLK Clock Selection",
-    "Invalid PSC Name",
-    "PSC Timeout Error",
-    "PSC Status Error"
+    "Error reported for an invalid NVM Edac mux selection",
+    "Error reported for invalid NVM controller type selection",
+    "Error returned when trying to configure an invalid NVM connector instance",
+    "Error returned when trying to configure an NVM controller clock selection",
+    "Error returned when trying to configure an NVM EDAC clock selection",
+    "Error returned when trying to configure an NVM BCH clock selection",
+    "Error returned when trying to configure ENET_EP D_CLK clock source.",
+    "Error returned when an invalid PSC region is passed as an argument.",
+    "Error when a PSC does not powerup/down (PSC_POWERUP_ACK) in timeout period.",
+    "Error when a PSC_STAT register indicates an error (VOLTAGE_OK!=1).",
+    "Error when any TMON threshold ordering is invalid (low > high) or threshold value is negative"
 };
 
-static char* p64h_drv_noc_core_descs[29] = {
-    "unsupported_event_type error",
-    "invalid_observed_port_index error",
-    "invalid_dump_selection error",
-    "invalid_filter_index error",
-    "invalid_trans_prof_mode error",
-    "invalid_subsystem error",
-    "invalid_action_packet_stat_counter error",
-    "invalid_action_transaction_stat_counter error",
-    "invalid_counter_index error",
-    "unsupported_trans_probe_index error",
-    "invalid_transaction_profiling_op_mode error",
-    "all_counters_occupied error",
-    "unallocated_counter error",
-    "invalid_targ_bitmask error",
-    "invalid_initiator error",
-    "invalid_noc_type error",
-    "driver_uninitialized error",
-    "noc_counter_out_of_range error",
-    "invalid_base_address error",
-    "invalid_stat_period error",
-    "invalid_bin_index error",
-    "tenure_lines_latency_out_of_range error",
-    "tenure_lines_pending_trans_out_of_range error",
-    "invalid_stat_collection_type error",
-    "stat_alarm_threshold_out_of_range error",
-    "invalid_async_period error",
-    "handle_error error",
-    "cfg_error error",
-    "invalid_param"
+static char* p64h_drv_noc_core_err_descs[29] = {
+    "Unsupported event type",
+    "Invalid observed port index",
+    "Invalid selection for statistics dump",
+    "Invalid filter index",
+    "Invalid transaction profiling mode",
+    "Invalid subsystem for trace collection",
+    "Invalid action for packet counter",
+    "Invalid action for counter for transaction profiling",
+    "Invalid counter index used to observe the port",
+    "Unsupported transaction probe index",
+    "Invalid transaction profiling operation mode",
+    "All counters are currently occupied",
+    "No counters allocated for the event",
+    "Invalid target bitmask",
+    "Invalid pm initiator",
+    "Invalid noc type",
+    "Noc pm driver uninitialized",
+    "Counter out of range",
+    "Invalid base address",
+    "Invalid statistic period",
+    "Invalid bin index",
+    "Tenure lines for latency measurements out of range",
+    "Tenure lines for pending transactions out of range",
+    "Invalid statistics collection type",
+    "statistics alarm threshold out of range",
+    "Invalid Async Period",
+    "handle error",
+    "configuration error",
+    "Error: an invalid parameter is passed to a NOC driver functions"
 };
 
-static char* p64h_drv_iobridge_descs[1] = {
-    "pointer to parameters are null"
+static char* p64h_drv_iobridge_err_descs[1] = {
+    "Error returned when a argument pointer is NULL."
 };
 
-static char* p64h_drv_wguard_descs[8] = {
-    "pointer to Wguard checker slot configuration is null",
-    "pointer to Wguard marker configuration is null",
-    "pointer to Wguard marker DID configuration is null",
-    "pointer to error data configuration is null",
-    "invalid slot number",
-    "invalid number of did-wid entries to configure",
-    "out of range slot index",
-    "Expected error information but read none"
+static char* p64h_drv_wguard_err_descs[8] = {
+    "Error returned when a pointer to Wguard checker slot configuration is NULL.",
+    "Error returned when a pointer to Wguard marker configuration is NULL.",
+    "Error returned when a pointer to Wguard marker DID configuration is NULL.",
+    "Error returned when a pointer to error data configuration is NULL.",
+    "Error returned when the number of slots is invalid",
+    "Error returned when trying to configure invalid number of did-wid entries",
+    "Error returned when trying to provision/deprovision an out of range WG slot.",
+    "Interrupt indicates error but register shows neither read nor write fault."
 };
 
-static char* p64h_drv_acsu_descs[8] = {
-    "pointer to ACSU handle is null",
-    "invalid ACSU preset",
-    "invalid ACSU instance",
-    "ACSU PLL lock timeout error",
-    "ACSU PLL offset calibration lock timeout error",
-    "ACSU not initialized error",
-    "invalid ACSU clock output index",
-    "out of range ACSU post divider value error"
+static char* p64h_drv_acsu_err_descs[8] = {
+    "Error: a pointer argument to an ACSU handle is null",
+    "Error: trying to configure an ACSU with invalid preset",
+    "Error: trying to configure an invalid ACSU instance",
+    "Error: ACSU PLL did not achieve lock before the timeout occurred",
+    "Error: ACSU PLL offset calibration did not achieve lock before the timeout occurred",
+    "Error: an ACSU API is called while ACSU is in reset (uninitialized)",
+    "Error: an invalid index is provided for selecting a clock output",
+    "Error: trying to configure the ACSU output post divider with out of range value"
 };
 
-static char* p64h_drv_pgmrclk_descs[3] = {
-    "pointer to PGMRCLK configuration is null",
-    "invalid PGMRCLK clock identifier",
-    "clock desired frequency is not supported"
+static char* p64h_drv_pgmrclk_err_descs[4] = {
+    "Error: a pointer argument to an PGMRCLK configuration is null",
+    "Error: an invalid identifier is provided for a PGMRCLK clock",
+    "Error: an invalid selection is provided for a PGMRCLK clock",
+    "Error: an invalid value is provided for clock desired frequency"
 };
 
-static char* p64h_drv_cfm_descs[5] = {
-    "CFM measurement is disabled",
-    "invalid CFM instance",
-    "invalid CFM channel",
-    "invalid CFM configuration",
-    "CFM is still active"
+static char* p64h_drv_cfm_err_descs[5] = {
+    "Error: CFM measurement is disabled",
+    "Error: an invalid instance is provided for a CFM",
+    "Error: an invalid channel is provided for a CFM",
+    "Error: an invalid configuration is provided for a CFM",
+    "Error: CFM is active"
 };
 
-static char* p64h_drv_app_ipc_descs[1] = {
-    "pointer to IPC handle is NULL"
+static char* p64h_drv_app_ipc_err_descs[1] = {
+    "Error: a pointer argument to an IPC handle is NULL"
 };
 
-static char* p64h_drv_ddr_ctrl_descs[3] = {
-    "pointer to ddr_ctrl handle is null",
-    "ddr_ctrl unsupported type",
-    "Invalid CTRL instance"
+static char* p64h_drv_ddr_ctrl_err_descs[3] = {
+    "Error: a pointer argument to a ddr_ctrl handle is NULL",
+    "Error: DDR is configured for an unsupported type",
+    "Error: trying to configure an invalid CTRL instance"
 };
 
-static char* p64h_drv_ddr_edac_descs[7] = {
-    "fec mode error",
-    "Invalid period of reads",
-    "Invalid write response timeout ",
-    "Invalid write data timeout ",
-    "Invalid write request timeout ",
-    "Invalid read data timeout ",
-    "Invalid read request timeout "
+static char* p64h_drv_ddr_edac_err_descs[7] = {
+    "Error: trying to configure an invalid FEC mode",
+    "Error: trying to configure an invalid period of rests",
+    "Error: trying to configure an invalid write response timeout",
+    "Error: trying to configure an invalid write data timeout",
+    "Error: trying to configure an invalid write request timeout",
+    "Error: trying to configure an invalid read data timeout",
+    "Error: trying to configure an invalid read request timeout"
 };
 
-static char* p64h_drv_dma_descs[10] = {
-    "pointer is null",
-    "mask value is invalid",
-    "time is out",
-    "invalid type",
-    "memory allocation failure",
-    "unimplemented",
-    "argument is invalid",
-    "dmac_chid_out_of_range_err",
-    "dmac_xfer_done_fail",
-    "dmac_blk_xfer_fail"
+static char* p64h_drv_ddr_training_err_descs[102] = {
+    "Error: Failure to find TDFI_RDDATA_EN during DDR0 training",
+    "Error: Failure to find TDFI_RDDATA_EN during DDR1 training",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 0",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 1",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 2",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 3",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 4",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 5",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 6",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 7",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 8",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR0 training on lane 9",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 0",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 1",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 2",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 3",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 4",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 5",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 6",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 7",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 8",
+    "Error: Failed to find a proper window for rdgt_sweep during DDR1 training on lane 9",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 0",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 1",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 2",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 3",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 4",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 5",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 6",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 7",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 8",
+    "Error: Failed to find a proper window for read_databus dq during DDR0 training on lane 9",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 0",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 1",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 2",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 3",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 4",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 5",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 6",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 7",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 8",
+    "Error: Failed to find a proper window for read_databus dq during DDR1 training on lane 9",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 0",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 1",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 2",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 3",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 4",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 5",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 6",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 7",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 8",
+    "Error: Failed to find a proper window for read_databus dqs during DDR0 training on lane 9",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 0",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 1",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 2",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 3",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 4",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 5",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 6",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 7",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 8",
+    "Error: Failed to find a proper window for read_databus dqs during DDR1 training on lane 9",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 0",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 1",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 2",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 3",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 4",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 5",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 6",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 7",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 8",
+    "Error: Failed to find a proper window for write_leveling during DDR0 training on lane 9",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 0",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 1",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 2",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 3",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 4",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 5",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 6",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 7",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 8",
+    "Error: Failed to find a proper window for write_leveling during DDR1 training on lane 9",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 0",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 1",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 2",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 3",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 4",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 5",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 6",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 7",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 8",
+    "Error: Failed to find a proper window for write_databus during DDR0 training on lane 9",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 0",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 1",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 2",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 3",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 4",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 5",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 6",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 7",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 8",
+    "Error: Failed to find a proper window for write_databus during DDR1 training on lane 9"
 };
 
-static char* p64h_drv_ocr_descs[4] = {
-    "fifo_mel_rd_err",
-    "init_busy",
+static char* p64h_drv_ddr_phy_err_descs[2] = {
+    "Error: trying to configure an invalid PHY instance",
+    "Error: trying to configure an invalid HSIO instance"
+};
+
+static char* p64h_drv_dma_err_descs[10] = {
+    "Error: a pointer argument is NULL",
+    "Error: the mask value is invalid",
+    "Error: time is out",
+    "Error: the type is invalid",
+    "Error: the memory allocation failed",
+    "Error: the function called is unimplemented",
+    "Error: the argument is invalid",
+    "Error: The select channel id is does not exist",
+    "Error: DMA transfer failed to complete",
+    "Error: DMA block transfer failed"
+};
+
+static char* p64h_drv_ocr_err_descs[5] = {
+    "Error: unable to read from the OCR Memory Error Logger FIFO",
+    "Error: OCR Memory block is performing initialization and is not accessible",
     "init_fail",
-    "invalid_param"
+    "Error: an invalid parameter is passed to a OCR driver functions",
+    "Error: invalid scrubbing period "
 };
 
-static char* p64h_drv_serdes_if_descs[8] = {
-    "generic SerDes Error",
-    "invalid SerDes Lane",
-    "invalid SerDes Rate",
-    "invalid SerDes loopback point",
-    "Calibration timed out waiting for completion",
-    "invalid AutoNegotiation Configuration",
-    "TXPLL for bank already running at different FVco",
-    "TXPLL timed out waiting for lock"
+static char* p64h_drv_serdes_if_err_descs[8] = {
+    "Error returned for failure cases that do not have unique error codes",
+    "Error: driver functions are called with a lane parameter larger than the number of lanes on the device",
+    "Error: driver functions are called with a rate outside the approved rates for the device",
+    "Error: driver functions are called with a loopback configuration that is not supported by the device",
+    "Error: calibration takes longer to happen than the specified timeout",
+    "Error: static configuration method is called with an impossible AN configuration",
+    "Error: attempting to configure a lane in a bank to a different FVco while a different lane in that bank is already utilizing that FVco",
+    "Error: lock takes longer to happen than the specified timeout"
 };
 
-static char* p64h_drv_anlt_descs[3] = {
-    "generic ANLT Error",
-    "lookup failed",
-    "invalid AN Arbitration State"
+static char* p64h_drv_anlt_err_descs[3] = {
+    "Error returned for failure cases that do not have unique error codes",
+    "Error: a lookup into an array has failed, either due to the index being too large, or the entry in the array being nonsensical",
+    "Error: an invalid AN Arbitration State Enum is passed into a function"
 };
 
-static char* p64h_drv_m1_core_descs[10] = {
-    "NULL APB2JTAG Handle",
-    "NULL APB2JTAG Config Pointer",
-    "Invalid APB2JTAG Access NBITS",
-    "Invalid APB2JTAG Access NSHIFTS",
-    "Invalid APB2JTAG Access OPCODE_SEL",
-    "Invalid APB2JTAG Access SELECT_TYPE",
-    "APB2JTAG FSM Error",
-    "APB2JTAG 64b TDO Miscompare",
-    "NULL m1 core Handle",
-    "NULL FW PLL Config Pointer"
+static char* p64h_drv_m1_core_err_descs[12] = {
+    "Error: a pointer argument to a APB2JTAG handle is NULL",
+    "Error: a pointer argument to a APB2JTAG config is NULL",
+    "Error: APB2JTAG config NBITS exceeds M1_CORE_APB2JTAG_MAX_BITS",
+    "Error: APB2JTAG config NSHIFTS exceeds M1_CORE_APB2JTAG_MAX_SHIFTS",
+    "Error: APB2JTAG config OPCODE_SEL exceeds M1_CORE_APB2JTAG_MAX_OPCODE_SEL",
+    "Error: APB2JTAG config SELECT_TYPE exceeds M1_CORE_APB2JTAG_MAX_SELECT_TYPE",
+    "Error: A2J_ERROR_I2=1 during APB2JTAG access",
+    "Error: both APB2JTAG TDO read/checking are enabled and TDO miscompare between read/expected",
+    "Error: a pointer argument to a M1 CORE handle is NULL",
+    "Error: a pointer argument to a FW PLL config is NULL",
+    "Error: FW_PLL watchdog was asserted, measurement failed",
+    "Error: an invalid configuration is provided for the FW_PLL"
 };
 
-static char* p64h_drv_sys_top_descs[5] = {
-    "SYS TOP arm and fire error",
-    "invalid register",
-    "pointer to return value is null",
-    "handle_error error",
-    "cfg_error error"
+static char* p64h_drv_sys_top_err_descs[6] = {
+    "Error: trying to configure arm and fire SYS TOP register",
+    "Error: register arguement does not exist",
+    "Error: a pointer to the result is NULL",
+    "Error: handle error",
+    "Error: configuration error",
+    "Error: invalid instance"
 };
 
-static char* p64h_drv_sys_spi_flash_descs[5] = {
-    "SYS SPI Flash configuration pointer is null",
-    "SYS SPI Flash initialization error",
-    "SYS SPI Flash program error",
-    "SYS SPI Flash read error",
-    "SYS SPI Flash erase error"
+static char* p64h_drv_sys_spi_flash_err_descs[5] = {
+    "Error: a pointer argument to a SYS SPI Flash configuration is NULL",
+    "Error: SYS SPI Flash initialization failed",
+    "Error: SYS SPI Flash program failed",
+    "Error: SYS SPI Flash read failed",
+    "Error: SYS SPI Flash erase failed"
 };
 
-static char* p64h_drv_sys_hpt_descs[3] = {
-    "invalid parameter",
-    "exceed MAX loop",
-    "mtime read error"
+static char* p64h_drv_sys_hpt_err_descs[3] = {
+    "Error: hpt arguement invalid",
+    "Error: MAX loop reached",
+    "Error returned when read mtime."
 };
 
-static char* p64h_drv_nvm_descs[56] = {
-    "NVM CTRL arm and fire error",
-    "pointer to NVM handle is null",
-    "pointer to NVM configuration is null",
-    "Invalid NVM controller instance",
-    "Invalid NVM controller type",
-    "Invalid EDAC instance",
-    "pflash unsupported data width configured",
-    "pflash device ready timed out",
-    "pflash write buffer null",
-    "Invalid XSPI instance",
-    "XSPI CTRL probe error",
-    "XSPI CTRL init error",
-    "XSPI CTRL start Error",
-    "XSPI CTRL get Callback Error",
-    "XSPI CTRL set Callback Error",
-    "XSPI CTRL get Event Error",
-    "XSPI CTRL set Event Error",
-    "XSPI CTRL get direct mode config Error",
-    "XSPI CTRL get direct work mode Error",
-    "XSPI CTRL set work mode mode Error invalid pointer",
-    "XSPI CTRL set work mode mode Error error busy",
-    "XSPI CTRL send stig command Error",
-    "XSPI CTRL get stig status Error",
-    "XSPI CTRL set direct mode config Error",
-    "XSPI CTRL get global cmd params Error",
-    "XSPI CTRL set global cmd params Error",
-    "XSPI CTRL get program seq p1 Error",
-    "XSPI CTRL set program seq p1 Error",
-    "XSPI CTRL get read seq p1 Error",
-    "XSPI CTRL set read seq p1 Error",
-    "XSPI CTRL get comm stat seq config Error",
-    "XSPI CTRL set comm stat seq config Error",
-    "XSPI CTRL get stat seq p1 config Error",
-    "XSPI CTRL set stat seq p1 config Error",
-    "XSPI CTRL get wel seq config Error",
-    "XSPI CTRL set wel seq config Error",
-    "XSPI CTRL enable direct mode Error",
-    "XSPI CTRL enable stig mode Error",
-    "XSPI CTRL conversion to XSPI num IOS Error",
-    "XSPI CTRL conversion to XSPI data edge mode Error",
-    "XSPI CTRL conversion to XSPI addr edge mode Error",
-    "XSPI CTRL conversion to XSPI cmd edge mode Error",
-    "XSPI CTRL conversion to XSPI cmd word size Error",
-    "XSPI CTRL conversion to XSPI stat polarity Error",
-    "XSPI CTRL conversion to XSPI seq type Error",
-    "XSPI CTRL conversion to XSPI crc chunk size Error",
-    "XSPI CTRL conversion to XSPI crc variant Error",
-    "XSPI CTRL conversion to XSPI data per addr Error",
-    "XSPI CTRL conversion to XSPI stat addr count Error",
-    "XSPI CTRL conversion to XSPI program page size Error",
-    "XSPI CTRL conversion to XSPI read page size Error",
-    "XSPI CTRL conversion to XSPI p1 stig instruction Error",
-    "Invalid XSPI CCP instance",
-    "XSPI CCP probe error",
-    "XSPI CCP init error",
-    "Diagnostic Test Failure"
+static char* p64h_drv_nvm_err_descs[56] = {
+    "Error: trying to configure arm and fire NVM CTRL register",
+    "Error: a pointer argument to a NVM handle is NULL",
+    "Error: a pointer argument to a NVM configuration is NULL",
+    "Error: trying to configure an invalid NVM controller instance",
+    "Error: trying to configure an invalid NVM controller type",
+    "Error: trying to configure an invalid EDAC instance",
+    "Error return when trying to configure pflash unsupported data width",
+    "Error return when pflash device ready times out",
+    "Error return when trying to load program data with null write buffer for write buffer program",
+    "Error: trying to configure an invalid XSPI instance",
+    "Error: trying to probe XSPI controller",
+    "Error: trying to init XSPI controller",
+    "Error returned when trying to start the XSPI controller",
+    "Error returned when trying to get Callbacks for the XSPI controller",
+    "Error returned when trying to set Callbacks for the XSPI controller",
+    "Error returned when trying to get the Events for the XSPI controller",
+    "Error returned when trying to set the Events for the XSPI controller",
+    "Error returned when trying to get the direct mode config from the XSPI controller inst",
+    "Error returned when trying to get work mode config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set work mode config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set work mode config from the XSPI controller inst; Error is controller busy",
+    "Error returned when trying to send the stig command to the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to get the set work mode config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set the direct mode config from the XSPI controller inst",
+    "Error returned when trying to get global command parameters from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set global command parameters from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to get program sequence profile 1 config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set program sequence profile 1 config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to get read sequence profile 1 config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set read sequence profile 1 config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to get common status sequence configuration from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set common status sequence configuration from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to get status sequence profile 1 config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set status sequence profile 1 config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to get write enable sequence config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to set write enable sequence config from the XSPI controller inst; Error is invalid pointer",
+    "Error returned when trying to enable direct mode in the XSPI controller inst",
+    "Error returned when trying to enable stig mode in the XSPI controller inst",
+    "Error returned when trying to convert the p64h number of ios enum to the XSPI enum",
+    "Error returned when trying to convert the p64h edge mode enum to the XSPI data edge enum",
+    "Error returned when trying to convert the p64h edge mode enum to the XSPI addr edge enum",
+    "Error returned when trying to convert the p64h edge mode enum to the XSPI cmd edge enum",
+    "Error returned when trying to convert the p64h word size enum to the XSPI cmd word size enum",
+    "Error returned when trying to convert the p64h status polarity enum to the XSPI status polarity enum",
+    "Error returned when trying to convert the p64h sequence type enum to the XSPI sequence type enum",
+    "Error returned when trying to convert the p64h crc chunk size enum to the XSPI crc chunk size enum",
+    "Error returned when trying to convert the p64h crc variant enum to the XSPI crc variant enum",
+    "Error returned when trying to convert the p64h data per address enum to the XSPI data per address enum",
+    "Error returned when trying to convert the p64h status sequence address count enum to the XSPI status sequence address count enum",
+    "Error returned when trying to convert the p64h program page size enum to the XSPI program page size enum",
+    "Error returned when trying to convert the p64h read page size enum to the XSPI read page size enum",
+    "Error returned when trying to convert the p64h profile 1 stig instruction enum to the XSPI profile 1 stig instruction enum",
+    "Error: trying to configure an invalid XSPI CCP instance",
+    "Error: trying to probe XSPI CCP",
+    "Error: trying to init XSPI CCP",
+    "Error: Diagnostic Test Failed"
 };
 
-static char* p64h_drv_edac_descs[4] = {
-    "pointer to EDAC handle is null",
-    "invalid EDAC configuration",
-    "Invalid EDAC instance",
-    "EDAC EMON read timeout"
+static char* p64h_drv_nvm_ctrl_pflash_diag_err_descs[0] = {};
+
+static char* p64h_drv_edac_err_descs[6] = {
+    "Error: a pointer argument to an EDAC handle is NULL",
+    "Error: the EDAC configuration is invalid",
+    "Error: trying to configure an invalid EDAC instance",
+    "Error returned on timeout when trying to read EDAC error monitor",
+    "Error returned when EMON Correctable Buffer is unexpectedly empty during ISR",
+    "Error returned when EMON Uncorrectable Buffer is unexpectedly empty during ISR"
 };
 
-static char* p64h_drv_x288_ras_descs[2] = {
-    "No signal detected in signal status",
-    "Invalid instance ID"
+static char* p64h_drv_x288_ras_err_descs[2] = {
+    "No errors active in the error map since no signal was logged to the signal status register",
+    "Error bank instance ID from registers is invalid"
 };
 
-static char* p64h_drv_arm_n_fire_descs[123] = {
-    "pointer to handle is null",
-    "Arm and fire operation failed",
-    "Arm and fire operation returns unknown error",
-    "signature TOP2_TEMP_MON_L mismatches",
-    "signature TOP2_TEMP_MON_R mismatches",
-    "signature TOP2_M1_SOK_CORE_PCBI mismatches",
-    "signature TOP2_TOP_IOB_GPIO0 mismatches",
-    "signature TOP2_TOP_IOB_GPIO1 mismatches",
-    "signature TOP2_TOP_IOB_GPIO2 mismatches",
-    "signature TOP2_TOP_IOB_GPIO3 mismatches",
-    "signature TOP2_TOP_IOB_GPIO4 mismatches",
-    "signature TOP2_TOP_IOB_GPIO5 mismatches",
-    "signature TOP2_TOP_IOB_GPIO6 mismatches",
-    "signature TOP2_TOP_IOB_GPIO7 mismatches",
-    "signature TOP3_SHI_E0 mismatches",
-    "signature TOP3_SHI_E1 mismatches",
-    "signature TOP3_SHI_S3 mismatches",
-    "signature TOP3_SHI_S2 mismatches",
-    "signature TOP3_SHI_S1 mismatches",
-    "signature TOP3_SHI_S0 mismatches",
-    "signature TOP3_SHI_HT mismatches",
-    "signature TOP3_APP_ACSU mismatches",
-    "signature TOP3_EDGE_CURR_TOP mismatches",
-    "signature TOP3_EDGE_CURR_BOTTOM mismatches",
-    "signature TOP3_SYS_ACSU mismatches",
-    "signature ETH_ENET_EP_SS_SVC mismatches",
-    "signature ETH_ENET_SWR_SS_SVC mismatches",
-    "signature DDR_DDR_EDAC0 mismatches",
-    "signature DDR_DDR_EDAC1 mismatches",
-    "signature DDR_IOB_HSIO_SOK0 mismatches",
-    "signature DDR_IOB_HSIO_SOK1 mismatches",
-    "signature DDR_IOB_HSIO_SOK2 mismatches",
-    "signature DDR_IOB_HSIO_SOK3 mismatches",
-    "signature DDR_IOB_HSIO_SOK4 mismatches",
-    "signature DDR_DDR_CTRL0 mismatches",
-    "signature DDR_DDR_CTRL1 mismatches",
-    "signature DDR_DDR_NOC mismatches",
-    "signature DDR_DDR_PHY_SOK mismatches",
-    "signature NVM_NVM_CTRL0 mismatches",
-    "signature NVM_NVM_CTRL1 mismatches",
-    "signature NVM_NVM_CTRL2 mismatches",
-    "signature NVM_NVM_CTRL3 mismatches",
-    "signature NVM_SRAM_EDAC0 mismatches",
-    "signature NVM_SRAM_EDAC1 mismatches",
-    "signature NVM_SRAM_EDAC2 mismatches",
-    "signature NVM_NVM_EDAC1 mismatches",
-    "signature NVM_NVM_EDAC0 mismatches",
-    "signature NVM_IOB0 mismatches",
-    "signature NVM_IOB1 mismatches",
-    "signature NVM_IOB2 mismatches",
-    "signature NVM_IOB3 mismatches",
-    "signature NVM_IOB4 mismatches",
-    "signature NVM_IOB5 mismatches",
-    "signature NVM_IOB6 mismatches",
-    "signature NVM_IOB7 mismatches",
-    "signature SUP_SYSC_SYSREG mismatches",
-    "signature SUP_SYSC_WDT mismatches",
-    "signature SUP_SRAM_EDAC_GSB mismatches",
-    "signature SUP_SYS_OCR mismatches",
-    "signature SUP_DDR_ENCRYPTOR mismatches",
-    "signature SUP_USER_CRYPTO_GSB mismatches",
-    "signature SUP_SYSC_HPT mismatches",
-    "signature SUP_SYSC_ELT mismatches",
-    "signature SUP_PQ_CRYPTO_CFG mismatches",
-    "signature SUP_GPIO_SOK mismatches",
-    "signature SUP_APPC_OCR0 mismatches",
-    "signature SUP_APPC_OCR1 mismatches",
-    "signature SUP_PQRAM_OCR mismatches",
-    "signature SUP_SECC_OCR mismatches",
-    "signature SUP_SEC_S7_OCR mismatches",
-    "signature SUP_SPI_CTRL_TPGM mismatches",
-    "signature SUP_SECC_SECREGS mismatches",
-    "signature SUP_SECC_WDT mismatches",
-    "signature SUP_SECC_HPT mismatches",
-    "signature SUP_APPC_WDT0 mismatches",
-    "signature SUP_APPC_WDT1 mismatches",
-    "signature SUP_APPC_WDT2 mismatches",
-    "signature SUP_APPC_WDT3 mismatches",
-    "signature SUP_APPC_WDT4 mismatches",
-    "signature SUP_APPC_WDT5 mismatches",
-    "signature SUP_APPC_WDT6 mismatches",
-    "signature SUP_APPC_WDT7 mismatches",
-    "signature SUP_APPC_HPT0 mismatches",
-    "signature SUP_APPC_HPT1 mismatches",
-    "signature SUP_APPC_HPT2 mismatches",
-    "signature SUP_APPC_HPT3 mismatches",
-    "signature SUP_APPC_HPT4 mismatches",
-    "signature SUP_APPC_HPT5 mismatches",
-    "signature SUP_APPC_HPT6 mismatches",
-    "signature SUP_APPC_HPT7 mismatches",
-    "signature SUP_APP_DMA_CFG0 mismatches",
-    "signature SUP_APP_DMA_GSB0 mismatches",
-    "signature SUP_APP_DMA_CFG1 mismatches",
-    "signature SUP_APP_DMA_GSB1 mismatches",
-    "signature APP_PCIE_CXL_WRAP0_PCIE_CXL mismatches",
-    "signature APP_PCIE_CXL_WRAP0_SHI_SOK0 mismatches",
-    "signature APP_PCIE_CXL_WRAP0_SHI_SOK1 mismatches",
-    "signature APP_PCIE_CXL_WRAP1_PCIE_CXL mismatches",
-    "signature APP_PCIE_CXL_WRAP1_SHI_SOK0 mismatches",
-    "signature APP_PCIE_CXL_WRAP1_SHI_SOK1 mismatches",
-    "signature APP_APP_WRAP mismatches",
-    "signature APP_IO_BRIDGE mismatches",
-    "signature APP_IOMMU mismatches",
-    "signature APP_IO_BRIDGEPG mismatches",
-    "signature TOP1_SYS0_ACSU mismatches",
-    "signature TOP1_APP_GPIO_SOK0 mismatches",
-    "signature TOP1_APP_GPIO_SOK1 mismatches",
-    "signature TOP1_SYS1_ACSU mismatches",
-    "signature TOP1_CPU_ACSU mismatches",
-    "signature TOP1_SEC_ACSU mismatches",
-    "signature TOP1_ENET_ACSU mismatches",
-    "signature TOP1_NVM0_ACSU mismatches",
-    "signature TOP1_NVM1_ACSU mismatches",
-    "signature TOP1_NVM2_ACSU mismatches",
-    "signature TOP1_TOP_TCSR_PCBI mismatches",
-    "signature TOP1_TOP_MCSR_PCBI mismatches",
-    "signature TOP1_TOP_LCSR_PCBI mismatches",
-    "signature TOP1_TOP_RCSR_PCBI mismatches",
-    "signature TOP1_M2_MISC_SVC_NOC_PCBI mismatches",
-    "signature TOP1_M2_MISC_APP_NOC_PCBI mismatches",
-    "signature TOP1_M3_SVC_NOC_PCBI mismatches",
-    "signature TOP1_EDAC_ACSU mismatches",
-    "signature TOP1_M1_SOK_SECC_PCBI mismatches"
+static char* p64h_drv_arm_n_fire_err_descs[123] = {
+    "Error: a pointer argument to an handle is NULL",
+    "Error: arm and fire operation failed",
+    "Error: no related arm and fire operation error found",
+    "Error: signature TOP2_TEMP_MON_L mismatches",
+    "Error: signature TOP2_TEMP_MON_R mismatches",
+    "Error: signature TOP2_M1_SOK_CORE_PCBI mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO0 mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO1 mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO2 mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO3 mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO4 mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO5 mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO6 mismatches",
+    "Error: signature TOP2_TOP_IOB_GPIO7 mismatches",
+    "Error: signature TOP3_SHI_E0 mismatches",
+    "Error: signature TOP3_SHI_E1 mismatches",
+    "Error: signature TOP3_SHI_S3 mismatches",
+    "Error: signature TOP3_SHI_S2 mismatches",
+    "Error: signature TOP3_SHI_S1 mismatches",
+    "Error: signature TOP3_SHI_S0 mismatches",
+    "Error: signature TOP3_SHI_HT mismatches",
+    "Error: signature TOP3_APP_ACSU mismatches",
+    "Error: signature TOP3_EDGE_CURR_TOP mismatches",
+    "Error: signature TOP3_EDGE_CURR_BOTTOM mismatches",
+    "Error: signature TOP3_SYS_ACSU mismatches",
+    "Error: signature ETH_ENET_EP_SS_SVC mismatches",
+    "Error: signature ETH_ENET_SWR_SS_SVC mismatches",
+    "Error: signature DDR_DDR_EDAC0 mismatches",
+    "Error: signature DDR_DDR_EDAC1 mismatches",
+    "Error: signature DDR_IOB_HSIO_SOK0 mismatches",
+    "Error: signature DDR_IOB_HSIO_SOK1 mismatches",
+    "Error: signature DDR_IOB_HSIO_SOK2 mismatches",
+    "Error: signature DDR_IOB_HSIO_SOK3 mismatches",
+    "Error: signature DDR_IOB_HSIO_SOK4 mismatches",
+    "Error: signature DDR_DDR_CTRL0 mismatches",
+    "Error: signature DDR_DDR_CTRL1 mismatches",
+    "Error: signature DDR_DDR_NOC mismatches",
+    "Error: signature DDR_DDR_PHY_SOK mismatches",
+    "Error: signature NVM_NVM_CTRL0 mismatches",
+    "Error: signature NVM_NVM_CTRL1 mismatches",
+    "Error: signature NVM_NVM_CTRL2 mismatches",
+    "Error: signature NVM_NVM_CTRL3 mismatches",
+    "Error: signature NVM_SRAM_EDAC0 mismatches",
+    "Error: signature NVM_SRAM_EDAC1 mismatches",
+    "Error: signature NVM_SRAM_EDAC2 mismatches",
+    "Error: signature NVM_NVM_EDAC1 mismatches",
+    "Error: signature NVM_NVM_EDAC0 mismatches",
+    "Error: signature NVM_IOB0 mismatches",
+    "Error: signature NVM_IOB1 mismatches",
+    "Error: signature NVM_IOB2 mismatches",
+    "Error: signature NVM_IOB3 mismatches",
+    "Error: signature NVM_IOB4 mismatches",
+    "Error: signature NVM_IOB5 mismatches",
+    "Error: signature NVM_IOB6 mismatches",
+    "Error: signature NVM_IOB7 mismatches",
+    "Error: signature SUP_SYSC_SYSREG mismatches",
+    "Error: signature SUP_SYSC_WDT mismatches",
+    "Error: signature SUP_SRAM_EDAC_GSB mismatches",
+    "Error: signature SUP_SYS_OCR mismatches",
+    "Error: signature SUP_DDR_ENCRYPTOR mismatches",
+    "Error: signature SUP_USER_CRYPTO_GSB mismatches",
+    "Error: signature SUP_SYSC_HPT mismatches",
+    "Error: signature SUP_SYSC_ELT mismatches",
+    "Error: signature SUP_PQ_CRYPTO_CFG mismatches",
+    "Error: signature SUP_GPIO_SOK mismatches",
+    "Error: signature SUP_APPC_OCR0 mismatches",
+    "Error: signature SUP_APPC_OCR1 mismatches",
+    "Error: signature SUP_PQRAM_OCR mismatches",
+    "Error: signature SUP_SECC_OCR mismatches",
+    "Error: signature SUP_SEC_S7_OCR mismatches",
+    "Error: signature SUP_SPI_CTRL_TPGM mismatches",
+    "Error: signature SUP_SECC_SECREGS mismatches",
+    "Error: signature SUP_SECC_WDT mismatches",
+    "Error: signature SUP_SECC_HPT mismatches",
+    "Error: signature SUP_APPC_WDT0 mismatches",
+    "Error: signature SUP_APPC_WDT1 mismatches",
+    "Error: signature SUP_APPC_WDT2 mismatches",
+    "Error: signature SUP_APPC_WDT3 mismatches",
+    "Error: signature SUP_APPC_WDT4 mismatches",
+    "Error: signature SUP_APPC_WDT5 mismatches",
+    "Error: signature SUP_APPC_WDT6 mismatches",
+    "Error: signature SUP_APPC_WDT7 mismatches",
+    "Error: signature SUP_APPC_HPT0 mismatches",
+    "Error: signature SUP_APPC_HPT1 mismatches",
+    "Error: signature SUP_APPC_HPT2 mismatches",
+    "Error: signature SUP_APPC_HPT3 mismatches",
+    "Error: signature SUP_APPC_HPT4 mismatches",
+    "Error: signature SUP_APPC_HPT5 mismatches",
+    "Error: signature SUP_APPC_HPT6 mismatches",
+    "Error: signature SUP_APPC_HPT7 mismatches",
+    "Error: signature SUP_APP_DMA_CFG0 mismatches",
+    "Error: signature SUP_APP_DMA_GSB0 mismatches",
+    "Error: signature SUP_APP_DMA_CFG1 mismatches",
+    "Error: signature SUP_APP_DMA_GSB1 mismatches",
+    "Error: signature APP_PCIE_CXL_WRAP0_PCIE_CXL mismatches",
+    "Error: signature APP_PCIE_CXL_WRAP0_SHI_SOK0 mismatches",
+    "Error: signature APP_PCIE_CXL_WRAP0_SHI_SOK1 mismatches",
+    "Error: signature APP_PCIE_CXL_WRAP1_PCIE_CXL mismatches",
+    "Error: signature APP_PCIE_CXL_WRAP1_SHI_SOK0 mismatches",
+    "Error: signature APP_PCIE_CXL_WRAP1_SHI_SOK1 mismatches",
+    "Error: signature APP_APP_WRAP mismatches",
+    "Error: signature APP_IO_BRIDGE mismatches",
+    "Error: signature APP_IOMMU mismatches",
+    "Error: signature APP_IO_BRIDGEPG mismatches",
+    "Error: signature TOP1_SYS0_ACSU mismatches",
+    "Error: signature TOP1_APP_GPIO_SOK0 mismatches",
+    "Error: signature TOP1_APP_GPIO_SOK1 mismatches",
+    "Error: signature TOP1_SYS1_ACSU mismatches",
+    "Error: signature TOP1_CPU_ACSU mismatches",
+    "Error: signature TOP1_SEC_ACSU mismatches",
+    "Error: signature TOP1_ENET_ACSU mismatches",
+    "Error: signature TOP1_NVM0_ACSU mismatches",
+    "Error: signature TOP1_NVM1_ACSU mismatches",
+    "Error: signature TOP1_NVM2_ACSU mismatches",
+    "Error: signature TOP1_TOP_TCSR_PCBI mismatches",
+    "Error: signature TOP1_TOP_MCSR_PCBI mismatches",
+    "Error: signature TOP1_TOP_LCSR_PCBI mismatches",
+    "Error: signature TOP1_TOP_RCSR_PCBI mismatches",
+    "Error: signature TOP1_M2_MISC_SVC_NOC_PCBI mismatches",
+    "Error: signature TOP1_M2_MISC_APP_NOC_PCBI mismatches",
+    "Error: signature TOP1_M3_SVC_NOC_PCBI mismatches",
+    "Error: signature TOP1_EDAC_ACSU mismatches",
+    "Error: signature TOP1_M1_SOK_SECC_PCBI mismatches"
 };
 
-static char* p64h_P64H_COMP_DRV_DEBUG_descs[0] = {};
+static char* p64h_drv_debug_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_APP_SPW_descs[0] = {};
+static char* p64h_drv_app_spw_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_DDR_NOC_descs[0] = {};
+static char* p64h_drv_ddr_noc_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_PIER_descs[0] = {};
+static char* p64h_drv_pier_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_PCIE_CXL_descs[0] = {};
+static char* p64h_drv_pcie_cxl_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_ZSBL_descs[0] = {};
+static char* p64h_drv_zsbl_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_TRACE_descs[0] = {};
+static char* p64h_drv_trace_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_WDOG_descs[0] = {};
+static char* p64h_drv_wdog_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_LSIO_descs[0] = {};
+static char* p64h_drv_lsio_err_descs[0] = {};
 
-static char* p64h_P64H_COMP_DRV_APP_DMA_descs[0] = {};
+static char* p64h_drv_app_dma_err_descs[0] = {};
 
-static char* p64h_drv_gpio_descs[2] = {
-    "pointer to GPIO handle is null",
-    "Invalid GPIO index"
+static char* p64h_drv_gpio_err_descs[2] = {
+    "Error: a pointer argument to an GPIO handle is NULL",
+    "Error: trying to configure an invalid pin index"
+};
+
+static char* p64h_drv_mdio_err_descs[0] = {};
+
+static char* p64h_drv_mbox_err_descs[0] = {};
+
+static char* p64h_drv_app_pier_err_descs[0] = {};
+
+static char* p64h_drv_beu_err_descs[0] = {};
+
+static char* p64h_drv_fttm_err_descs[6] = {
+    "Error: a pointer argument is NULL",
+    "Error: TSN domain index is out of range",
+    "Error: TSN domain mode is not recognized",
+    "Error: grandmaster time source is not recognized",
+    "Error: slave source is not recognized",
+    "Error: the function called is unimplemented"
 };
 
 static char** p64h_err_descs[P64H_COMP_LAST] = {
-    p64h_svc_system_descs,
-    p64h_svc_appc_descs,
-    p64h_svc_com_descs,
-    p64h_svc_test_descs,
-    p64h_svc_trace_descs,
-    p64h_svc_crypto_descs,
-    p64h_svc_secc_mbox_descs,
-    p64h_svc_hw_descs,
-    p64h_svc_switch_descs,
-    p64h_svc_em_descs,
-    p64h_svc_health_descs,
-    p64h_core_descs,
-    p64h_P64H_COMP_CORE_OSAL_descs,
-    p64h_P64H_COMP_CORE_INTR_HANDLER_descs,
-    p64h_P64H_COMP_CORE_SHARED_descs,
-    p64h_lib_baal_descs,
-    p64h_lib_power_descs,
-    p64h_lib_usr_crypto_descs,
-    p64h_lib_bist_descs,
-    p64h_lib_appc_soc_cfg_descs,
-    p64h_lib_api_descs,
-    p64h_lib_sysc_soc_cfg_descs,
-    p64h_lib_raslib_descs,
-    p64h_lib_anlt_sm_descs,
-    p64h_lib_tar_zip_helper_descs,
-    p64h_lib_ring_buf_descs,
-    p64h_P64H_COMP_LIB_BIAL_descs,
-    p64h_P64H_COMP_LIB_SEC_descs,
-    p64h_P64H_COMP_LIB_SPW_TEST_descs,
-    p64h_P64H_COMP_LIB_UTEST_descs,
-    p64h_P64H_COMP_LIB_EINJLIB_descs,
-    p64h_P64H_COMP_LIB_RPMI_descs,
-    p64h_lib_fw_upgrade_descs,
-    p64h_P64H_COMP_LIB_IPC_descs,
-    p64h_drv_app_wrap_descs,
-    p64h_drv_app_periph_descs,
-    p64h_drv_ddr_descs,
-    p64h_drv_top_descs,
-    p64h_drv_noc_core_descs,
-    p64h_drv_iobridge_descs,
-    p64h_drv_wguard_descs,
-    p64h_drv_acsu_descs,
-    p64h_drv_pgmrclk_descs,
-    p64h_drv_cfm_descs,
-    p64h_drv_app_ipc_descs,
-    p64h_drv_ddr_ctrl_descs,
-    p64h_drv_ddr_edac_descs,
-    p64h_drv_dma_descs,
-    p64h_drv_ocr_descs,
-    p64h_drv_serdes_if_descs,
-    p64h_drv_anlt_descs,
-    p64h_drv_m1_core_descs,
-    p64h_drv_sys_top_descs,
-    p64h_drv_sys_spi_flash_descs,
-    p64h_drv_sys_hpt_descs,
-    p64h_drv_nvm_descs,
-    p64h_drv_edac_descs,
-    p64h_drv_x288_ras_descs,
-    p64h_drv_arm_n_fire_descs,
-    p64h_P64H_COMP_DRV_DEBUG_descs,
-    p64h_P64H_COMP_DRV_APP_SPW_descs,
-    p64h_P64H_COMP_DRV_DDR_NOC_descs,
-    p64h_P64H_COMP_DRV_PIER_descs,
-    p64h_P64H_COMP_DRV_PCIE_CXL_descs,
-    p64h_P64H_COMP_DRV_ZSBL_descs,
-    p64h_P64H_COMP_DRV_TRACE_descs,
-    p64h_P64H_COMP_DRV_WDOG_descs,
-    p64h_P64H_COMP_DRV_LSIO_descs,
-    p64h_P64H_COMP_DRV_APP_DMA_descs,
-    p64h_drv_gpio_descs
+    p64h_svc_system_err_descs,
+    p64h_svc_appc_err_descs,
+    p64h_svc_com_err_descs,
+    p64h_svc_test_err_descs,
+    p64h_svc_trace_err_descs,
+    p64h_svc_crypto_err_descs,
+    p64h_svc_secc_mbox_err_descs,
+    p64h_svc_hw_err_descs,
+    p64h_svc_switch_err_descs,
+    p64h_svc_em_err_descs,
+    p64h_svc_health_err_descs,
+    p64h_core_err_descs,
+    p64h_core_osal_err_descs,
+    p64h_core_intr_handler_err_descs,
+    p64h_core_shared_err_descs,
+    p64h_core_evt_err_descs,
+    p64h_lib_baal_err_descs,
+    p64h_lib_power_err_descs,
+    p64h_lib_usr_crypto_err_descs,
+    p64h_lib_bist_err_descs,
+    p64h_lib_appc_soc_cfg_err_descs,
+    p64h_lib_api_err_descs,
+    p64h_lib_sysc_soc_cfg_err_descs,
+    p64h_lib_raslib_err_descs,
+    p64h_lib_anlt_sm_err_descs,
+    p64h_lib_zlib_helper_err_descs,
+    p64h_lib_xxhash_err_descs,
+    p64h_lib_ring_buf_err_descs,
+    p64h_lib_sec_err_descs,
+    p64h_lib_spw_test_err_descs,
+    p64h_lib_utest_err_descs,
+    p64h_lib_einjlib_err_descs,
+    p64h_lib_rpmi_err_descs,
+    p64h_lib_fw_upgrade_err_descs,
+    p64h_lib_ipc_err_descs,
+    p64h_lib_log_err_descs,
+    p64h_drv_app_wrap_err_descs,
+    p64h_drv_app_periph_err_descs,
+    p64h_drv_ddr_err_descs,
+    p64h_drv_top_err_descs,
+    p64h_drv_noc_core_err_descs,
+    p64h_drv_iobridge_err_descs,
+    p64h_drv_wguard_err_descs,
+    p64h_drv_acsu_err_descs,
+    p64h_drv_pgmrclk_err_descs,
+    p64h_drv_cfm_err_descs,
+    p64h_drv_app_ipc_err_descs,
+    p64h_drv_ddr_ctrl_err_descs,
+    p64h_drv_ddr_edac_err_descs,
+    p64h_drv_ddr_training_err_descs,
+    p64h_drv_ddr_phy_err_descs,
+    p64h_drv_dma_err_descs,
+    p64h_drv_ocr_err_descs,
+    p64h_drv_serdes_if_err_descs,
+    p64h_drv_anlt_err_descs,
+    p64h_drv_m1_core_err_descs,
+    p64h_drv_sys_top_err_descs,
+    p64h_drv_sys_spi_flash_err_descs,
+    p64h_drv_sys_hpt_err_descs,
+    p64h_drv_nvm_err_descs,
+    p64h_drv_nvm_ctrl_pflash_diag_err_descs,
+    p64h_drv_edac_err_descs,
+    p64h_drv_x288_ras_err_descs,
+    p64h_drv_arm_n_fire_err_descs,
+    p64h_drv_debug_err_descs,
+    p64h_drv_app_spw_err_descs,
+    p64h_drv_ddr_noc_err_descs,
+    p64h_drv_pier_err_descs,
+    p64h_drv_pcie_cxl_err_descs,
+    p64h_drv_zsbl_err_descs,
+    p64h_drv_trace_err_descs,
+    p64h_drv_wdog_err_descs,
+    p64h_drv_lsio_err_descs,
+    p64h_drv_app_dma_err_descs,
+    p64h_drv_gpio_err_descs,
+    p64h_drv_mdio_err_descs,
+    p64h_drv_mbox_err_descs,
+    p64h_drv_app_pier_err_descs,
+    p64h_drv_beu_err_descs,
+    p64h_drv_fttm_err_descs
 };
 
 
-char* p64h_err_name_get(p64h_err_t err_code) {
-    uint32_t id = err_id_decode(err_code);
-    uint32_t module_id = err_component_decode(err_code);
+
+char* p64h_err_name_get(uint32_t code)
+{
+    uint32_t id        = err_id_decode(code);
+    uint32_t module_id = err_component_decode(code);
     return p64h_err_names[module_id][id];
 }
 
-char* p64h_err_desc_get(p64h_err_t err_code) {
-    uint32_t id = err_id_decode(err_code);
-    uint32_t module_id = err_component_decode(err_code);
+
+char* p64h_err_desc_get(uint32_t code)
+{
+    uint32_t id        = err_id_decode(code);
+    uint32_t module_id = err_component_decode(code);
     return p64h_err_descs[module_id][id];
 }
+
+char* p64h_module_name_get(uint32_t code)
+{
+    uint32_t module_id = err_component_decode(code);
+    return (char*)p64h_components[module_id];
+}
+

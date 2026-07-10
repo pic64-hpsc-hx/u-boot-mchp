@@ -14,133 +14,133 @@
 #ifdef __ASSEMBLER__
 // #defines are for when included by assembler .S files.
 #define BOOT_STAGE_APPC_CORE_0_PARTITION_BOOT     0U ///< Core 0 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_0_HEARTBEAT          1U ///< Core 0 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED0                 2U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED8                 1U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_0_ZSBL_STARTED       2U ///< Core 0 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_0_PARTITION_AUTO_RESET  3U ///< Core 0 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_0_UP_DOWN            4U ///< Core 0 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED1                 5U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED2                 6U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED3                 7U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED4                 8U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED5                 9U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED6                10U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED7                11U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED8                12U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED9                13U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED10               14U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED11               15U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_0_RNMI_EXCEPTION     5U ///< Core 0 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED0                 6U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED1                 7U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED2                 8U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED3                 9U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED4                10U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED5                11U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED6                12U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED7                13U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_0_HEARTBEAT         14U ///< Core 0 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_0_GUARD_BIT         15U ///< STAT_DRV workaround (always 1)  
 #define BOOT_STAGE_APPC_CORE_1_PARTITION_BOOT    16U ///< Core 1 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_1_HEARTBEAT         17U ///< Core 1 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED12               18U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED18               17U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_1_ZSBL_STARTED      18U ///< Core 1 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_1_PARTITION_AUTO_RESET 19U ///< Core 1 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_1_UP_DOWN           20U ///< Core 1 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED13               21U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED14               22U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED15               23U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED16               24U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED17               25U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED18               26U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED19               27U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED20               28U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED21               29U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED22               30U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED23               31U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_1_RNMI_EXCEPTION    21U ///< Core 1 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED10               22U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED11               23U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED12               24U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED13               25U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED14               26U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED15               27U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED16               28U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED17               29U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_1_HEARTBEAT         30U ///< Core 1 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_1_GUARD_BIT         31U ///< STAT_DRV workaround (always 1)  
 #define BOOT_STAGE_APPC_CORE_2_PARTITION_BOOT    32U ///< Core 2 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_2_HEARTBEAT         33U ///< Core 2 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED24               34U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED28               33U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_2_ZSBL_STARTED      34U ///< Core 2 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_2_PARTITION_AUTO_RESET 35U ///< Core 2 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_2_UP_DOWN           36U ///< Core 2 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED25               37U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED26               38U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED27               39U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED28               40U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED29               41U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED30               42U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED31               43U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED32               44U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED33               45U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED34               46U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED35               47U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_2_RNMI_EXCEPTION    37U ///< Core 2 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED20               38U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED21               39U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED22               40U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED23               41U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED24               42U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED25               43U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED26               44U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED27               45U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_2_HEARTBEAT         46U ///< Core 2 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_2_GUARD_BIT         47U ///< STAT_DRV workaround (always 1)  
 #define BOOT_STAGE_APPC_CORE_3_PARTITION_BOOT    48U ///< Core 3 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_3_HEARTBEAT         49U ///< Core 3 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED36               50U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED38               49U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_3_ZSBL_STARTED      50U ///< Core 3 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_3_PARTITION_AUTO_RESET 51U ///< Core 3 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_3_UP_DOWN           52U ///< Core 3 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED37               53U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED38               54U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED39               55U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED40               56U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED41               57U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED42               58U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED43               59U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED44               60U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED45               61U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED46               62U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED47               63U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_3_RNMI_EXCEPTION    53U ///< Core 3 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED30               54U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED31               55U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED32               56U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED33               57U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED34               58U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED35               59U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED36               60U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED37               61U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_3_HEARTBEAT         62U ///< Core 3 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_3_GUARD_BIT         63U ///< STAT_DRV workaround (always 1)  
 #define BOOT_STAGE_APPC_CORE_4_PARTITION_BOOT    64U ///< Core 4 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_4_HEARTBEAT         65U ///< Core 4 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED48               66U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED48               65U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_4_ZSBL_STARTED      66U ///< Core 4 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_4_PARTITION_AUTO_RESET 67U ///< Core 4 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_4_UP_DOWN           68U ///< Core 4 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED49               69U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED50               70U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED51               71U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED52               72U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED53               73U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED54               74U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED55               75U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED56               76U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED57               77U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED58               78U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED59               79U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_4_RNMI_EXCEPTION    69U ///< Core 4 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED40               70U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED41               71U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED42               72U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED43               73U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED44               74U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED45               75U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED46               76U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED47               77U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_4_HEARTBEAT         78U ///< Core 4 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_4_GUARD_BIT         79U ///< STAT_DRV workaround (always 1)  
 #define BOOT_STAGE_APPC_CORE_5_PARTITION_BOOT    80U ///< Core 5 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_5_HEARTBEAT         81U ///< Core 5 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED60               82U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED58               81U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_5_ZSBL_STARTED      82U ///< Core 5 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_5_PARTITION_AUTO_RESET 83U ///< Core 5 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_5_UP_DOWN           84U ///< Core 5 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED61               85U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED62               86U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED63               87U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED64               88U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED65               89U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED66               90U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED67               91U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED68               92U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED69               93U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED70               94U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED71               95U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_5_RNMI_EXCEPTION    85U ///< Core 5 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED50               86U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED51               87U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED52               88U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED53               89U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED54               90U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED55               91U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED56               92U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED57               93U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_5_HEARTBEAT         94U ///< Core 5 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_5_GUARD_BIT         95U ///< STAT_DRV workaround (always 1)  
 #define BOOT_STAGE_APPC_CORE_6_PARTITION_BOOT    96U ///< Core 6 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_6_HEARTBEAT         97U ///< Core 6 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED72               98U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED68               97U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_6_ZSBL_STARTED      98U ///< Core 6 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_6_PARTITION_AUTO_RESET 99U ///< Core 6 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_6_UP_DOWN           100U ///< Core 6 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED73               101U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED74               102U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED75               103U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED76               104U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED77               105U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED78               106U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED79               107U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED80               108U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED81               109U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED82               110U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED83               111U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_6_RNMI_EXCEPTION    101U ///< Core 6 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED60               102U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED61               103U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED62               104U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED63               105U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED64               106U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED65               107U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED66               108U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED67               109U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_6_HEARTBEAT         110U ///< Core 6 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_6_GUARD_BIT         111U ///< STAT_DRV workaround (always 1)  
 #define BOOT_STAGE_APPC_CORE_7_PARTITION_BOOT    112U ///< Core 7 - Partition boot stage  
-#define BOOT_STAGE_APPC_CORE_7_HEARTBEAT         113U ///< Core 7 - AppC Heart beat event  
-#define BOOT_STAGE_APPC_RESERVED84               114U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED78               113U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_7_ZSBL_STARTED      114U ///< Core 7 - zsbl started  
 #define BOOT_STAGE_APPC_CORE_7_PARTITION_AUTO_RESET 115U ///< Core 7 - Partition auto reset  
 #define BOOT_STAGE_APPC_CORE_7_UP_DOWN           116U ///< Core 7 - status up/down  
-#define BOOT_STAGE_APPC_RESERVED85               117U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED86               118U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED87               119U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED88               120U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED89               121U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED90               122U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED91               123U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED92               124U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED93               125U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED94               126U ///< Not used for appc  
-#define BOOT_STAGE_APPC_RESERVED95               127U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_7_RNMI_EXCEPTION    117U ///< Core 7 - exception while RNMI in progress  
+#define BOOT_STAGE_APPC_RESERVED70               118U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED71               119U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED72               120U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED73               121U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED74               122U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED75               123U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED76               124U ///< Not used for appc  
+#define BOOT_STAGE_APPC_RESERVED77               125U ///< Not used for appc  
+#define BOOT_STAGE_APPC_CORE_7_HEARTBEAT         126U ///< Core 7 - AppC Heart beat event  
+#define BOOT_STAGE_APPC_CORE_7_GUARD_BIT         127U ///< STAT_DRV workaround (always 1)  
 #else // __ASSEMBLER__
 
 #ifndef BOOT_STAT_GEN_APPC_H
@@ -150,133 +150,133 @@
 typedef enum boot_stage_appc_t
 {
     BOOT_STAGE_APPC_CORE_0_PARTITION_BOOT    =  0U, ///< Core 0 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_0_HEARTBEAT         =  1U, ///< Core 0 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED0                =  2U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED8                =  1U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_0_ZSBL_STARTED      =  2U, ///< Core 0 - zsbl started  
     BOOT_STAGE_APPC_CORE_0_PARTITION_AUTO_RESET =  3U, ///< Core 0 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_0_UP_DOWN           =  4U, ///< Core 0 - status up/down  
-    BOOT_STAGE_APPC_RESERVED1                =  5U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED2                =  6U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED3                =  7U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED4                =  8U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED5                =  9U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED6                = 10U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED7                = 11U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED8                = 12U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED9                = 13U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED10               = 14U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED11               = 15U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_0_RNMI_EXCEPTION    =  5U, ///< Core 0 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED0                =  6U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED1                =  7U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED2                =  8U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED3                =  9U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED4                = 10U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED5                = 11U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED6                = 12U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED7                = 13U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_0_HEARTBEAT         = 14U, ///< Core 0 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_0_GUARD_BIT         = 15U, ///< STAT_DRV workaround (always 1)  
     BOOT_STAGE_APPC_CORE_1_PARTITION_BOOT    = 16U, ///< Core 1 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_1_HEARTBEAT         = 17U, ///< Core 1 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED12               = 18U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED18               = 17U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_1_ZSBL_STARTED      = 18U, ///< Core 1 - zsbl started  
     BOOT_STAGE_APPC_CORE_1_PARTITION_AUTO_RESET = 19U, ///< Core 1 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_1_UP_DOWN           = 20U, ///< Core 1 - status up/down  
-    BOOT_STAGE_APPC_RESERVED13               = 21U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED14               = 22U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED15               = 23U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED16               = 24U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED17               = 25U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED18               = 26U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED19               = 27U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED20               = 28U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED21               = 29U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED22               = 30U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED23               = 31U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_1_RNMI_EXCEPTION    = 21U, ///< Core 1 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED10               = 22U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED11               = 23U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED12               = 24U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED13               = 25U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED14               = 26U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED15               = 27U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED16               = 28U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED17               = 29U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_1_HEARTBEAT         = 30U, ///< Core 1 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_1_GUARD_BIT         = 31U, ///< STAT_DRV workaround (always 1)  
     BOOT_STAGE_APPC_CORE_2_PARTITION_BOOT    = 32U, ///< Core 2 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_2_HEARTBEAT         = 33U, ///< Core 2 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED24               = 34U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED28               = 33U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_2_ZSBL_STARTED      = 34U, ///< Core 2 - zsbl started  
     BOOT_STAGE_APPC_CORE_2_PARTITION_AUTO_RESET = 35U, ///< Core 2 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_2_UP_DOWN           = 36U, ///< Core 2 - status up/down  
-    BOOT_STAGE_APPC_RESERVED25               = 37U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED26               = 38U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED27               = 39U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED28               = 40U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED29               = 41U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED30               = 42U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED31               = 43U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED32               = 44U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED33               = 45U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED34               = 46U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED35               = 47U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_2_RNMI_EXCEPTION    = 37U, ///< Core 2 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED20               = 38U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED21               = 39U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED22               = 40U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED23               = 41U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED24               = 42U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED25               = 43U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED26               = 44U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED27               = 45U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_2_HEARTBEAT         = 46U, ///< Core 2 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_2_GUARD_BIT         = 47U, ///< STAT_DRV workaround (always 1)  
     BOOT_STAGE_APPC_CORE_3_PARTITION_BOOT    = 48U, ///< Core 3 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_3_HEARTBEAT         = 49U, ///< Core 3 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED36               = 50U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED38               = 49U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_3_ZSBL_STARTED      = 50U, ///< Core 3 - zsbl started  
     BOOT_STAGE_APPC_CORE_3_PARTITION_AUTO_RESET = 51U, ///< Core 3 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_3_UP_DOWN           = 52U, ///< Core 3 - status up/down  
-    BOOT_STAGE_APPC_RESERVED37               = 53U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED38               = 54U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED39               = 55U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED40               = 56U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED41               = 57U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED42               = 58U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED43               = 59U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED44               = 60U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED45               = 61U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED46               = 62U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED47               = 63U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_3_RNMI_EXCEPTION    = 53U, ///< Core 3 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED30               = 54U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED31               = 55U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED32               = 56U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED33               = 57U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED34               = 58U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED35               = 59U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED36               = 60U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED37               = 61U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_3_HEARTBEAT         = 62U, ///< Core 3 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_3_GUARD_BIT         = 63U, ///< STAT_DRV workaround (always 1)  
     BOOT_STAGE_APPC_CORE_4_PARTITION_BOOT    = 64U, ///< Core 4 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_4_HEARTBEAT         = 65U, ///< Core 4 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED48               = 66U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED48               = 65U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_4_ZSBL_STARTED      = 66U, ///< Core 4 - zsbl started  
     BOOT_STAGE_APPC_CORE_4_PARTITION_AUTO_RESET = 67U, ///< Core 4 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_4_UP_DOWN           = 68U, ///< Core 4 - status up/down  
-    BOOT_STAGE_APPC_RESERVED49               = 69U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED50               = 70U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED51               = 71U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED52               = 72U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED53               = 73U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED54               = 74U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED55               = 75U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED56               = 76U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED57               = 77U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED58               = 78U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED59               = 79U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_4_RNMI_EXCEPTION    = 69U, ///< Core 4 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED40               = 70U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED41               = 71U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED42               = 72U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED43               = 73U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED44               = 74U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED45               = 75U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED46               = 76U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED47               = 77U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_4_HEARTBEAT         = 78U, ///< Core 4 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_4_GUARD_BIT         = 79U, ///< STAT_DRV workaround (always 1)  
     BOOT_STAGE_APPC_CORE_5_PARTITION_BOOT    = 80U, ///< Core 5 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_5_HEARTBEAT         = 81U, ///< Core 5 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED60               = 82U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED58               = 81U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_5_ZSBL_STARTED      = 82U, ///< Core 5 - zsbl started  
     BOOT_STAGE_APPC_CORE_5_PARTITION_AUTO_RESET = 83U, ///< Core 5 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_5_UP_DOWN           = 84U, ///< Core 5 - status up/down  
-    BOOT_STAGE_APPC_RESERVED61               = 85U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED62               = 86U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED63               = 87U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED64               = 88U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED65               = 89U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED66               = 90U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED67               = 91U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED68               = 92U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED69               = 93U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED70               = 94U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED71               = 95U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_5_RNMI_EXCEPTION    = 85U, ///< Core 5 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED50               = 86U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED51               = 87U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED52               = 88U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED53               = 89U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED54               = 90U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED55               = 91U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED56               = 92U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED57               = 93U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_5_HEARTBEAT         = 94U, ///< Core 5 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_5_GUARD_BIT         = 95U, ///< STAT_DRV workaround (always 1)  
     BOOT_STAGE_APPC_CORE_6_PARTITION_BOOT    = 96U, ///< Core 6 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_6_HEARTBEAT         = 97U, ///< Core 6 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED72               = 98U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED68               = 97U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_6_ZSBL_STARTED      = 98U, ///< Core 6 - zsbl started  
     BOOT_STAGE_APPC_CORE_6_PARTITION_AUTO_RESET = 99U, ///< Core 6 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_6_UP_DOWN           = 100U, ///< Core 6 - status up/down  
-    BOOT_STAGE_APPC_RESERVED73               = 101U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED74               = 102U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED75               = 103U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED76               = 104U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED77               = 105U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED78               = 106U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED79               = 107U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED80               = 108U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED81               = 109U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED82               = 110U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED83               = 111U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_6_RNMI_EXCEPTION    = 101U, ///< Core 6 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED60               = 102U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED61               = 103U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED62               = 104U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED63               = 105U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED64               = 106U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED65               = 107U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED66               = 108U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED67               = 109U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_6_HEARTBEAT         = 110U, ///< Core 6 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_6_GUARD_BIT         = 111U, ///< STAT_DRV workaround (always 1)  
     BOOT_STAGE_APPC_CORE_7_PARTITION_BOOT    = 112U, ///< Core 7 - Partition boot stage  
-    BOOT_STAGE_APPC_CORE_7_HEARTBEAT         = 113U, ///< Core 7 - AppC Heart beat event  
-    BOOT_STAGE_APPC_RESERVED84               = 114U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED78               = 113U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_7_ZSBL_STARTED      = 114U, ///< Core 7 - zsbl started  
     BOOT_STAGE_APPC_CORE_7_PARTITION_AUTO_RESET = 115U, ///< Core 7 - Partition auto reset  
     BOOT_STAGE_APPC_CORE_7_UP_DOWN           = 116U, ///< Core 7 - status up/down  
-    BOOT_STAGE_APPC_RESERVED85               = 117U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED86               = 118U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED87               = 119U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED88               = 120U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED89               = 121U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED90               = 122U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED91               = 123U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED92               = 124U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED93               = 125U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED94               = 126U, ///< Not used for appc  
-    BOOT_STAGE_APPC_RESERVED95               = 127U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_7_RNMI_EXCEPTION    = 117U, ///< Core 7 - exception while RNMI in progress  
+    BOOT_STAGE_APPC_RESERVED70               = 118U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED71               = 119U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED72               = 120U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED73               = 121U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED74               = 122U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED75               = 123U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED76               = 124U, ///< Not used for appc  
+    BOOT_STAGE_APPC_RESERVED77               = 125U, ///< Not used for appc  
+    BOOT_STAGE_APPC_CORE_7_HEARTBEAT         = 126U, ///< Core 7 - AppC Heart beat event  
+    BOOT_STAGE_APPC_CORE_7_GUARD_BIT         = 127U, ///< STAT_DRV workaround (always 1)  
 } boot_stage_appc_t;
 
 /**
@@ -297,13 +297,13 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_CORE_0_PARTITION_BOOT:
               res = "BOOT_STAGE_APPC_CORE_0_PARTITION_BOOT";
               break;
-          // Core 0 - AppC Heart beat event
-          case BOOT_STAGE_APPC_CORE_0_HEARTBEAT:
-              res = "BOOT_STAGE_APPC_CORE_0_HEARTBEAT";
-              break;
           // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED0:
-              res = "BOOT_STAGE_APPC_RESERVED0";
+          case BOOT_STAGE_APPC_RESERVED8:
+              res = "BOOT_STAGE_APPC_RESERVED8";
+              break;
+          // Core 0 - zsbl started
+          case BOOT_STAGE_APPC_CORE_0_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_0_ZSBL_STARTED";
               break;
           // Core 0 - Partition auto reset
           case BOOT_STAGE_APPC_CORE_0_PARTITION_AUTO_RESET:
@@ -312,6 +312,14 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           // Core 0 - status up/down
           case BOOT_STAGE_APPC_CORE_0_UP_DOWN:
               res = "BOOT_STAGE_APPC_CORE_0_UP_DOWN";
+              break;
+          // Core 0 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_0_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_0_RNMI_EXCEPTION";
+              break;
+          // Not used for appc
+          case BOOT_STAGE_APPC_RESERVED0:
+              res = "BOOT_STAGE_APPC_RESERVED0";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED1:
@@ -341,13 +349,37 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED7:
               res = "BOOT_STAGE_APPC_RESERVED7";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED8:
-              res = "BOOT_STAGE_APPC_RESERVED8";
+          // Core 0 - AppC Heart beat event
+          case BOOT_STAGE_APPC_CORE_0_HEARTBEAT:
+              res = "BOOT_STAGE_APPC_CORE_0_HEARTBEAT";
+              break;
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_0_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_0_GUARD_BIT";
+              break;
+          // Core 1 - Partition boot stage
+          case BOOT_STAGE_APPC_CORE_1_PARTITION_BOOT:
+              res = "BOOT_STAGE_APPC_CORE_1_PARTITION_BOOT";
               break;
           // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED9:
-              res = "BOOT_STAGE_APPC_RESERVED9";
+          case BOOT_STAGE_APPC_RESERVED18:
+              res = "BOOT_STAGE_APPC_RESERVED18";
+              break;
+          // Core 1 - zsbl started
+          case BOOT_STAGE_APPC_CORE_1_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_1_ZSBL_STARTED";
+              break;
+          // Core 1 - Partition auto reset
+          case BOOT_STAGE_APPC_CORE_1_PARTITION_AUTO_RESET:
+              res = "BOOT_STAGE_APPC_CORE_1_PARTITION_AUTO_RESET";
+              break;
+          // Core 1 - status up/down
+          case BOOT_STAGE_APPC_CORE_1_UP_DOWN:
+              res = "BOOT_STAGE_APPC_CORE_1_UP_DOWN";
+              break;
+          // Core 1 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_1_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_1_RNMI_EXCEPTION";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED10:
@@ -357,25 +389,9 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED11:
               res = "BOOT_STAGE_APPC_RESERVED11";
               break;
-          // Core 1 - Partition boot stage
-          case BOOT_STAGE_APPC_CORE_1_PARTITION_BOOT:
-              res = "BOOT_STAGE_APPC_CORE_1_PARTITION_BOOT";
-              break;
-          // Core 1 - AppC Heart beat event
-          case BOOT_STAGE_APPC_CORE_1_HEARTBEAT:
-              res = "BOOT_STAGE_APPC_CORE_1_HEARTBEAT";
-              break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED12:
               res = "BOOT_STAGE_APPC_RESERVED12";
-              break;
-          // Core 1 - Partition auto reset
-          case BOOT_STAGE_APPC_CORE_1_PARTITION_AUTO_RESET:
-              res = "BOOT_STAGE_APPC_CORE_1_PARTITION_AUTO_RESET";
-              break;
-          // Core 1 - status up/down
-          case BOOT_STAGE_APPC_CORE_1_UP_DOWN:
-              res = "BOOT_STAGE_APPC_CORE_1_UP_DOWN";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED13:
@@ -397,13 +413,37 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED17:
               res = "BOOT_STAGE_APPC_RESERVED17";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED18:
-              res = "BOOT_STAGE_APPC_RESERVED18";
+          // Core 1 - AppC Heart beat event
+          case BOOT_STAGE_APPC_CORE_1_HEARTBEAT:
+              res = "BOOT_STAGE_APPC_CORE_1_HEARTBEAT";
+              break;
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_1_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_1_GUARD_BIT";
+              break;
+          // Core 2 - Partition boot stage
+          case BOOT_STAGE_APPC_CORE_2_PARTITION_BOOT:
+              res = "BOOT_STAGE_APPC_CORE_2_PARTITION_BOOT";
               break;
           // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED19:
-              res = "BOOT_STAGE_APPC_RESERVED19";
+          case BOOT_STAGE_APPC_RESERVED28:
+              res = "BOOT_STAGE_APPC_RESERVED28";
+              break;
+          // Core 2 - zsbl started
+          case BOOT_STAGE_APPC_CORE_2_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_2_ZSBL_STARTED";
+              break;
+          // Core 2 - Partition auto reset
+          case BOOT_STAGE_APPC_CORE_2_PARTITION_AUTO_RESET:
+              res = "BOOT_STAGE_APPC_CORE_2_PARTITION_AUTO_RESET";
+              break;
+          // Core 2 - status up/down
+          case BOOT_STAGE_APPC_CORE_2_UP_DOWN:
+              res = "BOOT_STAGE_APPC_CORE_2_UP_DOWN";
+              break;
+          // Core 2 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_2_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_2_RNMI_EXCEPTION";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED20:
@@ -421,25 +461,9 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED23:
               res = "BOOT_STAGE_APPC_RESERVED23";
               break;
-          // Core 2 - Partition boot stage
-          case BOOT_STAGE_APPC_CORE_2_PARTITION_BOOT:
-              res = "BOOT_STAGE_APPC_CORE_2_PARTITION_BOOT";
-              break;
-          // Core 2 - AppC Heart beat event
-          case BOOT_STAGE_APPC_CORE_2_HEARTBEAT:
-              res = "BOOT_STAGE_APPC_CORE_2_HEARTBEAT";
-              break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED24:
               res = "BOOT_STAGE_APPC_RESERVED24";
-              break;
-          // Core 2 - Partition auto reset
-          case BOOT_STAGE_APPC_CORE_2_PARTITION_AUTO_RESET:
-              res = "BOOT_STAGE_APPC_CORE_2_PARTITION_AUTO_RESET";
-              break;
-          // Core 2 - status up/down
-          case BOOT_STAGE_APPC_CORE_2_UP_DOWN:
-              res = "BOOT_STAGE_APPC_CORE_2_UP_DOWN";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED25:
@@ -453,13 +477,37 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED27:
               res = "BOOT_STAGE_APPC_RESERVED27";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED28:
-              res = "BOOT_STAGE_APPC_RESERVED28";
+          // Core 2 - AppC Heart beat event
+          case BOOT_STAGE_APPC_CORE_2_HEARTBEAT:
+              res = "BOOT_STAGE_APPC_CORE_2_HEARTBEAT";
+              break;
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_2_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_2_GUARD_BIT";
+              break;
+          // Core 3 - Partition boot stage
+          case BOOT_STAGE_APPC_CORE_3_PARTITION_BOOT:
+              res = "BOOT_STAGE_APPC_CORE_3_PARTITION_BOOT";
               break;
           // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED29:
-              res = "BOOT_STAGE_APPC_RESERVED29";
+          case BOOT_STAGE_APPC_RESERVED38:
+              res = "BOOT_STAGE_APPC_RESERVED38";
+              break;
+          // Core 3 - zsbl started
+          case BOOT_STAGE_APPC_CORE_3_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_3_ZSBL_STARTED";
+              break;
+          // Core 3 - Partition auto reset
+          case BOOT_STAGE_APPC_CORE_3_PARTITION_AUTO_RESET:
+              res = "BOOT_STAGE_APPC_CORE_3_PARTITION_AUTO_RESET";
+              break;
+          // Core 3 - status up/down
+          case BOOT_STAGE_APPC_CORE_3_UP_DOWN:
+              res = "BOOT_STAGE_APPC_CORE_3_UP_DOWN";
+              break;
+          // Core 3 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_3_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_3_RNMI_EXCEPTION";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED30:
@@ -485,37 +533,45 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED35:
               res = "BOOT_STAGE_APPC_RESERVED35";
               break;
-          // Core 3 - Partition boot stage
-          case BOOT_STAGE_APPC_CORE_3_PARTITION_BOOT:
-              res = "BOOT_STAGE_APPC_CORE_3_PARTITION_BOOT";
-              break;
-          // Core 3 - AppC Heart beat event
-          case BOOT_STAGE_APPC_CORE_3_HEARTBEAT:
-              res = "BOOT_STAGE_APPC_CORE_3_HEARTBEAT";
-              break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED36:
               res = "BOOT_STAGE_APPC_RESERVED36";
-              break;
-          // Core 3 - Partition auto reset
-          case BOOT_STAGE_APPC_CORE_3_PARTITION_AUTO_RESET:
-              res = "BOOT_STAGE_APPC_CORE_3_PARTITION_AUTO_RESET";
-              break;
-          // Core 3 - status up/down
-          case BOOT_STAGE_APPC_CORE_3_UP_DOWN:
-              res = "BOOT_STAGE_APPC_CORE_3_UP_DOWN";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED37:
               res = "BOOT_STAGE_APPC_RESERVED37";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED38:
-              res = "BOOT_STAGE_APPC_RESERVED38";
+          // Core 3 - AppC Heart beat event
+          case BOOT_STAGE_APPC_CORE_3_HEARTBEAT:
+              res = "BOOT_STAGE_APPC_CORE_3_HEARTBEAT";
+              break;
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_3_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_3_GUARD_BIT";
+              break;
+          // Core 4 - Partition boot stage
+          case BOOT_STAGE_APPC_CORE_4_PARTITION_BOOT:
+              res = "BOOT_STAGE_APPC_CORE_4_PARTITION_BOOT";
               break;
           // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED39:
-              res = "BOOT_STAGE_APPC_RESERVED39";
+          case BOOT_STAGE_APPC_RESERVED48:
+              res = "BOOT_STAGE_APPC_RESERVED48";
+              break;
+          // Core 4 - zsbl started
+          case BOOT_STAGE_APPC_CORE_4_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_4_ZSBL_STARTED";
+              break;
+          // Core 4 - Partition auto reset
+          case BOOT_STAGE_APPC_CORE_4_PARTITION_AUTO_RESET:
+              res = "BOOT_STAGE_APPC_CORE_4_PARTITION_AUTO_RESET";
+              break;
+          // Core 4 - status up/down
+          case BOOT_STAGE_APPC_CORE_4_UP_DOWN:
+              res = "BOOT_STAGE_APPC_CORE_4_UP_DOWN";
+              break;
+          // Core 4 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_4_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_4_RNMI_EXCEPTION";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED40:
@@ -549,29 +605,37 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED47:
               res = "BOOT_STAGE_APPC_RESERVED47";
               break;
-          // Core 4 - Partition boot stage
-          case BOOT_STAGE_APPC_CORE_4_PARTITION_BOOT:
-              res = "BOOT_STAGE_APPC_CORE_4_PARTITION_BOOT";
-              break;
           // Core 4 - AppC Heart beat event
           case BOOT_STAGE_APPC_CORE_4_HEARTBEAT:
               res = "BOOT_STAGE_APPC_CORE_4_HEARTBEAT";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED48:
-              res = "BOOT_STAGE_APPC_RESERVED48";
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_4_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_4_GUARD_BIT";
               break;
-          // Core 4 - Partition auto reset
-          case BOOT_STAGE_APPC_CORE_4_PARTITION_AUTO_RESET:
-              res = "BOOT_STAGE_APPC_CORE_4_PARTITION_AUTO_RESET";
-              break;
-          // Core 4 - status up/down
-          case BOOT_STAGE_APPC_CORE_4_UP_DOWN:
-              res = "BOOT_STAGE_APPC_CORE_4_UP_DOWN";
+          // Core 5 - Partition boot stage
+          case BOOT_STAGE_APPC_CORE_5_PARTITION_BOOT:
+              res = "BOOT_STAGE_APPC_CORE_5_PARTITION_BOOT";
               break;
           // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED49:
-              res = "BOOT_STAGE_APPC_RESERVED49";
+          case BOOT_STAGE_APPC_RESERVED58:
+              res = "BOOT_STAGE_APPC_RESERVED58";
+              break;
+          // Core 5 - zsbl started
+          case BOOT_STAGE_APPC_CORE_5_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_5_ZSBL_STARTED";
+              break;
+          // Core 5 - Partition auto reset
+          case BOOT_STAGE_APPC_CORE_5_PARTITION_AUTO_RESET:
+              res = "BOOT_STAGE_APPC_CORE_5_PARTITION_AUTO_RESET";
+              break;
+          // Core 5 - status up/down
+          case BOOT_STAGE_APPC_CORE_5_UP_DOWN:
+              res = "BOOT_STAGE_APPC_CORE_5_UP_DOWN";
+              break;
+          // Core 5 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_5_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_5_RNMI_EXCEPTION";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED50:
@@ -605,33 +669,41 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED57:
               res = "BOOT_STAGE_APPC_RESERVED57";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED58:
-              res = "BOOT_STAGE_APPC_RESERVED58";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED59:
-              res = "BOOT_STAGE_APPC_RESERVED59";
-              break;
-          // Core 5 - Partition boot stage
-          case BOOT_STAGE_APPC_CORE_5_PARTITION_BOOT:
-              res = "BOOT_STAGE_APPC_CORE_5_PARTITION_BOOT";
-              break;
           // Core 5 - AppC Heart beat event
           case BOOT_STAGE_APPC_CORE_5_HEARTBEAT:
               res = "BOOT_STAGE_APPC_CORE_5_HEARTBEAT";
               break;
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_5_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_5_GUARD_BIT";
+              break;
+          // Core 6 - Partition boot stage
+          case BOOT_STAGE_APPC_CORE_6_PARTITION_BOOT:
+              res = "BOOT_STAGE_APPC_CORE_6_PARTITION_BOOT";
+              break;
+          // Not used for appc
+          case BOOT_STAGE_APPC_RESERVED68:
+              res = "BOOT_STAGE_APPC_RESERVED68";
+              break;
+          // Core 6 - zsbl started
+          case BOOT_STAGE_APPC_CORE_6_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_6_ZSBL_STARTED";
+              break;
+          // Core 6 - Partition auto reset
+          case BOOT_STAGE_APPC_CORE_6_PARTITION_AUTO_RESET:
+              res = "BOOT_STAGE_APPC_CORE_6_PARTITION_AUTO_RESET";
+              break;
+          // Core 6 - status up/down
+          case BOOT_STAGE_APPC_CORE_6_UP_DOWN:
+              res = "BOOT_STAGE_APPC_CORE_6_UP_DOWN";
+              break;
+          // Core 6 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_6_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_6_RNMI_EXCEPTION";
+              break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED60:
               res = "BOOT_STAGE_APPC_RESERVED60";
-              break;
-          // Core 5 - Partition auto reset
-          case BOOT_STAGE_APPC_CORE_5_PARTITION_AUTO_RESET:
-              res = "BOOT_STAGE_APPC_CORE_5_PARTITION_AUTO_RESET";
-              break;
-          // Core 5 - status up/down
-          case BOOT_STAGE_APPC_CORE_5_UP_DOWN:
-              res = "BOOT_STAGE_APPC_CORE_5_UP_DOWN";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED61:
@@ -661,13 +733,37 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED67:
               res = "BOOT_STAGE_APPC_RESERVED67";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED68:
-              res = "BOOT_STAGE_APPC_RESERVED68";
+          // Core 6 - AppC Heart beat event
+          case BOOT_STAGE_APPC_CORE_6_HEARTBEAT:
+              res = "BOOT_STAGE_APPC_CORE_6_HEARTBEAT";
+              break;
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_6_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_6_GUARD_BIT";
+              break;
+          // Core 7 - Partition boot stage
+          case BOOT_STAGE_APPC_CORE_7_PARTITION_BOOT:
+              res = "BOOT_STAGE_APPC_CORE_7_PARTITION_BOOT";
               break;
           // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED69:
-              res = "BOOT_STAGE_APPC_RESERVED69";
+          case BOOT_STAGE_APPC_RESERVED78:
+              res = "BOOT_STAGE_APPC_RESERVED78";
+              break;
+          // Core 7 - zsbl started
+          case BOOT_STAGE_APPC_CORE_7_ZSBL_STARTED:
+              res = "BOOT_STAGE_APPC_CORE_7_ZSBL_STARTED";
+              break;
+          // Core 7 - Partition auto reset
+          case BOOT_STAGE_APPC_CORE_7_PARTITION_AUTO_RESET:
+              res = "BOOT_STAGE_APPC_CORE_7_PARTITION_AUTO_RESET";
+              break;
+          // Core 7 - status up/down
+          case BOOT_STAGE_APPC_CORE_7_UP_DOWN:
+              res = "BOOT_STAGE_APPC_CORE_7_UP_DOWN";
+              break;
+          // Core 7 - exception while RNMI in progress
+          case BOOT_STAGE_APPC_CORE_7_RNMI_EXCEPTION:
+              res = "BOOT_STAGE_APPC_CORE_7_RNMI_EXCEPTION";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED70:
@@ -677,25 +773,9 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED71:
               res = "BOOT_STAGE_APPC_RESERVED71";
               break;
-          // Core 6 - Partition boot stage
-          case BOOT_STAGE_APPC_CORE_6_PARTITION_BOOT:
-              res = "BOOT_STAGE_APPC_CORE_6_PARTITION_BOOT";
-              break;
-          // Core 6 - AppC Heart beat event
-          case BOOT_STAGE_APPC_CORE_6_HEARTBEAT:
-              res = "BOOT_STAGE_APPC_CORE_6_HEARTBEAT";
-              break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED72:
               res = "BOOT_STAGE_APPC_RESERVED72";
-              break;
-          // Core 6 - Partition auto reset
-          case BOOT_STAGE_APPC_CORE_6_PARTITION_AUTO_RESET:
-              res = "BOOT_STAGE_APPC_CORE_6_PARTITION_AUTO_RESET";
-              break;
-          // Core 6 - status up/down
-          case BOOT_STAGE_APPC_CORE_6_UP_DOWN:
-              res = "BOOT_STAGE_APPC_CORE_6_UP_DOWN";
               break;
           // Not used for appc
           case BOOT_STAGE_APPC_RESERVED73:
@@ -717,93 +797,13 @@ static inline const char *boot_stage_appc_str( boot_stage_appc_t code )
           case BOOT_STAGE_APPC_RESERVED77:
               res = "BOOT_STAGE_APPC_RESERVED77";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED78:
-              res = "BOOT_STAGE_APPC_RESERVED78";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED79:
-              res = "BOOT_STAGE_APPC_RESERVED79";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED80:
-              res = "BOOT_STAGE_APPC_RESERVED80";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED81:
-              res = "BOOT_STAGE_APPC_RESERVED81";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED82:
-              res = "BOOT_STAGE_APPC_RESERVED82";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED83:
-              res = "BOOT_STAGE_APPC_RESERVED83";
-              break;
-          // Core 7 - Partition boot stage
-          case BOOT_STAGE_APPC_CORE_7_PARTITION_BOOT:
-              res = "BOOT_STAGE_APPC_CORE_7_PARTITION_BOOT";
-              break;
           // Core 7 - AppC Heart beat event
           case BOOT_STAGE_APPC_CORE_7_HEARTBEAT:
               res = "BOOT_STAGE_APPC_CORE_7_HEARTBEAT";
               break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED84:
-              res = "BOOT_STAGE_APPC_RESERVED84";
-              break;
-          // Core 7 - Partition auto reset
-          case BOOT_STAGE_APPC_CORE_7_PARTITION_AUTO_RESET:
-              res = "BOOT_STAGE_APPC_CORE_7_PARTITION_AUTO_RESET";
-              break;
-          // Core 7 - status up/down
-          case BOOT_STAGE_APPC_CORE_7_UP_DOWN:
-              res = "BOOT_STAGE_APPC_CORE_7_UP_DOWN";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED85:
-              res = "BOOT_STAGE_APPC_RESERVED85";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED86:
-              res = "BOOT_STAGE_APPC_RESERVED86";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED87:
-              res = "BOOT_STAGE_APPC_RESERVED87";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED88:
-              res = "BOOT_STAGE_APPC_RESERVED88";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED89:
-              res = "BOOT_STAGE_APPC_RESERVED89";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED90:
-              res = "BOOT_STAGE_APPC_RESERVED90";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED91:
-              res = "BOOT_STAGE_APPC_RESERVED91";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED92:
-              res = "BOOT_STAGE_APPC_RESERVED92";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED93:
-              res = "BOOT_STAGE_APPC_RESERVED93";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED94:
-              res = "BOOT_STAGE_APPC_RESERVED94";
-              break;
-          // Not used for appc
-          case BOOT_STAGE_APPC_RESERVED95:
-              res = "BOOT_STAGE_APPC_RESERVED95";
+          // STAT_DRV workaround (always 1)
+          case BOOT_STAGE_APPC_CORE_7_GUARD_BIT:
+              res = "BOOT_STAGE_APPC_CORE_7_GUARD_BIT";
               break;
           default:
               res = "unknown boot_stage_appc_t";

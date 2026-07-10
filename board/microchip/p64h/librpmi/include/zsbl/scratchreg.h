@@ -77,18 +77,21 @@ typedef enum {
 /// Scratchpad registers for boot control
 /// boot mode
 typedef struct {
-    uint32_t por                    : 1;  ///< indicates power-on reset; Assumption is that it is cleared on POR; 0- POR, 1- not POR
+    uint32_t por                    : 1; ///< indicates power-on reset; Assumption is that it is cleared on POR; 0- POR, 1- not POR
     uint32_t early_sys_zsbl_active  : 1; ///< indicates if ZSBL is active; tracks this iteration of code execution prior to plan_iteration() analyzing prior iteration data.
-    uint32_t sys_zsbl_active        : 1;  ///< indicates if ZSBL is active; 0- ZSBL is not active, 1- ZSBL is active
-    uint32_t sys_fsbl_active        : 1;  ///< indicates if FSBL is active; 0- FSBL is not active, 1- FSBL is active
-    uint32_t image_id               : 3;  ///< image_id being processed for sysc FSBL boot procedure
-    uint32_t sysc_boot_sticky       : 6;  ///< Sticky bits for SysC ZSBL to transfer to BOOT_STAT on execution startup
+    uint32_t sys_zsbl_active        : 1; ///< indicates if ZSBL is active; 0- ZSBL is not active, 1- ZSBL is active
+    uint32_t sys_fsbl_active        : 1; ///< indicates if FSBL is active; 0- FSBL is not active, 1- FSBL is active
+    uint32_t image_id               : 3; ///< image_id being processed for sysc FSBL boot procedure
+    uint32_t sysc_boot_sticky       : 6; ///< Sticky bits for SysC ZSBL to transfer to BOOT_STAT on execution startup
     uint32_t sys_fsbl_boot_req      : 2; ///< FSBL boot request command see sysc_fsbl_boot_req_t
     uint32_t sys_fsbl_boot_image_id : 3; ///< FSBL requested image_id for SysC ZSBL to attempt boot
     uint32_t sys_fsbl_fail_mode     : 1; ///< FSBL force image boot fails, 0 - follow policy in image_table_entry, 1 - follow fsbl defined policy
     uint32_t sys_fsbl_policy        : 1; ///< on failure of FSBL forced image boot, 0 - request emergency mode, 1 - use sys_fsbl_policy_image
     uint32_t sys_fsbl_policy_image  : 3; ///< FSBL force image boot, failure rollback next image ID
-    uint32_t fill                   : 9; ///< Reserved  
+    uint32_t sys_pwr_freq_mode      : 3; ///< SysC runtime power freq mode: 0=disable 1=PMM, 2=PM1, 3=PM2, 4=PM3, 5=PM4, 6=Sleep
+    uint32_t sys_appc_boot_cfg      : 1; ///< SysC runtime AppC boot cfg: 0 - disabled, 1 - use sys_appc_boot_val
+    uint32_t sys_appc_boot_val      : 4; ///< SysC runtime AppC boot value: 0-15 correspond to boot_cfg 0-15
+    uint32_t fill                   : 1; ///< Reserved
 } scratchpad_boot_mode_t;
 #ifndef SWIG
 static_assert(sizeof(scratchpad_boot_mode_t) == 4,"scratchpad_boot_mode_t should be 4 bytes");

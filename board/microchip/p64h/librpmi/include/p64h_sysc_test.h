@@ -1,5 +1,10 @@
 /* (c) 2025 Microchip Technology Inc. */
-/* SPDX-License-Identifier: MIT */
+/*    SPDX-License-Identifier: MIT    */
+
+/* ======================================= */
+/*  This file is generated and should not  */
+/*              be modified!               */
+/* ======================================= */
 
 /**
  * @file  p64h_sysc_test.h
@@ -16,7 +21,7 @@
 #include <types/p64h_sysc_test_types.h>
 
 p64h_err_t p64h_sysc_test_num_get(const p64h_sysc_handle_t* handle_ptr, uint32_t* num_tids);
-p64h_err_t p64h_sysc_test_list_get(const p64h_sysc_handle_t* handle_ptr, p64h_sysc_test_utest_type_e* tids, bool shmem_xfer);
+p64h_err_t p64h_sysc_test_list_get(const p64h_sysc_handle_t* handle_ptr, uint32_t list_num, p64h_sysc_test_utest_type_e* tids, bool shmem_xfer);
 p64h_err_t p64h_sysc_test_attr_get(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_test_utest_type_e tid, p64h_sysc_test_attr_t* attr_ptr);
 p64h_err_t p64h_sysc_test_launch(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_test_launch_cfg_t* cfg_ptr);
 p64h_err_t p64h_sysc_etest_launch(const p64h_sysc_handle_t* handle_ptr, const p64h_sysc_etest_launch_cfg_t* cfg_ptr);

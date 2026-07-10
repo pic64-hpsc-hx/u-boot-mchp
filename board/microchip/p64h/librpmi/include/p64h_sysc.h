@@ -19,11 +19,12 @@
 #include <rpmi/librpmi_mchp.h>
 
 /// P64H SYSC Interfaces
-p64h_err_t          p64h_sysc_version_check(p64h_sysc_sys_version_t* sysc_ver, uint32_t vers);
-p64h_sysc_handle_t* p64h_sysc_handle_get(void);
-p64h_err_t          p64h_sysc_rpmi_shmem_init(const p64h_sysc_rpmi_shmem_cfg_t* cfg_ptr, p64h_sysc_handle_t** handle_pptr);
-p64h_err_t          p64h_sysc_rpmi_remote_init(const p64h_sysc_rpmi_remote_cfg_t* cfg_ptr, p64h_sysc_handle_t** handle_pptr);
-p64h_err_t          p64h_sysc_rpmi_remote_uninit(p64h_sysc_handle_t* handle_ptr);
+p64h_err_t p64h_sysc_version_check(p64h_sysc_sys_version_t* sysc_ver, uint32_t vers);
+p64h_err_t p64h_sysc_handle_get(p64h_sysc_handle_t** handle_pptr);
+p64h_err_t p64h_sysc_rpmi_shmem_init(const p64h_sysc_rpmi_shmem_cfg_t* cfg_ptr, p64h_sysc_handle_t** handle_pptr);
+p64h_err_t p64h_sysc_rpmi_remote_init(const p64h_sysc_rpmi_remote_cfg_t* cfg_ptr, p64h_sysc_handle_t** handle_pptr);
+p64h_err_t p64h_sysc_rpmi_remote_uninit(p64h_sysc_handle_t* handle_ptr);
+p64h_err_t p64h_sysc_rpmi_notification_poll(p64h_sysc_handle_t* handle_ptr);
 
 #endif // P64H_SYSC_H
 /// @}

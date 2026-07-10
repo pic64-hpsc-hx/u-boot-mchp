@@ -14,19 +14,6 @@
 #include <rpmi/librpmi.h>
 
 /* Private Defines ------------------------------------------------ */
-/**
- * @brief
- *   The condition is checked and if FALSE then we return an error
- *   @param[in] condition - check to perform
- *   @param[in] err_code - the error code to return
- *
- */
-#define P64H_SYSC_ASSERT(condition, err_code)                                                                                                        \
-    do {                                                                                                                                             \
-        if (__builtin_expect(!(condition), 0)) {                                                                                                     \
-            return (err_code);                                                                                                                       \
-        }                                                                                                                                            \
-    } while (false)
 
 /* Private Variables ---------------------------------------------- */
 /**
@@ -44,14 +31,25 @@ static p64h_sysc_handle_t* rpmi_handle_ptr = NULL;
  * This function returns a pointer to a p64h_sysc_handle_t structure,
  * which can be used to interact with the P64H system controller.
  *
- * @return Pointer to a p64h_sysc_handle_t instance.
+ * @param[out] handle_pptr  Address of a pointer to a p64h_sysc_handle_t instance.
+ * @return p64h_err_t Status code indicating the result of the operation
  */
-p64h_sysc_handle_t* p64h_sysc_handle_get(void)
+p64h_err_t p64h_sysc_handle_get(p64h_sysc_handle_t** handle_pptr)
 {
+    P64H_SYSC_ASSERT(NULL != handle_pptr, P64H_ERR_LIB_API_NULL_POINTER);
+
+    p64h_err_t rc = P64H_ERR_OK;
     if (NULL == rpmi_handle_ptr) {
         rpmi_handle_ptr = (p64h_sysc_handle_t*)rpmi_ctxt_malloc();
     }
-    return rpmi_handle_ptr;
+
+    if (rpmi_handle_ptr) {
+        *handle_pptr = rpmi_handle_ptr;
+    } else {
+        rc = P64H_ERR_LIB_API_NULL_POINTER;
+    }
+
+    return rc;
 }
 
 /**
@@ -94,25 +92,29 @@ p64h_err_t p64h_sysc_rpmi_shmem_init(const p64h_sysc_rpmi_shmem_cfg_t* cfg_ptr, 
     P64H_SYSC_ASSERT(NULL != cfg_ptr, P64H_ERR_LIB_API_NULL_POINTER);
     P64H_SYSC_ASSERT(NULL != handle_pptr, P64H_ERR_LIB_API_NULL_POINTER);
 
-    p64h_err_t rc                 = P64H_ERR_OK;
-    *handle_pptr                  = p64h_sysc_handle_get();
-
+    p64h_err_t           rc       = P64H_ERR_OK;
     p64h_sysc_rpmi_cfg_t rpmi_cfg = { 0 };
-    rpmi_cfg.type                 = RPMI_TRANS_SHMEM;
-    rpmi_cfg.role                 = RPMI_ROLE_A;
-    rpmi_env_memcpy((void*)&rpmi_cfg.mem, &cfg_ptr->mem, sizeof(cfg_ptr->mem));
 
-    if (!p64h_sysc_rpmi_handle_init(*handle_pptr, &rpmi_cfg)) {
-        rc = P64H_ERR_LIB_API_SHMEM_INIT_FAIL;
+    rc                            = p64h_sysc_handle_get(handle_pptr);
+    if (P64H_ERR_OK == rc) {
+        rpmi_cfg.type = RPMI_TRANS_SHMEM;
+        rpmi_cfg.role = RPMI_ROLE_A;
+        rpmi_env_memcpy((void*)&rpmi_cfg.mem, &cfg_ptr->mem, sizeof(cfg_ptr->mem));
+
+        if (!p64h_sysc_rpmi_handle_init(*handle_pptr, &rpmi_cfg)) {
+            rc = P64H_ERR_LIB_API_SHMEM_INIT_FAIL;
+        }
     }
 
     if (P64H_ERR_OK == rc) {
         // IPC message callback function
-        (*handle_pptr)->ctxt.ops.ipc_msg_send    = cfg_ptr->ops.ipc_msg_send;
-        (*handle_pptr)->ctxt.ops.ipc_msg_get     = cfg_ptr->ops.ipc_msg_get;
-        (*handle_pptr)->ctxt.ops.ipc_int_handler = p64h_sysc_rpmi_intr_isr;
+        if (!p64h_sysc_rpmi_ipc_init(*handle_pptr, &cfg_ptr->ops)) {
+            rc = P64H_ERR_LIB_API_IPC_INIT_FAIL;
+        }
     }
 
+    /* disable version check for 2.0.1 release*/
+    /*
     if (P64H_ERR_OK == rc) {
         p64h_sysc_sys_info_t sys_info;
         rc = p64h_sysc_sys_info_get(*handle_pptr, &sys_info);
@@ -120,6 +122,7 @@ p64h_err_t p64h_sysc_rpmi_shmem_init(const p64h_sysc_rpmi_shmem_cfg_t* cfg_ptr, 
             rc = p64h_sysc_version_check(&sys_info.fw_version, P64H_SYSC_FW_CURRENT_VERSION);
         }
     }
+    */
 
     return rc;
 }
@@ -141,10 +144,12 @@ p64h_err_t __attribute__((weak)) p64h_sysc_rpmi_remote_init(const p64h_sysc_rpmi
     P64H_SYSC_ASSERT(NULL != cfg_ptr, P64H_ERR_LIB_API_NULL_POINTER);
     P64H_SYSC_ASSERT(NULL != handle_pptr, P64H_ERR_LIB_API_NULL_POINTER);
 
-    p64h_err_t rc = P64H_ERR_OK;
-    *handle_pptr  = p64h_sysc_handle_get();
+    p64h_err_t           rc = P64H_ERR_OK;
     p64h_sysc_sys_info_t sys_info;
-    rc = p64h_sysc_sys_info_get(*handle_pptr, &sys_info);
+    rc = p64h_sysc_handle_get(handle_pptr);
+    if (P64H_ERR_OK == rc) {
+        rc = p64h_sysc_sys_info_get(*handle_pptr, &sys_info);
+    }
     if (P64H_ERR_OK == rc) {
         rc = p64h_sysc_version_check(&sys_info.fw_version, P64H_SYSC_FW_CURRENT_VERSION);
     }
@@ -162,7 +167,30 @@ p64h_err_t __attribute__((weak)) p64h_sysc_rpmi_remote_init(const p64h_sysc_rpmi
 p64h_err_t __attribute__((weak)) p64h_sysc_rpmi_remote_uninit(p64h_sysc_handle_t* handle_ptr)
 {
     P64H_SYSC_ASSERT(NULL != handle_ptr, P64H_ERR_LIB_API_NULL_POINTER);
-    handle_ptr->init = false;
+    p64h_sysc_rpmi_handle_uninit(handle_ptr);
     return P64H_ERR_OK;
 }
+
+/**
+ * @brief Polls for notifications from system controller.
+ *
+ * This function checks for any pending notifications from the system controller
+ * and processes them accordingly. It should be called periodically to ensure timely
+ * handling of events and messages from the system controller.
+ *
+ * @param[in] handle_ptr Pointer to the system controller handle.
+ *
+ * @return p64h_err_t Error code indicating the success or failure of the polling operation.
+ */
+p64h_err_t p64h_sysc_rpmi_notification_poll(p64h_sysc_handle_t* handle_ptr)
+{
+    P64H_SYSC_ASSERT(NULL != handle_ptr, P64H_ERR_LIB_API_NULL_POINTER);
+
+    if (p64h_sysc_rpmi_notification_check(handle_ptr)) {
+        return P64H_ERR_OK;
+    } else {
+        return P64H_ERR_RPMSG_FAIL;
+    }
+}
+
 /// @}

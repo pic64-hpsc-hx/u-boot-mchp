@@ -123,6 +123,26 @@ typedef long          rpmi_ssize_t;
 /** Minimum slot size in bytes */
 #define RPMI_SLOT_SIZE_MIN (64)
 
+/** Alignment in bytes for A2P slot size */
+#define RPMI_A2P_SLOT_SIZE_ALIGNED (0x1000)
+
+/** Alignment in bytes for P2A slot size */
+#define RPMI_P2A_SLOT_SIZE_ALIGNED (0x100)
+
+/** Number of reserved slots (headidx and tailidx) */
+#define RPMI_SLOTS_RESERVED (2)
+
+/** Offset for the first usable slot (after reserved slots) */
+#define RPMI_SLOT_OFFSET RPMI_SLOTS_RESERVED
+
+/** Minimum queue count(req and ack) */
+#define RPMI_QUEUE_MIN (2)
+
+/** RPMI I/O Port Types UART */
+#define RPMI_RPMI_IO_PORT_TYPE_UART (0x0U)
+/** RPMI I/O Port Types TCP */
+#define RPMI_RPMI_IO_PORT_TYPE_TCP (0x1U)
+
 /** RPMI Messages Types */
 enum rpmi_message_type {
     /* Normal request backed with ack */
@@ -201,7 +221,9 @@ enum rpmi_error {
     RPMI_ERR_VENDOR_START   = -128,
     // P64H Specific Error Codes
     RPMI_P64H_ERR_NOT_IMPLEMENTED = -65536,
-    RPMI_P64H_ERR_CHECKSUM_MISMATCH
+    RPMI_P64H_ERR_CHECKSUM_MISMATCH,
+    RPMI_P64H_ERR_HEADER_CORRUPT,
+    RPMI_P64H_ERR_TIMEOUT_DATA_DROPPED
 };
 
 /** RPMI Queue Types */
@@ -347,8 +369,11 @@ struct rpmi_transport {
      */
     rpmi_bool_t is_p2a_channel;
 
-    /** Slot (or max message) size in transport queues */
-    rpmi_size_t slot_size;
+    /** Slot (or max message) size for A2P channel queues */
+    rpmi_size_t a2p_slot_size;
+
+    /** Slot (or max message) size for P2A channel queues */
+    rpmi_size_t p2a_slot_size;
 
     /**
      * Callback to check if a RPMI queue type is empty
@@ -384,6 +409,12 @@ struct rpmi_transport {
     /** Private data of the transport implementation */
     void* priv;
 };
+
+/** Select the slot size for the given queue type (A2P channel vs P2A channel). */
+static inline rpmi_size_t rpmi_transport_slot_size(const struct rpmi_transport* trans, enum rpmi_queue_type qtype)
+{
+    return ((qtype == RPMI_QUEUE_A2P_REQ) || (qtype == RPMI_QUEUE_P2A_ACK)) ? trans->a2p_slot_size : trans->p2a_slot_size;
+}
 
 /** @} */
 
@@ -423,6 +454,9 @@ struct rpmi_io_platform_ops {
     /** Write to a peripheral (mandatory) */
     enum rpmi_error (*write)(void* priv, const void* out, rpmi_uint32_t len);
 
+    /** Flush the rx buffer */
+    rpmi_bool_t (*flush_rx)(void* priv);
+
     /** Poll peripheral to see if it is empty of data (mandatory) */
     rpmi_bool_t (*is_empty)(void* priv);
 };
@@ -446,11 +480,20 @@ struct rpmi_shmem {
 };
 
 struct rpmi_io_port {
+    ///** Port type */
+    rpmi_uint32_t type;
+
     /** Name of the IO port memory */
     const char* port;
 
-    /** Port type */
-    rpmi_uint32_t type;
+    /** IO port baudrate */
+    rpmi_uint32_t baudrate;
+
+    /** IO ip address */
+    char* host;
+
+    /** TCP port */
+    rpmi_uint16_t tcp_port;
 
     /** Enable flag */
     rpmi_bool_t enable;
@@ -468,7 +511,7 @@ struct rpmi_io {
     struct rpmi_shmem* shmem;
 
     /** IO port type */
-    const struct rpmi_io_port* port;
+    struct rpmi_io_port port;
 
     /** Pointer to platform specific operations */
     const struct rpmi_io_platform_ops* ops;

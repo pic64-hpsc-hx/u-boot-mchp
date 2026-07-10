@@ -29,6 +29,7 @@
 #define TVS_MON_GUID P64H_UUID_INIT(0x350a0974,0xf450,0x424f,0x87,0x8e,0x3,0x71,0xa6,0xce,0x55,0xa1)
 #define RISCV_PROC_GUID P64H_UUID_INIT(0x4b016bd2,0xeda5,0x4042,0x81,0x45,0x4b,0xd6,0x69,0x8c,0x20,0xfb)
 #define APP_NOC_GUID P64H_UUID_INIT(0x80495ddc,0xc0f3,0x4189,0x93,0xaa,0xe8,0x8f,0x49,0xcd,0x47,0x9)
+#define APP_WDOG_GUID P64H_UUID_INIT(0xe37fed01,0xc09c,0x41e6,0xbf,0x7b,0x6b,0x8e,0x11,0xe,0xa8,0x92)
 #define SRAM_EDAC_GUID P64H_UUID_INIT(0xddb8a8b2,0x2914,0x47d3,0x81,0x71,0x47,0x94,0xf6,0x25,0x14,0x83)
 #define NVM_EDAC_GUID P64H_UUID_INIT(0x14d3e022,0xf665,0x44eb,0xb7,0x3a,0x4f,0xda,0x6d,0x13,0xa9,0xa1)
 #define FW_ERR_GUID P64H_UUID_INIT(0x9a522ab2,0xc256,0x43c1,0xa5,0xbf,0x5c,0xec,0xef,0x5a,0xbc,0x83)
@@ -39,6 +40,22 @@
 #define SPI_CTRL_GUID P64H_UUID_INIT(0x38d66588,0x4d7c,0x498e,0xa4,0x36,0x57,0xa0,0x90,0x1c,0xfa,0x9e)
 #define NAND_CTRL_GUID P64H_UUID_INIT(0x4b9f98cd,0x2b66,0x4005,0xb2,0xf,0xcb,0xeb,0x11,0x2d,0x7f,0x47)
 #define DDR_CTRL_GUID P64H_UUID_INIT(0xe7f522ea,0xfa2e,0x4eb5,0x96,0xeb,0x3b,0xda,0xa5,0x9a,0x1b,0x6a)
+#define DDR_PHY_GUID P64H_UUID_INIT(0xffa2b457,0xeb28,0x4408,0xb4,0x4e,0xc7,0x5c,0xba,0x3b,0xc1,0x5e)
+#define DDR_HSIO_GUID P64H_UUID_INIT(0x5b5f6dfa,0xef8c,0x462e,0x83,0xe0,0xd9,0x21,0x8e,0x5b,0x55,0x8f)
+#define SPW_CTRL_GUID P64H_UUID_INIT(0xc6e2fb48,0x46fb,0x43a3,0x83,0x89,0xb9,0x43,0x80,0x53,0x54,0x82)
+#define SYS_DBG_GUID P64H_UUID_INIT(0xd92727e2,0x8ca0,0x4427,0x99,0x21,0x0,0x15,0x32,0x65,0x93,0x5c)
+#define ENET_EP_SB_GUID P64H_UUID_INIT(0xcabf0d35,0xfb90,0x40f8,0xa4,0xb1,0x76,0xfd,0x5c,0x38,0x96,0x4a)
+#define ENET_EP_CORE_GUID P64H_UUID_INIT(0x6531de2b,0xefc1,0x41fc,0xaa,0x95,0xf6,0x69,0xc7,0x4f,0x15,0x34)
+#define ENET_EP_FRER_TX_GUID P64H_UUID_INIT(0x2fc34bb0,0x8a2,0x4a7d,0xa3,0x54,0x1c,0xee,0x36,0x51,0xa4,0x5a)
+#define ENET_EP_FRER_RX_GUID P64H_UUID_INIT(0x710284dc,0x3dac,0x4216,0x9d,0x9a,0x95,0x36,0x6b,0x45,0x1e,0xb6)
+#define SYS_NOC_FA_GUID P64H_UUID_INIT(0xe7eee5b1,0x62f4,0x4830,0xa3,0x5,0x74,0xc6,0x9,0xbf,0xaa,0xa2)
+#define NOC_OBS_GUID P64H_UUID_INIT(0xd6cdb1eb,0x71de,0x438a,0xa8,0xf,0x8c,0xb,0x52,0x70,0xd6,0x8c)
+#define DDR_NOC_GUID P64H_UUID_INIT(0xa670cbc3,0x830e,0x47c0,0x91,0x9c,0x27,0x7,0x2b,0x45,0x8b,0x18)
+#define HPT_GUID P64H_UUID_INIT(0x384b7b57,0x2d81,0x40b0,0xa1,0x1e,0x94,0x4d,0xa7,0x15,0x20,0x1c)
+#define APP_NOC_FA_GUID P64H_UUID_INIT(0x6ecb792c,0x5286,0x41ca,0x8b,0x53,0x16,0x8b,0x70,0x69,0xfa,0x7e)
+#define SVC_NOC_GUID P64H_UUID_INIT(0xe0109c71,0xea2b,0x479f,0x96,0xa1,0xa6,0x75,0x98,0xa3,0x9c,0x76)
+#define PCXL_CTRL_GUID P64H_UUID_INIT(0x6ab38634,0x3ac5,0x4e03,0x9d,0x97,0xc,0x87,0x8e,0xf7,0x74,0x6c)
+#define PCXL_LINK_GUID P64H_UUID_INIT(0x5b7fe571,0x7e50,0x4267,0xa1,0xc5,0xb2,0x13,0xef,0xd8,0x19,0xbf)
 
 /* Public Structs and Enums - populated from Yaml files ----------------- */
 typedef struct {
@@ -653,6 +670,7 @@ typedef struct {
 #define DMA_EVT_SOURCE_CHANNEL_6 6UL ///< Channel 6
 #define DMA_EVT_SOURCE_CHANNEL_7 7UL ///< Channel 7
 #define DMA_EVT_SOURCE_CHANNEL_8 8UL ///< Channel 8
+#define DMA_EVT_SOURCE_NO_EVENT 9UL ///< No event
 #define DMA_COMMON_REG_EVT_SLVIF_COMMONREG_DEC_ERR_INTSTAT_NOT_DETECTED 0UL ///< No Register Bus Interface Decode Errors
 #define DMA_COMMON_REG_EVT_SLVIF_COMMONREG_DEC_ERR_INTSTAT_DETECTED 1UL ///< Register Bus Interface Decode Error detected
 #define DMA_COMMON_REG_EVT_SLVIF_COMMONREG_WR2RO_ERR_INTSTAT_NOT_DETECTED 0UL ///< No Register Bus Interface Write to Read Only Errors
@@ -747,16 +765,6 @@ typedef struct {
 #define DMA_CHANNEL_EVT_SLVIF_ADDRPARITY_ERR_INTSTAT_DETECTED 1UL ///< Register Bus Interface Address Parity Error detected.
 #define DMA_CHANNEL_EVT_SLVIF_WRPARITY_ERR_INTSTAT_NOT_DETECTED 0UL ///< No Register Bus Interface Write Parity Errors.
 #define DMA_CHANNEL_EVT_SLVIF_WRPARITY_ERR_INTSTAT_DETECTED 1UL ///< Register Bus Interface Write Parity Error detected.
-#define DMA_CHANNEL_EVT_CH_LOCK_CLEARED_INTSTAT_NOT_DETECTED 0UL ///< Channel locking is not cleared.
-#define DMA_CHANNEL_EVT_CH_LOCK_CLEARED_INTSTAT_DETECTED 1UL ///< Channel locking is cleared.
-#define DMA_CHANNEL_EVT_CH_SRC_SUSPENDED_INTSTAT_NOT_DETECTED 0UL ///< Channel source is not suspended
-#define DMA_CHANNEL_EVT_CH_SRC_SUSPENDED_INTSTAT_DETECTED 1UL ///< Channel Source is suspended.
-#define DMA_CHANNEL_EVT_CH_SUSPENDED_INTSTAT_NOT_DETECTED 0UL ///< Channel is not suspended.
-#define DMA_CHANNEL_EVT_CH_SUSPENDED_INTSTAT_DETECTED 1UL ///< Channel is suspended.
-#define DMA_CHANNEL_EVT_CH_DISABLED_INTSTAT_NOT_DETECTED 0UL ///< Channel is not disabled.
-#define DMA_CHANNEL_EVT_CH_DISABLED_INTSTAT_DETECTED 1UL ///< Channel is disabled.
-#define DMA_CHANNEL_EVT_CH_ABORTED_INTSTAT_NOT_DETECTED 0UL ///< Channel is not terminated
-#define DMA_CHANNEL_EVT_CH_ABORTED_INTSTAT_DETECTED 1UL ///< Channel is terminated
 #define DMA_CHANNEL_EVT_ECC_PROT_CHMEM_CORRERR_INTSTAT_NOT_DETECTED 0UL ///< No Channel x FIFO Memory Interface correctable Error.
 #define DMA_CHANNEL_EVT_ECC_PROT_CHMEM_CORRERR_INTSTAT_DETECTED 1UL ///< Channel x FIFO Memory Interface correctable Error detected.
 #define DMA_CHANNEL_EVT_ECC_PROT_CHMEM_UNCORRERR_INTSTAT_NOT_DETECTED 0UL ///< No Channel x FIFO Memory Interface Uncorrectable Error.
@@ -846,11 +854,6 @@ typedef struct {
     uint32_t slvif_wronhold_err_intstat:1; ///< Register Bus Interface Write On Hold Error. This error occurs if an illegal write operation is performed on a register; this happens if a write operation is performed on a channel register when DW_axi_dmac is in Hold mode.
     uint32_t slvif_addrparity_err_intstat:1; ///< Register Bus Interface Address Parity Error. This error occurs if address is used to do write/read operation on a channel register; But the Address fails the even/odd parity check.
     uint32_t slvif_wrparity_err_intstat:1; ///< Register Bus Interface Write Parity Error. This error occurs if a Write operation is performed on a channel register; But the Write data fails the even/odd parity check.
-    uint32_t ch_lock_cleared_intstat:1; ///< Channel Lock Cleared. This indicates to the software that the locking of the corresponding channel in DW_axi_dmac is cleared.
-    uint32_t ch_src_suspended_intstat:1; ///< Channel Source Suspended. This indicates to the software that the corresponding channel source data transfer in DW_axi_dmac is suspended.
-    uint32_t ch_suspended_intstat:1; ///< Channel Suspended. This indicates to the software that the corresponding channel in DW_axi_dmac is suspended.
-    uint32_t ch_disabled_intstat:1; ///< Channel Disabled. This indicates to the software that the corresponding channel in DW_axi_dmac is disabled.
-    uint32_t ch_aborted_intstat:1; ///< Channel Terminated. This indicates to the software that the corresponding channel in DW_axi_dmac is terminated.
     uint32_t ecc_prot_chmem_correrr_intstat:1; ///< Channel x FIFO Memory Interface ECC Protection related Correctable Error Interrupt Status bit. This error occurs if ECC correctable error is detected on the FIFO Memory Interface data.
     uint32_t ecc_prot_chmem_uncorrerr_intstat:1; ///< Channel x FIFO Memory Interface ECC Protection related Uncorrectable Error Interrupt Status bit. This error occurs if ECC Uncorrectable error is detected on the FIFO Memory Interface data.
     uint32_t ecc_prot_uidmem_correrr_intstat:1; ///< Channel x UID Memory Interface ECC Protection related Correctable Error Interrupt Status bit. This error occurs if ECC correctable error is detected on the UID Memory Interface data.
@@ -858,7 +861,7 @@ typedef struct {
     uint32_t chan_tx_src_valid:1; ///< chan_tx_src field data valid
     uint32_t chan_tx_dst_valid:1; ///< chan_tx_dst field data valid
     uint32_t chan_tx_data_valid:1; ///< chan_tx_data field data valid
-    uint32_t pad:2; ///< padding bits
+    uint32_t pad:7; ///< padding bits
 } dma_channel_evt_bits_t;
 
 /**
@@ -1335,6 +1338,21 @@ typedef struct {
 } app_noc_section_t;
 
 /*********************************************
+* APP_WDOG CPER Section
+********************************************/
+
+#define APP_WDOG_RESET_TYPE_RESET_PENDING 0UL ///< reset pending
+#define APP_WDOG_RESET_TYPE_RESET_REQUEST 1UL ///< reset request
+
+/**
+ * @brief app_wdog CPER section data description
+ */
+typedef struct {
+    uint8_t reset_type; ///< appc watch dog reset type, pending or request
+    uint8_t index; ///< index, 0-7
+} app_wdog_section_t;
+
+/*********************************************
 * SRAM_EDAC CPER Section
 ********************************************/
 
@@ -1351,9 +1369,10 @@ typedef struct {
 #define SRAM_EDAC_EVENT_EMON_CORR 10UL ///< EMON correctable error
 #define SRAM_EDAC_EVENT_EMON_UNCORR 11UL ///< EMON uncorrectable error
 #define SRAM_EDAC_EVENT_APP 12UL ///< Errors with AXI BIST or Patrol Scrub completion
-#define SRAM_EDAC_SRAM_EDAC_IDX_INST_0 0UL ///< SRAM EDAC INST 0
-#define SRAM_EDAC_SRAM_EDAC_IDX_INST_1 1UL ///< SRAM EDAC INST 1
-#define SRAM_EDAC_SRAM_EDAC_IDX_INST_2 2UL ///< SRAM EDAC INST 2
+#define SRAM_EDAC_SRAM_EDAC_IDX_INST_0 0UL ///< NVM SRAM EDAC INST 0
+#define SRAM_EDAC_SRAM_EDAC_IDX_INST_1 1UL ///< NVM SRAM EDAC INST 1
+#define SRAM_EDAC_SRAM_EDAC_IDX_INST_2 2UL ///< NVM SRAM EDAC INST 2
+#define SRAM_EDAC_SRAM_EDAC_IDX_INST_3 3UL ///< SYSC SRAM EDAC INST 0
 #define SRAM_EDAC_EDAC_IDX_INST_0 0UL ///< EDAC INST 0
 #define SRAM_EDAC_EDAC_IDX_INST_1 1UL ///< EDAC INST 1
 #define SRAM_EDAC_EDAC_IDX_NO_INST 2UL ///< No EDAC INST
@@ -1538,10 +1557,21 @@ typedef struct {
 #define SPI_CTRL_EVENT_XSPI_RAM_UNCORR 5UL ///< XSPI RAM uncorrectable error
 #define SPI_CTRL_EVENT_SD_RAM_CORR 6UL ///< SD RAM correctable error
 #define SPI_CTRL_EVENT_SD_RAM_UNCORR 7UL ///< SD RAM uncorrectable error
+#define SPI_CTRL_EVENT_DEVICE_ERR 8UL ///< Device fail detected when status of the last program operation was checked
+#define SPI_CTRL_EVENT_CMD_ERR 9UL ///< Invalid command sequence error detected
+#define SPI_CTRL_EVENT_CMD_IGNORED 10UL ///< The controller detected that a command that was sent by the host when system was busy and ignored it
+#define SPI_CTRL_EVENT_DEVICE_ECC_CORR 11UL ///< Attached memory device returned uncorrectable ECC error during read operation
+#define SPI_CTRL_EVENT_DQS_ERR 12UL ///< DQS underrun or overflow error detected
+#define SPI_CTRL_EVENT_CRC_ERR 13UL ///< CRC error detected
+#define SPI_CTRL_EVENT_BUS_ERR_S 14UL ///< Unsupported transaction to Slave Interface
+#define SPI_CTRL_EVENT_BUS_ERR_M 15UL ///< AXI error response is returned on RRESP or BRESP
+#define SPI_CTRL_EVENT_THREAD_ERR 16UL ///< Thread error
 #define SPI_CTRL_SPI_CTRL_IDX_INST_0 0UL ///< SPI CTRL INST 0
 #define SPI_CTRL_SPI_CTRL_IDX_INST_1 1UL ///< SPI CTRL INST 1
 #define SPI_CTRL_SPI_CTRL_IDX_INST_2 2UL ///< SPI CTRL INST 2
 #define SPI_CTRL_SPI_CTRL_IDX_INST_3 3UL ///< SPI CTRL INST 3
+#define SPI_CTRL_SPI_CTRL_IDX_INST_4 4UL ///< Sysc XSPI CTRL INST 0
+#define SPI_CTRL_SPI_CTRL_IDX_INST_5 5UL ///< Sysc XSPI CTRL INST 1
 
 /**
  * @brief spi_ctrl CPER section data description
@@ -1582,12 +1612,49 @@ typedef struct {
 ********************************************/
 
 #define DDR_CTRL_EVENT_NO_EVENT 0UL ///< No Event
-#define DDR_CTRL_EVENT_DDR_CTRL 1UL ///< error detected in the DDR controller
-#define DDR_CTRL_EVENT_ECC_CORR 2UL ///< ECC correctable error
-#define DDR_CTRL_EVENT_ECC_UNCORR 3UL ///< ECC uncorrectable error
+#define DDR_CTRL_EVENT_MISC 1UL ///< error detected in the DDR controller
+#define DDR_CTRL_EVENT_RAM_CORR 2UL ///< RAM ECC correctable error
+#define DDR_CTRL_EVENT_RAM_UNCORR 3UL ///< RAM ECC uncorrectable error
 #define DDR_CTRL_CTRL_ID_INST_0 0UL ///< CTRL INST 0
 #define DDR_CTRL_CTRL_ID_INST_1 1UL ///< CTRL INST 1
 #define DDR_CTRL_CTRL_ID_NO_INST 2UL ///< No CTRL INST
+#define DDR_CTRL_MISC_INT_INFO_NO_INT_INFO 0UL ///< No Interrupt Info.
+#define DDR_CTRL_MISC_INT_INFO_BIST_COMPLETED 1UL ///< The BIST operation has been completed.
+#define DDR_CTRL_MISC_INT_INFO_DFI_INIT_TIMEOUT 2UL ///< The DFItinit-complete value has timed out.
+#define DDR_CTRL_MISC_INT_INFO_DFI_DLL_RESYNC_DONE 3UL ///< The user-initiated DLL resynchronization has completed.
+#define DDR_CTRL_MISC_INT_INFO_DFI_INIT_STATE_CHANGE 4UL ///< A state change has been detected after initialization.
+#define DDR_CTRL_MISC_INT_INFO_DFI_PHY_MASTER_ERROR 5UL ///< A DFI PHY Master Interface error has occurred.
+#define DDR_CTRL_MISC_INT_INFO_DFI_PHY_BUS_ERROR 6UL ///< Error received from the PHY on the DFI bus.
+#define DDR_CTRL_MISC_INT_INFO_DFI_UPDATE_ERROR 7UL ///< A DFI update error has occurred.
+#define DDR_CTRL_MISC_INT_INFO_FREQ_SW_COMPLETED 8UL ///< A DFS operation initiated by software completed.
+#define DDR_CTRL_MISC_INT_INFO_FREQ_SW_TIMEOUT 9UL ///< The DFS operation initiated by the software interface has timed out.
+#define DDR_CTRL_MISC_INT_INFO_FREQ_SW_IGNORED 10UL ///< The DFS request from software was ignored.
+#define DDR_CTRL_MISC_INT_INFO_FREQ_HW_COMPLETED 11UL ///< A DFS operation initiated by the hardware interface completed.
+#define DDR_CTRL_MISC_INT_INFO_FREQ_HW_TIMEOUT 12UL ///< The DFS operation initiated by the hardware interface has timed out.
+#define DDR_CTRL_MISC_INT_INFO_FREQ_HW_IGNORED 13UL ///< The DFS request from the hardware interface was ignored.
+#define DDR_CTRL_MISC_INT_INFO_INIT_MC_COMPLETED 14UL ///< The MC initialization has been completed.
+#define DDR_CTRL_MISC_INT_INFO_INIT_MEM_RESET_VALID 15UL ///< The memory reset is valid on the DFI bus.
+#define DDR_CTRL_MISC_INT_INFO_LP_TIMEOUT_ERROR 16UL ///< A Low Power Interface timeout error has occurred.
+#define DDR_CTRL_MISC_INT_INFO_LP_COMPLETED 17UL ///< The low power operation has been completed.
+#define DDR_CTRL_MISC_INT_INFO_MISC_SW_REFRESH_STATUS_SET 18UL ///< The sw requested refresh operation has resulted in a status bit being set.
+#define DDR_CTRL_MISC_INT_INFO_MISC_REFRESH_STATUS_SET 19UL ///< The refresh operation has resulted in a status bit being set.
+#define DDR_CTRL_MISC_INT_INFO_MISC_SW_MODE_ENTERED 20UL ///< The controller has entered the software-requested mode.
+#define DDR_CTRL_MISC_INT_INFO_MISC_INHIBIT_DRAM_CMD 21UL ///< The assertion of the inhibit_dram_cmd parameter has successfully inhibited the command queue.
+#define DDR_CTRL_MISC_INT_INFO_MODE_MRW_COMPLETED 22UL ///< The register interface-initiated mode register write has completed and another mode register write may be issued.
+#define DDR_CTRL_MISC_INT_INFO_MODE_MPR_READ_DONE 23UL ///< MPR read command, initiated with a software MPR_READ request, is complete.
+#define DDR_CTRL_MISC_INT_INFO_PARITY_ADDR_CTRL_ERROR 24UL ///< A parity error has been detected on the address/control bus on a registered DIMM.
+#define DDR_CTRL_MISC_INT_INFO_PARITY_WR_DATA_OVERLAP 25UL ///< An overlapping write data parity error has been detected at the memory controller boundary.
+#define DDR_CTRL_MISC_INT_INFO_PARITY_WR_DATA_ERROR 26UL ///< A write data parity error has been detected.
+#define DDR_CTRL_MISC_INT_INFO_TIMEOUT_AUTO_REFRESH_MAX_DEFICIT 27UL ///< The auto-refresh max deficit timeout has expired.
+#define DDR_CTRL_MISC_INT_INFO_TIMEOUT_LP_WAKEUP 28UL ///< The low power interface wakeup timeout has expired.
+#define DDR_CTRL_MISC_INT_INFO_TIMEOUT_DFI_UPDATE_FM 29UL ///< The DFI update FM timeout has expired.
+#define DDR_CTRL_MISC_INT_INFO_TIMEOUT_ZQ_CAL_FM 30UL ///< The ZQ cal init, cs, cl, or reset FM timeout has expired.
+#define DDR_CTRL_MISC_INT_INFO_TRAINING_ZQ_CAL_STATUS_SET 31UL ///< The ZQ calibration operation has resulted in a status bit being set.
+#define DDR_CTRL_MISC_INT_INFO_UI_INVALID_CORE_WORDS 32UL ///< The user has programmed an invalid setting associated with core words per burst.
+#define DDR_CTRL_MISC_INT_INFO_UI_WRAP_CYCLE_CROSS_PAGE 33UL ///< A wrap cycle crossing a DRAM page has been detected.
+#define DDR_CTRL_MISC_INT_INFO_UI_PORT_CMD_ERROR 34UL ///< An error occurred on the port command channel.
+#define DDR_CTRL_MISC_INT_INFO_UI_MULTI_PHYS_MEM_ACCESS 35UL ///< Multiple accesses outside the defined PHYSICAL memory space have occurred.
+#define DDR_CTRL_MISC_INT_INFO_UI_PHYS_MEM_ACCESS 36UL ///< A memory access outside the defined PHYSICAL memory space has occurred.
 
 /**
  * @brief DDR_CTRL_FIFO_FULL bitfields access descriptor
@@ -1613,7 +1680,608 @@ typedef struct {
     uint32_t event; ///< Event type identifier
     uint8_t ctrl_id; ///< CTRL instance identifier
     ddr_ctrl_fifo_full_t fifo_full; ///< fifo is full
+    uint8_t misc_int_info; ///< Controller Misc Interrupt Info
 } ddr_ctrl_section_t;
+
+/*********************************************
+* DDR_PHY CPER Section
+********************************************/
+
+#define DDR_PHY_EVENT_NO_EVENT 0UL ///< No Event
+#define DDR_PHY_EVENT_DFI_RDDATA 1UL ///< DFI read data valid for each data slice
+#define DDR_PHY_PHY_ID_INST_0 0UL ///< PHY instance 0
+#define DDR_PHY_PHY_ID_INST_1 1UL ///< PHY instance 1
+#define DDR_PHY_PHY_ID_NO_INST 2UL ///< No PHY instance
+
+/**
+ * @brief ddr_phy CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t phy_id; ///< PHY instance identifier
+    uint16_t dfi_rddata_valid_err; ///< DFI rddata valid error
+    uint16_t dfi_rddata_valid_fifo_full; ///< DFI rddata valid fifo full
+} ddr_phy_section_t;
+
+/*********************************************
+* DDR_HSIO CPER Section
+********************************************/
+
+#define DDR_HSIO_EVENT_NO_EVENT 0UL ///< No Event
+#define DDR_HSIO_EVENT_PAB 1UL ///< PAB DLL lock and unlock
+#define DDR_HSIO_HSIO_ID_INST_0 0UL ///< PHY HSIO 0
+#define DDR_HSIO_HSIO_ID_INST_1 1UL ///< PHY HSIO 1
+#define DDR_HSIO_HSIO_ID_INST_2 2UL ///< PHY HSIO 2
+#define DDR_HSIO_HSIO_ID_INST_3 3UL ///< PHY HSIO 3
+#define DDR_HSIO_HSIO_ID_INST_4 4UL ///< PHY HSIO 4
+#define DDR_HSIO_HSIO_ID_NO_INST 5UL ///< No HSIO
+
+/**
+ * @brief ddr_hsio CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t hsio_id; ///< PHY HSIO identifier
+} ddr_hsio_section_t;
+
+/*********************************************
+* SPW_CTRL CPER Section
+********************************************/
+
+#define SPW_CTRL_EVENT_NO_EVENT 0UL ///< No Event
+#define SPW_CTRL_EVENT_TX_RAM_CORR 1UL ///< Tx RAM correctable error
+#define SPW_CTRL_EVENT_TX_RAM_UNCORR 2UL ///< Tx RAM uncorrectable error
+#define SPW_CTRL_EVENT_RX_RAM_CORR 3UL ///< Rx RAM correctable error
+#define SPW_CTRL_EVENT_RX_RAM_UNCORR 4UL ///< Rx RAM uncorrectable error
+#define SPW_CTRL_EVENT_RMAP_RAM_CORR 5UL ///< RMAP RAM correctable error
+#define SPW_CTRL_EVENT_RMAP_RAM_UNCORR 6UL ///< RMAP RAM uncorrectable error
+#define SPW_CTRL_EVENT_LINK_STATE_ERR 7UL ///< SPW link state error
+#define SPW_CTRL_EVENT_PKT_DISCARD 8UL ///< Packet discarded
+#define SPW_CTRL_EVENT_EEP_RECEIVED 9UL ///< EEP received
+#define SPW_CTRL_EVENT_EEP_SENT 10UL ///< EEP sent
+#define SPW_CTRL_EVENT_TIME_CODE_ERR 11UL ///< Time code error
+#define SPW_CTRL_EVENT_PAR_ERR 12UL ///< Parity error
+#define SPW_CTRL_EVENT_ESC_ERR 13UL ///< ESC error
+#define SPW_CTRL_SPW_CTRL_IDX_INST_0 0UL ///< SYSC SPW CTRL INST
+
+/**
+ * @brief SPW_CTRL_EDAC_STS data description
+ */
+typedef struct {
+    uint8_t corr_count; ///< Number of EDAC corrections made. Saturates at max (255).
+    uint8_t uncorrected; ///< Whether an uncorrected error has occurred since last clear.
+} spw_ctrl_edac_sts_t;
+
+/**
+ * @brief SPW_CTRL payload data
+ */
+typedef union {
+    spw_ctrl_edac_sts_t edac_sts; ///< EDAC status for SPW controller errors
+} spw_ctrl_payload_t;
+
+/**
+ * @brief spw_ctrl CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t spw_ctrl_idx; ///< SPW CTRL instance identifier
+    spw_ctrl_payload_t payload; ///< Data payload
+} spw_ctrl_section_t;
+
+/*********************************************
+* SYS_DBG CPER Section
+********************************************/
+
+#define SYS_DBG_EVENT_NO_EVENT 0UL ///< No Event
+#define SYS_DBG_EVENT_S7_TRACE_RAM_CORR 1UL ///< S7 Trace RAM correctable error
+#define SYS_DBG_EVENT_S7_TRACE_RAM_UNCORR 2UL ///< S7 Trace RAM uncorrectable error
+#define SYS_DBG_EVENT_INTERRUPT_LOG_TIMESTAMP_FIFO_CORR 3UL ///< Interrupt log timestamp FIFO correctable error
+#define SYS_DBG_EVENT_INTERRUPT_LOG_TIMESTAMP_FIFO_UNCORR 4UL ///< Interrupt log timestamp FIFO uncorrectable error
+#define SYS_DBG_EVENT_INTERRUPT_LOG_TIMESTAMP_FIFO_OVERFLOW 5UL ///< Interrupt log timestamp FIFO overflow error
+#define SYS_DBG_EVENT_APPC_INTERRUPT_LOG_TIMESTAMP_FIFO_CORR 6UL ///< APPC error interrupt log timestamp FIFO correctable error
+#define SYS_DBG_EVENT_APPC_INTERRUPT_LOG_TIMESTAMP_FIFO_UNCORR 7UL ///< APPC error interrupt log timestamp FIFO uncorrectable error
+#define SYS_DBG_EVENT_APPC_INTERRUPT_LOG_TIMESTAMP_FIFO_OVERFLOW 8UL ///< APPC error interrupt log timestamp FIFO overflow error
+
+/**
+ * @brief sys_dbg CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+} sys_dbg_section_t;
+
+/*********************************************
+* ENET_EP_SB CPER Section
+********************************************/
+
+#define ENET_EP_SB_EVENT_NO_EVENT 0UL ///< No Event
+#define ENET_EP_SB_EVENT_FATAL 1UL ///< Service Bus Fatal Error interrupt (Mainly, but not limited to, multi-bit ECC errors)
+#define ENET_EP_SB_EVENT_ERROR 2UL ///< Service Bus Non-Fatal Error interrupt (Mainly, but not limited to, single-bit ECC errors)
+#define ENET_EP_SB_SB_ID_INST_0 0UL ///< Service Bus INST 0
+
+/**
+ * @brief ENET_EP_SB_AXI_PARITY_ERR bitfields access descriptor
+ */
+typedef struct {
+    uint16_t ep0:3; ///< ep0 axi parity error
+    uint16_t ep1:3; ///< ep1 axi parity error
+    uint16_t ep2:3; ///< ep2 axi parity error
+    uint16_t ep3:3; ///< ep3 axi parity error
+    uint16_t pad:4; ///< padding bits
+} enet_ep_sb_axi_parity_err_bits_t;
+
+/**
+ * @brief ENET_EP_SB_AXI_PARITY_ERR bit access and word access wrapper union
+ */
+typedef union {
+    enet_ep_sb_axi_parity_err_bits_t b; ///< Bitfields accessor
+    uint16_t w; ///< Word accessor
+} enet_ep_sb_axi_parity_err_t;
+
+/**
+ * @brief enet_ep_sb CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< ENET EP Service Bus event type
+    uint8_t sb_id; ///< Service Bus instance identifier
+    enet_ep_sb_axi_parity_err_t axi_parity_err; ///< axi parity error
+} enet_ep_sb_section_t;
+
+/*********************************************
+* ENET_EP_CORE CPER Section
+********************************************/
+
+#define ENET_EP_CORE_EVENT_NO_EVENT 0UL ///< No Event
+#define ENET_EP_CORE_EVENT_ASF 1UL ///< Automotic Safety Feature (ASF) fatal interrupt
+#define ENET_EP_CORE_EVENT_IOB 2UL ///< IO Bridge Error interrupt
+#define ENET_EP_CORE_EVENT_MMSL 3UL ///< MAC merge sublayer Error Interrupt
+#define ENET_EP_CORE_CORE_ID_INST_0 0UL ///< ENET_EP Core INST 0
+#define ENET_EP_CORE_CORE_ID_INST_1 1UL ///< ENET_EP Core INST 1
+#define ENET_EP_CORE_CORE_ID_INST_2 2UL ///< ENET_EP Core INST 2
+#define ENET_EP_CORE_CORE_ID_INST_3 3UL ///< ENET_EP Core INST 3
+
+/**
+ * @brief ENET_EP_CORE_ASF_SRAM_UNCORR_FAULT bitfields access descriptor
+ */
+typedef struct {
+    uint32_t addr:24; ///< ASF SRAM uncorrectable fault address
+    uint32_t inst:8; ///< ASF SRAM uncorrectable fault instance
+} enet_ep_core_asf_sram_uncorr_fault_bits_t;
+
+/**
+ * @brief ENET_EP_CORE_ASF_SRAM_UNCORR_FAULT bit access and word access wrapper union
+ */
+typedef union {
+    enet_ep_core_asf_sram_uncorr_fault_bits_t b; ///< Bitfields accessor
+    uint32_t w; ///< Word accessor
+} enet_ep_core_asf_sram_uncorr_fault_t;
+
+/**
+ * @brief ENET_EP_CORE_ASF_SRAM_CORR_FAULT bitfields access descriptor
+ */
+typedef struct {
+    uint32_t addr:24; ///< ASF SRAM correctable fault address
+    uint32_t inst:8; ///< ASF SRAM correctable fault instance
+} enet_ep_core_asf_sram_corr_fault_bits_t;
+
+/**
+ * @brief ENET_EP_CORE_ASF_SRAM_CORR_FAULT bit access and word access wrapper union
+ */
+typedef union {
+    enet_ep_core_asf_sram_corr_fault_bits_t b; ///< Bitfields accessor
+    uint32_t w; ///< Word accessor
+} enet_ep_core_asf_sram_corr_fault_t;
+
+/**
+ * @brief ENET_EP_CORE_ASF_PROTO_FAULT bitfields access descriptor
+ */
+typedef struct {
+    uint32_t rx_crc_err_status:1; ///< Status bit for RX packet with bad CRC.
+    uint32_t rx_short_err_status:1; ///< Status bit for RX packet too short.
+    uint32_t rx_long_err_status:1; ///< Status bit for RX packet too long.
+    uint32_t rx_symbol_err_status:1; ///< Status bit for RX packet with symbol errors.
+    uint32_t rx_length_err_status:1; ///< Status bit for RX packet with length field error.
+    uint32_t rx_ip_ck_err_status:1; ///< Status bit for RX packet IP checksum error.
+    uint32_t rx_tcp_ck_err_status:1; ///< Status bit for RX packet TCP checksum error.
+    uint32_t rx_udp_ck_err_status:1; ///< Status bit for RX packet UDP checksum error.
+    uint32_t tx_too_many_retries_status:1; ///< Status bit for too many retry attempts after collision error (half duplex only).
+    uint32_t reserved_15_9:7; ///< Reserved, read as 0, ignored on write.
+    uint32_t tx_underrun_status:1; ///< Status bit for Transmit DMA underrun occurred.
+    uint32_t tx_buff_ex_mid_status:1; ///< Status bit for Transmit buffers exhausted before end of packet.
+    uint32_t tx_hresp_err_status:1; ///< Status bit for DMA hresp error (AHB only).
+    uint32_t rx_hresp_err_status:1; ///< Status bit for DMA hresp error (AHB only).
+    uint32_t rx_overflow_status:1; ///< Status bit for DMA buffer overflow and packet was dropped.
+    uint32_t rx_dma_pkt_flush_status:1; ///< Status bit for RX packet was flushed from the DMA.
+    uint32_t pad:10; ///< padding bits
+} enet_ep_core_asf_proto_fault_bits_t;
+
+/**
+ * @brief ENET_EP_CORE_ASF_PROTO_FAULT bit access and word access wrapper union
+ */
+typedef union {
+    enet_ep_core_asf_proto_fault_bits_t b; ///< Bitfields accessor
+    uint32_t w; ///< Word accessor
+} enet_ep_core_asf_proto_fault_t;
+
+/**
+ * @brief ENET_EP_CORE_ASF_TRANS_FAULT bitfields access descriptor
+ */
+typedef struct {
+    uint32_t mac_tx_to_status:1; ///< Status bit for MAC TX lockup detection.
+    uint32_t mac_rx_to_status:1; ///< Status bit for MAC RX lockup detection.
+    uint32_t dma_tx_to_status:1; ///< Status bit for DMA TX lockup detection.
+    uint32_t dma_rx_to_status:1; ///< Status bit for DMA RX lockup detection.
+    uint32_t host_trans_to_status:1; ///< Status bit for AMBA host transaction timeouts.
+    uint32_t pad:27; ///< padding bits
+} enet_ep_core_asf_trans_fault_bits_t;
+
+/**
+ * @brief ENET_EP_CORE_ASF_TRANS_FAULT bit access and word access wrapper union
+ */
+typedef union {
+    enet_ep_core_asf_trans_fault_bits_t b; ///< Bitfields accessor
+    uint32_t w; ///< Word accessor
+} enet_ep_core_asf_trans_fault_t;
+
+/**
+ * @brief enet_ep_core CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< ENET EP Core event type
+    uint8_t core_id; ///< ENET EP Core instance identifier
+    enet_ep_core_asf_sram_uncorr_fault_t asf_sram_uncorr_fault; ///< ASF SRAM uncorrectable fault
+    enet_ep_core_asf_sram_corr_fault_t asf_sram_corr_fault; ///< ASF SRAM correctable fault
+    enet_ep_core_asf_proto_fault_t asf_proto_fault; ///< Bitmask of ASF protocol fault interrupt status
+    enet_ep_core_asf_trans_fault_t asf_trans_fault; ///< Bitmask of ASF transaction fault interrupt status
+} enet_ep_core_section_t;
+
+/*********************************************
+* ENET_EP_FRER_TX CPER Section
+********************************************/
+
+#define ENET_EP_FRER_TX_EVENT_NO_EVENT 0UL ///< No Event
+#define ENET_EP_FRER_TX_EVENT_GROUP 1UL ///< FRER TX Group Error interrupt
+#define ENET_EP_FRER_TX_FRER_TX_ID_INST_0 0UL ///< FRER_TX INST 0
+#define ENET_EP_FRER_TX_FRER_TX_ID_INST_1 1UL ///< FRER_TX INST 1
+
+/**
+ * @brief enet_ep_frer_tx CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< ENET FRER TX event type
+    uint8_t frer_tx_id; ///< FRER TX instance identifier
+} enet_ep_frer_tx_section_t;
+
+/*********************************************
+* ENET_EP_FRER_RX CPER Section
+********************************************/
+
+#define ENET_EP_FRER_RX_EVENT_NO_EVENT 0UL ///< No Event
+#define ENET_EP_FRER_RX_EVENT_GROUP 1UL ///< FRER RX Group Error interrupt
+#define ENET_EP_FRER_RX_FRER_RX_ID_INST_0 0UL ///< FRER_RX INST 0
+#define ENET_EP_FRER_RX_FRER_RX_ID_INST_1 1UL ///< FRER_RX INST 1
+
+/**
+ * @brief enet_ep_frer_rx CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< ENET FRER RX event type
+    uint8_t frer_rx_id; ///< FRER RX instance identifier
+} enet_ep_frer_rx_section_t;
+
+/*********************************************
+* SYS_NOC_FA CPER Section
+********************************************/
+
+#define SYS_NOC_FA_EVENT_NO_EVENT 0UL ///< No event
+#define SYS_NOC_FA_EVENT_FLT_SECDED_CORR_EVENT 1UL ///< FLT SECDED correctable error event
+#define SYS_NOC_FA_EVENT_FLT_SECDED_UNCORR_EVENT 2UL ///< FLT SECDED uncorrectable error event
+#define SYS_NOC_FA_EVENT_PKT_VALID_FAULT_EVENT 3UL ///< packet validity fault event
+#define SYS_NOC_FA_EVENT_CTRL_REG_PAR_EVENT 4UL ///< control register parity error event
+#define SYS_NOC_FA_EVENT_TIMEOUT_EVENT 5UL ///< Initiator NIU timeout event
+#define SYS_NOC_FA_EVENT_FSM_ERROR_EVENT 6UL ///< Internal FSM error event
+#define SYS_NOC_FA_EVENT_LN_DTP_FLT_FAULT_EVENT 7UL ///< FLT SECDED error event of datapath link block
+#define SYS_NOC_FA_EVENT_FAULT_FROM_AGG_BOTTOM_EVENT 8UL ///< fault detected from bottom aggregator
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_CPU_PERIPH_I_NIU 0UL ///< CPU Peripheral Initiator NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_CPU_SYS_I_NIU 1UL ///< CPU sys Initiator NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_DMA_MASTER_I_NIU 2UL ///< DMA Master Initiator NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SEC_DMA_MASTER_I_NIU 3UL ///< SEC DMA Master Initiator NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SPW_RMAP_I_NIU 4UL ///< SPW RMAP Initiator NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SPW_RX_I_NIU 5UL ///< SPW RX Initiator NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SPW_TX_I_NIU 6UL ///< SPW TX Initiator NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_APP_NOC_T_NIU 7UL ///< APP NoC Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_CPU_FRONT_T_NIU 8UL ///< CPU Front Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_DMA_CTRL_T_NIU 9UL ///< DMA Control Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_EDAC_CTRL_T_NIU 10UL ///< EDAC Control Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_ELAPSED_TIMER_T_NIU 11UL ///< Elapsed Timer Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_FLASH0_DATA_T_NIU 12UL ///< FLASH0 Data Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_FLASH1_DATA_T_NIU 13UL ///< FLASH1 Data Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_GPIO_T_NIU 14UL ///< GPIO Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_I2C_T_NIU 15UL ///< I2C Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_NOC_CONFIG_T_NIU 16UL ///< noc_config Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_OCR_CTRL_T_NIU 17UL ///< OCR Control Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_OCR_DATA_T_NIU 18UL ///< OCR Data Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_QSPI0_CTRL_T_NIU 19UL ///< qspi0 control Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_QSPI1_CTRL_T_NIU 20UL ///< qspi1 control Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SEC_MBOX_T_NIU 21UL ///< sec mbox Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SPW_CTRL_T_NIU 22UL ///< spw control Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SVC_NOC_CONFIG_T_NIU 23UL ///< svc_noc_config Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_SYSREG_T_NIU 24UL ///< sysreg Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_TIMERS_T_NIU 25UL ///< timers Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_UART_T_NIU 26UL ///< uart Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_WDT_T_NIU 27UL ///< wdt Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_WG_CHECKER_T_NIU 28UL ///< wgchecker Target NIU
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_TOP_AGG_APP 29UL ///< APP Top fault aggregator
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_TOP_AGG_SYS_HA 30UL ///< SYS HA Top fault aggregator
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_TOP_AGG_SVC 31UL ///< SVC Top fault aggregator
+#define SYS_NOC_FA_FAULT_SOURCE_IDX_TOP_AGG_SYS 32UL ///< SYS Top fault aggregator
+
+/**
+ * @brief sys_noc_fa CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< SysNoC fault aggregator event type
+    uint8_t fault_source_idx; ///< Error source instance identifier
+} sys_noc_fa_section_t;
+
+/*********************************************
+* NOC_OBS CPER Section
+********************************************/
+
+#define NOC_OBS_EVENT_NO_EVENT 0UL ///< No event
+#define NOC_OBS_EVENT_SLV_ERR_EVENT 1UL ///< Target error detected event
+#define NOC_OBS_EVENT_DEC_ERR_EVENT 2UL ///< Address decode error event
+#define NOC_OBS_EVENT_UNS_ERR_EVENT 3UL ///< Unsupported request type error event
+#define NOC_OBS_EVENT_DISC_ERR_EVENT 4UL ///< Disconnected target or domain event
+#define NOC_OBS_EVENT_SEC_ERR_EVENT 5UL ///< Security violation event
+#define NOC_OBS_EVENT_HIDE_ERR_EVENT 6UL ///< Hidden security violation event
+#define NOC_OBS_EVENT_TMO_ERR_EVENT 7UL ///< target NIU timeout error event
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_CPU_TARG0 0UL ///< APP NOC CPU_TARG0 observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_CPU_TARG1 1UL ///< APP NOC CPU_TARG1 observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_DDR_TARG0 2UL ///< APP NOC DDR_TARG0 observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_DDR_TARG1 3UL ///< APP NOC DDR_TARG1 observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_DDRCFG_TARG 4UL ///< APP NOC DDRCFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_DDRENC_TARG 5UL ///< APP NOC DDRENC_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_ENETEPCFG_TARG 6UL ///< APP NOC ENETEPCFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_ENETSWR_TARG 7UL ///< APP NOC ENETSWR_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_ENETSWRCFG_TARG 8UL ///< APP NOC ENETSWRCFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_IOMMUCFG_TARG 9UL ///< APP NOC IOMMUCFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_M2_TARG 10UL ///< APP NOC M2_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_M2CFG_TARG 11UL ///< APP NOC M2CFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_M3_TARG 12UL ///< APP NOC M3_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_M3CFG_TARG 13UL ///< APP NOC M3CFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_NVM_TARG 14UL ///< APP NOC NVM_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_NVMCFG_TARG 15UL ///< APP NOC NVMCFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_PCIE0_TARG 16UL ///< APP NOC PCIE0_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_PCIE0CFG_TARG 17UL ///< APP NOC PCIE0CFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_PCIE1_TARG 18UL ///< APP NOC PCIE1_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_PCIE1CFG_TARG 19UL ///< APP NOC PCIE1CFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_SYSCTLINTSTATUS 20UL ///< APP NOC SYSCTLINTSTATUS observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_USRCRYPTO_TARG 21UL ///< APP NOC USRCRYPTO_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_APP_USRCRYPTOCFG_TARG 22UL ///< APP NOC USRCRYPTOCFG_TARG observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_DDR_MAIN 23UL ///< DDR NOC observer error logger instance
+#define NOC_OBS_ERROR_LOGGER_IDX_SYS_MAIN 24UL ///< SYS NOC observer error logger instance
+
+/**
+ * @brief noc_obs CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< NoC observer error packet event type
+    uint8_t lock; ///< lock field of the logged packet header. When the Lock (Lck) bit is set, arbitration will not take place at the end of the packet.
+    uint8_t opc; ///< opc field indicates the transaction type.
+    uint16_t initFlow; ///< The initiator of the transaction.
+    uint16_t targFlow; ///< The target of the transaction.
+    uint16_t targSubRange; ///< Target subrange.
+    uint16_t seqId; ///< SequenceId of the transaction.
+    uint32_t targ_addr_lsb; ///< Address LSB field of the logged packet header.Addr indicates the start address of the transaction, expressed in bytes, in the target address space.Only valid when error is of type UNS, DISC, SEC or DEC and it has been generated within the NoC transport.
+    uint32_t targ_addr_msb; ///< Address MSB field of the logged packet header.Addr indicates the start address of the transaction, expressed in bytes, in the target address space.Only valid when error is of type UNS, DISC, SEC or DEC and it has been generated within the NoC transport.
+    uint32_t userFlags; ///< User field of the logged packet header
+    uint8_t error_logger_idx; ///< NoC observer error logger instance identifier
+} noc_obs_section_t;
+
+/*********************************************
+* DDR_NOC CPER Section
+********************************************/
+
+#define DDR_NOC_EVENT_NO_EVENT 0UL ///< No event
+#define DDR_NOC_EVENT_FLT_SECDED_CORR_EVENT 1UL ///< FLT SECDED correctable error event
+#define DDR_NOC_EVENT_FLT_SECDED_UNCORR_EVENT 2UL ///< FLT SECDED uncorrectable error event
+#define DDR_NOC_EVENT_PKT_VALID_FAULT_EVENT 3UL ///< packet validity fault event
+#define DDR_NOC_EVENT_CTRL_REG_PAR_EVENT 4UL ///< control register parity error event
+#define DDR_NOC_EVENT_TIMEOUT_EVENT 5UL ///< Initiator NIU timeout event
+#define DDR_NOC_EVENT_FSM_ERROR_EVENT 6UL ///< Internal FSM error event
+#define DDR_NOC_EVENT_COMPARATOR_TREE_FAULT_EVENT 7UL ///< comparator tree fault
+#define DDR_NOC_EVENT_RGC_CORR_FAULT_EVENT 8UL ///< redunancy generator and checker correctable error event
+#define DDR_NOC_EVENT_RGC_UNCORR_FAULT_EVENT 9UL ///< redunancy generator and checker uncorrectable error event
+#define DDR_NOC_EVENT_FAULT_FROM_AGG_BOTTOM_EVENT 10UL ///< fault detected from bottom aggregator
+#define DDR_NOC_FAULT_SOURCE_IDX_APP_A0_I_NIU 0UL ///< APP A0 Initiator NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_APP_A1_I_NIU 1UL ///< APP A1 Initiator NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_APP_B0_I_NIU 2UL ///< APP B0 Initiator NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_APP_B1_I_NIU 3UL ///< APP B1 Initiator NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_SVC_I_NIU 4UL ///< SVC Initiator NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_EDAC0_T_NIU 5UL ///< EDAC0 Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_EDAC1_T_NIU 6UL ///< EDAC1 Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_ISVC_T_NIU 7UL ///< ISVC Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_WG_0_T_NIU 8UL ///< WG_0 Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_WG_1_T_NIU 9UL ///< WG_1 Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_WG_2_T_NIU 10UL ///< WG_2 Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_WG_3_T_NIU 11UL ///< WG_3 Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_PCBI_T_NIU 12UL ///< PCBI Target NIU
+#define DDR_NOC_FAULT_SOURCE_IDX_TOP_AGG_A0_PWR 13UL ///< APP A0 Top fault aggregator
+#define DDR_NOC_FAULT_SOURCE_IDX_TOP_AGG_A1_PWR 14UL ///< APP A1 Top fault aggregator
+#define DDR_NOC_FAULT_SOURCE_IDX_TOP_AGG_B0_PWR 15UL ///< APP B0 Top fault aggregator
+#define DDR_NOC_FAULT_SOURCE_IDX_TOP_AGG_B1_PWR 16UL ///< APP B1 Top fault aggregator
+#define DDR_NOC_FAULT_SOURCE_IDX_TOP_AGG_SVC_PWR 17UL ///< SVC Top fault aggregator
+#define DDR_NOC_FAULT_SOURCE_IDX_TOP_AGG_EDAC0_PWR 18UL ///< EDAC0 Top fault aggregator
+#define DDR_NOC_FAULT_SOURCE_IDX_TOP_AGG_EDAC1_PWR 19UL ///< EDAC1 Top fault aggregator
+
+/**
+ * @brief ddr_noc CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< DDR NoC fault aggregator event type
+    uint8_t fault_source_idx; ///< Error source instance identifier
+} ddr_noc_section_t;
+
+/*********************************************
+* HPT CPER Section
+********************************************/
+
+#define HPT_EVENT_NO_EVENT 0UL ///< No Event
+#define HPT_EVENT_ELT_CNT_UNCORR 1UL ///< HPT input ELT counter uncorrectable error
+#define HPT_HPT_IDX_SYSC_HPT_INST 0UL ///< SYSC HPT INST
+
+/**
+ * @brief hpt CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< Event type identifier
+    uint8_t hpt_idx; ///< HPT instance identifier
+} hpt_section_t;
+
+/*********************************************
+* APP_NOC_FA CPER Section
+********************************************/
+
+#define APP_NOC_FA_EVENT_NO_EVENT 0UL ///< No event
+#define APP_NOC_FA_EVENT_FLT_SECDED_CORR_EVENT 1UL ///< FLT SECDED correctable error event
+#define APP_NOC_FA_EVENT_FLT_SECDED_UNCORR_EVENT 2UL ///< FLT SECDED uncorrectable error event
+#define APP_NOC_FA_EVENT_PKT_VALID_FAULT_EVENT 3UL ///< packet validity fault event
+#define APP_NOC_FA_EVENT_CTRL_REG_PAR_EVENT 4UL ///< control register parity error event
+#define APP_NOC_FA_EVENT_TIMEOUT_EVENT 5UL ///< Initiator NIU timeout event
+#define APP_NOC_FA_EVENT_FSM_ERROR_EVENT 6UL ///< Internal FSM error event
+#define APP_NOC_FA_EVENT_COMPARATOR_TREE_FAULT_EVENT 7UL ///< comparator tree fault
+#define APP_NOC_FA_EVENT_RGC_CORR_FAULT_EVENT 8UL ///< redunancy generator and checker correctable error event
+#define APP_NOC_FA_EVENT_RGC_UNCORR_FAULT_EVENT 9UL ///< redunancy generator and checker uncorrectable error event
+#define APP_NOC_FA_EVENT_FAULT_FROM_AGG_BOTTOM_EVENT 10UL ///< fault detected from bottom aggregator
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_CPU0 0UL ///< CPU0 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_CPU1 1UL ///< CPU1 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_CPU_TARG0 2UL ///< CPU targ0 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_CPU_TARG1 3UL ///< CPU targ1 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_DDR_ENCRYPT 4UL ///< ddr_encrypt NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_DDR_ENCRYPT_TARG 5UL ///< ddr_encrypt_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_DDR_TARG0 6UL ///< ddr_targ0 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_DDR_TARG1 7UL ///< ddr_targ1 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_DDR_TARG_CFG 8UL ///< ddr_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_ENET_EP 9UL ///< enet_ep NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_ENET_EP_TARG_CFG 10UL ///< enet_ep_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_ENET_SWR 11UL ///< enet_swr NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_ENET_SWR_TARG 12UL ///< enet_swr_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_ENET_SWR_TARG_CFG 13UL ///< enet_swr_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_IOMMU 14UL ///< iommu NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_IOMMU_TARG_CFG 15UL ///< iommu_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_M2 16UL ///< m2 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_M2_TARG 17UL ///< m2_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_M2_TARG_CFG 18UL ///< m2_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_M3 19UL ///< m3 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_M3_TARG 20UL ///< m3_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_M3_TARG_CFG 21UL ///< m3_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_NVM 22UL ///< nvm NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_NVM_TARG 23UL ///< nvm_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_NVM_TARG_CFG 24UL ///< nvm_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_PCIE_0 25UL ///< pcie_0 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_PCIE_0_TARG 26UL ///< pcie_0_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_PCIE_0_TARG_CFG 27UL ///< pcie_0_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_PCIE_1 28UL ///< pcie_1 NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_PCIE_1_TARG 29UL ///< pcie_1_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_PCIE_1_TARG_CFG 30UL ///< pcie_1_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_USER_CRYPTO 31UL ///< user_crypto NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_USER_CRYPTO_TARG 32UL ///< user_crypto_targ NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_NIU_USER_CRYPTO_TARG_CFG 33UL ///< user_crypto_targ_cfg NIU
+#define APP_NOC_FA_FAULT_SOURCE_IDX_CFG_TRANSPORT 34UL ///< cfg_transport
+#define APP_NOC_FA_FAULT_SOURCE_IDX_SVC 35UL ///< svc
+#define APP_NOC_FA_FAULT_SOURCE_IDX_TRANSPORT_HIGH0 36UL ///< transport_high0
+#define APP_NOC_FA_FAULT_SOURCE_IDX_TRANSPORT_HIGH1 37UL ///< transport_high1
+#define APP_NOC_FA_FAULT_SOURCE_IDX_TRANSPORT_MAIN 38UL ///< transport_main
+#define APP_NOC_FA_FAULT_SOURCE_IDX_TRANSPORT_SMF_EAST 39UL ///< transport_smf_east
+#define APP_NOC_FA_FAULT_SOURCE_IDX_TRANSPORT_SMF_WEST 40UL ///< transport_smf_west
+#define APP_NOC_FA_FAULT_SOURCE_IDX_TRANSPORT_SMF_WEST_TARG 41UL ///< transport_smf_west_targ
+
+/**
+ * @brief app_noc_fa CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< AppC NoC fault aggregator event type
+    uint8_t fault_source_idx; ///< Error source instance identifier
+} app_noc_fa_section_t;
+
+/*********************************************
+* SVC_NOC CPER Section
+********************************************/
+
+#define SVC_NOC_EVENT_NO_EVENT 0UL ///< No event
+#define SVC_NOC_EVENT_FLT_SECDED_CORR_EVENT 1UL ///< FLT SECDED correctable error event
+#define SVC_NOC_EVENT_FLT_SECDED_UNCORR_EVENT 2UL ///< FLT SECDED uncorrectable error event
+#define SVC_NOC_EVENT_PKT_VALID_FAULT_EVENT 3UL ///< packet validity fault event
+#define SVC_NOC_EVENT_CTRL_REG_PAR_EVENT 4UL ///< control register parity error event
+#define SVC_NOC_EVENT_TIMEOUT_EVENT 5UL ///< Initiator NIU timeout event
+#define SVC_NOC_EVENT_FSM_ERROR_EVENT 6UL ///< Internal FSM error event
+#define SVC_NOC_FAULT_SOURCE_IDX_SYS_CTRL_I_NIU 0UL ///< sys_ctrl Initiator NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_ACSU_GRP0_T_NIU 1UL ///< acsu_grp0 Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_ACSU_GRP1_T_NIU 2UL ///< acsu_grp1 Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_APP_GRP_T_NIU 3UL ///< app_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_APP_NOC_SERVICE_T_NIU 4UL ///< app_noc_service Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_CRYPTO_GRP_T_NIU 5UL ///< crypto_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_DDR_GRP_T_NIU 6UL ///< ddr_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_EDGE_B_T_NIU 7UL ///< edge_b Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_ENC_GRP_T_NIU 8UL ///< enc_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_EP_GRP_T_NIU 9UL ///< ep_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_M1_GRP_T_NIU 10UL ///< m1_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_M3_T_NIU 11UL ///< m3 Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_NVM_GRP_T_NIU 12UL ///< nvm_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_PCIE_CXL0_T_NIU 13UL ///< pcie_cxl0 Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_PCIE_CXL1_T_NIU 14UL ///< pcie_cxl1 Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_PCIE_GRP_T_NIU 15UL ///< pcie_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_SVC_NOC_SERVICE_T_NIU 16UL ///< svc_noc_service Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_SWR_GRP_T_NIU 17UL ///< swr_grp Target NIU
+#define SVC_NOC_FAULT_SOURCE_IDX_TOP_AGG_POWER_MAIN 18UL ///< power_main Top fault aggregator
+
+/**
+ * @brief svc_noc CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< SVC NoC fault aggregator event type
+    uint8_t fault_source_idx; ///< Error source instance identifier
+} svc_noc_section_t;
+
+/*********************************************
+* PCXL_CTRL CPER Section
+********************************************/
+
+#define PCXL_CTRL_EVENT_NO_EVENT 0UL ///< No event
+#define PCXL_CTRL_EVENT_ECC_CORR 1UL ///< ECC correctable error event
+#define PCXL_CTRL_EVENT_ECC_UNCORR 2UL ///< ECC uncorrectable error event
+#define PCXL_CTRL_CTRL_ID_INST_0 0UL ///< Controller instance 0
+#define PCXL_CTRL_CTRL_ID_INST_1 1UL ///< Controller instance 1
+#define PCXL_CTRL_CTRL_ID_NO_INST 2UL ///< No controller instance
+
+/**
+ * @brief pcxl_ctrl CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< PCIE CXL controller event type
+    uint8_t ctrl_id; ///< Error source instance identifier
+} pcxl_ctrl_section_t;
+
+/*********************************************
+* PCXL_LINK CPER Section
+********************************************/
+
+#define PCXL_LINK_EVENT_NO_EVENT 0UL ///< No event
+#define PCXL_LINK_EVENT_FATAL 1UL ///< Fatal event
+#define PCXL_LINK_EVENT_NON_FATAL 2UL ///< Non-fatal event
+#define PCXL_LINK_LINK_ID_SLICE_0_INST_0 0UL ///< Slice 0 Link instance 0
+#define PCXL_LINK_LINK_ID_SLICE_0_INST_1 1UL ///< Slice 0 Link instance 1
+#define PCXL_LINK_LINK_ID_SLICE_1_INST_0 2UL ///< Slice 1 Link instance 0
+#define PCXL_LINK_LINK_ID_SLICE_1_INST_1 3UL ///< Slice 1 Link instance 1
+#define PCXL_LINK_LINK_ID_NO_INST 4UL ///< No link instance
+
+/**
+ * @brief pcxl_link CPER section data description
+ */
+typedef struct {
+    uint32_t event; ///< PCIE CXL link event type
+    uint8_t link_id; ///< Error source instance identifier
+} pcxl_link_section_t;
 
 /**
  * @brief CPER section data union
@@ -1636,6 +2304,7 @@ typedef union {
     tvs_mon_section_t tvs_mon_section; ///< tvs_mon CPER section type
     riscv_proc_section_t riscv_proc_section; ///< riscv_proc CPER section type
     app_noc_section_t app_noc_section; ///< app_noc CPER section type
+    app_wdog_section_t app_wdog_section; ///< app_wdog CPER section type
     sram_edac_section_t sram_edac_section; ///< sram_edac CPER section type
     nvm_edac_section_t nvm_edac_section; ///< nvm_edac CPER section type
     fw_err_section_t fw_err_section; ///< fw_err CPER section type
@@ -1646,6 +2315,22 @@ typedef union {
     spi_ctrl_section_t spi_ctrl_section; ///< spi_ctrl CPER section type
     nand_ctrl_section_t nand_ctrl_section; ///< nand_ctrl CPER section type
     ddr_ctrl_section_t ddr_ctrl_section; ///< ddr_ctrl CPER section type
+    ddr_phy_section_t ddr_phy_section; ///< ddr_phy CPER section type
+    ddr_hsio_section_t ddr_hsio_section; ///< ddr_hsio CPER section type
+    spw_ctrl_section_t spw_ctrl_section; ///< spw_ctrl CPER section type
+    sys_dbg_section_t sys_dbg_section; ///< sys_dbg CPER section type
+    enet_ep_sb_section_t enet_ep_sb_section; ///< enet_ep_sb CPER section type
+    enet_ep_core_section_t enet_ep_core_section; ///< enet_ep_core CPER section type
+    enet_ep_frer_tx_section_t enet_ep_frer_tx_section; ///< enet_ep_frer_tx CPER section type
+    enet_ep_frer_rx_section_t enet_ep_frer_rx_section; ///< enet_ep_frer_rx CPER section type
+    sys_noc_fa_section_t sys_noc_fa_section; ///< sys_noc_fa CPER section type
+    noc_obs_section_t noc_obs_section; ///< noc_obs CPER section type
+    ddr_noc_section_t ddr_noc_section; ///< ddr_noc CPER section type
+    hpt_section_t hpt_section; ///< hpt CPER section type
+    app_noc_fa_section_t app_noc_fa_section; ///< app_noc_fa CPER section type
+    svc_noc_section_t svc_noc_section; ///< svc_noc CPER section type
+    pcxl_ctrl_section_t pcxl_ctrl_section; ///< pcxl_ctrl CPER section type
+    pcxl_link_section_t pcxl_link_section; ///< pcxl_link CPER section type
 } p64h_cper_section_t;
 
 

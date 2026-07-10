@@ -9,19 +9,20 @@
 #ifndef RAS_ERR_SRC_H
 #define RAS_ERR_SRC_H
 
-#include <assert.h>
+// #include <assert.h>
+#include <stdint.h>
 
 /* Autofilled Macros for decoding Error ID Enum -------------------------------- */
 ///< @brief Bit-size of the GHES ID field
-#define RAS_ERR_PACK_SRC_ID_LEN (uint32_t)5U
+#define RAS_ERR_PACK_SRC_ID_LEN (uint32_t)5UL
 ///< @brief Bit-size of the GHES structure ID field
-#define RAS_ERR_PACK_STRUCT_ID_LEN (uint32_t)6U
+#define RAS_ERR_PACK_STRUCT_ID_LEN (uint32_t)6UL
 ///< @brief Bit-size of the GHES structure instance field
-#define RAS_ERR_PACK_STRUCT_INST_ID_LEN (uint32_t)7U
+#define RAS_ERR_PACK_STRUCT_INST_ID_LEN (uint32_t)7UL
 ///< @brief Bit-size of the error serverity ID field
-#define RAS_ERR_PACK_SEV_ID_LEN (uint32_t)3U
+#define RAS_ERR_PACK_SEV_ID_LEN (uint32_t)3UL
 ///< @brief Bit-size of the error event ID field
-#define RAS_ERR_PACK_EVT_ID_LEN (uint32_t)11U
+#define RAS_ERR_PACK_EVT_ID_LEN (uint32_t)11UL
 
 ///< @brief Bit position of the RAS GHES
 #define RAS_ERR_PACK_SRC_ID_POS (uint32_t)(RAS_ERR_PACK_STRUCT_ID_POS + RAS_ERR_PACK_STRUCT_ID_LEN)
@@ -32,27 +33,27 @@
 ///< @brief Bit position of the error event severity
 #define RAS_ERR_PACK_SEV_ID_POS (uint32_t)(RAS_ERR_PACK_EVT_ID_POS + RAS_ERR_PACK_EVT_ID_LEN)
 ///< @brief Bit position of the error event related to the GHES structure
-#define RAS_ERR_PACK_EVT_ID_POS (uint32_t)0U
+#define RAS_ERR_PACK_EVT_ID_POS (uint32_t)0UL
 
 ///< @brief Bitmask for the GHES ID field
-#define RAS_ERR_PACK_SRC_ID_MASK ((uint32_t)((1U << RAS_ERR_PACK_SRC_ID_LEN) - (uint32_t)1U) << RAS_ERR_PACK_SRC_ID_POS)
+#define RAS_ERR_PACK_SRC_ID_MASK ((uint32_t)((1UL << RAS_ERR_PACK_SRC_ID_LEN) - (uint32_t)1UL) << RAS_ERR_PACK_SRC_ID_POS)
 ///< @brief Bitmask for the GHES structure ID field
-#define RAS_ERR_PACK_STRUCT_ID_MASK ((uint32_t)((1U << RAS_ERR_PACK_STRUCT_ID_LEN) - (uint32_t)1U) << RAS_ERR_PACK_STRUCT_ID_POS)
+#define RAS_ERR_PACK_STRUCT_ID_MASK ((uint32_t)((1UL << RAS_ERR_PACK_STRUCT_ID_LEN) - (uint32_t)1UL) << RAS_ERR_PACK_STRUCT_ID_POS)
 ///< @brief Bitmask for the GHES structure instance field
-#define RAS_ERR_PACK_STRUCT_INST_ID_MASK ((uint32_t)((1U << RAS_ERR_PACK_STRUCT_INST_ID_LEN) - (uint32_t)1U) << RAS_ERR_PACK_STRUCT_INST_ID_POS)
+#define RAS_ERR_PACK_STRUCT_INST_ID_MASK ((uint32_t)((1UL << RAS_ERR_PACK_STRUCT_INST_ID_LEN) - (uint32_t)1UL) << RAS_ERR_PACK_STRUCT_INST_ID_POS)
 ///< @brief Bitmask for the error severity ID field
-#define RAS_ERR_PACK_SEV_ID_MASK ((uint32_t)((1U << RAS_ERR_PACK_SEV_ID_LEN) - (uint32_t)1U) << RAS_ERR_PACK_SEV_ID_POS)
+#define RAS_ERR_PACK_SEV_ID_MASK ((uint32_t)((1UL << RAS_ERR_PACK_SEV_ID_LEN) - (uint32_t)1UL) << RAS_ERR_PACK_SEV_ID_POS)
 ///< @brief Bitmask for the error event ID field
-#define RAS_ERR_PACK_EVT_ID_MASK ((uint32_t)((1U << RAS_ERR_PACK_EVT_ID_LEN) - (uint32_t)1U) << RAS_ERR_PACK_EVT_ID_POS)
+#define RAS_ERR_PACK_EVT_ID_MASK ((uint32_t)((1UL << RAS_ERR_PACK_EVT_ID_LEN) - (uint32_t)1UL) << RAS_ERR_PACK_EVT_ID_POS)
 
 ///< @brief Bit-size of the GHES Signature field
-#define RAS_ERR_SIGN_LEN (uint32_t)4U
+#define RAS_ERR_SIGN_LEN (uint32_t)4UL
 ///< @brief Bit-size of the GHES ID field
-#define RAS_ERR_SRC_ID_LEN (uint32_t)5U
+#define RAS_ERR_SRC_ID_LEN (uint32_t)5UL
 ///< @brief Bit-size of the GHES structure ID field
-#define RAS_ERR_STRUCT_ID_LEN (uint32_t)6U
+#define RAS_ERR_STRUCT_ID_LEN (uint32_t)6UL
 ///< @brief Bit-size of the error event ID field
-#define RAS_ERR_EVT_ID_LEN (uint32_t)11U
+#define RAS_ERR_EVT_ID_LEN (uint32_t)11UL
 
 ///< @brief RAS GHES signature
 #define RAS_ERR_SIGN 0xAU
@@ -63,19 +64,19 @@
 ///< @brief Bit position of the GHES structure
 #define RAS_ERR_STRUCT_ID_POS (uint32_t)(RAS_ERR_EVT_ID_POS + RAS_ERR_EVT_ID_LEN)
 ///< @brief Bit position of the error event related to the GHES structure
-#define RAS_ERR_EVT_ID_POS (uint32_t)(0U)
+#define RAS_ERR_EVT_ID_POS (uint32_t)(0UL)
 
 ///< @brief Bitmask for the GHES Signature field
-#define RAS_ERR_SIGN_MASK ((uint32_t)((1U << RAS_ERR_SIGN_LEN) - (uint32_t)1U) << RAS_ERR_SIGN_POS)
+#define RAS_ERR_SIGN_MASK ((uint32_t)((1UL << RAS_ERR_SIGN_LEN) - (uint32_t)1UL) << RAS_ERR_SIGN_POS)
 ///< @brief Bitmask for the GHES ID field
-#define RAS_ERR_SRC_ID_MASK ((uint32_t)((1U << RAS_ERR_SRC_ID_LEN) - (uint32_t)1U) << RAS_ERR_SRC_ID_POS)
+#define RAS_ERR_SRC_ID_MASK ((uint32_t)((1UL << RAS_ERR_SRC_ID_LEN) - (uint32_t)1UL) << RAS_ERR_SRC_ID_POS)
 ///< @brief Bitmask for the GHES structure ID field
-#define RAS_ERR_STRUCT_ID_MASK ((uint32_t)((1U << RAS_ERR_STRUCT_ID_LEN) - (uint32_t)1U) << RAS_ERR_STRUCT_ID_POS)
+#define RAS_ERR_STRUCT_ID_MASK ((uint32_t)((1UL << RAS_ERR_STRUCT_ID_LEN) - (uint32_t)1UL) << RAS_ERR_STRUCT_ID_POS)
 ///< @brief Bitmask for the error event ID field
-#define RAS_ERR_EVT_ID_MASK ((uint32_t)((1U << RAS_ERR_EVT_ID_LEN) - (uint32_t)1U) << RAS_ERR_EVT_ID_POS)
+#define RAS_ERR_EVT_ID_MASK ((uint32_t)((1UL << RAS_ERR_EVT_ID_LEN) - (uint32_t)1UL) << RAS_ERR_EVT_ID_POS)
 
 ///< @brief Value used to define a portion of the RAS error encoding as Not-Available
-#define RAS_NA 0U
+#define RAS_NA 0UL
 
 ///< @brief Encoding rule for the RAS errors
 #define RAS_ERROR_PACK(_source, _structure, _structure_id, _severity, _error) (((_source << RAS_ERR_PACK_SRC_ID_POS) & RAS_ERR_PACK_SRC_ID_MASK) | ((_structure << RAS_ERR_PACK_STRUCT_ID_POS) & RAS_ERR_PACK_STRUCT_ID_MASK) | ((_structure_id << RAS_ERR_PACK_STRUCT_INST_ID_POS) & RAS_ERR_PACK_STRUCT_INST_ID_MASK) | ((_severity << RAS_ERR_PACK_SEV_ID_POS) & RAS_ERR_PACK_SEV_ID_MASK) | ((_error << RAS_ERR_PACK_EVT_ID_POS) & RAS_ERR_PACK_EVT_ID_MASK)) 
@@ -109,14 +110,19 @@
 typedef enum p64h_ghes_id {
     APP_MEM = 0, ///< APP_MEM generic hardware error source
     APP_NOC = 1, ///< APP_NOC generic hardware error source
-    APP_X288 = 2, ///< APP_X288 generic hardware error source
-    CLOCK = 3, ///< CLOCK generic hardware error source
-    DDR = 4, ///< DDR generic hardware error source
-    DDR_NOC = 5, ///< DDR_NOC generic hardware error source
-    ENET = 6, ///< ENET generic hardware error source
-    NVM = 7, ///< NVM generic hardware error source
-    SEC = 8, ///< SEC generic hardware error source
-    SYS = 9, ///< SYS generic hardware error source
+    APP_PERIPH = 2, ///< APP_PERIPH generic hardware error source
+    APP_X288 = 3, ///< APP_X288 generic hardware error source
+    CLOCK = 4, ///< CLOCK generic hardware error source
+    DDR = 5, ///< DDR generic hardware error source
+    DDR_NOC = 6, ///< DDR_NOC generic hardware error source
+    ENET = 7, ///< ENET generic hardware error source
+    ENET_EP = 8, ///< ENET_EP generic hardware error source
+    NVM = 9, ///< NVM generic hardware error source
+    PCXL = 10, ///< PCXL generic hardware error source
+    SEC = 11, ///< SEC generic hardware error source
+    SVC_NOC = 12, ///< SVC_NOC generic hardware error source
+    SYS = 13, ///< SYS generic hardware error source
+    SYS_NOC = 14, ///< SYS_NOC generic hardware error source
     GHES_TYPES_MAX ///< Maximum value of p64h_ghes_id_t enum
 } p64h_ghes_id_t;
 
@@ -133,8 +139,21 @@ typedef enum {
  */
 typedef enum {
     APP_NOC_STRUCT_WGC = 0, ///< WGC structure ID from the APP_NOC
+     APP_NOC_STRUCT_INITIATORS = 1, ///< INITIATORS structure ID from the APP_NOC
+     APP_NOC_STRUCT_TARGETS = 2, ///< TARGETS structure ID from the APP_NOC
+     APP_NOC_STRUCT_TOP_FAULT_AGG = 3, ///< TOP_FAULT_AGG structure ID from the APP_NOC
+     APP_NOC_STRUCT_DTP_LN = 4, ///< DTP_LN structure ID from the APP_NOC
+     APP_NOC_STRUCT_OBSERVER = 5, ///< OBSERVER structure ID from the APP_NOC
      APP_NOC_STRUCT_LAST ///< Last value for possible structure within the app_noc GHE
 } p64h_ras_app_noc_struc_t;
+
+/**
+ * @brief Definitions of all structures within the APP_PERIPH GHES
+ */
+typedef enum {
+    APP_PERIPH_STRUCT_WDOG = 0, ///< WDOG structure ID from the APP_PERIPH
+     APP_PERIPH_STRUCT_LAST ///< Last value for possible structure within the app_periph GHE
+} p64h_ras_app_periph_struc_t;
 
 /**
  * @brief Definitions of all structures within the APP_X288 GHES
@@ -162,6 +181,8 @@ typedef enum {
 typedef enum {
     DDR_STRUCT_EDAC = 0, ///< EDAC structure ID from the DDR
      DDR_STRUCT_CTRL = 1, ///< CTRL structure ID from the DDR
+     DDR_STRUCT_PHY = 2, ///< PHY structure ID from the DDR
+     DDR_STRUCT_HSIO = 3, ///< HSIO structure ID from the DDR
      DDR_STRUCT_LAST ///< Last value for possible structure within the ddr GHE
 } p64h_ras_ddr_struc_t;
 
@@ -171,6 +192,8 @@ typedef enum {
 typedef enum {
     DDR_NOC_STRUCT_INITIATORS = 0, ///< INITIATORS structure ID from the DDR_NOC
      DDR_NOC_STRUCT_TARGETS = 1, ///< TARGETS structure ID from the DDR_NOC
+     DDR_NOC_STRUCT_TOP_FAULT_AGG = 2, ///< TOP_FAULT_AGG structure ID from the DDR_NOC
+     DDR_NOC_STRUCT_OBSERVER = 3, ///< OBSERVER structure ID from the DDR_NOC
      DDR_NOC_STRUCT_LAST ///< Last value for possible structure within the ddr_noc GHE
 } p64h_ras_ddr_noc_struc_t;
 
@@ -188,8 +211,20 @@ typedef enum {
      ENET_STRUCT_PIER_RDMA_MISC = 7, ///< PIER_RDMA_MISC structure ID from the ENET
      ENET_STRUCT_ANACL32OAM = 8, ///< ANACL32OAM structure ID from the ENET
      ENET_STRUCT_MISC = 9, ///< MISC structure ID from the ENET
+     ENET_STRUCT_TCAM_ECC = 10, ///< TCAM_ECC structure ID from the ENET
      ENET_STRUCT_LAST ///< Last value for possible structure within the enet GHE
 } p64h_ras_enet_struc_t;
+
+/**
+ * @brief Definitions of all structures within the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_STRUCT_SB = 0, ///< SB structure ID from the ENET_EP
+     ENET_EP_STRUCT_CORE = 1, ///< CORE structure ID from the ENET_EP
+     ENET_EP_STRUCT_FRER_TX = 2, ///< FRER_TX structure ID from the ENET_EP
+     ENET_EP_STRUCT_FRER_RX = 3, ///< FRER_RX structure ID from the ENET_EP
+     ENET_EP_STRUCT_LAST ///< Last value for possible structure within the enet_ep GHE
+} p64h_ras_enet_ep_struc_t;
 
 /**
  * @brief Definitions of all structures within the NVM GHES
@@ -202,6 +237,15 @@ typedef enum {
      NVM_STRUCT_NAND_CTRL = 4, ///< NAND_CTRL structure ID from the NVM
      NVM_STRUCT_LAST ///< Last value for possible structure within the nvm GHE
 } p64h_ras_nvm_struc_t;
+
+/**
+ * @brief Definitions of all structures within the PCXL GHES
+ */
+typedef enum {
+    PCXL_STRUCT_CTRL = 0, ///< CTRL structure ID from the PCXL
+     PCXL_STRUCT_LINK = 1, ///< LINK structure ID from the PCXL
+     PCXL_STRUCT_LAST ///< Last value for possible structure within the pcxl GHE
+} p64h_ras_pcxl_struc_t;
 
 /**
  * @brief Definitions of all structures within the SEC GHES
@@ -226,13 +270,40 @@ typedef enum {
 } p64h_ras_sec_struc_t;
 
 /**
+ * @brief Definitions of all structures within the SVC_NOC GHES
+ */
+typedef enum {
+    SVC_NOC_STRUCT_INITIATORS = 0, ///< INITIATORS structure ID from the SVC_NOC
+     SVC_NOC_STRUCT_TARGETS = 1, ///< TARGETS structure ID from the SVC_NOC
+     SVC_NOC_STRUCT_TOP_FAULT_AGG = 2, ///< TOP_FAULT_AGG structure ID from the SVC_NOC
+     SVC_NOC_STRUCT_LAST ///< Last value for possible structure within the svc_noc GHE
+} p64h_ras_svc_noc_struc_t;
+
+/**
  * @brief Definitions of all structures within the SYS GHES
  */
 typedef enum {
     SYS_STRUCT_OCR = 0, ///< OCR structure ID from the SYS
      SYS_STRUCT_S7 = 1, ///< S7 structure ID from the SYS
+     SYS_STRUCT_SRAM_EDAC = 2, ///< SRAM_EDAC structure ID from the SYS
+     SYS_STRUCT_SPW_CTRL = 3, ///< SPW_CTRL structure ID from the SYS
+     SYS_STRUCT_DMA = 4, ///< DMA structure ID from the SYS
+     SYS_STRUCT_SPI_CTRL = 5, ///< SPI_CTRL structure ID from the SYS
+     SYS_STRUCT_HPT = 6, ///< HPT structure ID from the SYS
      SYS_STRUCT_LAST ///< Last value for possible structure within the sys GHE
 } p64h_ras_sys_struc_t;
+
+/**
+ * @brief Definitions of all structures within the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_STRUCT_INITIATORS = 0, ///< INITIATORS structure ID from the SYS_NOC
+     SYS_NOC_STRUCT_TARGETS = 1, ///< TARGETS structure ID from the SYS_NOC
+     SYS_NOC_STRUCT_TOP_FAULT_AGG = 2, ///< TOP_FAULT_AGG structure ID from the SYS_NOC
+     SYS_NOC_STRUCT_OBSERVER = 3, ///< OBSERVER structure ID from the SYS_NOC
+     SYS_NOC_STRUCT_DTP_LN = 4, ///< DTP_LN structure ID from the SYS_NOC
+     SYS_NOC_STRUCT_LAST ///< Last value for possible structure within the sys_noc GHE
+} p64h_ras_sys_noc_struc_t;
 
 /**
  * @brief Generic GHES structure ID container
@@ -241,14 +312,19 @@ typedef union {
     uint32_t w; ///< Word access
     p64h_ras_app_mem_struc_t app_mem_struc; ///< app_mem structure IDs
     p64h_ras_app_noc_struc_t app_noc_struc; ///< app_noc structure IDs
+    p64h_ras_app_periph_struc_t app_periph_struc; ///< app_periph structure IDs
     p64h_ras_app_x288_struc_t app_x288_struc; ///< app_x288 structure IDs
     p64h_ras_clock_struc_t clock_struc; ///< clock structure IDs
     p64h_ras_ddr_struc_t ddr_struc; ///< ddr structure IDs
     p64h_ras_ddr_noc_struc_t ddr_noc_struc; ///< ddr_noc structure IDs
     p64h_ras_enet_struc_t enet_struc; ///< enet structure IDs
+    p64h_ras_enet_ep_struc_t enet_ep_struc; ///< enet_ep structure IDs
     p64h_ras_nvm_struc_t nvm_struc; ///< nvm structure IDs
+    p64h_ras_pcxl_struc_t pcxl_struc; ///< pcxl structure IDs
     p64h_ras_sec_struc_t sec_struc; ///< sec structure IDs
+    p64h_ras_svc_noc_struc_t svc_noc_struc; ///< svc_noc structure IDs
     p64h_ras_sys_struc_t sys_struc; ///< sys structure IDs
+    p64h_ras_sys_noc_struc_t sys_noc_struc; ///< sys_noc structure IDs
 } p64h_ras_generic_struc_id_t;
 
 /**
@@ -259,6 +335,220 @@ typedef enum {
     APP_MEM_OCR_1, ///< Instance 1 of structure ocr
     APP_MEM_OCR_INST_LAST, ///< Number of possible instances within the OCR structure of the APP_MEM GH
 } p64h_ras_app_mem_ocr_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_DTP_LN_ENET_EP_CDC_2 = 0, ///< Instance enet_ep_cdc_2 of structure dtp_ln
+    APP_NOC_DTP_LN_M2_CDC, ///< Instance m2_cdc of structure dtp_ln
+    APP_NOC_DTP_LN_M2_CDC1, ///< Instance m2_cdc1 of structure dtp_ln
+    APP_NOC_DTP_LN_M2_CDC2, ///< Instance m2_cdc2 of structure dtp_ln
+    APP_NOC_DTP_LN_M3_CDC_2, ///< Instance m3_cdc_2 of structure dtp_ln
+    APP_NOC_DTP_LN_REQ_CDC_CPU0_3, ///< Instance req_cdc_cpu0_3 of structure dtp_ln
+    APP_NOC_DTP_LN_REQ_CDC_CPU0_4, ///< Instance req_cdc_cpu0_4 of structure dtp_ln
+    APP_NOC_DTP_LN_REQ_CDC_CPU1_3, ///< Instance req_cdc_cpu1_3 of structure dtp_ln
+    APP_NOC_DTP_LN_REQ_CDC_CPU1_4, ///< Instance req_cdc_cpu1_4 of structure dtp_ln
+    APP_NOC_DTP_LN_REQ_CDC_DDR_ENC_2, ///< Instance req_cdc_ddr_enc_2 of structure dtp_ln
+    APP_NOC_DTP_LN_REQ_CDC_PCIE0_2, ///< Instance req_cdc_pcie0_2 of structure dtp_ln
+    APP_NOC_DTP_LN_REQ_CDC_PCIE1_2, ///< Instance req_cdc_pcie1_2 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_CPU0_7, ///< Instance rsp_cdc_cpu0_7 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_CPU0_8, ///< Instance rsp_cdc_cpu0_8 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_CPU1_7, ///< Instance rsp_cdc_cpu1_7 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_CPU1_8, ///< Instance rsp_cdc_cpu1_8 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_DDR_ENC_5, ///< Instance rsp_cdc_ddr_enc_5 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_DDR_ENC_6, ///< Instance rsp_cdc_ddr_enc_6 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_PCIE0_5, ///< Instance rsp_cdc_pcie0_5 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_PCIE0_6, ///< Instance rsp_cdc_pcie0_6 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_PCIE1_5, ///< Instance rsp_cdc_pcie1_5 of structure dtp_ln
+    APP_NOC_DTP_LN_RSP_CDC_PCIE1_6, ///< Instance rsp_cdc_pcie1_6 of structure dtp_ln
+    APP_NOC_DTP_LN_TRANS_CDC_1RESP002, ///< Instance trans_cdc_1Resp002 of structure dtp_ln
+    APP_NOC_DTP_LN_TRANS_CDC_2RESP001, ///< Instance trans_cdc_2Resp001 of structure dtp_ln
+    APP_NOC_DTP_LN_TRANS_CDC_7, ///< Instance trans_cdc_7 of structure dtp_ln
+    APP_NOC_DTP_LN_TRANS_CDC_7RESP002, ///< Instance trans_cdc_7Resp002 of structure dtp_ln
+    APP_NOC_DTP_LN_INST_LAST, ///< Number of possible instances within the DTP_LN structure of the APP_NOC GH
+} p64h_ras_app_noc_dtp_ln_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_INITIATORS_CPU_CLSTR0_MEM = 0, ///< Instance cpu_clstr0_mem of structure initiators
+    APP_NOC_INITIATORS_CPU_CLSTR0_SYS, ///< Instance cpu_clstr0_sys of structure initiators
+    APP_NOC_INITIATORS_CPU_CLSTR1_MEM, ///< Instance cpu_clstr1_mem of structure initiators
+    APP_NOC_INITIATORS_CPU_CLSTR1_SYS, ///< Instance cpu_clstr1_sys of structure initiators
+    APP_NOC_INITIATORS_DDR_ENCRYPT_I, ///< Instance ddr_encrypt_i of structure initiators
+    APP_NOC_INITIATORS_ENET_EP_0, ///< Instance enet_ep_0 of structure initiators
+    APP_NOC_INITIATORS_ENET_EP_1, ///< Instance enet_ep_1 of structure initiators
+    APP_NOC_INITIATORS_ENET_EP_2, ///< Instance enet_ep_2 of structure initiators
+    APP_NOC_INITIATORS_ENET_EP_3, ///< Instance enet_ep_3 of structure initiators
+    APP_NOC_INITIATORS_ENET_SWR_RDMA1_PIE_HIGHBW, ///< Instance enet_swr_rdma1_pie_highbw of structure initiators
+    APP_NOC_INITIATORS_ENET_SWR_RDMA1_ROCE_HIGHBW, ///< Instance enet_swr_rdma1_roce_highbw of structure initiators
+    APP_NOC_INITIATORS_ENET_SWR_RDMA1_ROCE_LOWBW, ///< Instance enet_swr_rdma1_roce_lowbw of structure initiators
+    APP_NOC_INITIATORS_ENET_SWR_RDMA2_PIE_HIGHBW, ///< Instance enet_swr_rdma2_pie_highbw of structure initiators
+    APP_NOC_INITIATORS_ENET_SWR_RDMA2_ROCE_HIGHBW, ///< Instance enet_swr_rdma2_roce_highbw of structure initiators
+    APP_NOC_INITIATORS_ENET_SWR_RDMA2_ROCE_LOWBW, ///< Instance enet_swr_rdma2_roce_lowbw of structure initiators
+    APP_NOC_INITIATORS_IOMMU_0_PDS, ///< Instance iommu_0_pds of structure initiators
+    APP_NOC_INITIATORS_IOMMU_1_PDS, ///< Instance iommu_1_pds of structure initiators
+    APP_NOC_INITIATORS_M2_SPW0, ///< Instance m2_spw0 of structure initiators
+    APP_NOC_INITIATORS_M2_SPW1, ///< Instance m2_spw1 of structure initiators
+    APP_NOC_INITIATORS_M2_USB0, ///< Instance m2_usb0 of structure initiators
+    APP_NOC_INITIATORS_M2_USB1, ///< Instance m2_usb1 of structure initiators
+    APP_NOC_INITIATORS_M3_APPDMA0, ///< Instance m3_appdma0 of structure initiators
+    APP_NOC_INITIATORS_M3_APPDMA1, ///< Instance m3_appdma1 of structure initiators
+    APP_NOC_INITIATORS_M3_TRACE_SOK, ///< Instance m3_trace_sok of structure initiators
+    APP_NOC_INITIATORS_NVM_DMA0, ///< Instance nvm_dma0 of structure initiators
+    APP_NOC_INITIATORS_NVM_DMA1, ///< Instance nvm_dma1 of structure initiators
+    APP_NOC_INITIATORS_NVM_SD_DMA0, ///< Instance nvm_sd_dma0 of structure initiators
+    APP_NOC_INITIATORS_NVM_SD_DMA1, ///< Instance nvm_sd_dma1 of structure initiators
+    APP_NOC_INITIATORS_PCIE_0_CTL0_I, ///< Instance pcie_0_ctl0_i of structure initiators
+    APP_NOC_INITIATORS_PCIE_0_CTL1_I, ///< Instance pcie_0_ctl1_i of structure initiators
+    APP_NOC_INITIATORS_PCIE_1_CTL0_I, ///< Instance pcie_1_ctl0_i of structure initiators
+    APP_NOC_INITIATORS_PCIE_1_CTL1_I, ///< Instance pcie_1_ctl1_i of structure initiators
+    APP_NOC_INITIATORS_SERVICE_NOC_INITIATOR, ///< Instance service_noc_initiator of structure initiators
+    APP_NOC_INITIATORS_SYS_NOC, ///< Instance sys_noc of structure initiators
+    APP_NOC_INITIATORS_USER_CRYPTO_I, ///< Instance user_crypto_i of structure initiators
+    APP_NOC_INITIATORS_INST_LAST, ///< Number of possible instances within the INITIATORS structure of the APP_NOC GH
+} p64h_ras_app_noc_initiators_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_OBSERVER_CPU_TARG0 = 0, ///< Instance cpu_targ0 of structure observer
+    APP_NOC_OBSERVER_CPU_TARG1, ///< Instance cpu_targ1 of structure observer
+    APP_NOC_OBSERVER_DDR_TARG0, ///< Instance ddr_targ0 of structure observer
+    APP_NOC_OBSERVER_DDR_TARG1, ///< Instance ddr_targ1 of structure observer
+    APP_NOC_OBSERVER_DDRCFG_TARG, ///< Instance ddrcfg_targ of structure observer
+    APP_NOC_OBSERVER_DDRENC_TARG, ///< Instance ddrenc_targ of structure observer
+    APP_NOC_OBSERVER_ENETEPCFG_TARG, ///< Instance enetepcfg_targ of structure observer
+    APP_NOC_OBSERVER_ENETSWR_TARG, ///< Instance enetswr_targ of structure observer
+    APP_NOC_OBSERVER_ENETSWRCFG_TARG, ///< Instance enetswrcfg_targ of structure observer
+    APP_NOC_OBSERVER_IOMMUCFG_TARG, ///< Instance iommucfg_targ of structure observer
+    APP_NOC_OBSERVER_M2_TARG, ///< Instance m2_targ of structure observer
+    APP_NOC_OBSERVER_M2CFG_TARG, ///< Instance m2cfg_targ of structure observer
+    APP_NOC_OBSERVER_M3_TARG, ///< Instance m3_targ of structure observer
+    APP_NOC_OBSERVER_M3CFG_TARG, ///< Instance m3cfg_targ of structure observer
+    APP_NOC_OBSERVER_NVM_TARG, ///< Instance nvm_targ of structure observer
+    APP_NOC_OBSERVER_NVMCFG_TARG, ///< Instance nvmcfg_targ of structure observer
+    APP_NOC_OBSERVER_PCIE0_TARG, ///< Instance pcie0_targ of structure observer
+    APP_NOC_OBSERVER_PCIE0CFG_TARG, ///< Instance pcie0cfg_targ of structure observer
+    APP_NOC_OBSERVER_PCIE1_TARG, ///< Instance pcie1_targ of structure observer
+    APP_NOC_OBSERVER_PCIE1CFG_TARG, ///< Instance pcie1cfg_targ of structure observer
+    APP_NOC_OBSERVER_SYSCTLINTSTATUS, ///< Instance sysctlintstatus of structure observer
+    APP_NOC_OBSERVER_USRCRYPTO_TARG, ///< Instance usrcrypto_targ of structure observer
+    APP_NOC_OBSERVER_USRCRYPTOCFG_TARG, ///< Instance usrcryptocfg_targ of structure observer
+    APP_NOC_OBSERVER_INST_LAST, ///< Number of possible instances within the OBSERVER structure of the APP_NOC GH
+} p64h_ras_app_noc_observer_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_TARGETS_CPU_CLSTR0_FRONT = 0, ///< Instance cpu_clstr0_front of structure targets
+    APP_NOC_TARGETS_CPU_CLSTR0_PMC, ///< Instance cpu_clstr0_pmc of structure targets
+    APP_NOC_TARGETS_CPU_CLSTR1_FRONT, ///< Instance cpu_clstr1_front of structure targets
+    APP_NOC_TARGETS_CPU_CLSTR1_PMC, ///< Instance cpu_clstr1_pmc of structure targets
+    APP_NOC_TARGETS_DDR_A_0, ///< Instance ddr_a_0 of structure targets
+    APP_NOC_TARGETS_DDR_A_1, ///< Instance ddr_a_1 of structure targets
+    APP_NOC_TARGETS_DDR_B_0, ///< Instance ddr_b_0 of structure targets
+    APP_NOC_TARGETS_DDR_B_1, ///< Instance ddr_b_1 of structure targets
+    APP_NOC_TARGETS_DDR_CFG, ///< Instance ddr_cfg of structure targets
+    APP_NOC_TARGETS_DDR_ENCRYPT_HP_CSR, ///< Instance ddr_encrypt_hp_csr of structure targets
+    APP_NOC_TARGETS_DDR_ENCRYPT_T, ///< Instance ddr_encrypt_t of structure targets
+    APP_NOC_TARGETS_ENET_EP_CFG, ///< Instance enet_ep_cfg of structure targets
+    APP_NOC_TARGETS_ENET_SWR_RDMA1_MCHP_CFG, ///< Instance enet_swr_rdma1_mchp_cfg of structure targets
+    APP_NOC_TARGETS_ENET_SWR_RDMA1_ROCE_COMMAND, ///< Instance enet_swr_rdma1_roce_command of structure targets
+    APP_NOC_TARGETS_ENET_SWR_RDMA2_MCHP_CFG, ///< Instance enet_swr_rdma2_mchp_cfg of structure targets
+    APP_NOC_TARGETS_ENET_SWR_RDMA2_ROCE_COMMAND, ///< Instance enet_swr_rdma2_roce_command of structure targets
+    APP_NOC_TARGETS_ENET_SWR_SWITCH_CFG, ///< Instance enet_swr_switch_cfg of structure targets
+    APP_NOC_TARGETS_ENET_SWR_TOP_CFG, ///< Instance enet_swr_top_cfg of structure targets
+    APP_NOC_TARGETS_IOMMU_0_CFG, ///< Instance iommu_0_cfg of structure targets
+    APP_NOC_TARGETS_IOMMU_1_CFG, ///< Instance iommu_1_cfg of structure targets
+    APP_NOC_TARGETS_IOMMU_SS_CFG, ///< Instance iommu_ss_cfg of structure targets
+    APP_NOC_TARGETS_M2_HP_SPW_CSR, ///< Instance m2_hp_spw_csr of structure targets
+    APP_NOC_TARGETS_M2_JTAG_SPI, ///< Instance m2_jtag_spi of structure targets
+    APP_NOC_TARGETS_M2_OTHER_0, ///< Instance m2_other_0 of structure targets
+    APP_NOC_TARGETS_M2_OTHER_1, ///< Instance m2_other_1 of structure targets
+    APP_NOC_TARGETS_M3_APPDMA0_HP_CSR, ///< Instance m3_appdma0_hp_csr of structure targets
+    APP_NOC_TARGETS_M3_APPDMA1_HP_CSR, ///< Instance m3_appdma1_hp_csr of structure targets
+    APP_NOC_TARGETS_M3_IPC_0, ///< Instance m3_ipc_0 of structure targets
+    APP_NOC_TARGETS_M3_IPC_1, ///< Instance m3_ipc_1 of structure targets
+    APP_NOC_TARGETS_M3_NMRA0_T, ///< Instance m3_nmra0_t of structure targets
+    APP_NOC_TARGETS_M3_NMRA1_T, ///< Instance m3_nmra1_t of structure targets
+    APP_NOC_TARGETS_M3_OCR0_MEM, ///< Instance m3_ocr0_mem of structure targets
+    APP_NOC_TARGETS_M3_OCR1_MEM, ///< Instance m3_ocr1_mem of structure targets
+    APP_NOC_TARGETS_M3_OTHER, ///< Instance m3_other of structure targets
+    APP_NOC_TARGETS_NVM_EDAC0, ///< Instance nvm_edac0 of structure targets
+    APP_NOC_TARGETS_NVM_EDAC1, ///< Instance nvm_edac1 of structure targets
+    APP_NOC_TARGETS_NVM_SRAM_EDAC0_0, ///< Instance nvm_sram_edac0_0 of structure targets
+    APP_NOC_TARGETS_NVM_SRAM_EDAC0_1, ///< Instance nvm_sram_edac0_1 of structure targets
+    APP_NOC_TARGETS_NVM_SRAM_EDAC1_0, ///< Instance nvm_sram_edac1_0 of structure targets
+    APP_NOC_TARGETS_NVM_SRAM_EDAC1_1, ///< Instance nvm_sram_edac1_1 of structure targets
+    APP_NOC_TARGETS_NVM_SRAM_EDAC2_0, ///< Instance nvm_sram_edac2_0 of structure targets
+    APP_NOC_TARGETS_NVM_SRAM_EDAC2_1, ///< Instance nvm_sram_edac2_1 of structure targets
+    APP_NOC_TARGETS_NVM_SS_CFG, ///< Instance nvm_ss_cfg of structure targets
+    APP_NOC_TARGETS_PCIE_0_CFG, ///< Instance pcie_0_cfg of structure targets
+    APP_NOC_TARGETS_PCIE_0_CTL0_T, ///< Instance pcie_0_ctl0_t of structure targets
+    APP_NOC_TARGETS_PCIE_0_CTL1_T, ///< Instance pcie_0_ctl1_t of structure targets
+    APP_NOC_TARGETS_PCIE_1_CFG, ///< Instance pcie_1_cfg of structure targets
+    APP_NOC_TARGETS_PCIE_1_CTL0_T, ///< Instance pcie_1_ctl0_t of structure targets
+    APP_NOC_TARGETS_PCIE_1_CTL1_T, ///< Instance pcie_1_ctl1_t of structure targets
+    APP_NOC_TARGETS_SERVICE_BUS_SERVICE, ///< Instance service_bus_service of structure targets
+    APP_NOC_TARGETS_SYS_CTL_INT_STATUS, ///< Instance sys_ctl_int_status of structure targets
+    APP_NOC_TARGETS_USER_CRYPTO_CFG, ///< Instance user_crypto_cfg of structure targets
+    APP_NOC_TARGETS_USER_CRYPTO_T, ///< Instance user_crypto_t of structure targets
+    APP_NOC_TARGETS_INST_LAST, ///< Number of possible instances within the TARGETS structure of the APP_NOC GH
+} p64h_ras_app_noc_targets_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_TOP_FAULT_AGG_CFG_TRANSPORT_PWR = 0, ///< Instance cfg_transport_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_CPU0_PWR, ///< Instance niu_cpu0_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_CPU1_PWR, ///< Instance niu_cpu1_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_CPU_TARG0_PWR, ///< Instance niu_cpu_targ0_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_CPU_TARG1_PWR, ///< Instance niu_cpu_targ1_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_DDR_ENCRYPT_PWR, ///< Instance niu_ddr_encrypt_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_DDR_ENCRYPT_TARG_PWR, ///< Instance niu_ddr_encrypt_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_DDR_TARG0_PWR, ///< Instance niu_ddr_targ0_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_DDR_TARG1_PWR, ///< Instance niu_ddr_targ1_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_DDR_TARG_CFG_PWR, ///< Instance niu_ddr_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_ENET_EP_PWR, ///< Instance niu_enet_ep_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_ENET_EP_TARG_CFG_PWR, ///< Instance niu_enet_ep_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_ENET_SWR_PWR, ///< Instance niu_enet_swr_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_ENET_SWR_TARG_CFG_PWR, ///< Instance niu_enet_swr_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_ENET_SWR_TARG_PWR, ///< Instance niu_enet_swr_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_IOMMU_PWR, ///< Instance niu_iommu_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_IOMMU_TARG_CFG_PWR, ///< Instance niu_iommu_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_M2_PWR, ///< Instance niu_m2_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_M2_TARG_CFG_PWR, ///< Instance niu_m2_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_M2_TARG_PWR, ///< Instance niu_m2_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_M3_PWR, ///< Instance niu_m3_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_M3_TARG_CFG_PWR, ///< Instance niu_m3_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_M3_TARG_PWR, ///< Instance niu_m3_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_NVM_PWR, ///< Instance niu_nvm_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_NVM_TARG_CFG_PWR, ///< Instance niu_nvm_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_NVM_TARG_PWR, ///< Instance niu_nvm_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_PCIE_0_PWR, ///< Instance niu_pcie_0_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_PCIE_0_TARG_CFG_PWR, ///< Instance niu_pcie_0_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_PCIE_0_TARG_PWR, ///< Instance niu_pcie_0_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_PCIE_1_PWR, ///< Instance niu_pcie_1_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_PCIE_1_TARG_CFG_PWR, ///< Instance niu_pcie_1_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_PCIE_1_TARG_PWR, ///< Instance niu_pcie_1_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_USER_CRYPTO_PWR, ///< Instance niu_user_crypto_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_USER_CRYPTO_TARG_CFG_PWR, ///< Instance niu_user_crypto_targ_cfg_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_NIU_USER_CRYPTO_TARG_PWR, ///< Instance niu_user_crypto_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_SVC_PWR, ///< Instance svc_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_TRANSPORT_HIGH0_PWR, ///< Instance transport_high0_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_TRANSPORT_HIGH1_PWR, ///< Instance transport_high1_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_TRANSPORT_MAIN_PWR, ///< Instance transport_main_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_TRANSPORT_SMF_EAST_PWR, ///< Instance transport_smf_east_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_TRANSPORT_SMF_WEST_PWR, ///< Instance transport_smf_west_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_TRANSPORT_SMF_WEST_TARG_PWR, ///< Instance transport_smf_west_targ_pwr of structure top_fault_agg
+    APP_NOC_TOP_FAULT_AGG_INST_LAST, ///< Number of possible instances within the TOP_FAULT_AGG structure of the APP_NOC GH
+} p64h_ras_app_noc_top_fault_agg_inst_t;
 
 /**
  * @brief Definitions of all errors within a structure of the APP_NOC GHES
@@ -316,6 +606,21 @@ typedef enum {
     APP_NOC_WGC_WG_WID_SEC, ///< Instance wg_wid_sec of structure wgc
     APP_NOC_WGC_INST_LAST, ///< Number of possible instances within the WGC structure of the APP_NOC GH
 } p64h_ras_app_noc_wgc_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_PERIPH GHES
+ */
+typedef enum {
+    APP_PERIPH_WDOG_0 = 0, ///< Instance 0 of structure wdog
+    APP_PERIPH_WDOG_1, ///< Instance 1 of structure wdog
+    APP_PERIPH_WDOG_2, ///< Instance 2 of structure wdog
+    APP_PERIPH_WDOG_3, ///< Instance 3 of structure wdog
+    APP_PERIPH_WDOG_4, ///< Instance 4 of structure wdog
+    APP_PERIPH_WDOG_5, ///< Instance 5 of structure wdog
+    APP_PERIPH_WDOG_6, ///< Instance 6 of structure wdog
+    APP_PERIPH_WDOG_7, ///< Instance 7 of structure wdog
+    APP_PERIPH_WDOG_INST_LAST, ///< Number of possible instances within the WDOG structure of the APP_PERIPH GH
+} p64h_ras_app_periph_wdog_inst_t;
 
 /**
  * @brief Definitions of all errors within a structure of the APP_X288 GHES
@@ -488,14 +793,35 @@ typedef enum {
 } p64h_ras_ddr_edac_inst_t;
 
 /**
+ * @brief Definitions of all errors within a structure of the DDR GHES
+ */
+typedef enum {
+    DDR_HSIO_0 = 0, ///< Instance 0 of structure hsio
+    DDR_HSIO_1, ///< Instance 1 of structure hsio
+    DDR_HSIO_2, ///< Instance 2 of structure hsio
+    DDR_HSIO_3, ///< Instance 3 of structure hsio
+    DDR_HSIO_4, ///< Instance 4 of structure hsio
+    DDR_HSIO_INST_LAST, ///< Number of possible instances within the HSIO structure of the DDR GH
+} p64h_ras_ddr_hsio_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the DDR GHES
+ */
+typedef enum {
+    DDR_PHY_0 = 0, ///< Instance 0 of structure phy
+    DDR_PHY_1, ///< Instance 1 of structure phy
+    DDR_PHY_INST_LAST, ///< Number of possible instances within the PHY structure of the DDR GH
+} p64h_ras_ddr_phy_inst_t;
+
+/**
  * @brief Definitions of all errors within a structure of the DDR_NOC GHES
  */
 typedef enum {
-    DDR_NOC_INITIATORS_0 = 0, ///< Instance 0 of structure initiators
-    DDR_NOC_INITIATORS_1, ///< Instance 1 of structure initiators
-    DDR_NOC_INITIATORS_2, ///< Instance 2 of structure initiators
-    DDR_NOC_INITIATORS_3, ///< Instance 3 of structure initiators
-    DDR_NOC_INITIATORS_4, ///< Instance 4 of structure initiators
+    DDR_NOC_INITIATORS_APP_A0 = 0, ///< Instance app_a0 of structure initiators
+    DDR_NOC_INITIATORS_APP_A1, ///< Instance app_a1 of structure initiators
+    DDR_NOC_INITIATORS_APP_B0, ///< Instance app_b0 of structure initiators
+    DDR_NOC_INITIATORS_APP_B1, ///< Instance app_b1 of structure initiators
+    DDR_NOC_INITIATORS_SVC, ///< Instance svc of structure initiators
     DDR_NOC_INITIATORS_INST_LAST, ///< Number of possible instances within the INITIATORS structure of the DDR_NOC GH
 } p64h_ras_ddr_noc_initiators_inst_t;
 
@@ -503,10 +829,38 @@ typedef enum {
  * @brief Definitions of all errors within a structure of the DDR_NOC GHES
  */
 typedef enum {
-    DDR_NOC_TARGETS_0 = 0, ///< Instance 0 of structure targets
-    DDR_NOC_TARGETS_1, ///< Instance 1 of structure targets
+    DDR_NOC_OBSERVER_DDR = 0, ///< Instance ddr of structure observer
+    DDR_NOC_OBSERVER_INST_LAST, ///< Number of possible instances within the OBSERVER structure of the DDR_NOC GH
+} p64h_ras_ddr_noc_observer_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the DDR_NOC GHES
+ */
+typedef enum {
+    DDR_NOC_TARGETS_EDAC_0 = 0, ///< Instance edac_0 of structure targets
+    DDR_NOC_TARGETS_EDAC_1, ///< Instance edac_1 of structure targets
+    DDR_NOC_TARGETS_ISVC, ///< Instance isvc of structure targets
+    DDR_NOC_TARGETS_PCBI, ///< Instance pcbi of structure targets
+    DDR_NOC_TARGETS_WG_0, ///< Instance wg_0 of structure targets
+    DDR_NOC_TARGETS_WG_1, ///< Instance wg_1 of structure targets
+    DDR_NOC_TARGETS_WG_2, ///< Instance wg_2 of structure targets
+    DDR_NOC_TARGETS_WG_3, ///< Instance wg_3 of structure targets
     DDR_NOC_TARGETS_INST_LAST, ///< Number of possible instances within the TARGETS structure of the DDR_NOC GH
 } p64h_ras_ddr_noc_targets_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the DDR_NOC GHES
+ */
+typedef enum {
+    DDR_NOC_TOP_FAULT_AGG_A_0_PWR = 0, ///< Instance a_0_pwr of structure top_fault_agg
+    DDR_NOC_TOP_FAULT_AGG_A_1_PWR, ///< Instance a_1_pwr of structure top_fault_agg
+    DDR_NOC_TOP_FAULT_AGG_B_0_PWR, ///< Instance b_0_pwr of structure top_fault_agg
+    DDR_NOC_TOP_FAULT_AGG_B_1_PWR, ///< Instance b_1_pwr of structure top_fault_agg
+    DDR_NOC_TOP_FAULT_AGG_EDAC_0_PWR, ///< Instance edac_0_pwr of structure top_fault_agg
+    DDR_NOC_TOP_FAULT_AGG_EDAC_1_PWR, ///< Instance edac_1_pwr of structure top_fault_agg
+    DDR_NOC_TOP_FAULT_AGG_SVC_PWR, ///< Instance svc_pwr of structure top_fault_agg
+    DDR_NOC_TOP_FAULT_AGG_INST_LAST, ///< Number of possible instances within the TOP_FAULT_AGG structure of the DDR_NOC GH
+} p64h_ras_ddr_noc_top_fault_agg_inst_t;
 
 /**
  * @brief Definitions of all errors within a structure of the ENET GHES
@@ -584,9 +938,54 @@ typedef enum {
  * @brief Definitions of all errors within a structure of the ENET GHES
  */
 typedef enum {
+    ENET_TCAM_ECC_0 = 0, ///< Instance 0 of structure tcam_ecc
+    ENET_TCAM_ECC_INST_LAST, ///< Number of possible instances within the TCAM_ECC structure of the ENET GH
+} p64h_ras_enet_tcam_ecc_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET GHES
+ */
+typedef enum {
     ENET_VCAP_SUPER_0 = 0, ///< Instance 0 of structure vcap_super
     ENET_VCAP_SUPER_INST_LAST, ///< Number of possible instances within the VCAP_SUPER structure of the ENET GH
 } p64h_ras_enet_vcap_super_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_CORE_0 = 0, ///< Instance 0 of structure core
+    ENET_EP_CORE_1, ///< Instance 1 of structure core
+    ENET_EP_CORE_2, ///< Instance 2 of structure core
+    ENET_EP_CORE_3, ///< Instance 3 of structure core
+    ENET_EP_CORE_INST_LAST, ///< Number of possible instances within the CORE structure of the ENET_EP GH
+} p64h_ras_enet_ep_core_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_FRER_RX_0 = 0, ///< Instance 0 of structure frer_rx
+    ENET_EP_FRER_RX_1, ///< Instance 1 of structure frer_rx
+    ENET_EP_FRER_RX_INST_LAST, ///< Number of possible instances within the FRER_RX structure of the ENET_EP GH
+} p64h_ras_enet_ep_frer_rx_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_FRER_TX_0 = 0, ///< Instance 0 of structure frer_tx
+    ENET_EP_FRER_TX_1, ///< Instance 1 of structure frer_tx
+    ENET_EP_FRER_TX_INST_LAST, ///< Number of possible instances within the FRER_TX structure of the ENET_EP GH
+} p64h_ras_enet_ep_frer_tx_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_SB_0 = 0, ///< Instance 0 of structure sb
+    ENET_EP_SB_INST_LAST, ///< Number of possible instances within the SB structure of the ENET_EP GH
+} p64h_ras_enet_ep_sb_inst_t;
 
 /**
  * @brief Definitions of all errors within a structure of the NVM GHES
@@ -639,6 +1038,26 @@ typedef enum {
     NVM_SRAM_EDAC_2, ///< Instance 2 of structure sram_edac
     NVM_SRAM_EDAC_INST_LAST, ///< Number of possible instances within the SRAM_EDAC structure of the NVM GH
 } p64h_ras_nvm_sram_edac_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the PCXL GHES
+ */
+typedef enum {
+    PCXL_CTRL_0 = 0, ///< Instance 0 of structure ctrl
+    PCXL_CTRL_1, ///< Instance 1 of structure ctrl
+    PCXL_CTRL_INST_LAST, ///< Number of possible instances within the CTRL structure of the PCXL GH
+} p64h_ras_pcxl_ctrl_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the PCXL GHES
+ */
+typedef enum {
+    PCXL_LINK_SLICE_0_L0 = 0, ///< Instance slice_0_l0 of structure link
+    PCXL_LINK_SLICE_0_L1, ///< Instance slice_0_l1 of structure link
+    PCXL_LINK_SLICE_1_L0, ///< Instance slice_1_l0 of structure link
+    PCXL_LINK_SLICE_1_L1, ///< Instance slice_1_l1 of structure link
+    PCXL_LINK_INST_LAST, ///< Number of possible instances within the LINK structure of the PCXL GH
+} p64h_ras_pcxl_link_inst_t;
 
 /**
  * @brief Definitions of all errors within a structure of the SEC GHES
@@ -777,6 +1196,62 @@ typedef enum {
 } p64h_ras_sec_wdog_inst_t;
 
 /**
+ * @brief Definitions of all errors within a structure of the SVC_NOC GHES
+ */
+typedef enum {
+    SVC_NOC_INITIATORS_SYS_CTRL = 0, ///< Instance sys_ctrl of structure initiators
+    SVC_NOC_INITIATORS_INST_LAST, ///< Number of possible instances within the INITIATORS structure of the SVC_NOC GH
+} p64h_ras_svc_noc_initiators_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SVC_NOC GHES
+ */
+typedef enum {
+    SVC_NOC_TARGETS_ACSU_GRP0 = 0, ///< Instance acsu_grp0 of structure targets
+    SVC_NOC_TARGETS_ACSU_GRP1, ///< Instance acsu_grp1 of structure targets
+    SVC_NOC_TARGETS_APP_GRP, ///< Instance app_grp of structure targets
+    SVC_NOC_TARGETS_APP_NOC_SERVICE, ///< Instance app_noc_service of structure targets
+    SVC_NOC_TARGETS_CRYPTO_GRP, ///< Instance crypto_grp of structure targets
+    SVC_NOC_TARGETS_DDR_GRP, ///< Instance ddr_grp of structure targets
+    SVC_NOC_TARGETS_EDGE_B, ///< Instance edge_b of structure targets
+    SVC_NOC_TARGETS_ENC_GRP, ///< Instance enc_grp of structure targets
+    SVC_NOC_TARGETS_EP_GRP, ///< Instance ep_grp of structure targets
+    SVC_NOC_TARGETS_M1_GRP, ///< Instance m1_grp of structure targets
+    SVC_NOC_TARGETS_M3, ///< Instance m3 of structure targets
+    SVC_NOC_TARGETS_NVM_GRP, ///< Instance nvm_grp of structure targets
+    SVC_NOC_TARGETS_PCIE_CXL0, ///< Instance pcie_cxl0 of structure targets
+    SVC_NOC_TARGETS_PCIE_CXL1, ///< Instance pcie_cxl1 of structure targets
+    SVC_NOC_TARGETS_PCIE_GRP, ///< Instance pcie_grp of structure targets
+    SVC_NOC_TARGETS_SVC_NOC_SERVICE, ///< Instance svc_noc_service of structure targets
+    SVC_NOC_TARGETS_SWR_GRP, ///< Instance swr_grp of structure targets
+    SVC_NOC_TARGETS_INST_LAST, ///< Number of possible instances within the TARGETS structure of the SVC_NOC GH
+} p64h_ras_svc_noc_targets_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SVC_NOC GHES
+ */
+typedef enum {
+    SVC_NOC_TOP_FAULT_AGG_POWER_MAIN_PWR = 0, ///< Instance power_main_pwr of structure top_fault_agg
+    SVC_NOC_TOP_FAULT_AGG_INST_LAST, ///< Number of possible instances within the TOP_FAULT_AGG structure of the SVC_NOC GH
+} p64h_ras_svc_noc_top_fault_agg_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_DMA_0 = 0, ///< Instance 0 of structure dma
+    SYS_DMA_INST_LAST, ///< Number of possible instances within the DMA structure of the SYS GH
+} p64h_ras_sys_dma_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_HPT_0 = 0, ///< Instance 0 of structure hpt
+    SYS_HPT_INST_LAST, ///< Number of possible instances within the HPT structure of the SYS GH
+} p64h_ras_sys_hpt_inst_t;
+
+/**
  * @brief Definitions of all errors within a structure of the SYS GHES
  */
 typedef enum {
@@ -791,6 +1266,101 @@ typedef enum {
     SYS_S7_0 = 0, ///< Instance 0 of structure s7
     SYS_S7_INST_LAST, ///< Number of possible instances within the S7 structure of the SYS GH
 } p64h_ras_sys_s7_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_SPI_CTRL_0 = 0, ///< Instance 0 of structure spi_ctrl
+    SYS_SPI_CTRL_1, ///< Instance 1 of structure spi_ctrl
+    SYS_SPI_CTRL_INST_LAST, ///< Number of possible instances within the SPI_CTRL structure of the SYS GH
+} p64h_ras_sys_spi_ctrl_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_SPW_CTRL_0 = 0, ///< Instance 0 of structure spw_ctrl
+    SYS_SPW_CTRL_INST_LAST, ///< Number of possible instances within the SPW_CTRL structure of the SYS GH
+} p64h_ras_sys_spw_ctrl_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_SRAM_EDAC_0 = 0, ///< Instance 0 of structure sram_edac
+    SYS_SRAM_EDAC_INST_LAST, ///< Number of possible instances within the SRAM_EDAC structure of the SYS GH
+} p64h_ras_sys_sram_edac_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_DTP_LN_RSP_SYS2REF_DST_SYNC = 0, ///< Instance rsp_sys2ref_dst_sync of structure dtp_ln
+    SYS_NOC_DTP_LN_INST_LAST, ///< Number of possible instances within the DTP_LN structure of the SYS_NOC GH
+} p64h_ras_sys_noc_dtp_ln_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_INITIATORS_CPU_PERIPH = 0, ///< Instance cpu_periph of structure initiators
+    SYS_NOC_INITIATORS_CPU_SYS, ///< Instance cpu_sys of structure initiators
+    SYS_NOC_INITIATORS_DMA_MASTER, ///< Instance dma_master of structure initiators
+    SYS_NOC_INITIATORS_SEC_DMA_MASTER, ///< Instance sec_dma_master of structure initiators
+    SYS_NOC_INITIATORS_SPW_RMAP, ///< Instance spw_rmap of structure initiators
+    SYS_NOC_INITIATORS_SPW_RX, ///< Instance spw_rx of structure initiators
+    SYS_NOC_INITIATORS_SPW_TX, ///< Instance spw_tx of structure initiators
+    SYS_NOC_INITIATORS_INST_LAST, ///< Number of possible instances within the INITIATORS structure of the SYS_NOC GH
+} p64h_ras_sys_noc_initiators_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_OBSERVER_SYS = 0, ///< Instance sys of structure observer
+    SYS_NOC_OBSERVER_INST_LAST, ///< Number of possible instances within the OBSERVER structure of the SYS_NOC GH
+} p64h_ras_sys_noc_observer_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_TARGETS_APP_NOC = 0, ///< Instance app_noc of structure targets
+    SYS_NOC_TARGETS_CPU_FRONT, ///< Instance cpu_front of structure targets
+    SYS_NOC_TARGETS_DMA_CTRL, ///< Instance dma_ctrl of structure targets
+    SYS_NOC_TARGETS_EDAC_CTRL, ///< Instance edac_ctrl of structure targets
+    SYS_NOC_TARGETS_ELAPSED_TIMER, ///< Instance elapsed_timer of structure targets
+    SYS_NOC_TARGETS_FLASH0_DATA, ///< Instance flash0_data of structure targets
+    SYS_NOC_TARGETS_FLASH1_DATA, ///< Instance flash1_data of structure targets
+    SYS_NOC_TARGETS_GPIO, ///< Instance gpio of structure targets
+    SYS_NOC_TARGETS_I2C, ///< Instance i2c of structure targets
+    SYS_NOC_TARGETS_NOC_CONFIG, ///< Instance noc_config of structure targets
+    SYS_NOC_TARGETS_OCR_CTRL, ///< Instance ocr_ctrl of structure targets
+    SYS_NOC_TARGETS_OCR_DATA, ///< Instance ocr_data of structure targets
+    SYS_NOC_TARGETS_QSPI0_CTRL, ///< Instance qspi0_ctrl of structure targets
+    SYS_NOC_TARGETS_QSPI1_CTRL, ///< Instance qspi1_ctrl of structure targets
+    SYS_NOC_TARGETS_SEC_MBOX, ///< Instance sec_mbox of structure targets
+    SYS_NOC_TARGETS_SPW_CTRL, ///< Instance spw_ctrl of structure targets
+    SYS_NOC_TARGETS_SVC_NOC_CONFIG, ///< Instance svc_noc_config of structure targets
+    SYS_NOC_TARGETS_SYSREG, ///< Instance sysreg of structure targets
+    SYS_NOC_TARGETS_TIMERS, ///< Instance timers of structure targets
+    SYS_NOC_TARGETS_UART, ///< Instance uart of structure targets
+    SYS_NOC_TARGETS_WDOG, ///< Instance wdog of structure targets
+    SYS_NOC_TARGETS_WGCHECKER, ///< Instance wgchecker of structure targets
+    SYS_NOC_TARGETS_INST_LAST, ///< Number of possible instances within the TARGETS structure of the SYS_NOC GH
+} p64h_ras_sys_noc_targets_inst_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_TOP_FAULT_AGG_APP = 0, ///< Instance app of structure top_fault_agg
+    SYS_NOC_TOP_FAULT_AGG_SVC, ///< Instance svc of structure top_fault_agg
+    SYS_NOC_TOP_FAULT_AGG_SYS, ///< Instance sys of structure top_fault_agg
+    SYS_NOC_TOP_FAULT_AGG_SYS_HA, ///< Instance sys_ha of structure top_fault_agg
+    SYS_NOC_TOP_FAULT_AGG_INST_LAST, ///< Number of possible instances within the TOP_FAULT_AGG structure of the SYS_NOC GH
+} p64h_ras_sys_noc_top_fault_agg_inst_t;
 
 /**
  * @brief Definitions of all errors within a structure of the APP_MEM GHES
@@ -816,10 +1386,119 @@ typedef enum {
  * @brief Definitions of all errors within a structure of the APP_NOC GHES
  */
 typedef enum {
+    APP_NOC_DTP_LN_FSM_FAULT_INTERNAL_FSM = 0, ///< Value fsm_fault:internal_fsm for instance dtp_ln of structure from APP_NOC
+   APP_NOC_DTP_LN_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance dtp_ln of structure from APP_NOC
+   APP_NOC_DTP_LN_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance dtp_ln of structure from APP_NOC
+   APP_NOC_DTP_LN_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance dtp_ln of structure from APP_NOC
+   APP_NOC_DTP_LN_REGISTER_PARITY_FAULT_RATE_ADAPTER_PARITY, ///< Value register_parity_fault:rate_adapter_parity for instance dtp_ln of structure from APP_NOC
+   APP_NOC_DTP_LN_ERROR_LAST, ///< Last value of possible error within the APP_NOC GHES DTP_LN structu
+} p64h_ras_app_noc_dtp_ln_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_INITIATORS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = 0, ///< Value comparator_tree_fault:critical_comparator_tree for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE, ///< Value comparator_tree_fault:latent_comparator_tree for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM, ///< Value fsm_fault:internal_fsm for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_REGISTER_PARITY_FAULT_QOS_GENERATOR_PARITY, ///< Value register_parity_fault:qos_generator_parity for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_A_SECDED_CORR, ///< Value rgc_fault:axi_ar_a_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_A_SECDED_UNCORR, ///< Value rgc_fault:axi_ar_a_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_C_SECDED_CORR, ///< Value rgc_fault:axi_ar_c_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_C_SECDED_UNCORR, ///< Value rgc_fault:axi_ar_c_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_WGID_SECDED_CORR, ///< Value rgc_fault:axi_ar_wgid_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_WGID_SECDED_UNCORR, ///< Value rgc_fault:axi_ar_wgid_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_A_SECDED_CORR, ///< Value rgc_fault:axi_aw_a_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_A_SECDED_UNCORR, ///< Value rgc_fault:axi_aw_a_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_C_SECDED_CORR, ///< Value rgc_fault:axi_aw_c_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_C_SECDED_UNCORR, ///< Value rgc_fault:axi_aw_c_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_WGID_SECDED_CORR, ///< Value rgc_fault:axi_aw_wgid_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_WGID_SECDED_UNCORR, ///< Value rgc_fault:axi_aw_wgid_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_W_SECDED_CORR, ///< Value rgc_fault:axi_w_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_W_SECDED_UNCORR, ///< Value rgc_fault:axi_w_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_WDATA_SECDED_CORR, ///< Value rgc_fault:axi_wdata_secded_corr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_RGC_FAULT_AXI_WDATA_SECDED_UNCORR, ///< Value rgc_fault:axi_wdata_secded_uncorr for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT, ///< Value timeout_fault:latent_timeout for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT, ///< Value timeout_fault:major_timeout for instance initiators of structure from APP_NOC
+   APP_NOC_INITIATORS_ERROR_LAST, ///< Last value of possible error within the APP_NOC GHES INITIATORS structu
+} p64h_ras_app_noc_initiators_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_OBSERVER_ERROR_PACKET_DEC_ERR = 0, ///< Value error_packet:dec_err for instance observer of structure from APP_NOC
+   APP_NOC_OBSERVER_ERROR_PACKET_DISC_ERR, ///< Value error_packet:disc_err for instance observer of structure from APP_NOC
+   APP_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR, ///< Value error_packet:hide_err for instance observer of structure from APP_NOC
+   APP_NOC_OBSERVER_ERROR_PACKET_SEC_ERR, ///< Value error_packet:sec_err for instance observer of structure from APP_NOC
+   APP_NOC_OBSERVER_ERROR_PACKET_SLV_ERR, ///< Value error_packet:slv_err for instance observer of structure from APP_NOC
+   APP_NOC_OBSERVER_ERROR_PACKET_TMO_ERR, ///< Value error_packet:tmo_err for instance observer of structure from APP_NOC
+   APP_NOC_OBSERVER_ERROR_PACKET_UNS_ERR, ///< Value error_packet:uns_err for instance observer of structure from APP_NOC
+   APP_NOC_OBSERVER_ERROR_LAST, ///< Last value of possible error within the APP_NOC GHES OBSERVER structu
+} p64h_ras_app_noc_observer_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_TARGETS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = 0, ///< Value comparator_tree_fault:critical_comparator_tree for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE, ///< Value comparator_tree_fault:latent_comparator_tree for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM, ///< Value fsm_fault:internal_fsm for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER, ///< Value packet_validity_fault:packet_wordnumber for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_RGC_FAULT_AXI_R_SECDED_CORR, ///< Value rgc_fault:axi_r_secded_corr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_RGC_FAULT_AXI_R_SECDED_UNCORR, ///< Value rgc_fault:axi_r_secded_uncorr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_CORR, ///< Value rgc_fault:axi_rdata_secded_corr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_UNCORR, ///< Value rgc_fault:axi_rdata_secded_uncorr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_CORR, ///< Value rgc_fault:axi_wresp_secded_corr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_UNCORR, ///< Value rgc_fault:axi_wresp_secded_uncorr for instance targets of structure from APP_NOC
+   APP_NOC_TARGETS_ERROR_LAST, ///< Last value of possible error within the APP_NOC GHES TARGETS structu
+} p64h_ras_app_noc_targets_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
+    APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID0 = 0, ///< Value fault_from_bottom:pwrDis_lnDtp_flt_mid0 for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID1, ///< Value fault_from_bottom:pwrDis_lnDtp_flt_mid1 for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID2, ///< Value fault_from_bottom:pwrDis_lnDtp_flt_mid2 for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_TOP, ///< Value fault_from_bottom:pwrDis_lnDtp_flt_top for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID0, ///< Value fsm_fault:internal_fsm_mid0 for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID1, ///< Value fsm_fault:internal_fsm_mid1 for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID2, ///< Value fsm_fault:internal_fsm_mid2 for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_TOP, ///< Value fsm_fault:internal_fsm_top for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value register_parity_fault:power_main_fault_control_parity for instance top_fault_agg of structure from APP_NOC
+   APP_NOC_TOP_FAULT_AGG_ERROR_LAST, ///< Last value of possible error within the APP_NOC GHES TOP_FAULT_AGG structu
+} p64h_ras_app_noc_top_fault_agg_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_NOC GHES
+ */
+typedef enum {
     APP_NOC_WGC_PERMISSION_DENIED_READ = 0, ///< Value permission_denied:read for instance wgc of structure from APP_NOC
    APP_NOC_WGC_PERMISSION_DENIED_WRITE, ///< Value permission_denied:write for instance wgc of structure from APP_NOC
    APP_NOC_WGC_ERROR_LAST, ///< Last value of possible error within the APP_NOC GHES WGC structu
 } p64h_ras_app_noc_wgc_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the APP_PERIPH GHES
+ */
+typedef enum {
+    APP_PERIPH_WDOG_WDOG_RESET_PENDING = 0, ///< Value wdog_reset:pending for instance wdog of structure from APP_PERIPH
+   APP_PERIPH_WDOG_WDOG_RESET_REQUEST, ///< Value wdog_reset:request for instance wdog of structure from APP_PERIPH
+   APP_PERIPH_WDOG_ERROR_LAST, ///< Last value of possible error within the APP_PERIPH GHES WDOG structu
+} p64h_ras_app_periph_wdog_err_t;
 
 /**
  * @brief Definitions of all errors within a structure of the APP_X288 GHES
@@ -940,7 +1619,6 @@ typedef enum {
    DDR_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL, ///< Value emon_corrected:emon_stat_buf_full for instance edac of structure from DDR
    DDR_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW, ///< Value emon_corrected:emon_stat_buf_ovrflw for instance edac of structure from DDR
    DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL, ///< Value emon_corrected:emon_uncor_buf_full for instance edac of structure from DDR
-   DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THLD, ///< Value emon_corrected:emon_uncor_buf_high_thld for instance edac of structure from DDR
    DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW, ///< Value emon_corrected:emon_uncor_buf_ovrflw for instance edac of structure from DDR
    DDR_EDAC_EMON_CORRECTED_ERR_MON_COR, ///< Value emon_corrected:err_mon_cor for instance edac of structure from DDR
    DDR_EDAC_EMON_CORRECTED_ERR_MON_COR_RAM_COR_ECC_ERR, ///< Value emon_corrected:err_mon_cor_ram_cor_ecc_err for instance edac of structure from DDR
@@ -949,6 +1627,8 @@ typedef enum {
    DDR_EDAC_EMON_CORRECTED_ERR_MON_STAT_RAM_UNCOR_ECC_ERR, ///< Value emon_corrected:err_mon_stat_ram_uncor_ecc_err for instance edac of structure from DDR
    DDR_EDAC_EMON_CORRECTED_ERR_MON_UNCOR_RAM_COR_ECC_ERR, ///< Value emon_corrected:err_mon_uncor_ram_cor_ecc_err for instance edac of structure from DDR
    DDR_EDAC_EMON_CORRECTED_ERR_MON_UNCOR_RAM_UNCOR_ECC_ERR, ///< Value emon_corrected:err_mon_uncor_ram_uncor_ecc_err for instance edac of structure from DDR
+   DDR_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION, ///< Value emon_uncorrected:emon_invalid_extraction for instance edac of structure from DDR
+   DDR_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD, ///< Value emon_uncorrected:emon_uncor_buf_high_thld for instance edac of structure from DDR
    DDR_EDAC_EMON_UNCORRECTED_ERR_MON_ADDR_ERR, ///< Value emon_uncorrected:err_mon_addr_err for instance edac of structure from DDR
    DDR_EDAC_EMON_UNCORRECTED_ERR_MON_UNCOR, ///< Value emon_uncorrected:err_mon_uncor for instance edac of structure from DDR
    DDR_EDAC_FAULT_ERR_BID_PARITY, ///< Value fault:err_bid_parity for instance edac of structure from DDR
@@ -1051,54 +1731,42 @@ typedef enum {
 } p64h_ras_ddr_edac_err_t;
 
 /**
+ * @brief Definitions of all errors within a structure of the DDR GHES
+ */
+typedef enum {
+    DDR_HSIO_PAB_DLL0_LOCK = 0, ///< Value pab:dll0_lock for instance hsio of structure from DDR
+   DDR_HSIO_PAB_DLL0_UNLOCK, ///< Value pab:dll0_unlock for instance hsio of structure from DDR
+   DDR_HSIO_PAB_DLL1_LOCK, ///< Value pab:dll1_lock for instance hsio of structure from DDR
+   DDR_HSIO_PAB_DLL1_UNLOCK, ///< Value pab:dll1_unlock for instance hsio of structure from DDR
+   DDR_HSIO_ERROR_LAST, ///< Last value of possible error within the DDR GHES HSIO structu
+} p64h_ras_ddr_hsio_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the DDR GHES
+ */
+typedef enum {
+    DDR_PHY_DFI_RDDATA_VALID_ERR = 0, ///< Value dfi_rddata:valid_err for instance phy of structure from DDR
+   DDR_PHY_DFI_RDDATA_VALID_FIFO_FULL, ///< Value dfi_rddata:valid_fifo_full for instance phy of structure from DDR
+   DDR_PHY_ERROR_LAST, ///< Last value of possible error within the DDR GHES PHY structu
+} p64h_ras_ddr_phy_err_t;
+
+/**
  * @brief Definitions of all errors within a structure of the DDR_NOC GHES
  */
 typedef enum {
-    DDR_NOC_INITIATORS_CRITICAL_CRITICAL_COMPARATOR_TREE = 0, ///< Value critical:critical_comparator_tree for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_FLT_SECDED_CORR, ///< Value critical:flt_secded_corr for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_FLT_SECDED_UNCORR, ///< Value critical:flt_secded_uncorr for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_HANDSHAKE_RETRACTION, ///< Value critical:handshake_retraction for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_INTERNAL_FSM, ///< Value critical:internal_fsm for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_JUMPER_PARITY, ///< Value critical:jumper_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_LATENT_COMPARATOR_TREE, ///< Value critical:latent_comparator_tree for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_LATENT_TIMEOUT, ///< Value critical:latent_timeout for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_MAJOR_TIMEOUT, ///< Value critical:major_timeout for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_PACKET_FRAMING, ///< Value critical:packet_framing for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_PACKET_WORDNUMBER, ///< Value critical:packet_wordnumber for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_PACKET_WRONGPATH, ///< Value critical:packet_wrongpath for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_POWER_DISCONNECT_ERROR, ///< Value critical:power_disconnect_error for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value critical:power_main_fault_control_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_CRITICAL_QOS_GENERATOR_PARITY, ///< Value critical:qos_generator_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_CRITICAL_COMPARATOR_TREE, ///< Value major:critical_comparator_tree for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_FLT_SECDED_CORR, ///< Value major:flt_secded_corr for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_FLT_SECDED_UNCORR, ///< Value major:flt_secded_uncorr for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_HANDSHAKE_RETRACTION, ///< Value major:handshake_retraction for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_INTERNAL_FSM, ///< Value major:internal_fsm for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_JUMPER_PARITY, ///< Value major:jumper_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_LATENT_COMPARATOR_TREE, ///< Value major:latent_comparator_tree for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_LATENT_TIMEOUT, ///< Value major:latent_timeout for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_MAJOR_TIMEOUT, ///< Value major:major_timeout for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_PACKET_FRAMING, ///< Value major:packet_framing for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_PACKET_WORDNUMBER, ///< Value major:packet_wordnumber for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_PACKET_WRONGPATH, ///< Value major:packet_wrongpath for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_POWER_DISCONNECT_ERROR, ///< Value major:power_disconnect_error for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value major:power_main_fault_control_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MAJOR_QOS_GENERATOR_PARITY, ///< Value major:qos_generator_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_CRITICAL_COMPARATOR_TREE, ///< Value minor:critical_comparator_tree for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_FLT_SECDED_CORR, ///< Value minor:flt_secded_corr for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_FLT_SECDED_UNCORR, ///< Value minor:flt_secded_uncorr for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_HANDSHAKE_RETRACTION, ///< Value minor:handshake_retraction for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_INTERNAL_FSM, ///< Value minor:internal_fsm for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_JUMPER_PARITY, ///< Value minor:jumper_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_LATENT_COMPARATOR_TREE, ///< Value minor:latent_comparator_tree for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_LATENT_TIMEOUT, ///< Value minor:latent_timeout for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_MAJOR_TIMEOUT, ///< Value minor:major_timeout for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_PACKET_FRAMING, ///< Value minor:packet_framing for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_PACKET_WORDNUMBER, ///< Value minor:packet_wordnumber for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_PACKET_WRONGPATH, ///< Value minor:packet_wrongpath for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_POWER_DISCONNECT_ERROR, ///< Value minor:power_disconnect_error for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value minor:power_main_fault_control_parity for instance initiators of structure from DDR_NOC
-   DDR_NOC_INITIATORS_MINOR_QOS_GENERATOR_PARITY, ///< Value minor:qos_generator_parity for instance initiators of structure from DDR_NOC
+    DDR_NOC_INITIATORS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = 0, ///< Value comparator_tree_fault:critical_comparator_tree for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE, ///< Value comparator_tree_fault:latent_comparator_tree for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM, ///< Value fsm_fault:internal_fsm for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER, ///< Value packet_validity_fault:packet_wordnumber for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_REGISTER_PARITY_FAULT_QOS_GENERATOR_PARITY, ///< Value register_parity_fault:qos_generator_parity for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT, ///< Value timeout_fault:latent_timeout for instance initiators of structure from DDR_NOC
+   DDR_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT, ///< Value timeout_fault:major_timeout for instance initiators of structure from DDR_NOC
    DDR_NOC_INITIATORS_ERROR_LAST, ///< Last value of possible error within the DDR_NOC GHES INITIATORS structu
 } p64h_ras_ddr_noc_initiators_err_t;
 
@@ -1106,53 +1774,46 @@ typedef enum {
  * @brief Definitions of all errors within a structure of the DDR_NOC GHES
  */
 typedef enum {
-    DDR_NOC_TARGETS_CRITICAL_AXI_RDATA_SECDED_CORR = 0, ///< Value critical:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_AXI_RDATA_SECDED_UNCORR, ///< Value critical:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_AXI_WRESP_SECDED_CORR, ///< Value critical:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_AXI_WRESP_SECDED_UNCORR, ///< Value critical:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_CRITICAL_COMPARATOR_TREE, ///< Value critical:critical_comparator_tree for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_FLT_SECDED_CORR, ///< Value critical:flt_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_FLT_SECDED_UNCORR, ///< Value critical:flt_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_HANDSHAKE_RETRACTION, ///< Value critical:handshake_retraction for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_INTERNAL_FSM, ///< Value critical:internal_fsm for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_JUMPER_PARITY, ///< Value critical:jumper_parity for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_LATENT_COMPARATOR_TREE, ///< Value critical:latent_comparator_tree for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_PACKET_FRAMING, ///< Value critical:packet_framing for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_PACKET_WORDNUMBER, ///< Value critical:packet_wordnumber for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_PACKET_WRONGPATH, ///< Value critical:packet_wrongpath for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_CRITICAL_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value critical:power_main_fault_control_parity for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_AXI_RDATA_SECDED_CORR, ///< Value major:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_AXI_RDATA_SECDED_UNCORR, ///< Value major:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_AXI_WRESP_SECDED_CORR, ///< Value major:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_AXI_WRESP_SECDED_UNCORR, ///< Value major:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_CRITICAL_COMPARATOR_TREE, ///< Value major:critical_comparator_tree for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_FLT_SECDED_CORR, ///< Value major:flt_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_FLT_SECDED_UNCORR, ///< Value major:flt_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_HANDSHAKE_RETRACTION, ///< Value major:handshake_retraction for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_INTERNAL_FSM, ///< Value major:internal_fsm for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_JUMPER_PARITY, ///< Value major:jumper_parity for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_LATENT_COMPARATOR_TREE, ///< Value major:latent_comparator_tree for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_PACKET_FRAMING, ///< Value major:packet_framing for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_PACKET_WORDNUMBER, ///< Value major:packet_wordnumber for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_PACKET_WRONGPATH, ///< Value major:packet_wrongpath for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MAJOR_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value major:power_main_fault_control_parity for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_AXI_RDATA_SECDED_CORR, ///< Value minor:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_AXI_RDATA_SECDED_UNCORR, ///< Value minor:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_AXI_WRESP_SECDED_CORR, ///< Value minor:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_AXI_WRESP_SECDED_UNCORR, ///< Value minor:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_CRITICAL_COMPARATOR_TREE, ///< Value minor:critical_comparator_tree for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_FLT_SECDED_CORR, ///< Value minor:flt_secded_corr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_FLT_SECDED_UNCORR, ///< Value minor:flt_secded_uncorr for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_HANDSHAKE_RETRACTION, ///< Value minor:handshake_retraction for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_INTERNAL_FSM, ///< Value minor:internal_fsm for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_JUMPER_PARITY, ///< Value minor:jumper_parity for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_LATENT_COMPARATOR_TREE, ///< Value minor:latent_comparator_tree for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_PACKET_FRAMING, ///< Value minor:packet_framing for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_PACKET_WORDNUMBER, ///< Value minor:packet_wordnumber for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_PACKET_WRONGPATH, ///< Value minor:packet_wrongpath for instance targets of structure from DDR_NOC
-   DDR_NOC_TARGETS_MINOR_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value minor:power_main_fault_control_parity for instance targets of structure from DDR_NOC
+    DDR_NOC_OBSERVER_ERROR_PACKET_DEC_ERR = 0, ///< Value error_packet:dec_err for instance observer of structure from DDR_NOC
+   DDR_NOC_OBSERVER_ERROR_PACKET_DISC_ERR, ///< Value error_packet:disc_err for instance observer of structure from DDR_NOC
+   DDR_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR, ///< Value error_packet:hide_err for instance observer of structure from DDR_NOC
+   DDR_NOC_OBSERVER_ERROR_PACKET_SEC_ERR, ///< Value error_packet:sec_err for instance observer of structure from DDR_NOC
+   DDR_NOC_OBSERVER_ERROR_PACKET_SLV_ERR, ///< Value error_packet:slv_err for instance observer of structure from DDR_NOC
+   DDR_NOC_OBSERVER_ERROR_PACKET_TMO_ERR, ///< Value error_packet:tmo_err for instance observer of structure from DDR_NOC
+   DDR_NOC_OBSERVER_ERROR_PACKET_UNS_ERR, ///< Value error_packet:uns_err for instance observer of structure from DDR_NOC
+   DDR_NOC_OBSERVER_ERROR_LAST, ///< Last value of possible error within the DDR_NOC GHES OBSERVER structu
+} p64h_ras_ddr_noc_observer_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the DDR_NOC GHES
+ */
+typedef enum {
+    DDR_NOC_TARGETS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = 0, ///< Value comparator_tree_fault:critical_comparator_tree for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE, ///< Value comparator_tree_fault:latent_comparator_tree for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM, ///< Value fsm_fault:internal_fsm for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER, ///< Value packet_validity_fault:packet_wordnumber for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_CORR, ///< Value rgc_fault:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_UNCORR, ///< Value rgc_fault:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_CORR, ///< Value rgc_fault:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
+   DDR_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_UNCORR, ///< Value rgc_fault:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
    DDR_NOC_TARGETS_ERROR_LAST, ///< Last value of possible error within the DDR_NOC GHES TARGETS structu
 } p64h_ras_ddr_noc_targets_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the DDR_NOC GHES
+ */
+typedef enum {
+    DDR_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_POWER_DISCONNECT = 0, ///< Value fault_from_bottom:power_disconnect for instance top_fault_agg of structure from DDR_NOC
+   DDR_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM, ///< Value fsm_fault:internal_fsm for instance top_fault_agg of structure from DDR_NOC
+   DDR_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value register_parity_fault:power_main_fault_control_parity for instance top_fault_agg of structure from DDR_NOC
+   DDR_NOC_TOP_FAULT_AGG_ERROR_LAST, ///< Last value of possible error within the DDR_NOC GHES TOP_FAULT_AGG structu
+} p64h_ras_ddr_noc_top_fault_agg_err_t;
 
 /**
  * @brief Definitions of all errors within a structure of the ENET GHES
@@ -1768,6 +2429,21 @@ typedef enum {
  * @brief Definitions of all errors within a structure of the ENET GHES
  */
 typedef enum {
+    ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_ES0_X = 0, ///< Value ram_corrected:tcam_vcap_es0_X for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_ES2_X, ///< Value ram_corrected:tcam_vcap_es2_X for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_IP6PFX, ///< Value ram_corrected:tcam_vcap_ip6pfx for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_SUPER_BK_X, ///< Value ram_corrected:tcam_vcap_super_bk_X for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_ES0_X, ///< Value ram_uncorrected:tcam_vcap_es0_X for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_ES2_X, ///< Value ram_uncorrected:tcam_vcap_es2_X for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_IP6PFX, ///< Value ram_uncorrected:tcam_vcap_ip6pfx for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_SUPER_BK_X, ///< Value ram_uncorrected:tcam_vcap_super_bk_X for instance tcam_ecc of structure from ENET
+   ENET_TCAM_ECC_ERROR_LAST, ///< Last value of possible error within the ENET GHES TCAM_ECC structu
+} p64h_ras_enet_tcam_ecc_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET GHES
+ */
+typedef enum {
     ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XA_AR_Y = 0, ///< Value ram_corrected:vcap_super_def_Xa_AR_Y for instance vcap_super of structure from ENET
    ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XA_CNTR, ///< Value ram_corrected:vcap_super_def_Xa_cntr for instance vcap_super of structure from ENET
    ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XB_AR_Y, ///< Value ram_corrected:vcap_super_def_Xb_AR_Y for instance vcap_super of structure from ENET
@@ -1790,6 +2466,310 @@ typedef enum {
 } p64h_ras_enet_vcap_super_err_t;
 
 /**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_CORE_ASF_CSR_ERR = 0, ///< Value asf:csr_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_ASF_DAP_ERR, ///< Value asf:dap_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_ASF_INTEGRITY_ERR, ///< Value asf:integrity_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_ASF_PROTOCOL_ERR, ///< Value asf:protocol_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_ASF_SRAM_CORR_ERR, ///< Value asf:sram_corr_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_ASF_SRAM_UNCORR_ERR, ///< Value asf:sram_uncorr_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_ASF_TRANS_TO_ERR, ///< Value asf:trans_to_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_IOB_BUF_FULL, ///< Value iob:buf_full for instance core of structure from ENET_EP
+   ENET_EP_CORE_IOB_DTC_WDG, ///< Value iob:dtc_wdg for instance core of structure from ENET_EP
+   ENET_EP_CORE_IOB_PMP_FAIL, ///< Value iob:pmp_fail for instance core of structure from ENET_EP
+   ENET_EP_CORE_MMSL_FR_COUNT_ERR, ///< Value mmsl:fr_count_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_MMSL_RCV_R_ERR, ///< Value mmsl:rcv_r_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_MMSL_RCV_V_ERR, ///< Value mmsl:rcv_v_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_MMSL_SMD_ERR, ///< Value mmsl:smd_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_MMSL_SMDC_ERR, ///< Value mmsl:smdc_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_MMSL_SMDS_ERR, ///< Value mmsl:smds_err for instance core of structure from ENET_EP
+   ENET_EP_CORE_ERROR_LAST, ///< Last value of possible error within the ENET_EP GHES CORE structu
+} p64h_ras_enet_ep_core_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_FRER_RX_GROUP_GROUP_BAD_CONFIG = 0, ///< Value group:group_bad_config for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_LAT_RST_OVERFLOW, ///< Value group:n_group_async_lat_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_RCVY_OVERFLOW, ///< Value group:n_group_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_RST_OVERFLOW, ///< Value group:n_group_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR, ///< Value group:n_group_latent_error for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR_DROP_SAT, ///< Value group:n_group_latent_error_drop_sat for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR_PASS_SAT, ///< Value group:n_group_latent_error_pass_sat for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_OVERFLOW, ///< Value group:n_group_port0_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_RCVY_OVERFLOW, ///< Value group:n_group_port0_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_RST_OVERFLOW, ///< Value group:n_group_port0_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_BAD_RTAG, ///< Value group:n_group_port0_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_FRAME_FIFO_OVERFLOW, ///< Value group:n_group_port0_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_FRAME_FIFO_UNDERFLOW, ///< Value group:n_group_port0_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_MISSING_EOP, ///< Value group:n_group_port0_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_MISSING_SOP, ///< Value group:n_group_port0_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_NO_RTAG, ///< Value group:n_group_port0_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_RTAG_STATE, ///< Value group:n_group_port0_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_STATUS_FIFO_OVERFLOW, ///< Value group:n_group_port0_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_OVERFLOW, ///< Value group:n_group_port1_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_RCVY_OVERFLOW, ///< Value group:n_group_port1_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_RST_OVERFLOW, ///< Value group:n_group_port1_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_BAD_RTAG, ///< Value group:n_group_port1_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_FRAME_FIFO_OVERFLOW, ///< Value group:n_group_port1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_FRAME_FIFO_UNDERFLOW, ///< Value group:n_group_port1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_MISSING_EOP, ///< Value group:n_group_port1_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_MISSING_SOP, ///< Value group:n_group_port1_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_NO_RTAG, ///< Value group:n_group_port1_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_RTAG_STATE, ///< Value group:n_group_port1_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_STATUS_FIFO_OVERFLOW, ///< Value group:n_group_port1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_OVERFLOW, ///< Value group:n_group_port2_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_RCVY_OVERFLOW, ///< Value group:n_group_port2_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_RST_OVERFLOW, ///< Value group:n_group_port2_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_BAD_RTAG, ///< Value group:n_group_port2_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_FRAME_FIFO_OVERFLOW, ///< Value group:n_group_port2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_FRAME_FIFO_UNDERFLOW, ///< Value group:n_group_port2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_MISSING_EOP, ///< Value group:n_group_port2_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_MISSING_SOP, ///< Value group:n_group_port2_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_NO_RTAG, ///< Value group:n_group_port2_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_RTAG_STATE, ///< Value group:n_group_port2_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_STATUS_FIFO_OVERFLOW, ///< Value group:n_group_port2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_OVERFLOW, ///< Value group:n_group_port3_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_RCVY_OVERFLOW, ///< Value group:n_group_port3_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_RST_OVERFLOW, ///< Value group:n_group_port3_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_BAD_RTAG, ///< Value group:n_group_port3_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_FRAME_FIFO_OVERFLOW, ///< Value group:n_group_port3_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_FRAME_FIFO_UNDERFLOW, ///< Value group:n_group_port3_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_MISSING_EOP, ///< Value group:n_group_port3_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_MISSING_SOP, ///< Value group:n_group_port3_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_NO_RTAG, ///< Value group:n_group_port3_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_RTAG_STATE, ///< Value group:n_group_port3_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_STATUS_FIFO_OVERFLOW, ///< Value group:n_group_port3_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_R1_FRAME_FIFO_OVERFLOW, ///< Value group:n_group_r1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_R1_FRAME_FIFO_UNDERFLOW, ///< Value group:n_group_r1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_R1_STATUS_FIFO_OVERFLOW, ///< Value group:n_group_r1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_R2_FRAME_FIFO_OVERFLOW, ///< Value group:n_group_r2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_R2_FRAME_FIFO_UNDERFLOW, ///< Value group:n_group_r2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_N_GROUP_R2_STATUS_FIFO_OVERFLOW, ///< Value group:n_group_r2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_LAT_RST_OVERFLOW, ///< Value group:w_group_async_lat_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_RCVY_OVERFLOW, ///< Value group:w_group_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_RST_OVERFLOW, ///< Value group:w_group_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR, ///< Value group:w_group_latent_error for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR_DROP_SAT, ///< Value group:w_group_latent_error_drop_sat for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR_PASS_SAT, ///< Value group:w_group_latent_error_pass_sat for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_OVERFLOW, ///< Value group:w_group_port0_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_RCVY_OVERFLOW, ///< Value group:w_group_port0_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_RST_OVERFLOW, ///< Value group:w_group_port0_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_BAD_RTAG, ///< Value group:w_group_port0_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_FRAME_FIFO_OVERFLOW, ///< Value group:w_group_port0_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_FRAME_FIFO_UNDERFLOW, ///< Value group:w_group_port0_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_MISSING_EOP, ///< Value group:w_group_port0_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_MISSING_SOP, ///< Value group:w_group_port0_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_NO_RTAG, ///< Value group:w_group_port0_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_RTAG_STATE, ///< Value group:w_group_port0_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_STATUS_FIFO_OVERFLOW, ///< Value group:w_group_port0_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_OVERFLOW, ///< Value group:w_group_port1_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_RCVY_OVERFLOW, ///< Value group:w_group_port1_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_RST_OVERFLOW, ///< Value group:w_group_port1_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_BAD_RTAG, ///< Value group:w_group_port1_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_FRAME_FIFO_OVERFLOW, ///< Value group:w_group_port1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_FRAME_FIFO_UNDERFLOW, ///< Value group:w_group_port1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_MISSING_EOP, ///< Value group:w_group_port1_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_MISSING_SOP, ///< Value group:w_group_port1_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_NO_RTAG, ///< Value group:w_group_port1_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_RTAG_STATE, ///< Value group:w_group_port1_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_STATUS_FIFO_OVERFLOW, ///< Value group:w_group_port1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_OVERFLOW, ///< Value group:w_group_port2_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_RCVY_OVERFLOW, ///< Value group:w_group_port2_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_RST_OVERFLOW, ///< Value group:w_group_port2_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_BAD_RTAG, ///< Value group:w_group_port2_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_FRAME_FIFO_OVERFLOW, ///< Value group:w_group_port2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_FRAME_FIFO_UNDERFLOW, ///< Value group:w_group_port2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_MISSING_EOP, ///< Value group:w_group_port2_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_MISSING_SOP, ///< Value group:w_group_port2_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_NO_RTAG, ///< Value group:w_group_port2_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_RTAG_STATE, ///< Value group:w_group_port2_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_STATUS_FIFO_OVERFLOW, ///< Value group:w_group_port2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_OVERFLOW, ///< Value group:w_group_port3_async_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_RCVY_OVERFLOW, ///< Value group:w_group_port3_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_RST_OVERFLOW, ///< Value group:w_group_port3_async_rst_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_BAD_RTAG, ///< Value group:w_group_port3_bad_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_FRAME_FIFO_OVERFLOW, ///< Value group:w_group_port3_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_FRAME_FIFO_UNDERFLOW, ///< Value group:w_group_port3_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_MISSING_EOP, ///< Value group:w_group_port3_missing_eop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_MISSING_SOP, ///< Value group:w_group_port3_missing_sop for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_NO_RTAG, ///< Value group:w_group_port3_no_rtag for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_RTAG_STATE, ///< Value group:w_group_port3_rtag_state for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_STATUS_FIFO_OVERFLOW, ///< Value group:w_group_port3_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_R1_FRAME_FIFO_OVERFLOW, ///< Value group:w_group_r1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_R1_FRAME_FIFO_UNDERFLOW, ///< Value group:w_group_r1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_R1_STATUS_FIFO_OVERFLOW, ///< Value group:w_group_r1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_R2_FRAME_FIFO_OVERFLOW, ///< Value group:w_group_r2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_R2_FRAME_FIFO_UNDERFLOW, ///< Value group:w_group_r2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_GROUP_W_GROUP_R2_STATUS_FIFO_OVERFLOW, ///< Value group:w_group_r2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+   ENET_EP_FRER_RX_ERROR_LAST, ///< Last value of possible error within the ENET_EP GHES FRER_RX structu
+} p64h_ras_enet_ep_frer_rx_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_FRER_TX_GROUP_GROUP_BAD_CONFIG = 0, ///< Value group:group_bad_config for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_N_AXI_GROUP_PMON_FIFO_OVERFLOW, ///< Value group:n_axi_group_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_N_DMA_PORT0_PMON_FIFO_OVERFLOW, ///< Value group:n_dma_port0_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_N_DMA_PORT1_PMON_FIFO_OVERFLOW, ///< Value group:n_dma_port1_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_N_DMA_PORT2_PMON_FIFO_OVERFLOW, ///< Value group:n_dma_port2_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_N_DMA_PORT3_PMON_FIFO_OVERFLOW, ///< Value group:n_dma_port3_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_W_AXI_GROUP_PMON_FIFO_OVERFLOW, ///< Value group:w_axi_group_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_W_DMA_PORT0_PMON_FIFO_OVERFLOW, ///< Value group:w_dma_port0_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_W_DMA_PORT1_PMON_FIFO_OVERFLOW, ///< Value group:w_dma_port1_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_W_DMA_PORT2_PMON_FIFO_OVERFLOW, ///< Value group:w_dma_port2_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_GROUP_W_DMA_PORT3_PMON_FIFO_OVERFLOW, ///< Value group:w_dma_port3_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+   ENET_EP_FRER_TX_ERROR_LAST, ///< Last value of possible error within the ENET_EP GHES FRER_TX structu
+} p64h_ras_enet_ep_frer_tx_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the ENET_EP GHES
+ */
+typedef enum {
+    ENET_EP_SB_ERROR_EP0_APB_RDATA_PARITY_ERR = 0, ///< Value error:ep0_apb_rdata_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_AXI_PARITY_ERR, ///< Value error:ep0_axi_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_MII_LPBK_FIFO_OVFL_ERR, ///< Value error:ep0_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_MII_LPBK_FIFO_UNFL_ERR, ///< Value error:ep0_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_N_PMON_RX_OVFL_ERR, ///< Value error:ep0_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_N_PMON_TX_OVFL_ERR, ///< Value error:ep0_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_N_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep0_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_N_STREAM_GATE_CLOSE_ERR, ///< Value error:ep0_n_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_N_STREAM_GATE_OPEN_ERR, ///< Value error:ep0_n_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_N_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep0_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_W_PMON_RX_OVFL_ERR, ///< Value error:ep0_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_W_PMON_TX_OVFL_ERR, ///< Value error:ep0_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_W_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep0_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_W_STREAM_GATE_CLOSE_ERR, ///< Value error:ep0_w_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_W_STREAM_GATE_OPEN_ERR, ///< Value error:ep0_w_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP0_W_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep0_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_APB_RDATA_PARITY_ERR, ///< Value error:ep1_apb_rdata_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_AXI_PARITY_ERR, ///< Value error:ep1_axi_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_MII_LPBK_FIFO_OVFL_ERR, ///< Value error:ep1_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_MII_LPBK_FIFO_UNFL_ERR, ///< Value error:ep1_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_N_PMON_RX_OVFL_ERR, ///< Value error:ep1_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_N_PMON_TX_OVFL_ERR, ///< Value error:ep1_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_N_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep1_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_N_STREAM_GATE_CLOSE_ERR, ///< Value error:ep1_n_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_N_STREAM_GATE_OPEN_ERR, ///< Value error:ep1_n_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_N_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep1_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_W_PMON_RX_OVFL_ERR, ///< Value error:ep1_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_W_PMON_TX_OVFL_ERR, ///< Value error:ep1_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_W_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep1_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_W_STREAM_GATE_CLOSE_ERR, ///< Value error:ep1_w_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_W_STREAM_GATE_OPEN_ERR, ///< Value error:ep1_w_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP1_W_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep1_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_APB_RDATA_PARITY_ERR, ///< Value error:ep2_apb_rdata_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_AXI_PARITY_ERR, ///< Value error:ep2_axi_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_MII_LPBK_FIFO_OVFL_ERR, ///< Value error:ep2_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_MII_LPBK_FIFO_UNFL_ERR, ///< Value error:ep2_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_N_PMON_RX_OVFL_ERR, ///< Value error:ep2_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_N_PMON_TX_OVFL_ERR, ///< Value error:ep2_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_N_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep2_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_N_STREAM_GATE_CLOSE_ERR, ///< Value error:ep2_n_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_N_STREAM_GATE_OPEN_ERR, ///< Value error:ep2_n_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_N_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep2_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_W_PMON_RX_OVFL_ERR, ///< Value error:ep2_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_W_PMON_TX_OVFL_ERR, ///< Value error:ep2_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_W_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep2_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_W_STREAM_GATE_CLOSE_ERR, ///< Value error:ep2_w_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_W_STREAM_GATE_OPEN_ERR, ///< Value error:ep2_w_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP2_W_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep2_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_APB_RDATA_PARITY_ERR, ///< Value error:ep3_apb_rdata_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_AXI_PARITY_ERR, ///< Value error:ep3_axi_parity_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_MII_LPBK_FIFO_OVFL_ERR, ///< Value error:ep3_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_MII_LPBK_FIFO_UNFL_ERR, ///< Value error:ep3_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_N_PMON_RX_OVFL_ERR, ///< Value error:ep3_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_N_PMON_TX_OVFL_ERR, ///< Value error:ep3_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_N_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep3_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_N_STREAM_GATE_CLOSE_ERR, ///< Value error:ep3_n_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_N_STREAM_GATE_OPEN_ERR, ///< Value error:ep3_n_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_N_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep3_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_W_PMON_RX_OVFL_ERR, ///< Value error:ep3_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_W_PMON_TX_OVFL_ERR, ///< Value error:ep3_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_W_RX_RAM_ECC_SBIT_ERR, ///< Value error:ep3_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_W_STREAM_GATE_CLOSE_ERR, ///< Value error:ep3_w_stream_gate_close_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_W_STREAM_GATE_OPEN_ERR, ///< Value error:ep3_w_stream_gate_open_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_EP3_W_TX_RAM_ECC_SBIT_ERR, ///< Value error:ep3_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_frm_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_frm_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP2_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_frm_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP3_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_frm_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_FRM_RPL0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_frm_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_FRM_RPL1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_frm_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_stat_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_stat_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP2_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_stat_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP3_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_stat_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_STAT_RPL0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_stat_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_N_STAT_RPL1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_n_stat_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_frm_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_frm_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP2_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_frm_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP3_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_frm_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_FRM_RPL0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_frm_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_FRM_RPL1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_frm_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_stat_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_stat_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP2_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_stat_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP3_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_stat_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_STAT_RPL0_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_stat_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_FRER_RX_W_STAT_RPL1_RAM_ECC_SBIT_ERR, ///< Value error:frer_rx_w_stat_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP0_AXI_RESP_ERR_DATA, ///< Value fatal:ep0_axi_resp_err_data for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP0_AXI_RESP_ERR_DESC, ///< Value fatal:ep0_axi_resp_err_desc for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP0_N_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep0_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP0_N_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep0_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP0_W_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep0_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP0_W_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep0_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP1_AXI_RESP_ERR_DATA, ///< Value fatal:ep1_axi_resp_err_data for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP1_AXI_RESP_ERR_DESC, ///< Value fatal:ep1_axi_resp_err_desc for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP1_N_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep1_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP1_N_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep1_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP1_W_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep1_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP1_W_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep1_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP2_AXI_RESP_ERR_DATA, ///< Value fatal:ep2_axi_resp_err_data for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP2_AXI_RESP_ERR_DESC, ///< Value fatal:ep2_axi_resp_err_desc for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP2_N_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep2_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP2_N_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep2_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP2_W_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep2_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP2_W_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep2_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP3_AXI_RESP_ERR_DATA, ///< Value fatal:ep3_axi_resp_err_data for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP3_AXI_RESP_ERR_DESC, ///< Value fatal:ep3_axi_resp_err_desc for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP3_N_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep3_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP3_N_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep3_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP3_W_RX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep3_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_EP3_W_TX_RAM_ECC_MBIT_ERR, ///< Value fatal:ep3_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_frm_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_frm_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP2_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_frm_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP3_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_frm_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_FRM_RPL0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_frm_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_FRM_RPL1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_frm_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_stat_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_stat_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP2_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_stat_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP3_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_stat_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_STAT_RPL0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_stat_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_N_STAT_RPL1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_n_stat_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_frm_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_frm_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP2_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_frm_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP3_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_frm_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_FRM_RPL0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_frm_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_FRM_RPL1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_frm_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_stat_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_stat_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP2_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_stat_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP3_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_stat_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_STAT_RPL0_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_stat_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_FATAL_FRER_RX_W_STAT_RPL1_RAM_ECC_MBIT_ERR, ///< Value fatal:frer_rx_w_stat_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+   ENET_EP_SB_ERROR_LAST, ///< Last value of possible error within the ENET_EP GHES SB structu
+} p64h_ras_enet_ep_sb_err_t;
+
+/**
  * @brief Definitions of all errors within a structure of the NVM GHES
  */
 typedef enum {
@@ -1810,7 +2790,7 @@ typedef enum {
    NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_AW_A_PARITY, ///< Value bus_ecc_uncorrected:nand_s_uncor_err_aw_a_parity for instance nand_ctrl of structure from NVM
    NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_AW_C_PARITY, ///< Value bus_ecc_uncorrected:nand_s_uncor_err_aw_c_parity for instance nand_ctrl of structure from NVM
    NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_W_PARITY, ///< Value bus_ecc_uncorrected:nand_s_uncor_err_w_parity for instance nand_ctrl of structure from NVM
-   NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_WDATA_PARIT, ///< Value bus_ecc_uncorrected:nand_s_uncor_err_wdata_parit for instance nand_ctrl of structure from NVM
+   NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_WDATA_PARITY, ///< Value bus_ecc_uncorrected:nand_s_uncor_err_wdata_parity for instance nand_ctrl of structure from NVM
    NVM_NAND_CTRL_RAM_CORRECTED_DESC_CTXT_MEM_ERR_COR, ///< Value ram_corrected:desc_ctxt_mem_err_cor for instance nand_ctrl of structure from NVM
    NVM_NAND_CTRL_RAM_CORRECTED_ECC_BUF_0_ERR_COR, ///< Value ram_corrected:ecc_buf_0_err_cor for instance nand_ctrl of structure from NVM
    NVM_NAND_CTRL_RAM_CORRECTED_ECC_BUF_1_ERR_COR, ///< Value ram_corrected:ecc_buf_1_err_cor for instance nand_ctrl of structure from NVM
@@ -1914,13 +2894,13 @@ typedef enum {
    NVM_NVM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL, ///< Value emon_corrected:emon_stat_buf_full for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW, ///< Value emon_corrected:emon_stat_buf_ovrflw for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL, ///< Value emon_corrected:emon_uncor_buf_full for instance nvm_edac of structure from NVM
-   NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THRHLD, ///< Value emon_corrected:emon_uncor_buf_high_thrhld for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW, ///< Value emon_corrected:emon_uncor_buf_ovrflw for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_CORRECTED_PATROL_SCRUB_COMPLETE, ///< Value emon_corrected:patrol_scrub_complete for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_CORRECTED_SCRUB_DONE, ///< Value emon_corrected:scrub_done for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_CORRECTED_SCRUB_REQ, ///< Value emon_corrected:scrub_req for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR, ///< Value emon_uncorrected:emon_addr_err for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_UNCOR, ///< Value emon_uncorrected:emon_uncor for instance nvm_edac of structure from NVM
+   NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THRHLD, ///< Value emon_uncorrected:emon_uncor_buf_high_thrhld for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_FAULT_BUF_FSM_ERR, ///< Value fault:buf_fsm_err for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_FAULT_DEMAND_READ_RAM_DSCR_ERR, ///< Value fault:demand_read_ram_dscr_err for instance nvm_edac of structure from NVM
    NVM_NVM_EDAC_FAULT_ENC_ADDR_PARITY_ERR, ///< Value fault:enc_addr_parity_err for instance nvm_edac of structure from NVM
@@ -2073,23 +3053,26 @@ typedef enum {
    NVM_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL, ///< Value emon_corrected:emon_stat_buf_full for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW, ///< Value emon_corrected:emon_stat_buf_ovrflw for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL, ///< Value emon_corrected:emon_uncor_buf_full for instance sram_edac of structure from NVM
-   NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THLD, ///< Value emon_corrected:emon_uncor_buf_high_thld for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW, ///< Value emon_corrected:emon_uncor_buf_ovrflw for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR, ///< Value emon_uncorrected:emon_addr_err for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION, ///< Value emon_uncorrected:emon_invalid_extraction for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR, ///< Value emon_uncorrected:emon_uncor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD, ///< Value emon_uncorrected:emon_uncor_buf_high_thld for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_FAULT_DEC_ADDR_PARITY_ERR, ///< Value fault:dec_addr_parity_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_ENC_ADDR_PARITY_ERR, ///< Value fault:enc_addr_parity_err for instance sram_edac of structure from NVM
-   NVM_SRAM_EDAC_FAULT_ENC_DATA_PARITY_ERR, ///< Value fault:enc_data_parity_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_ENC_FSM_ERR, ///< Value fault:enc_fsm_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_ERR_REMOVE_READ_COH, ///< Value fault:err_remove_read_coh for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_ERR_REMOVE_WRITE_COH, ///< Value fault:err_remove_write_coh for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_PATROL_SCRUB_FSM_ERR, ///< Value fault:patrol_scrub_fsm_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RARB_ERR, ///< Value fault:rarb_err for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_FAULT_RD_WR_ARB_ERR, ///< Value fault:rd_wr_arb_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RDCAP_CTX_OVERFLOW, ///< Value fault:rdcap_ctx_overflow for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RDCAP_CTX_UNDERFLOW, ///< Value fault:rdcap_ctx_underflow for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RDGEN_CTX_OVERFLOW, ///< Value fault:rdgen_ctx_overflow for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RDGEN_CTX_UNDERFLOW, ///< Value fault:rdgen_ctx_underflow for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RMW_CTX_OVERFLOW, ///< Value fault:rmw_ctx_overflow for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RMW_CTX_UNDERFLOW, ///< Value fault:rmw_ctx_underflow for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_FAULT_RMW_RD_ERR, ///< Value fault:rmw_rd_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RMW_RDCAP_OVERFLOW, ///< Value fault:rmw_rdcap_overflow for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_RMW_RDCAP_UNDERFLOW, ///< Value fault:rmw_rdcap_underflow for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_WARB_ERR, ///< Value fault:warb_err for instance sram_edac of structure from NVM
@@ -2104,6 +3087,10 @@ typedef enum {
    NVM_SRAM_EDAC_FAULT_CORRECTED_BCH_ENC_BUS_ECC_COR, ///< Value fault_corrected:bch_enc_bus_ecc_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_CORRECTED_RCMD_BUS_ECC_COR, ///< Value fault_corrected:rcmd_bus_ecc_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_CORRECTED_RDCAP_BUS_ECC_COR, ///< Value fault_corrected:rdcap_bus_ecc_cor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_0_COR, ///< Value fault_corrected:rmw_bus_ecc_0_cor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_1_COR, ///< Value fault_corrected:rmw_bus_ecc_1_cor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_2_COR, ///< Value fault_corrected:rmw_bus_ecc_2_cor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_3_COR, ///< Value fault_corrected:rmw_bus_ecc_3_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_CORRECTED_SECDED_ENC_BUS_ECC_COR, ///< Value fault_corrected:secded_enc_bus_ecc_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_CORRECTED_WCMD_CAP_BUS_ECC_COR, ///< Value fault_corrected:wcmd_cap_bus_ecc_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_FAULT_CORRECTED_WCMD_GEN_BUS_ECC_COR, ///< Value fault_corrected:wcmd_gen_bus_ecc_cor for instance sram_edac of structure from NVM
@@ -2116,9 +3103,11 @@ typedef enum {
    NVM_SRAM_EDAC_RAM_CORRECTED_EMON_UNCOR_RAM_COR, ///< Value ram_corrected:emon_uncor_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_CORRECTED_ENC_DATA_RAM_COR_ERR, ///< Value ram_corrected:enc_data_ram_cor_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_CORRECTED_RDCAP_CTX_RAM_COR, ///< Value ram_corrected:rdcap_ctx_ram_cor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_RAM_CORRECTED_RDGEN_CTX_RAM_COR, ///< Value ram_corrected:rdgen_ctx_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_CORRECTED_RMW_CTX_RAM_COR, ///< Value ram_corrected:rmw_ctx_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_CORRECTED_RMW_DATA_RAM_COR, ///< Value ram_corrected:rmw_data_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_CORRECTED_WDCAP_CTX_RAM_COR, ///< Value ram_corrected:wdcap_ctx_ram_cor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_RAM_CORRECTED_WDCAP_DATA_RAM_COR, ///< Value ram_corrected:wdcap_data_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_CORRECTED_WDGEN_CTX_RAM_COR, ///< Value ram_corrected:wdgen_ctx_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_CORRECTED_WDRESP_CTX_RAM_COR, ///< Value ram_corrected:wdresp_ctx_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_DEC_DATA_RAM_UNCOR_ERR, ///< Value ram_uncorrected:dec_data_ram_uncor_err for instance sram_edac of structure from NVM
@@ -2127,12 +3116,10 @@ typedef enum {
    NVM_SRAM_EDAC_RAM_UNCORRECTED_EMON_UNCOR_RAM_UNCOR_ERR, ///< Value ram_uncorrected:emon_uncor_ram_uncor_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_ENC_DATA_RAM_UNCOR_ERR, ///< Value ram_uncorrected:enc_data_ram_uncor_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_RDCAP_CTX_RAM_UNCOR, ///< Value ram_uncorrected:rdcap_ctx_ram_uncor for instance sram_edac of structure from NVM
-   NVM_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_COR, ///< Value ram_uncorrected:rdgen_ctx_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_UNCOR, ///< Value ram_uncorrected:rdgen_ctx_ram_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_RMW_CTX_RAM_UNCOR, ///< Value ram_uncorrected:rmw_ctx_ram_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_RMW_DATA_RAM_UNCOR, ///< Value ram_uncorrected:rmw_data_ram_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_CTX_RAM_UNCOR, ///< Value ram_uncorrected:wdcap_ctx_ram_uncor for instance sram_edac of structure from NVM
-   NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_COR, ///< Value ram_uncorrected:wdcap_data_ram_cor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_UNCOR, ///< Value ram_uncorrected:wdcap_data_ram_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_WDGEN_CTX_RAM_UNCOR, ///< Value ram_uncorrected:wdgen_ctx_ram_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_RAM_UNCORRECTED_WDRESP_CTX_RAM_UNCOR, ///< Value ram_uncorrected:wdresp_ctx_ram_uncor for instance sram_edac of structure from NVM
@@ -2143,6 +3130,10 @@ typedef enum {
    NVM_SRAM_EDAC_TRANS_DROP_RCMD_DROP_TRANS, ///< Value trans_drop:rcmd_drop_trans for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_TRANS_DROP_RDCAP_BUS_ECC_UNCOR, ///< Value trans_drop:rdcap_bus_ecc_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_TRANS_DROP_RDCAP_DROP_TRANS, ///< Value trans_drop:rdcap_drop_trans for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_UNCOR, ///< Value trans_drop:rmw_bus_ecc_0_uncor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_UNCOR, ///< Value trans_drop:rmw_bus_ecc_1_uncor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_UNCOR, ///< Value trans_drop:rmw_bus_ecc_2_uncor for instance sram_edac of structure from NVM
+   NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_UNCOR, ///< Value trans_drop:rmw_bus_ecc_3_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_TRANS_DROP_RMW_CMD_CTX_ERR, ///< Value trans_drop:rmw_cmd_ctx_err for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_TRANS_DROP_SECDED_ENC_BUS_ECC_UNCOR, ///< Value trans_drop:secded_enc_bus_ecc_uncor for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_TRANS_DROP_WCMD_CAP_BUS_ECC_UNCOR, ///< Value trans_drop:wcmd_cap_bus_ecc_uncor for instance sram_edac of structure from NVM
@@ -2159,6 +3150,329 @@ typedef enum {
    NVM_SRAM_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT, ///< Value write_timeout:wdresp_timeout for instance sram_edac of structure from NVM
    NVM_SRAM_EDAC_ERROR_LAST, ///< Last value of possible error within the NVM GHES SRAM_EDAC structu
 } p64h_ras_nvm_sram_edac_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the PCXL GHES
+ */
+typedef enum {
+    PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_A2P_ECC_CORR_ERR = 0, ///< Value ecc_corr:ctrl0_bridge_a2p_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_DMA_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_bridge_dma_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_P2A_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_bridge_p2a_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_PL_LLRB_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_pl_llrb_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_DATA_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_rx_cxl_cache_data_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_REQ_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_rx_cxl_cache_req_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_RSP_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_rx_cxl_cache_rsp_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_MEM_DATA_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_rx_cxl_mem_data_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_MEM_REQ_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_rx_cxl_mem_req_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_DATA_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_tx_cxl_cache_data_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_DATAHDR_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_tx_cxl_cache_datahdr_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_REQ_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_tx_cxl_cache_req_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_RSP_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_tx_cxl_cache_rsp_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_DATA_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_tx_cxl_mem_data_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_DATAHDR_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_tx_cxl_mem_datahdr_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_REQ_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_tx_cxl_mem_req_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_NP_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_xpressrich_np_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_RX_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_xpressrich_rx_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_TX_ECC_CORR_ERR, ///< Value ecc_corr:ctrl0_xpressrich_tx_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_A2P_ECC_CORR_ERR, ///< Value ecc_corr:ctrl1_bridge_a2p_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_DMA_ECC_CORR_ERR, ///< Value ecc_corr:ctrl1_bridge_dma_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_P2A_ECC_CORR_ERR, ///< Value ecc_corr:ctrl1_bridge_p2a_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL1_PL_LLRB_ECC_CORR_ERR, ///< Value ecc_corr:ctrl1_pl_llrb_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_NP_ECC_CORR_ERR, ///< Value ecc_corr:ctrl1_xpressrich_np_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_RX_ECC_CORR_ERR, ///< Value ecc_corr:ctrl1_xpressrich_rx_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_TX_ECC_CORR_ERR, ///< Value ecc_corr:ctrl1_xpressrich_tx_ecc_corr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_A2P_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_bridge_a2p_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_DMA_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_bridge_dma_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_P2A_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_bridge_p2a_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_PL_LLRB_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_pl_llrb_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_DATA_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_rx_cxl_cache_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_REQ_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_rx_cxl_cache_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_RSP_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_rx_cxl_cache_rsp_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_MEM_DATA_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_rx_cxl_mem_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_MEM_REQ_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_rx_cxl_mem_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_DATA_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_tx_cxl_cache_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_DATAHDR_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_tx_cxl_cache_datahdr_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_REQ_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_tx_cxl_cache_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_RSP_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_tx_cxl_cache_rsp_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_DATA_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_tx_cxl_mem_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_DATAHDR_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_tx_cxl_mem_datahdr_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_REQ_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_tx_cxl_mem_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_NP_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_xpressrich_np_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_RX_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_xpressrich_rx_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_TX_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl0_xpressrich_tx_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_A2P_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl1_bridge_a2p_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_DMA_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl1_bridge_dma_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_P2A_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl1_bridge_p2a_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL1_PL_LLRB_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl1_pl_llrb_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_NP_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl1_xpressrich_np_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_RX_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl1_xpressrich_rx_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_TX_ECC_UNCORR_ERR, ///< Value ecc_uncorr:ctrl1_xpressrich_tx_ecc_uncorr_err for instance ctrl of structure from PCXL
+   PCXL_CTRL_ERROR_LAST, ///< Last value of possible error within the PCXL GHES CTRL structu
+} p64h_ras_pcxl_ctrl_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the PCXL GHES
+ */
+typedef enum {
+    PCXL_LINK_FATAL_A2F_D2H_DATAPOISON = 0, ///< Value fatal:a2f_d2h_datapoison for instance link of structure from PCXL
+   PCXL_LINK_FATAL_A2F_D2H_FATAL, ///< Value fatal:a2f_d2h_fatal for instance link of structure from PCXL
+   PCXL_LINK_FATAL_A2F_D2H_VIRAL, ///< Value fatal:a2f_d2h_viral for instance link of structure from PCXL
+   PCXL_LINK_FATAL_A2F_S2M_DATAPOISON, ///< Value fatal:a2f_s2m_datapoison for instance link of structure from PCXL
+   PCXL_LINK_FATAL_A2F_S2M_FATAL, ///< Value fatal:a2f_s2m_fatal for instance link of structure from PCXL
+   PCXL_LINK_FATAL_A2F_S2M_VIRAL, ///< Value fatal:a2f_s2m_viral for instance link of structure from PCXL
+   PCXL_LINK_FATAL_ATS_INVALIDATION_RESP_TIMEOUT, ///< Value fatal:ats_invalidation_resp_timeout for instance link of structure from PCXL
+   PCXL_LINK_FATAL_ATS_TRANSLATION_FAULT, ///< Value fatal:ats_translation_fault for instance link of structure from PCXL
+   PCXL_LINK_FATAL_AXI_M0_ARUSER, ///< Value fatal:axi_m0_aruser for instance link of structure from PCXL
+   PCXL_LINK_FATAL_AXI_M0_AWUSER, ///< Value fatal:axi_m0_awuser for instance link of structure from PCXL
+   PCXL_LINK_FATAL_AXI_M0_BRESP, ///< Value fatal:axi_m0_bresp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_AXI_M0_RRESP, ///< Value fatal:axi_m0_rresp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_AXI_S0_RUSER, ///< Value fatal:axi_s0_ruser for instance link of structure from PCXL
+   PCXL_LINK_FATAL_CM_TX_VIRAL_ENTERED, ///< Value fatal:cm_tx_viral_entered for instance link of structure from PCXL
+   PCXL_LINK_FATAL_F2A_H2D_DATAPOISON, ///< Value fatal:f2a_h2d_datapoison for instance link of structure from PCXL
+   PCXL_LINK_FATAL_F2A_H2D_FATAL, ///< Value fatal:f2a_h2d_fatal for instance link of structure from PCXL
+   PCXL_LINK_FATAL_F2A_H2D_VIRAL, ///< Value fatal:f2a_h2d_viral for instance link of structure from PCXL
+   PCXL_LINK_FATAL_F2A_M2S_DATAPOISON, ///< Value fatal:f2a_m2s_datapoison for instance link of structure from PCXL
+   PCXL_LINK_FATAL_F2A_M2S_FATAL, ///< Value fatal:f2a_m2s_fatal for instance link of structure from PCXL
+   PCXL_LINK_FATAL_F2A_M2S_VIRAL, ///< Value fatal:f2a_m2s_viral for instance link of structure from PCXL
+   PCXL_LINK_FATAL_LOCAL_INTERRUPT_AER_ERR, ///< Value fatal:local_interrupt_aer_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_LOCAL_INTERRUPT_SYS_ERR, ///< Value fatal:local_interrupt_sys_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_DISCARD_ERR, ///< Value fatal:test_out_adt_axi_slave0_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_FETCH_ERR, ///< Value fatal:test_out_adt_axi_slave0_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_POST_ERR, ///< Value fatal:test_out_adt_axi_slave0_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_DISCARD_ERR, ///< Value fatal:test_out_adt_axi_slave1_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_FETCH_ERR, ///< Value fatal:test_out_adt_axi_slave1_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_POST_ERR, ///< Value fatal:test_out_adt_axi_slave1_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_POST_ERR, ///< Value fatal:test_out_adt_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_slave0_tbl0_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_slave0_tbl0_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_POST_ERR, ///< Value fatal:test_out_adt_slave0_tbl0_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_slave0_tbl1_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_slave0_tbl1_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_POST_ERR, ///< Value fatal:test_out_adt_slave0_tbl1_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_slave0_tbl2_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_slave0_tbl2_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_POST_ERR, ///< Value fatal:test_out_adt_slave0_tbl2_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_slave0_tbl3_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_slave0_tbl3_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_POST_ERR, ///< Value fatal:test_out_adt_slave0_tbl3_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_slave1_tbl0_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_slave1_tbl0_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_POST_ERR, ///< Value fatal:test_out_adt_slave1_tbl0_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_win0_tbl0_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_win0_tbl0_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_POST_ERR, ///< Value fatal:test_out_adt_win0_tbl0_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_win0_tbl1_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_win0_tbl1_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_POST_ERR, ///< Value fatal:test_out_adt_win0_tbl1_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_win0_tbl2_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_win0_tbl2_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_POST_ERR, ///< Value fatal:test_out_adt_win0_tbl2_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_DISCARD_ERR, ///< Value fatal:test_out_adt_win0_tbl3_pcie_discard_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_FETCH_ERR, ///< Value fatal:test_out_adt_win0_tbl3_pcie_fetch_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_POST_ERR, ///< Value fatal:test_out_adt_win0_tbl3_pcie_post_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_AER_ERR, ///< Value fatal:test_out_bridge_aer_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_DPC_INT, ///< Value fatal:test_out_bridge_dpc_int for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_DRS_EVENT, ///< Value fatal:test_out_bridge_drs_event for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_FRS_MSG_OVFL, ///< Value fatal:test_out_bridge_frs_msg_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_HOTPLUG_EVENT, ///< Value fatal:test_out_bridge_hotplug_event for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_L2_STATUS, ///< Value fatal:test_out_bridge_l2_status for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_AUTO_BW, ///< Value fatal:test_out_bridge_link_auto_bw for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_BW_MGMT, ///< Value fatal:test_out_bridge_link_bw_mgmt for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_EQ_REQ, ///< Value fatal:test_out_bridge_link_eq_req for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_PM_EVENT, ///< Value fatal:test_out_bridge_pm_event for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_BRIDGE_SYS_ERR, ///< Value fatal:test_out_bridge_sys_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_DATA_FIFO_OVFL, ///< Value fatal:test_out_cm_cache_data_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_REQ_FIFO_OVFL, ///< Value fatal:test_out_cm_cache_req_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_RSP_FIFO_OVFL, ///< Value fatal:test_out_cm_cache_rsp_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_MEM_DATA_FIFO_OVFL, ///< Value fatal:test_out_cm_mem_data_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_MEM_REQ_RSP_FIFO_OVFL, ///< Value fatal:test_out_cm_mem_req_rsp_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_HDR_ERR, ///< Value fatal:test_out_cm_rx_cache_hdr_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_MSG_RCV_ERR, ///< Value fatal:test_out_cm_rx_cache_msg_rcv_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_POISON, ///< Value fatal:test_out_cm_rx_cache_poison for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_CRC_ERR, ///< Value fatal:test_out_cm_rx_crc_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_HDR_ERR, ///< Value fatal:test_out_cm_rx_mem_hdr_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_MSG_RCV_ERR, ///< Value fatal:test_out_cm_rx_mem_msg_rcv_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_POISON, ///< Value fatal:test_out_cm_rx_mem_poison for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_PHY_ERR, ///< Value fatal:test_out_cm_rx_phy_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_RESERVED_ENCODE_FLIT_HDR, ///< Value fatal:test_out_cm_rx_reserved_encode_flit_hdr for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_RX_VIRAL, ///< Value fatal:test_out_cm_rx_viral for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_DATA_FIFO_OVFL, ///< Value fatal:test_out_cm_tx_cache_data_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_DATA_HDR_FIFO_OVFL, ///< Value fatal:test_out_cm_tx_cache_data_hdr_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_REQ_FIFO_OVFL, ///< Value fatal:test_out_cm_tx_cache_req_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_RSP_FIFO_OVFL, ///< Value fatal:test_out_cm_tx_cache_rsp_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_RETRY_ERR, ///< Value fatal:test_out_cm_tx_llrb_retry_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_SRAM_PARITY_ERR, ///< Value fatal:test_out_cm_tx_llrb_sram_parity_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_SRAM_UECC_ERR, ///< Value fatal:test_out_cm_tx_llrb_sram_uecc_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_DATA_FIFO_OVFL, ///< Value fatal:test_out_cm_tx_mem_data_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_DATA_HDR_FIFO_OVFL, ///< Value fatal:test_out_cm_tx_mem_data_hdr_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_REQ_RSP_FIFO_OVFL, ///< Value fatal:test_out_cm_tx_mem_req_rsp_fifo_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_ACK_NAK_SEQ_NUM_ERR, ///< Value fatal:test_out_pcie_ack_nak_seq_num_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_DESKEW_ERR, ///< Value fatal:test_out_pcie_deskew_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_ENCODING_ERR, ///< Value fatal:test_out_pcie_encoding_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FLIT_FRAMING_ERR, ///< Value fatal:test_out_pcie_flit_framing_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FLOW_CTRL_PROTO_ERR, ///< Value fatal:test_out_pcie_flow_ctrl_proto_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FLOW_CTRL_TIMEOUT, ///< Value fatal:test_out_pcie_flow_ctrl_timeout for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR, ///< Value fatal:test_out_pcie_framing_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_STP_EDS, ///< Value fatal:test_out_pcie_framing_err_128b_stp_eds for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_SYNC, ///< Value fatal:test_out_pcie_framing_err_128b_sync for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_UNEXPECTED_EDS, ///< Value fatal:test_out_pcie_framing_err_128b_unexpected_eds for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_UNEXPECTED_SYMBOL, ///< Value fatal:test_out_pcie_framing_err_128b_unexpected_symbol for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_LTSSM_TIMEOUT, ///< Value fatal:test_out_pcie_ltssm_timeout for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_PHY_STATUS_ERR, ///< Value fatal:test_out_pcie_phy_status_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_BAD_DLLP, ///< Value fatal:test_out_pcie_rcvd_bad_dllp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_BAD_TLP, ///< Value fatal:test_out_pcie_rcvd_bad_tlp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_DUPLICATE_TLP, ///< Value fatal:test_out_pcie_rcvd_duplicate_tlp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_NULLIFIED_TLP, ///< Value fatal:test_out_pcie_rcvd_nullified_tlp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_TLP_LCRC_ERR, ///< Value fatal:test_out_pcie_rcvd_tlp_lcrc_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_BUF_OVFL, ///< Value fatal:test_out_pcie_replay_buf_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_NUM_ERR, ///< Value fatal:test_out_pcie_replay_num_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_TIMER_ERR, ///< Value fatal:test_out_pcie_replay_timer_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_RX_BUF_OVFL, ///< Value fatal:test_out_pcie_rx_buf_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_TX_BUF_OVFL, ///< Value fatal:test_out_pcie_tx_buf_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ACS_VIOLATION, ///< Value fatal:test_out_pcie_uncorr_acs_violation for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ATOMICOP_EGRESS_BLOCKED, ///< Value fatal:test_out_pcie_uncorr_atomicop_egress_blocked for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_CPL_ABORT, ///< Value fatal:test_out_pcie_uncorr_cpl_abort for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_CPL_TIMEOUT, ///< Value fatal:test_out_pcie_uncorr_cpl_timeout for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_DATA_LINK_PROTO, ///< Value fatal:test_out_pcie_uncorr_data_link_proto for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ECRC_ERR, ///< Value fatal:test_out_pcie_uncorr_ecrc_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_FLOW_CTRL_ERR, ///< Value fatal:test_out_pcie_uncorr_flow_ctrl_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_INTERNAL_ERR, ///< Value fatal:test_out_pcie_uncorr_internal_err for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_MALFORMED_TLP, ///< Value fatal:test_out_pcie_uncorr_malformed_tlp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_MC_BLOCKED_TLP, ///< Value fatal:test_out_pcie_uncorr_mc_blocked_tlp for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_POISONED_TLP_EGRESS_BLOCKED, ///< Value fatal:test_out_pcie_uncorr_poisoned_tlp_egress_blocked for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_POISONED_TLP_RCVD, ///< Value fatal:test_out_pcie_uncorr_poisoned_tlp_rcvd for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_RCVR_OVFL, ///< Value fatal:test_out_pcie_uncorr_rcvr_ovfl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_SURPRISE_DOWN, ///< Value fatal:test_out_pcie_uncorr_surprise_down for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_TLP_PREFIX_BLOCKED, ///< Value fatal:test_out_pcie_uncorr_tlp_prefix_blocked for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_UNEXPECTED_CPL, ///< Value fatal:test_out_pcie_uncorr_unexpected_cpl for instance link of structure from PCXL
+   PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_UNSUPPORTED_REQ, ///< Value fatal:test_out_pcie_uncorr_unsupported_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_A2F_D2H_TXCONREQ, ///< Value non_fatal:a2f_d2h_txconreq for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_A2F_S2M_TXCONREQ, ///< Value non_fatal:a2f_s2m_txconreq for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_ATS_INVALID_CPL, ///< Value non_fatal:ats_invalid_cpl for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_ATS_INVALID_REQ, ///< Value non_fatal:ats_invalid_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_ATS_PAGE_REQ, ///< Value non_fatal:ats_page_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_ATS_PAGE_RESP_ACK, ///< Value non_fatal:ats_page_resp_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_ATS_SYNC_ACK, ///< Value non_fatal:ats_sync_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_ATS_TRANS_REQ, ///< Value non_fatal:ats_trans_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_ATS_TRANS_RESP, ///< Value non_fatal:ats_trans_resp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_F2A_H2D_TXCONREQ, ///< Value non_fatal:f2a_h2d_txconreq for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_F2A_M2S_TXCONREQ, ///< Value non_fatal:f2a_m2s_txconreq for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_MSI_RCVD, ///< Value non_fatal:local_int_msi_rcvd for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_0, ///< Value non_fatal:local_int_out_0 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_1, ///< Value non_fatal:local_int_out_1 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_10, ///< Value non_fatal:local_int_out_10 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_11, ///< Value non_fatal:local_int_out_11 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_12, ///< Value non_fatal:local_int_out_12 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_13, ///< Value non_fatal:local_int_out_13 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_14, ///< Value non_fatal:local_int_out_14 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_15, ///< Value non_fatal:local_int_out_15 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_16, ///< Value non_fatal:local_int_out_16 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_17, ///< Value non_fatal:local_int_out_17 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_18, ///< Value non_fatal:local_int_out_18 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_19, ///< Value non_fatal:local_int_out_19 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_2, ///< Value non_fatal:local_int_out_2 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_20, ///< Value non_fatal:local_int_out_20 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_21, ///< Value non_fatal:local_int_out_21 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_22, ///< Value non_fatal:local_int_out_22 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_23, ///< Value non_fatal:local_int_out_23 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_3, ///< Value non_fatal:local_int_out_3 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_4, ///< Value non_fatal:local_int_out_4 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_5, ///< Value non_fatal:local_int_out_5 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_6, ///< Value non_fatal:local_int_out_6 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_7, ///< Value non_fatal:local_int_out_7 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_8, ///< Value non_fatal:local_int_out_8 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_9, ///< Value non_fatal:local_int_out_9 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_A, ///< Value non_fatal:local_int_pci_a for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_B, ///< Value non_fatal:local_int_pci_b for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_C, ///< Value non_fatal:local_int_pci_c for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_D, ///< Value non_fatal:local_int_pci_d for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_LOCAL_INT_PM_HOTPLUG, ///< Value non_fatal:local_int_pm_hotplug for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_AXI_SLAVE0_DOORBELL, ///< Value non_fatal:test_out_adt_axi_slave0_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_AXI_SLAVE1_DOORBELL, ///< Value non_fatal:test_out_adt_axi_slave1_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_slave0_tbl0_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_slave0_tbl1_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_slave0_tbl2_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_slave0_tbl3_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_slave1_tbl0_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_win0_tbl0_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_win0_tbl1_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_win0_tbl2_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_DOORBELL, ///< Value non_fatal:test_out_adt_win0_tbl3_pcie_doorbell for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_CPL_RX, ///< Value non_fatal:test_out_bridge_cpl_rx for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_CPL_TX, ///< Value non_fatal:test_out_bridge_cpl_tx for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_RD_RX, ///< Value non_fatal:test_out_bridge_mem_rd_rx for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_RD_TX, ///< Value non_fatal:test_out_bridge_mem_rd_tx for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_WR_RX, ///< Value non_fatal:test_out_bridge_mem_wr_rx for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_WR_TX, ///< Value non_fatal:test_out_bridge_mem_wr_tx for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_DATA, ///< Value non_fatal:test_out_cm_cpi_tx_ovr_flow_cache_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_REQ, ///< Value non_fatal:test_out_cm_cpi_tx_ovr_flow_cache_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_RSP, ///< Value non_fatal:test_out_cm_cpi_tx_ovr_flow_cache_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_MEM_DATA, ///< Value non_fatal:test_out_cm_cpi_tx_ovr_flow_mem_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_MEM_REQ_RSP, ///< Value non_fatal:test_out_cm_cpi_tx_ovr_flow_mem_req_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_LL_RESET_ACK, ///< Value non_fatal:test_out_cm_ll_reset_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CACHE_DATA_POISON_ACK, ///< Value non_fatal:test_out_cm_rx_cache_data_poison_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CRC_ERR_INJ_ACK, ///< Value non_fatal:test_out_cm_rx_crc_err_inj_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CRC_ERR_TIME_THRESH, ///< Value non_fatal:test_out_cm_rx_crc_err_time_thresh for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_DATA, ///< Value non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_cache_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_REQ, ///< Value non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_cache_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_RSP, ///< Value non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_cache_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_MEM_DATA, ///< Value non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_mem_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_MEM_REQ_RSP, ///< Value non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_mem_req_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_DATA, ///< Value non_fatal:test_out_cm_rx_cxl_credit_udr_flow_cache_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_REQ, ///< Value non_fatal:test_out_cm_rx_cxl_credit_udr_flow_cache_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_RSP, ///< Value non_fatal:test_out_cm_rx_cxl_credit_udr_flow_cache_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_MEM_DATA, ///< Value non_fatal:test_out_cm_rx_cxl_credit_udr_flow_mem_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_MEM_REQ_RSP, ///< Value non_fatal:test_out_cm_rx_cxl_credit_udr_flow_mem_req_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_MEM_DATA_POISON_ACK, ///< Value non_fatal:test_out_cm_rx_mem_data_poison_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_PHY_REINIT_TIME_THRESH, ///< Value non_fatal:test_out_cm_rx_phy_reinit_time_thresh for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_REPLAY_REQ, ///< Value non_fatal:test_out_cm_rx_replay_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_RETRY_TIME_THRESH, ///< Value non_fatal:test_out_cm_rx_retry_time_thresh for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CACHE_DATA_POISON_ACK, ///< Value non_fatal:test_out_cm_tx_cache_data_poison_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CRC_ERR_INJ_ACK, ///< Value non_fatal:test_out_cm_tx_crc_err_inj_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_DATA, ///< Value non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_cache_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_REQ, ///< Value non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_cache_req for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_RSP, ///< Value non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_cache_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_MEM_DATA, ///< Value non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_mem_data for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_MEM_REQ_RSP, ///< Value non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_mem_req_rsp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_MEM_DATA_POISON_ACK, ///< Value non_fatal:test_out_cm_tx_mem_data_poison_ack for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_ADVISORY_NF, ///< Value non_fatal:test_out_pcie_corr_advisory_nf for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_BAD_DLLP, ///< Value non_fatal:test_out_pcie_corr_bad_dllp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_BAD_TLP, ///< Value non_fatal:test_out_pcie_corr_bad_tlp for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_HDR_LOG_OVFL, ///< Value non_fatal:test_out_pcie_corr_hdr_log_ovfl for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_INTERNAL_ERR, ///< Value non_fatal:test_out_pcie_corr_internal_err for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_RCVR_ERR, ///< Value non_fatal:test_out_pcie_corr_rcvr_err for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_REPLAY_ROLLOVER, ///< Value non_fatal:test_out_pcie_corr_replay_rollover for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_REPLAY_TO, ///< Value non_fatal:test_out_pcie_corr_replay_to for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CPL_CA, ///< Value non_fatal:test_out_pcie_cpl_ca for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CPL_UR, ///< Value non_fatal:test_out_pcie_cpl_ur for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_DPC_ACTIVE, ///< Value non_fatal:test_out_pcie_dpc_active for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L0S, ///< Value non_fatal:test_out_pcie_ltssm_l0s for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L1, ///< Value non_fatal:test_out_pcie_ltssm_l1 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L2, ///< Value non_fatal:test_out_pcie_ltssm_l2 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_4KB_BOUNDARY, ///< Value non_fatal:test_out_pcie_tlp_4kb_boundary for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_ACS_VIOLATION, ///< Value non_fatal:test_out_pcie_tlp_acs_violation for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_ADDR_NOT_IN_BAR, ///< Value non_fatal:test_out_pcie_tlp_addr_not_in_bar for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_FBE_LBE_ERR, ///< Value non_fatal:test_out_pcie_tlp_fbe_lbe_err for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_HDR_RECEIVED, ///< Value non_fatal:test_out_pcie_tlp_hdr_received for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_ATOMIC, ///< Value non_fatal:test_out_pcie_tlp_malformed_atomic for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_CPL, ///< Value non_fatal:test_out_pcie_tlp_malformed_cpl for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_IO_CFG, ///< Value non_fatal:test_out_pcie_tlp_malformed_io_cfg for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_MEMRDLK, ///< Value non_fatal:test_out_pcie_tlp_malformed_memrdlk for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_MSG, ///< Value non_fatal:test_out_pcie_tlp_malformed_msg for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_PAYLOAD_SIZE_ERR, ///< Value non_fatal:test_out_pcie_tlp_payload_size_err for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNEXPECTED_CPL, ///< Value non_fatal:test_out_pcie_tlp_unexpected_cpl for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNKNOWN_TYPE, ///< Value non_fatal:test_out_pcie_tlp_unknown_type for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNSUPPORTED, ///< Value non_fatal:test_out_pcie_tlp_unsupported for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_PHASE1, ///< Value non_fatal:tl_cxl_status_gpf_phase1 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_PHASE2, ///< Value non_fatal:tl_cxl_status_gpf_phase2 for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_TIMEOUT, ///< Value non_fatal:tl_cxl_status_gpf_timeout for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TL_CXL_STATUS_RESETPREP_PENDING, ///< Value non_fatal:tl_cxl_status_resetprep_pending for instance link of structure from PCXL
+   PCXL_LINK_NON_FATAL_TL_CXL_STATUS_RESETPREP_TIMEOUT, ///< Value non_fatal:tl_cxl_status_resetprep_timeout for instance link of structure from PCXL
+   PCXL_LINK_ERROR_LAST, ///< Last value of possible error within the PCXL GHES LINK structu
+} p64h_ras_pcxl_link_err_t;
 
 /**
  * @brief Definitions of all errors within a structure of the SEC GHES
@@ -2418,6 +3732,113 @@ typedef enum {
 } p64h_ras_sec_wdog_err_t;
 
 /**
+ * @brief Definitions of all errors within a structure of the SVC_NOC GHES
+ */
+typedef enum {
+    SVC_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM = 0, ///< Value fsm_fault:internal_fsm for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER, ///< Value packet_validity_fault:packet_wordnumber for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT, ///< Value timeout_fault:latent_timeout for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT, ///< Value timeout_fault:major_timeout for instance initiators of structure from SVC_NOC
+   SVC_NOC_INITIATORS_ERROR_LAST, ///< Last value of possible error within the SVC_NOC GHES INITIATORS structu
+} p64h_ras_svc_noc_initiators_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SVC_NOC GHES
+ */
+typedef enum {
+    SVC_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM = 0, ///< Value fsm_fault:internal_fsm for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER, ///< Value packet_validity_fault:packet_wordnumber for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance targets of structure from SVC_NOC
+   SVC_NOC_TARGETS_ERROR_LAST, ///< Last value of possible error within the SVC_NOC GHES TARGETS structu
+} p64h_ras_svc_noc_targets_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SVC_NOC GHES
+ */
+typedef enum {
+    SVC_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_TOP = 0, ///< Value fsm_fault:internal_fsm_top for instance top_fault_agg of structure from SVC_NOC
+   SVC_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY, ///< Value register_parity_fault:power_main_fault_control_parity for instance top_fault_agg of structure from SVC_NOC
+   SVC_NOC_TOP_FAULT_AGG_ERROR_LAST, ///< Last value of possible error within the SVC_NOC GHES TOP_FAULT_AGG structu
+} p64h_ras_svc_noc_top_fault_agg_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_DMA_BUS_PARITY_ERR_MXIF1_ARCH_PROT_ARREADY = 0, ///< Value bus_parity_err:mxif1_arch_prot_arready for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF1_AWCH_PROT_AWREADY, ///< Value bus_parity_err:mxif1_awch_prot_awready for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF1_BCH_PROT_BVALID, ///< Value bus_parity_err:mxif1_bch_prot_bvalid for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF1_RCH_PROT_RVALID, ///< Value bus_parity_err:mxif1_rch_prot_rvalid for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF1_WCH_PROT_WREADY, ///< Value bus_parity_err:mxif1_wch_prot_wready for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF2_ARCH_PROT_ARREADY, ///< Value bus_parity_err:mxif2_arch_prot_arready for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF2_AWCH_PROT_AWREADY, ///< Value bus_parity_err:mxif2_awch_prot_awready for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF2_BCH_PROT_BVALID, ///< Value bus_parity_err:mxif2_bch_prot_bvalid for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF2_RCH_PROT_RVALID, ///< Value bus_parity_err:mxif2_rch_prot_rvalid for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_MXIF2_WCH_PROT_WREADY, ///< Value bus_parity_err:mxif2_wch_prot_wready for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_SLVIF_ADDRPARITY, ///< Value bus_parity_err:slvif_addrparity for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_SLVIF_COMMONREG_ADDRPARITY, ///< Value bus_parity_err:slvif_commonreg_addrparity for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_SLVIF_COMMONREG_WRPARITY, ///< Value bus_parity_err:slvif_commonreg_wrparity for instance dma of structure from SYS
+   SYS_DMA_BUS_PARITY_ERR_SLVIF_WRPARITY, ///< Value bus_parity_err:slvif_wrparity for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_FIFO_MEM, ///< Value corrected:fifo_mem for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_MXIF1_BCH_PROT, ///< Value corrected:mxif1_bch_prot for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_MXIF1_RCH0_PROT, ///< Value corrected:mxif1_rch0_prot for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_MXIF1_RCH1_PROT, ///< Value corrected:mxif1_rch1_prot for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_MXIF2_BCH_PROT, ///< Value corrected:mxif2_bch_prot for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_MXIF2_RCH0_PROT, ///< Value corrected:mxif2_rch0_prot for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_MXIF2_RCH1_PROT, ///< Value corrected:mxif2_rch1_prot for instance dma of structure from SYS
+   SYS_DMA_CORRECTED_UID_MEM, ///< Value corrected:uid_mem for instance dma of structure from SYS
+   SYS_DMA_DECODE_ERR_DST_DEC, ///< Value decode_err:dst_dec for instance dma of structure from SYS
+   SYS_DMA_DECODE_ERR_LLI_RD_DEC, ///< Value decode_err:lli_rd_dec for instance dma of structure from SYS
+   SYS_DMA_DECODE_ERR_LLI_WR_DEC, ///< Value decode_err:lli_wr_dec for instance dma of structure from SYS
+   SYS_DMA_DECODE_ERR_SLVIF_COMMONREG_DEC, ///< Value decode_err:slvif_commonreg_dec for instance dma of structure from SYS
+   SYS_DMA_DECODE_ERR_SLVIF_DEC, ///< Value decode_err:slvif_dec for instance dma of structure from SYS
+   SYS_DMA_DECODE_ERR_SLVIF_UNDEFINEDREG, ///< Value decode_err:slvif_undefinedreg for instance dma of structure from SYS
+   SYS_DMA_DECODE_ERR_SRC_DEC, ///< Value decode_err:src_dec for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SHADOWREG_OR_LLI_INVALID, ///< Value invalid_access:shadowreg_or_lli_invalid for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_RD2WO, ///< Value invalid_access:slvif_commonreg_rd2wo for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_WR2RO, ///< Value invalid_access:slvif_commonreg_wr2ro for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_WRONHOLD, ///< Value invalid_access:slvif_commonreg_wronhold for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_MULTIBLKTYPE, ///< Value invalid_access:slvif_multiblktype for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_RD2RWO, ///< Value invalid_access:slvif_rd2rwo for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_SHADOWREG_WRON_VALID, ///< Value invalid_access:slvif_shadowreg_wron_valid for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_WR2RO, ///< Value invalid_access:slvif_wr2ro for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_WRONCHEN, ///< Value invalid_access:slvif_wronchen for instance dma of structure from SYS
+   SYS_DMA_INVALID_ACCESS_SLVIF_WRONHOLD, ///< Value invalid_access:slvif_wronhold for instance dma of structure from SYS
+   SYS_DMA_SUBORDINATE_ERR_DST_SLV, ///< Value subordinate_err:dst_slv for instance dma of structure from SYS
+   SYS_DMA_SUBORDINATE_ERR_LLI_RD_SLV, ///< Value subordinate_err:lli_rd_slv for instance dma of structure from SYS
+   SYS_DMA_SUBORDINATE_ERR_LLI_WR_SLV, ///< Value subordinate_err:lli_wr_slv for instance dma of structure from SYS
+   SYS_DMA_SUBORDINATE_ERR_SRC_SLV, ///< Value subordinate_err:src_slv for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_FIFO_MEM, ///< Value uncorrected:fifo_mem for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_MXIF1_BCH_PROT, ///< Value uncorrected:mxif1_bch_prot for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_MXIF1_RCH0_PROT, ///< Value uncorrected:mxif1_rch0_prot for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_MXIF1_RCH1_PROT, ///< Value uncorrected:mxif1_rch1_prot for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_MXIF2_BCH_PROT, ///< Value uncorrected:mxif2_bch_prot for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_MXIF2_RCH0_PROT, ///< Value uncorrected:mxif2_rch0_prot for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_MXIF2_RCH1_PROT, ///< Value uncorrected:mxif2_rch1_prot for instance dma of structure from SYS
+   SYS_DMA_UNCORRECTED_UID_MEM, ///< Value uncorrected:uid_mem for instance dma of structure from SYS
+   SYS_DMA_ERROR_LAST, ///< Last value of possible error within the SYS GHES DMA structu
+} p64h_ras_sys_dma_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_HPT_UNCORRECTED_ELT_COUNT_ECC = 0, ///< Value uncorrected:elt_count_ecc for instance hpt of structure from SYS
+   SYS_HPT_ERROR_LAST, ///< Last value of possible error within the SYS GHES HPT structu
+} p64h_ras_sys_hpt_err_t;
+
+/**
  * @brief Definitions of all errors within a structure of the SYS GHES
  */
 typedef enum {
@@ -2441,19 +3862,289 @@ typedef enum {
  * @brief Definitions of all errors within a structure of the SYS GHES
  */
 typedef enum {
-    SYS_S7_D_CACHE_CORRECTABLE = 0, ///< Value d_cache:correctable for instance s7 of structure from SYS
-   SYS_S7_D_CACHE_UNCORRECTABLE, ///< Value d_cache:uncorrectable for instance s7 of structure from SYS
+    SYS_S7_CORRECTED_APPC_ERR_TIMESTAMP_FIFO = 0, ///< Value corrected:appc_err_timestamp_fifo for instance s7 of structure from SYS
+   SYS_S7_CORRECTED_TIMESTAMP_FIFO, ///< Value corrected:timestamp_fifo for instance s7 of structure from SYS
+   SYS_S7_CORRECTED_TRACE, ///< Value corrected:trace for instance s7 of structure from SYS
    SYS_S7_DTIM_CORRECTABLE, ///< Value dtim:correctable for instance s7 of structure from SYS
    SYS_S7_DTIM_UNCORRECTABLE, ///< Value dtim:uncorrectable for instance s7 of structure from SYS
+   SYS_S7_FIFO_OVERFLOW_APPC_ERR_TIMESTAMP_FIFO, ///< Value fifo_overflow:appc_err_timestamp_fifo for instance s7 of structure from SYS
+   SYS_S7_FIFO_OVERFLOW_TIMESTAMP_FIFO, ///< Value fifo_overflow:timestamp_fifo for instance s7 of structure from SYS
    SYS_S7_FW_EXEC, ///< Value fw:exec for instance s7 of structure from SYS
    SYS_S7_I_CACHE_BUS_ERROR, ///< Value i_cache:bus_error for instance s7 of structure from SYS
-   SYS_S7_I_CACHE_CORRECTABLE, ///< Value i_cache:correctable for instance s7 of structure from SYS
+   SYS_S7_I_CACHE_ERROR, ///< Value i_cache:error for instance s7 of structure from SYS
    SYS_S7_INTERRUPT_STORM, ///< Value interrupt:storm for instance s7 of structure from SYS
    SYS_S7_ITIM_CORRECTABLE, ///< Value itim:correctable for instance s7 of structure from SYS
    SYS_S7_ITIM_UNCORRECTABLE, ///< Value itim:uncorrectable for instance s7 of structure from SYS
    SYS_S7_TX_BUS_ERROR_LOAD_STORE_PTW, ///< Value tx_bus_error:load_store_ptw for instance s7 of structure from SYS
+   SYS_S7_UNCORRECTED_APPC_ERR_TIMESTAMP_FIFO, ///< Value uncorrected:appc_err_timestamp_fifo for instance s7 of structure from SYS
+   SYS_S7_UNCORRECTED_TIMESTAMP_FIFO, ///< Value uncorrected:timestamp_fifo for instance s7 of structure from SYS
+   SYS_S7_UNCORRECTED_TRACE, ///< Value uncorrected:trace for instance s7 of structure from SYS
    SYS_S7_ERROR_LAST, ///< Last value of possible error within the SYS GHES S7 structu
 } p64h_ras_sys_s7_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_SPI_CTRL_ACMD_MODE_ERR_BUS_ERR_M = 0, ///< Value acmd_mode_err:bus_err_m for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_BUS_ERR_S, ///< Value acmd_mode_err:bus_err_s for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_CMD_IGNORED, ///< Value acmd_mode_err:cmd_ignored for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD0_ERROR, ///< Value acmd_mode_err:trd0_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD1_ERROR, ///< Value acmd_mode_err:trd1_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD2_ERROR, ///< Value acmd_mode_err:trd2_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD3_ERROR, ///< Value acmd_mode_err:trd3_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD4_ERROR, ///< Value acmd_mode_err:trd4_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD5_ERROR, ///< Value acmd_mode_err:trd5_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD6_ERROR, ///< Value acmd_mode_err:trd6_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ACMD_MODE_ERR_TRD7_ERROR, ///< Value acmd_mode_err:trd7_error for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_CORRECTED_CONTEXT_RAM, ///< Value corrected:context_ram for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_CORRECTED_DEVICE_ECC_CORRECTED, ///< Value corrected:device_ecc_corrected for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_CORRECTED_FLASH_DATA_RAM, ///< Value corrected:flash_data_ram for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_DIRECT_MODE_ERR_CMD_ERR, ///< Value direct_mode_err:cmd_err for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_DIRECT_MODE_ERR_CRC_ERR, ///< Value direct_mode_err:crc_err for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_DIRECT_MODE_ERR_DEVICE_ERR, ///< Value direct_mode_err:device_err for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_DIRECT_MODE_ERR_DQS_ERR, ///< Value direct_mode_err:dqs_err for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_STIG_MODE_ERR_BUS_ERR_S, ///< Value stig_mode_err:bus_err_s for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_STIG_MODE_ERR_CMD_IGNORED, ///< Value stig_mode_err:cmd_ignored for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_UNCORRECTED_CONTEXT_RAM, ///< Value uncorrected:context_ram for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_UNCORRECTED_FLASH_DATA_RAM, ///< Value uncorrected:flash_data_ram for instance spi_ctrl of structure from SYS
+   SYS_SPI_CTRL_ERROR_LAST, ///< Last value of possible error within the SYS GHES SPI_CTRL structu
+} p64h_ras_sys_spi_ctrl_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_SPW_CTRL_CORRECTED_RMAP_RAM = 0, ///< Value corrected:rmap_ram for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_CORRECTED_RX_RAM, ///< Value corrected:rx_ram for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_CORRECTED_TX_RAM, ///< Value corrected:tx_ram for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_LINK_ERR_CRERR, ///< Value link_err:crerr for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_LINK_ERR_DISERR, ///< Value link_err:diserr for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_LINK_ERR_ESCERR, ///< Value link_err:escerr for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_LINK_ERR_LINKABORT, ///< Value link_err:linkabort for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_LINK_ERR_PARERR, ///< Value link_err:parerr for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_PACKET_ERR_LINK_DISCARD, ///< Value packet_err:link_discard for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_PACKET_ERR_LINK_EEPREC, ///< Value packet_err:link_eeprec for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_PACKET_ERR_LINK_EEPTRANS, ///< Value packet_err:link_eeptrans for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_PACKET_ERR_RX_DISCARD, ///< Value packet_err:rx_discard for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_PACKET_ERR_RX_EEP, ///< Value packet_err:rx_eep for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_PACKET_ERR_TX_EEP, ///< Value packet_err:tx_eep for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_TIME_CODE_ERR_EARLYWD, ///< Value time_code_err:earlywd for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_TIME_CODE_ERR_LATEWD, ///< Value time_code_err:latewd for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_UNCORRECTED_RMAP_RAM, ///< Value uncorrected:rmap_ram for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_UNCORRECTED_RX_RAM, ///< Value uncorrected:rx_ram for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_UNCORRECTED_TX_RAM, ///< Value uncorrected:tx_ram for instance spw_ctrl of structure from SYS
+   SYS_SPW_CTRL_ERROR_LAST, ///< Last value of possible error within the SYS GHES SPW_CTRL structu
+} p64h_ras_sys_spw_ctrl_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS GHES
+ */
+typedef enum {
+    SYS_SRAM_EDAC_APP_BIST_DATA_ERROR = 0, ///< Value app:bist_data_error for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_FINISHED, ///< Value app:bist_finished for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_PARITY_ERROR, ///< Value app:bist_parity_error for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_TBL_0_CORRECTABLE, ///< Value app:bist_tbl_0_correctable for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_TBL_0_UNCORRECTABLE, ///< Value app:bist_tbl_0_uncorrectable for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_TBL_1_CORRECTABLE, ///< Value app:bist_tbl_1_correctable for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_TBL_1_UNCORRECTABLE, ///< Value app:bist_tbl_1_uncorrectable for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_TBL_2_CORRECTABLE, ///< Value app:bist_tbl_2_correctable for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_BIST_TBL_2_UNCORRECTABLE, ///< Value app:bist_tbl_2_uncorrectable for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_APP_PATROL_SCRUB_COMPLETE, ///< Value app:patrol_scrub_complete for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_BRESP_SEL, ///< Value dmr_corrected:dmr_s0_bresp_sel for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_CORR, ///< Value dmr_corrected:dmr_s0_corr for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_DROP_BRESP, ///< Value dmr_corrected:dmr_s0_drop_bresp for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_DROP_R, ///< Value dmr_corrected:dmr_s0_drop_r for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_RDATA_SEL, ///< Value dmr_corrected:dmr_s0_rdata_sel for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_BRESP_SEL, ///< Value dmr_corrected:dmr_s1_bresp_sel for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_CORR, ///< Value dmr_corrected:dmr_s1_corr for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_DROP_BRESP, ///< Value dmr_corrected:dmr_s1_drop_bresp for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_DROP_R, ///< Value dmr_corrected:dmr_s1_drop_r for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_RDATA_SEL, ///< Value dmr_corrected:dmr_s1_rdata_sel for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S_RPARITY, ///< Value dmr_corrected:dmr_s_rparity for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_CORRECTED_DMR_SUBS_MM_STATUS, ///< Value dmr_corrected:dmr_subs_mm_status for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_BID, ///< Value dmr_uncorrected:dmr_mm_bid for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_BRESP, ///< Value dmr_uncorrected:dmr_mm_bresp for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_EXOKAY, ///< Value dmr_uncorrected:dmr_mm_exokay for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RDATA, ///< Value dmr_uncorrected:dmr_mm_rdata for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RID, ///< Value dmr_uncorrected:dmr_mm_rid for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RRESP, ///< Value dmr_uncorrected:dmr_mm_rresp for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S0_STUCK, ///< Value dmr_uncorrected:dmr_s0_stuck for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S0_UNCORR, ///< Value dmr_uncorrected:dmr_s0_uncorr for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S1_STUCK, ///< Value dmr_uncorrected:dmr_s1_stuck for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S1_UNCORR, ///< Value dmr_uncorrected:dmr_s1_uncorr for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_SUBS_UNCORR, ///< Value dmr_uncorrected:dmr_subs_uncorr for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR, ///< Value emon_corrected:emon_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_FULL, ///< Value emon_corrected:emon_cor_buf_full for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_HIGH_THLD, ///< Value emon_corrected:emon_cor_buf_high_thld for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_OVRFLW, ///< Value emon_corrected:emon_cor_buf_ovrflw for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_FSM_ERR, ///< Value emon_corrected:emon_fsm_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL, ///< Value emon_corrected:emon_stat_buf_full for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW, ///< Value emon_corrected:emon_stat_buf_ovrflw for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL, ///< Value emon_corrected:emon_uncor_buf_full for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW, ///< Value emon_corrected:emon_uncor_buf_ovrflw for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR, ///< Value emon_uncorrected:emon_addr_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION, ///< Value emon_uncorrected:emon_invalid_extraction for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR, ///< Value emon_uncorrected:emon_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD, ///< Value emon_uncorrected:emon_uncor_buf_high_thld for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_DEC_ADDR_PARITY_ERR, ///< Value fault:dec_addr_parity_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_ENC_ADDR_PARITY_ERR, ///< Value fault:enc_addr_parity_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_ENC_FSM_ERR, ///< Value fault:enc_fsm_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_ERR_REMOVE_READ_COH, ///< Value fault:err_remove_read_coh for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_ERR_REMOVE_WRITE_COH, ///< Value fault:err_remove_write_coh for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_PATROL_SCRUB_FSM_ERR, ///< Value fault:patrol_scrub_fsm_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RARB_ERR, ///< Value fault:rarb_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RD_WR_ARB_ERR, ///< Value fault:rd_wr_arb_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RDCAP_CTX_OVERFLOW, ///< Value fault:rdcap_ctx_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RDCAP_CTX_UNDERFLOW, ///< Value fault:rdcap_ctx_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RDGEN_CTX_OVERFLOW, ///< Value fault:rdgen_ctx_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RDGEN_CTX_UNDERFLOW, ///< Value fault:rdgen_ctx_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RMW_CTX_OVERFLOW, ///< Value fault:rmw_ctx_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RMW_CTX_UNDERFLOW, ///< Value fault:rmw_ctx_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RMW_RD_ERR, ///< Value fault:rmw_rd_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RMW_RDCAP_OVERFLOW, ///< Value fault:rmw_rdcap_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_RMW_RDCAP_UNDERFLOW, ///< Value fault:rmw_rdcap_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WARB_ERR, ///< Value fault:warb_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDCAP_CTX_OVERFLOW, ///< Value fault:wdcap_ctx_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDCAP_CTX_UNDERFLOW, ///< Value fault:wdcap_ctx_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDCAP_OVERFLOW, ///< Value fault:wdcap_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDCAP_UNDERFLOW, ///< Value fault:wdcap_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDGEN_CTX_OVERFLOW, ///< Value fault:wdgen_ctx_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDGEN_CTX_UNDERFLOW, ///< Value fault:wdgen_ctx_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDRESP_CTX_OVERFLOW, ///< Value fault:wdresp_ctx_overflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_WDRESP_CTX_UNDERFLOW, ///< Value fault:wdresp_ctx_underflow for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_BCH_ENC_BUS_ECC_COR, ///< Value fault_corrected:bch_enc_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_RCMD_BUS_ECC_COR, ///< Value fault_corrected:rcmd_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_RDCAP_BUS_ECC_COR, ///< Value fault_corrected:rdcap_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_SECDED_ENC_BUS_ECC_COR, ///< Value fault_corrected:secded_enc_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_WCMD_CAP_BUS_ECC_COR, ///< Value fault_corrected:wcmd_cap_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_WCMD_GEN_BUS_ECC_COR, ///< Value fault_corrected:wcmd_gen_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_WDCAP_BUS_ECC_COR, ///< Value fault_corrected:wdcap_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_WDGEN_BUS_ECC_COR, ///< Value fault_corrected:wdgen_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_FAULT_CORRECTED_WDRESP_BUS_ECC_COR, ///< Value fault_corrected:wdresp_bus_ecc_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_DEC_DATA_RAM_COR_ERR, ///< Value ram_corrected:dec_data_ram_cor_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_EMON_COR_RAM_COR, ///< Value ram_corrected:emon_cor_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_EMON_STAT_RAM_COR, ///< Value ram_corrected:emon_stat_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_EMON_UNCOR_RAM_COR, ///< Value ram_corrected:emon_uncor_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_ENC_DATA_RAM_COR_ERR, ///< Value ram_corrected:enc_data_ram_cor_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_RDCAP_CTX_RAM_COR, ///< Value ram_corrected:rdcap_ctx_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_RDGEN_CTX_RAM_COR, ///< Value ram_corrected:rdgen_ctx_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_RMW_CTX_RAM_COR, ///< Value ram_corrected:rmw_ctx_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_RMW_DATA_RAM_COR, ///< Value ram_corrected:rmw_data_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_WDCAP_CTX_RAM_COR, ///< Value ram_corrected:wdcap_ctx_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_WDCAP_DATA_RAM_COR, ///< Value ram_corrected:wdcap_data_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_WDGEN_CTX_RAM_COR, ///< Value ram_corrected:wdgen_ctx_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_CORRECTED_WDRESP_CTX_RAM_COR, ///< Value ram_corrected:wdresp_ctx_ram_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_DEC_DATA_RAM_UNCOR_ERR, ///< Value ram_uncorrected:dec_data_ram_uncor_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_COR_RAM_UNCOR_ERR, ///< Value ram_uncorrected:emon_cor_ram_uncor_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_STAT_RAM_UNCOR_ERR, ///< Value ram_uncorrected:emon_stat_ram_uncor_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_UNCOR_RAM_UNCOR_ERR, ///< Value ram_uncorrected:emon_uncor_ram_uncor_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_ENC_DATA_RAM_UNCOR_ERR, ///< Value ram_uncorrected:enc_data_ram_uncor_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_RDCAP_CTX_RAM_UNCOR, ///< Value ram_uncorrected:rdcap_ctx_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_UNCOR, ///< Value ram_uncorrected:rdgen_ctx_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_RMW_CTX_RAM_UNCOR, ///< Value ram_uncorrected:rmw_ctx_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_RMW_DATA_RAM_UNCOR, ///< Value ram_uncorrected:rmw_data_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_CTX_RAM_UNCOR, ///< Value ram_uncorrected:wdcap_ctx_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_UNCOR, ///< Value ram_uncorrected:wdcap_data_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_WDGEN_CTX_RAM_UNCOR, ///< Value ram_uncorrected:wdgen_ctx_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_RAM_UNCORRECTED_WDRESP_CTX_RAM_UNCOR, ///< Value ram_uncorrected:wdresp_ctx_ram_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_READ_TIMEOUT_RCMD_TIMEOUT, ///< Value read_timeout:rcmd_timeout for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_READ_TIMEOUT_RDCAP_TIMEOUT, ///< Value read_timeout:rdcap_timeout for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_BCH_ENC_BUS_ECC_UNCOR, ///< Value trans_drop:bch_enc_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RCMD_BUS_ECC_UNCOR, ///< Value trans_drop:rcmd_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RCMD_DROP_TRANS, ///< Value trans_drop:rcmd_drop_trans for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RDCAP_BUS_ECC_UNCOR, ///< Value trans_drop:rdcap_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RDCAP_DROP_TRANS, ///< Value trans_drop:rdcap_drop_trans for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_COR, ///< Value trans_drop:rmw_bus_ecc_0_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_UNCOR, ///< Value trans_drop:rmw_bus_ecc_0_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_COR, ///< Value trans_drop:rmw_bus_ecc_1_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_UNCOR, ///< Value trans_drop:rmw_bus_ecc_1_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_COR, ///< Value trans_drop:rmw_bus_ecc_2_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_UNCOR, ///< Value trans_drop:rmw_bus_ecc_2_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_COR, ///< Value trans_drop:rmw_bus_ecc_3_cor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_UNCOR, ///< Value trans_drop:rmw_bus_ecc_3_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_RMW_CMD_CTX_ERR, ///< Value trans_drop:rmw_cmd_ctx_err for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_SECDED_ENC_BUS_ECC_UNCOR, ///< Value trans_drop:secded_enc_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WCMD_CAP_BUS_ECC_UNCOR, ///< Value trans_drop:wcmd_cap_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WCMD_DROP_TRANS, ///< Value trans_drop:wcmd_drop_trans for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WCMD_GEN_BUS_ECC_UNCOR, ///< Value trans_drop:wcmd_gen_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WDCAP_BUS_ECC_UNCOR, ///< Value trans_drop:wdcap_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WDCAP_SPARSE_WRITE, ///< Value trans_drop:wdcap_sparse_write for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WDGEN_BUS_ECC_UNCOR, ///< Value trans_drop:wdgen_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WDGEN_DROP_TRANS, ///< Value trans_drop:wdgen_drop_trans for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WDRESP_BUS_ECC_UNCOR, ///< Value trans_drop:wdresp_bus_ecc_uncor for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_TRANS_DROP_WDRESP_DROP_TRANS, ///< Value trans_drop:wdresp_drop_trans for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_WRITE_TIMEOUT_WCMD_TIMEOUT, ///< Value write_timeout:wcmd_timeout for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_WRITE_TIMEOUT_WDGEN_TIMEOUT, ///< Value write_timeout:wdgen_timeout for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT, ///< Value write_timeout:wdresp_timeout for instance sram_edac of structure from SYS
+   SYS_SRAM_EDAC_ERROR_LAST, ///< Last value of possible error within the SYS GHES SRAM_EDAC structu
+} p64h_ras_sys_sram_edac_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_DTP_LN_FSM_FAULT_INTERNAL_FSM = 0, ///< Value fsm_fault:internal_fsm for instance dtp_ln of structure from SYS_NOC
+   SYS_NOC_DTP_LN_PACKET_PROTECTION_FAULT_LN_DTP_FLT_SECDED_CORR, ///< Value packet_protection_fault:ln_dtp_flt_secded_corr for instance dtp_ln of structure from SYS_NOC
+   SYS_NOC_DTP_LN_PACKET_PROTECTION_FAULT_LN_DTP_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:ln_dtp_flt_secded_uncorr for instance dtp_ln of structure from SYS_NOC
+   SYS_NOC_DTP_LN_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance dtp_ln of structure from SYS_NOC
+   SYS_NOC_DTP_LN_ERROR_LAST, ///< Last value of possible error within the SYS_NOC GHES DTP_LN structu
+} p64h_ras_sys_noc_dtp_ln_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM = 0, ///< Value fsm_fault:internal_fsm for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT, ///< Value timeout_fault:latent_timeout for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT, ///< Value timeout_fault:major_timeout for instance initiators of structure from SYS_NOC
+   SYS_NOC_INITIATORS_ERROR_LAST, ///< Last value of possible error within the SYS_NOC GHES INITIATORS structu
+} p64h_ras_sys_noc_initiators_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_OBSERVER_ERROR_PACKET_DEC_ERR = 0, ///< Value error_packet:dec_err for instance observer of structure from SYS_NOC
+   SYS_NOC_OBSERVER_ERROR_PACKET_DISC_ERR, ///< Value error_packet:disc_err for instance observer of structure from SYS_NOC
+   SYS_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR, ///< Value error_packet:hide_err for instance observer of structure from SYS_NOC
+   SYS_NOC_OBSERVER_ERROR_PACKET_SEC_ERR, ///< Value error_packet:sec_err for instance observer of structure from SYS_NOC
+   SYS_NOC_OBSERVER_ERROR_PACKET_SLV_ERR, ///< Value error_packet:slv_err for instance observer of structure from SYS_NOC
+   SYS_NOC_OBSERVER_ERROR_PACKET_TMO_ERR, ///< Value error_packet:tmo_err for instance observer of structure from SYS_NOC
+   SYS_NOC_OBSERVER_ERROR_PACKET_UNS_ERR, ///< Value error_packet:uns_err for instance observer of structure from SYS_NOC
+   SYS_NOC_OBSERVER_ERROR_LAST, ///< Last value of possible error within the SYS_NOC GHES OBSERVER structu
+} p64h_ras_sys_noc_observer_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM = 0, ///< Value fsm_fault:internal_fsm for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR, ///< Value packet_protection_fault:flt_secded_corr for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR, ///< Value packet_protection_fault:flt_secded_uncorr for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION, ///< Value packet_validity_fault:handshake_retraction for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING, ///< Value packet_validity_fault:packet_framing for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER, ///< Value packet_validity_fault:packet_wordnumber for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH, ///< Value packet_validity_fault:packet_wrongpath for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY, ///< Value register_parity_fault:jumper_parity for instance targets of structure from SYS_NOC
+   SYS_NOC_TARGETS_ERROR_LAST, ///< Last value of possible error within the SYS_NOC GHES TARGETS structu
+} p64h_ras_sys_noc_targets_err_t;
+
+/**
+ * @brief Definitions of all errors within a structure of the SYS_NOC GHES
+ */
+typedef enum {
+    SYS_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT = 0, ///< Value fault_from_bottom:pwrDis_lnDtp_flt for instance top_fault_agg of structure from SYS_NOC
+   SYS_NOC_TOP_FAULT_AGG_FSM_FAULT_TOP_INTERNAL_FSM, ///< Value fsm_fault:top_internal_fsm for instance top_fault_agg of structure from SYS_NOC
+   SYS_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CTRL_PAR, ///< Value register_parity_fault:power_main_fault_ctrl_par for instance top_fault_agg of structure from SYS_NOC
+   SYS_NOC_TOP_FAULT_AGG_ERROR_LAST, ///< Last value of possible error within the SYS_NOC GHES TOP_FAULT_AGG structu
+} p64h_ras_sys_noc_top_fault_agg_err_t;
 
 /**
  * @brief Definitions of all uniquely encoded identifiers for the structures of all GHESs
@@ -2462,6 +4153,12 @@ typedef enum {
     RAS_GHES_STRUCT_NA = 0, ///< Used to convey no associated structure and source
     RAS_GHES_APP_MEM_STRUCT_OCR = RAS_ERROR_PACK(APP_MEM, APP_MEM_STRUCT_OCR, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded OCR structure ID from the APP_MEM
     RAS_GHES_APP_NOC_STRUCT_WGC = RAS_ERROR_PACK(APP_NOC, APP_NOC_STRUCT_WGC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded WGC structure ID from the APP_NOC
+    RAS_GHES_APP_NOC_STRUCT_INITIATORS = RAS_ERROR_PACK(APP_NOC, APP_NOC_STRUCT_INITIATORS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded INITIATORS structure ID from the APP_NOC
+    RAS_GHES_APP_NOC_STRUCT_TARGETS = RAS_ERROR_PACK(APP_NOC, APP_NOC_STRUCT_TARGETS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TARGETS structure ID from the APP_NOC
+    RAS_GHES_APP_NOC_STRUCT_TOP_FAULT_AGG = RAS_ERROR_PACK(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TOP_FAULT_AGG structure ID from the APP_NOC
+    RAS_GHES_APP_NOC_STRUCT_DTP_LN = RAS_ERROR_PACK(APP_NOC, APP_NOC_STRUCT_DTP_LN, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded DTP_LN structure ID from the APP_NOC
+    RAS_GHES_APP_NOC_STRUCT_OBSERVER = RAS_ERROR_PACK(APP_NOC, APP_NOC_STRUCT_OBSERVER, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded OBSERVER structure ID from the APP_NOC
+    RAS_GHES_APP_PERIPH_STRUCT_WDOG = RAS_ERROR_PACK(APP_PERIPH, APP_PERIPH_STRUCT_WDOG, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded WDOG structure ID from the APP_PERIPH
     RAS_GHES_APP_X288_STRUCT_TILE = RAS_ERROR_PACK(APP_X288, APP_X288_STRUCT_TILE, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TILE structure ID from the APP_X288
     RAS_GHES_APP_X288_STRUCT_FABRIC = RAS_ERROR_PACK(APP_X288, APP_X288_STRUCT_FABRIC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded FABRIC structure ID from the APP_X288
     RAS_GHES_APP_X288_STRUCT_IOMMU = RAS_ERROR_PACK(APP_X288, APP_X288_STRUCT_IOMMU, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded IOMMU structure ID from the APP_X288
@@ -2470,8 +4167,12 @@ typedef enum {
     RAS_GHES_CLOCK_STRUCT_CSU = RAS_ERROR_PACK(CLOCK, CLOCK_STRUCT_CSU, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded CSU structure ID from the CLOCK
     RAS_GHES_DDR_STRUCT_EDAC = RAS_ERROR_PACK(DDR, DDR_STRUCT_EDAC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded EDAC structure ID from the DDR
     RAS_GHES_DDR_STRUCT_CTRL = RAS_ERROR_PACK(DDR, DDR_STRUCT_CTRL, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded CTRL structure ID from the DDR
+    RAS_GHES_DDR_STRUCT_PHY = RAS_ERROR_PACK(DDR, DDR_STRUCT_PHY, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded PHY structure ID from the DDR
+    RAS_GHES_DDR_STRUCT_HSIO = RAS_ERROR_PACK(DDR, DDR_STRUCT_HSIO, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded HSIO structure ID from the DDR
     RAS_GHES_DDR_NOC_STRUCT_INITIATORS = RAS_ERROR_PACK(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded INITIATORS structure ID from the DDR_NOC
     RAS_GHES_DDR_NOC_STRUCT_TARGETS = RAS_ERROR_PACK(DDR_NOC, DDR_NOC_STRUCT_TARGETS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TARGETS structure ID from the DDR_NOC
+    RAS_GHES_DDR_NOC_STRUCT_TOP_FAULT_AGG = RAS_ERROR_PACK(DDR_NOC, DDR_NOC_STRUCT_TOP_FAULT_AGG, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TOP_FAULT_AGG structure ID from the DDR_NOC
+    RAS_GHES_DDR_NOC_STRUCT_OBSERVER = RAS_ERROR_PACK(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded OBSERVER structure ID from the DDR_NOC
     RAS_GHES_ENET_STRUCT_ASM = RAS_ERROR_PACK(ENET, ENET_STRUCT_ASM, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded ASM structure ID from the ENET
     RAS_GHES_ENET_STRUCT_ANA_AC_EACL_REW_WRAP = RAS_ERROR_PACK(ENET, ENET_STRUCT_ANA_AC_EACL_REW_WRAP, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded ANA_AC_EACL_REW_WRAP structure ID from the ENET
     RAS_GHES_ENET_STRUCT_SQS = RAS_ERROR_PACK(ENET, ENET_STRUCT_SQS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded SQS structure ID from the ENET
@@ -2482,11 +4183,18 @@ typedef enum {
     RAS_GHES_ENET_STRUCT_PIER_RDMA_MISC = RAS_ERROR_PACK(ENET, ENET_STRUCT_PIER_RDMA_MISC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded PIER_RDMA_MISC structure ID from the ENET
     RAS_GHES_ENET_STRUCT_ANACL32OAM = RAS_ERROR_PACK(ENET, ENET_STRUCT_ANACL32OAM, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded ANACL32OAM structure ID from the ENET
     RAS_GHES_ENET_STRUCT_MISC = RAS_ERROR_PACK(ENET, ENET_STRUCT_MISC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded MISC structure ID from the ENET
+    RAS_GHES_ENET_STRUCT_TCAM_ECC = RAS_ERROR_PACK(ENET, ENET_STRUCT_TCAM_ECC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TCAM_ECC structure ID from the ENET
+    RAS_GHES_ENET_EP_STRUCT_SB = RAS_ERROR_PACK(ENET_EP, ENET_EP_STRUCT_SB, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded SB structure ID from the ENET_EP
+    RAS_GHES_ENET_EP_STRUCT_CORE = RAS_ERROR_PACK(ENET_EP, ENET_EP_STRUCT_CORE, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded CORE structure ID from the ENET_EP
+    RAS_GHES_ENET_EP_STRUCT_FRER_TX = RAS_ERROR_PACK(ENET_EP, ENET_EP_STRUCT_FRER_TX, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded FRER_TX structure ID from the ENET_EP
+    RAS_GHES_ENET_EP_STRUCT_FRER_RX = RAS_ERROR_PACK(ENET_EP, ENET_EP_STRUCT_FRER_RX, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded FRER_RX structure ID from the ENET_EP
     RAS_GHES_NVM_STRUCT_SRAM_EDAC = RAS_ERROR_PACK(NVM, NVM_STRUCT_SRAM_EDAC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded SRAM_EDAC structure ID from the NVM
     RAS_GHES_NVM_STRUCT_NVM_EDAC = RAS_ERROR_PACK(NVM, NVM_STRUCT_NVM_EDAC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded NVM_EDAC structure ID from the NVM
     RAS_GHES_NVM_STRUCT_PFLASH_CTRL = RAS_ERROR_PACK(NVM, NVM_STRUCT_PFLASH_CTRL, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded PFLASH_CTRL structure ID from the NVM
     RAS_GHES_NVM_STRUCT_SPI_CTRL = RAS_ERROR_PACK(NVM, NVM_STRUCT_SPI_CTRL, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded SPI_CTRL structure ID from the NVM
     RAS_GHES_NVM_STRUCT_NAND_CTRL = RAS_ERROR_PACK(NVM, NVM_STRUCT_NAND_CTRL, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded NAND_CTRL structure ID from the NVM
+    RAS_GHES_PCXL_STRUCT_CTRL = RAS_ERROR_PACK(PCXL, PCXL_STRUCT_CTRL, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded CTRL structure ID from the PCXL
+    RAS_GHES_PCXL_STRUCT_LINK = RAS_ERROR_PACK(PCXL, PCXL_STRUCT_LINK, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded LINK structure ID from the PCXL
     RAS_GHES_SEC_STRUCT_OCR = RAS_ERROR_PACK(SEC, SEC_STRUCT_OCR, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded OCR structure ID from the SEC
     RAS_GHES_SEC_STRUCT_CSU = RAS_ERROR_PACK(SEC, SEC_STRUCT_CSU, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded CSU structure ID from the SEC
     RAS_GHES_SEC_STRUCT_PQS = RAS_ERROR_PACK(SEC, SEC_STRUCT_PQS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded PQS structure ID from the SEC
@@ -2502,8 +4210,21 @@ typedef enum {
     RAS_GHES_SEC_STRUCT_DMA = RAS_ERROR_PACK(SEC, SEC_STRUCT_DMA, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded DMA structure ID from the SEC
     RAS_GHES_SEC_STRUCT_TVS_MON = RAS_ERROR_PACK(SEC, SEC_STRUCT_TVS_MON, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TVS_MON structure ID from the SEC
     RAS_GHES_SEC_STRUCT_MESH = RAS_ERROR_PACK(SEC, SEC_STRUCT_MESH, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded MESH structure ID from the SEC
+    RAS_GHES_SVC_NOC_STRUCT_INITIATORS = RAS_ERROR_PACK(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded INITIATORS structure ID from the SVC_NOC
+    RAS_GHES_SVC_NOC_STRUCT_TARGETS = RAS_ERROR_PACK(SVC_NOC, SVC_NOC_STRUCT_TARGETS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TARGETS structure ID from the SVC_NOC
+    RAS_GHES_SVC_NOC_STRUCT_TOP_FAULT_AGG = RAS_ERROR_PACK(SVC_NOC, SVC_NOC_STRUCT_TOP_FAULT_AGG, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TOP_FAULT_AGG structure ID from the SVC_NOC
     RAS_GHES_SYS_STRUCT_OCR = RAS_ERROR_PACK(SYS, SYS_STRUCT_OCR, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded OCR structure ID from the SYS
     RAS_GHES_SYS_STRUCT_S7 = RAS_ERROR_PACK(SYS, SYS_STRUCT_S7, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded S7 structure ID from the SYS
+    RAS_GHES_SYS_STRUCT_SRAM_EDAC = RAS_ERROR_PACK(SYS, SYS_STRUCT_SRAM_EDAC, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded SRAM_EDAC structure ID from the SYS
+    RAS_GHES_SYS_STRUCT_SPW_CTRL = RAS_ERROR_PACK(SYS, SYS_STRUCT_SPW_CTRL, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded SPW_CTRL structure ID from the SYS
+    RAS_GHES_SYS_STRUCT_DMA = RAS_ERROR_PACK(SYS, SYS_STRUCT_DMA, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded DMA structure ID from the SYS
+    RAS_GHES_SYS_STRUCT_SPI_CTRL = RAS_ERROR_PACK(SYS, SYS_STRUCT_SPI_CTRL, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded SPI_CTRL structure ID from the SYS
+    RAS_GHES_SYS_STRUCT_HPT = RAS_ERROR_PACK(SYS, SYS_STRUCT_HPT, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded HPT structure ID from the SYS
+    RAS_GHES_SYS_NOC_STRUCT_INITIATORS = RAS_ERROR_PACK(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded INITIATORS structure ID from the SYS_NOC
+    RAS_GHES_SYS_NOC_STRUCT_TARGETS = RAS_ERROR_PACK(SYS_NOC, SYS_NOC_STRUCT_TARGETS, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TARGETS structure ID from the SYS_NOC
+    RAS_GHES_SYS_NOC_STRUCT_TOP_FAULT_AGG = RAS_ERROR_PACK(SYS_NOC, SYS_NOC_STRUCT_TOP_FAULT_AGG, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded TOP_FAULT_AGG structure ID from the SYS_NOC
+    RAS_GHES_SYS_NOC_STRUCT_OBSERVER = RAS_ERROR_PACK(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded OBSERVER structure ID from the SYS_NOC
+    RAS_GHES_SYS_NOC_STRUCT_DTP_LN = RAS_ERROR_PACK(SYS_NOC, SYS_NOC_STRUCT_DTP_LN, RAS_NA, RAS_NA, RAS_NA), ///< Uniquely encoded DTP_LN structure ID from the SYS_NOC
     RAS_GHES_STRUC_MAX ///< Maximum value of p64h_ras_ghes_struc_t enum
 } p64h_ras_ghes_struc_t;
 
@@ -2526,8 +4247,75 @@ typedef enum {
     RAS_ERR_ID_APP_MEM_OCR_INVALID_ACCESS_UNAVAILABLE_ACCESS = RAS_ERROR_ENCODE(APP_MEM, APP_MEM_STRUCT_OCR, APP_MEM_OCR_INVALID_ACCESS_UNAVAILABLE_ACCESS), ///< invalid_access:unavailable_access for instance ocr of structure from APP_MEM
     RAS_ERR_ID_APP_MEM_OCR_UNCORRECTED_READ = RAS_ERROR_ENCODE(APP_MEM, APP_MEM_STRUCT_OCR, APP_MEM_OCR_UNCORRECTED_READ), ///< uncorrected:read for instance ocr of structure from APP_MEM
     RAS_ERR_ID_APP_MEM_OCR_UNCORRECTED_WRITE = RAS_ERROR_ENCODE(APP_MEM, APP_MEM_STRUCT_OCR, APP_MEM_OCR_UNCORRECTED_WRITE), ///< uncorrected:write for instance ocr of structure from APP_MEM
+    RAS_ERR_ID_APP_NOC_DTP_LN_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_DTP_LN, APP_NOC_DTP_LN_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance dtp_ln of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_DTP_LN_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_DTP_LN, APP_NOC_DTP_LN_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance dtp_ln of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_DTP_LN_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_DTP_LN, APP_NOC_DTP_LN_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance dtp_ln of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_DTP_LN_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_DTP_LN, APP_NOC_DTP_LN_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance dtp_ln of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_DTP_LN_REGISTER_PARITY_FAULT_RATE_ADAPTER_PARITY = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_DTP_LN, APP_NOC_DTP_LN_REGISTER_PARITY_FAULT_RATE_ADAPTER_PARITY), ///< register_parity_fault:rate_adapter_parity for instance dtp_ln of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE), ///< comparator_tree_fault:critical_comparator_tree for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE), ///< comparator_tree_fault:latent_comparator_tree for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_REGISTER_PARITY_FAULT_QOS_GENERATOR_PARITY = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_REGISTER_PARITY_FAULT_QOS_GENERATOR_PARITY), ///< register_parity_fault:qos_generator_parity for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_A_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_A_SECDED_CORR), ///< rgc_fault:axi_ar_a_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_A_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_A_SECDED_UNCORR), ///< rgc_fault:axi_ar_a_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_C_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_C_SECDED_CORR), ///< rgc_fault:axi_ar_c_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_C_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_C_SECDED_UNCORR), ///< rgc_fault:axi_ar_c_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_WGID_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_WGID_SECDED_CORR), ///< rgc_fault:axi_ar_wgid_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_WGID_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AR_WGID_SECDED_UNCORR), ///< rgc_fault:axi_ar_wgid_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_A_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_A_SECDED_CORR), ///< rgc_fault:axi_aw_a_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_A_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_A_SECDED_UNCORR), ///< rgc_fault:axi_aw_a_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_C_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_C_SECDED_CORR), ///< rgc_fault:axi_aw_c_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_C_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_C_SECDED_UNCORR), ///< rgc_fault:axi_aw_c_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_WGID_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_WGID_SECDED_CORR), ///< rgc_fault:axi_aw_wgid_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_WGID_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_AW_WGID_SECDED_UNCORR), ///< rgc_fault:axi_aw_wgid_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_W_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_W_SECDED_CORR), ///< rgc_fault:axi_w_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_W_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_W_SECDED_UNCORR), ///< rgc_fault:axi_w_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_WDATA_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_WDATA_SECDED_CORR), ///< rgc_fault:axi_wdata_secded_corr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_RGC_FAULT_AXI_WDATA_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_RGC_FAULT_AXI_WDATA_SECDED_UNCORR), ///< rgc_fault:axi_wdata_secded_uncorr for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT), ///< timeout_fault:latent_timeout for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_INITIATORS, APP_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT), ///< timeout_fault:major_timeout for instance initiators of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_OBSERVER_ERROR_PACKET_DEC_ERR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_OBSERVER, APP_NOC_OBSERVER_ERROR_PACKET_DEC_ERR), ///< error_packet:dec_err for instance observer of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_OBSERVER_ERROR_PACKET_DISC_ERR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_OBSERVER, APP_NOC_OBSERVER_ERROR_PACKET_DISC_ERR), ///< error_packet:disc_err for instance observer of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_OBSERVER, APP_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR), ///< error_packet:hide_err for instance observer of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_OBSERVER_ERROR_PACKET_SEC_ERR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_OBSERVER, APP_NOC_OBSERVER_ERROR_PACKET_SEC_ERR), ///< error_packet:sec_err for instance observer of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_OBSERVER_ERROR_PACKET_SLV_ERR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_OBSERVER, APP_NOC_OBSERVER_ERROR_PACKET_SLV_ERR), ///< error_packet:slv_err for instance observer of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_OBSERVER_ERROR_PACKET_TMO_ERR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_OBSERVER, APP_NOC_OBSERVER_ERROR_PACKET_TMO_ERR), ///< error_packet:tmo_err for instance observer of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_OBSERVER_ERROR_PACKET_UNS_ERR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_OBSERVER, APP_NOC_OBSERVER_ERROR_PACKET_UNS_ERR), ///< error_packet:uns_err for instance observer of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE), ///< comparator_tree_fault:critical_comparator_tree for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE), ///< comparator_tree_fault:latent_comparator_tree for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER), ///< packet_validity_fault:packet_wordnumber for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_RGC_FAULT_AXI_R_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_RGC_FAULT_AXI_R_SECDED_CORR), ///< rgc_fault:axi_r_secded_corr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_RGC_FAULT_AXI_R_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_RGC_FAULT_AXI_R_SECDED_UNCORR), ///< rgc_fault:axi_r_secded_uncorr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_CORR), ///< rgc_fault:axi_rdata_secded_corr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_UNCORR), ///< rgc_fault:axi_rdata_secded_uncorr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_CORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_CORR), ///< rgc_fault:axi_wresp_secded_corr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_UNCORR = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TARGETS, APP_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_UNCORR), ///< rgc_fault:axi_wresp_secded_uncorr for instance targets of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID0 = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID0), ///< fault_from_bottom:pwrDis_lnDtp_flt_mid0 for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID1 = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID1), ///< fault_from_bottom:pwrDis_lnDtp_flt_mid1 for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID2 = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_MID2), ///< fault_from_bottom:pwrDis_lnDtp_flt_mid2 for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_TOP = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT_TOP), ///< fault_from_bottom:pwrDis_lnDtp_flt_top for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID0 = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID0), ///< fsm_fault:internal_fsm_mid0 for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID1 = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID1), ///< fsm_fault:internal_fsm_mid1 for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID2 = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_MID2), ///< fsm_fault:internal_fsm_mid2 for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_TOP = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_TOP), ///< fsm_fault:internal_fsm_top for instance top_fault_agg of structure from APP_NOC
+    RAS_ERR_ID_APP_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_TOP_FAULT_AGG, APP_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY), ///< register_parity_fault:power_main_fault_control_parity for instance top_fault_agg of structure from APP_NOC
     RAS_ERR_ID_APP_NOC_WGC_PERMISSION_DENIED_READ = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_WGC, APP_NOC_WGC_PERMISSION_DENIED_READ), ///< permission_denied:read for instance wgc of structure from APP_NOC
     RAS_ERR_ID_APP_NOC_WGC_PERMISSION_DENIED_WRITE = RAS_ERROR_ENCODE(APP_NOC, APP_NOC_STRUCT_WGC, APP_NOC_WGC_PERMISSION_DENIED_WRITE), ///< permission_denied:write for instance wgc of structure from APP_NOC
+    RAS_ERR_ID_APP_PERIPH_WDOG_WDOG_RESET_PENDING = RAS_ERROR_ENCODE(APP_PERIPH, APP_PERIPH_STRUCT_WDOG, APP_PERIPH_WDOG_WDOG_RESET_PENDING), ///< wdog_reset:pending for instance wdog of structure from APP_PERIPH
+    RAS_ERR_ID_APP_PERIPH_WDOG_WDOG_RESET_REQUEST = RAS_ERROR_ENCODE(APP_PERIPH, APP_PERIPH_STRUCT_WDOG, APP_PERIPH_WDOG_WDOG_RESET_REQUEST), ///< wdog_reset:request for instance wdog of structure from APP_PERIPH
     RAS_ERR_ID_APP_X288_FABRIC_AXI4_DEINTERLEAVER_CORRECTED = RAS_ERROR_ENCODE(APP_X288, APP_X288_STRUCT_FABRIC, APP_X288_FABRIC_AXI4_DEINTERLEAVER_CORRECTED), ///< axi4_deinterleaver:corrected for instance fabric of structure from APP_X288
     RAS_ERR_ID_APP_X288_FABRIC_AXI4_DEINTERLEAVER_UNCORRECTED = RAS_ERROR_ENCODE(APP_X288, APP_X288_STRUCT_FABRIC, APP_X288_FABRIC_AXI4_DEINTERLEAVER_UNCORRECTED), ///< axi4_deinterleaver:uncorrected for instance fabric of structure from APP_X288
     RAS_ERR_ID_APP_X288_FABRIC_CXL_CACHE_BRIDGE_CORRECTED = RAS_ERROR_ENCODE(APP_X288, APP_X288_STRUCT_FABRIC, APP_X288_FABRIC_CXL_CACHE_BRIDGE_CORRECTED), ///< cxl_cache_bridge:corrected for instance fabric of structure from APP_X288
@@ -2594,7 +4382,6 @@ typedef enum {
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL), ///< emon_corrected:emon_stat_buf_full for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW), ///< emon_corrected:emon_stat_buf_ovrflw for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL), ///< emon_corrected:emon_uncor_buf_full for instance edac of structure from DDR
-    RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THLD = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THLD), ///< emon_corrected:emon_uncor_buf_high_thld for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW), ///< emon_corrected:emon_uncor_buf_ovrflw for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_ERR_MON_COR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_ERR_MON_COR), ///< emon_corrected:err_mon_cor for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_ERR_MON_COR_RAM_COR_ECC_ERR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_ERR_MON_COR_RAM_COR_ECC_ERR), ///< emon_corrected:err_mon_cor_ram_cor_ecc_err for instance edac of structure from DDR
@@ -2603,6 +4390,8 @@ typedef enum {
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_ERR_MON_STAT_RAM_UNCOR_ECC_ERR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_ERR_MON_STAT_RAM_UNCOR_ECC_ERR), ///< emon_corrected:err_mon_stat_ram_uncor_ecc_err for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_ERR_MON_UNCOR_RAM_COR_ECC_ERR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_ERR_MON_UNCOR_RAM_COR_ECC_ERR), ///< emon_corrected:err_mon_uncor_ram_cor_ecc_err for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_CORRECTED_ERR_MON_UNCOR_RAM_UNCOR_ECC_ERR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_CORRECTED_ERR_MON_UNCOR_RAM_UNCOR_ECC_ERR), ///< emon_corrected:err_mon_uncor_ram_uncor_ecc_err for instance edac of structure from DDR
+    RAS_ERR_ID_DDR_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION), ///< emon_uncorrected:emon_invalid_extraction for instance edac of structure from DDR
+    RAS_ERR_ID_DDR_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD), ///< emon_uncorrected:emon_uncor_buf_high_thld for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_UNCORRECTED_ERR_MON_ADDR_ERR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_UNCORRECTED_ERR_MON_ADDR_ERR), ///< emon_uncorrected:err_mon_addr_err for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_EMON_UNCORRECTED_ERR_MON_UNCOR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_EMON_UNCORRECTED_ERR_MON_UNCOR), ///< emon_uncorrected:err_mon_uncor for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_FAULT_ERR_BID_PARITY = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_FAULT_ERR_BID_PARITY), ///< fault:err_bid_parity for instance edac of structure from DDR
@@ -2701,96 +4490,49 @@ typedef enum {
     RAS_ERR_ID_DDR_EDAC_WRITE_TIMEOUT_WCMD_TIMEOUT = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_WRITE_TIMEOUT_WCMD_TIMEOUT), ///< write_timeout:wcmd_timeout for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_WRITE_TIMEOUT_WDGEN_TIMEOUT = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_WRITE_TIMEOUT_WDGEN_TIMEOUT), ///< write_timeout:wdgen_timeout for instance edac of structure from DDR
     RAS_ERR_ID_DDR_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_EDAC, DDR_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT), ///< write_timeout:wdresp_timeout for instance edac of structure from DDR
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_CRITICAL_COMPARATOR_TREE), ///< critical:critical_comparator_tree for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_FLT_SECDED_CORR), ///< critical:flt_secded_corr for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_FLT_SECDED_UNCORR), ///< critical:flt_secded_uncorr for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_HANDSHAKE_RETRACTION), ///< critical:handshake_retraction for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_INTERNAL_FSM), ///< critical:internal_fsm for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_JUMPER_PARITY), ///< critical:jumper_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_LATENT_COMPARATOR_TREE), ///< critical:latent_comparator_tree for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_LATENT_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_LATENT_TIMEOUT), ///< critical:latent_timeout for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_MAJOR_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_MAJOR_TIMEOUT), ///< critical:major_timeout for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_PACKET_FRAMING), ///< critical:packet_framing for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_PACKET_WORDNUMBER), ///< critical:packet_wordnumber for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_PACKET_WRONGPATH), ///< critical:packet_wrongpath for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_POWER_DISCONNECT_ERROR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_POWER_DISCONNECT_ERROR), ///< critical:power_disconnect_error for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_POWER_MAIN_FAULT_CONTROL_PARITY), ///< critical:power_main_fault_control_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_CRITICAL_QOS_GENERATOR_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_CRITICAL_QOS_GENERATOR_PARITY), ///< critical:qos_generator_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_CRITICAL_COMPARATOR_TREE), ///< major:critical_comparator_tree for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_FLT_SECDED_CORR), ///< major:flt_secded_corr for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_FLT_SECDED_UNCORR), ///< major:flt_secded_uncorr for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_HANDSHAKE_RETRACTION), ///< major:handshake_retraction for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_INTERNAL_FSM), ///< major:internal_fsm for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_JUMPER_PARITY), ///< major:jumper_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_LATENT_COMPARATOR_TREE), ///< major:latent_comparator_tree for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_LATENT_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_LATENT_TIMEOUT), ///< major:latent_timeout for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_MAJOR_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_MAJOR_TIMEOUT), ///< major:major_timeout for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_PACKET_FRAMING), ///< major:packet_framing for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_PACKET_WORDNUMBER), ///< major:packet_wordnumber for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_PACKET_WRONGPATH), ///< major:packet_wrongpath for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_POWER_DISCONNECT_ERROR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_POWER_DISCONNECT_ERROR), ///< major:power_disconnect_error for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_POWER_MAIN_FAULT_CONTROL_PARITY), ///< major:power_main_fault_control_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MAJOR_QOS_GENERATOR_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MAJOR_QOS_GENERATOR_PARITY), ///< major:qos_generator_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_CRITICAL_COMPARATOR_TREE), ///< minor:critical_comparator_tree for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_FLT_SECDED_CORR), ///< minor:flt_secded_corr for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_FLT_SECDED_UNCORR), ///< minor:flt_secded_uncorr for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_HANDSHAKE_RETRACTION), ///< minor:handshake_retraction for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_INTERNAL_FSM), ///< minor:internal_fsm for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_JUMPER_PARITY), ///< minor:jumper_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_LATENT_COMPARATOR_TREE), ///< minor:latent_comparator_tree for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_LATENT_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_LATENT_TIMEOUT), ///< minor:latent_timeout for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_MAJOR_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_MAJOR_TIMEOUT), ///< minor:major_timeout for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_PACKET_FRAMING), ///< minor:packet_framing for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_PACKET_WORDNUMBER), ///< minor:packet_wordnumber for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_PACKET_WRONGPATH), ///< minor:packet_wrongpath for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_POWER_DISCONNECT_ERROR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_POWER_DISCONNECT_ERROR), ///< minor:power_disconnect_error for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_POWER_MAIN_FAULT_CONTROL_PARITY), ///< minor:power_main_fault_control_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_INITIATORS_MINOR_QOS_GENERATOR_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_MINOR_QOS_GENERATOR_PARITY), ///< minor:qos_generator_parity for instance initiators of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_AXI_RDATA_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_AXI_RDATA_SECDED_CORR), ///< critical:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_AXI_RDATA_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_AXI_RDATA_SECDED_UNCORR), ///< critical:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_AXI_WRESP_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_AXI_WRESP_SECDED_CORR), ///< critical:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_AXI_WRESP_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_AXI_WRESP_SECDED_UNCORR), ///< critical:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_CRITICAL_COMPARATOR_TREE), ///< critical:critical_comparator_tree for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_FLT_SECDED_CORR), ///< critical:flt_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_FLT_SECDED_UNCORR), ///< critical:flt_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_HANDSHAKE_RETRACTION), ///< critical:handshake_retraction for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_INTERNAL_FSM), ///< critical:internal_fsm for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_JUMPER_PARITY), ///< critical:jumper_parity for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_LATENT_COMPARATOR_TREE), ///< critical:latent_comparator_tree for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_PACKET_FRAMING), ///< critical:packet_framing for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_PACKET_WORDNUMBER), ///< critical:packet_wordnumber for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_PACKET_WRONGPATH), ///< critical:packet_wrongpath for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_CRITICAL_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_CRITICAL_POWER_MAIN_FAULT_CONTROL_PARITY), ///< critical:power_main_fault_control_parity for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_AXI_RDATA_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_AXI_RDATA_SECDED_CORR), ///< major:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_AXI_RDATA_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_AXI_RDATA_SECDED_UNCORR), ///< major:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_AXI_WRESP_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_AXI_WRESP_SECDED_CORR), ///< major:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_AXI_WRESP_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_AXI_WRESP_SECDED_UNCORR), ///< major:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_CRITICAL_COMPARATOR_TREE), ///< major:critical_comparator_tree for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_FLT_SECDED_CORR), ///< major:flt_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_FLT_SECDED_UNCORR), ///< major:flt_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_HANDSHAKE_RETRACTION), ///< major:handshake_retraction for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_INTERNAL_FSM), ///< major:internal_fsm for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_JUMPER_PARITY), ///< major:jumper_parity for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_LATENT_COMPARATOR_TREE), ///< major:latent_comparator_tree for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_PACKET_FRAMING), ///< major:packet_framing for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_PACKET_WORDNUMBER), ///< major:packet_wordnumber for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_PACKET_WRONGPATH), ///< major:packet_wrongpath for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MAJOR_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MAJOR_POWER_MAIN_FAULT_CONTROL_PARITY), ///< major:power_main_fault_control_parity for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_AXI_RDATA_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_AXI_RDATA_SECDED_CORR), ///< minor:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_AXI_RDATA_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_AXI_RDATA_SECDED_UNCORR), ///< minor:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_AXI_WRESP_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_AXI_WRESP_SECDED_CORR), ///< minor:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_AXI_WRESP_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_AXI_WRESP_SECDED_UNCORR), ///< minor:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_CRITICAL_COMPARATOR_TREE), ///< minor:critical_comparator_tree for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_FLT_SECDED_CORR), ///< minor:flt_secded_corr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_FLT_SECDED_UNCORR), ///< minor:flt_secded_uncorr for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_HANDSHAKE_RETRACTION), ///< minor:handshake_retraction for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_INTERNAL_FSM), ///< minor:internal_fsm for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_JUMPER_PARITY), ///< minor:jumper_parity for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_LATENT_COMPARATOR_TREE), ///< minor:latent_comparator_tree for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_PACKET_FRAMING), ///< minor:packet_framing for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_PACKET_WORDNUMBER), ///< minor:packet_wordnumber for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_PACKET_WRONGPATH), ///< minor:packet_wrongpath for instance targets of structure from DDR_NOC
-    RAS_ERR_ID_DDR_NOC_TARGETS_MINOR_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_MINOR_POWER_MAIN_FAULT_CONTROL_PARITY), ///< minor:power_main_fault_control_parity for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_HSIO_PAB_DLL0_LOCK = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_HSIO, DDR_HSIO_PAB_DLL0_LOCK), ///< pab:dll0_lock for instance hsio of structure from DDR
+    RAS_ERR_ID_DDR_HSIO_PAB_DLL0_UNLOCK = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_HSIO, DDR_HSIO_PAB_DLL0_UNLOCK), ///< pab:dll0_unlock for instance hsio of structure from DDR
+    RAS_ERR_ID_DDR_HSIO_PAB_DLL1_LOCK = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_HSIO, DDR_HSIO_PAB_DLL1_LOCK), ///< pab:dll1_lock for instance hsio of structure from DDR
+    RAS_ERR_ID_DDR_HSIO_PAB_DLL1_UNLOCK = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_HSIO, DDR_HSIO_PAB_DLL1_UNLOCK), ///< pab:dll1_unlock for instance hsio of structure from DDR
+    RAS_ERR_ID_DDR_PHY_DFI_RDDATA_VALID_ERR = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_PHY, DDR_PHY_DFI_RDDATA_VALID_ERR), ///< dfi_rddata:valid_err for instance phy of structure from DDR
+    RAS_ERR_ID_DDR_PHY_DFI_RDDATA_VALID_FIFO_FULL = RAS_ERROR_ENCODE(DDR, DDR_STRUCT_PHY, DDR_PHY_DFI_RDDATA_VALID_FIFO_FULL), ///< dfi_rddata:valid_fifo_full for instance phy of structure from DDR
+    RAS_ERR_ID_DDR_NOC_INITIATORS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE), ///< comparator_tree_fault:critical_comparator_tree for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE), ///< comparator_tree_fault:latent_comparator_tree for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER), ///< packet_validity_fault:packet_wordnumber for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_REGISTER_PARITY_FAULT_QOS_GENERATOR_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_REGISTER_PARITY_FAULT_QOS_GENERATOR_PARITY), ///< register_parity_fault:qos_generator_parity for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT), ///< timeout_fault:latent_timeout for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_INITIATORS, DDR_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT), ///< timeout_fault:major_timeout for instance initiators of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_OBSERVER_ERROR_PACKET_DEC_ERR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, DDR_NOC_OBSERVER_ERROR_PACKET_DEC_ERR), ///< error_packet:dec_err for instance observer of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_OBSERVER_ERROR_PACKET_DISC_ERR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, DDR_NOC_OBSERVER_ERROR_PACKET_DISC_ERR), ///< error_packet:disc_err for instance observer of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, DDR_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR), ///< error_packet:hide_err for instance observer of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_OBSERVER_ERROR_PACKET_SEC_ERR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, DDR_NOC_OBSERVER_ERROR_PACKET_SEC_ERR), ///< error_packet:sec_err for instance observer of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_OBSERVER_ERROR_PACKET_SLV_ERR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, DDR_NOC_OBSERVER_ERROR_PACKET_SLV_ERR), ///< error_packet:slv_err for instance observer of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_OBSERVER_ERROR_PACKET_TMO_ERR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, DDR_NOC_OBSERVER_ERROR_PACKET_TMO_ERR), ///< error_packet:tmo_err for instance observer of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_OBSERVER_ERROR_PACKET_UNS_ERR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_OBSERVER, DDR_NOC_OBSERVER_ERROR_PACKET_UNS_ERR), ///< error_packet:uns_err for instance observer of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_COMPARATOR_TREE_FAULT_CRITICAL_COMPARATOR_TREE), ///< comparator_tree_fault:critical_comparator_tree for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_COMPARATOR_TREE_FAULT_LATENT_COMPARATOR_TREE), ///< comparator_tree_fault:latent_comparator_tree for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER), ///< packet_validity_fault:packet_wordnumber for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_CORR), ///< rgc_fault:axi_rdata_secded_corr for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_RGC_FAULT_AXI_RDATA_SECDED_UNCORR), ///< rgc_fault:axi_rdata_secded_uncorr for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_CORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_CORR), ///< rgc_fault:axi_wresp_secded_corr for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_UNCORR = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TARGETS, DDR_NOC_TARGETS_RGC_FAULT_AXI_WRESP_SECDED_UNCORR), ///< rgc_fault:axi_wresp_secded_uncorr for instance targets of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_POWER_DISCONNECT = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TOP_FAULT_AGG, DDR_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_POWER_DISCONNECT), ///< fault_from_bottom:power_disconnect for instance top_fault_agg of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TOP_FAULT_AGG, DDR_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance top_fault_agg of structure from DDR_NOC
+    RAS_ERR_ID_DDR_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(DDR_NOC, DDR_NOC_STRUCT_TOP_FAULT_AGG, DDR_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY), ///< register_parity_fault:power_main_fault_control_parity for instance top_fault_agg of structure from DDR_NOC
     RAS_ERR_ID_ENET_ANA_AC_EACL_REW_WRAP_RAM_CORRECTED_ANA_AC_FRER_GEN_CFG = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_ANA_AC_EACL_REW_WRAP, ENET_ANA_AC_EACL_REW_WRAP_RAM_CORRECTED_ANA_AC_FRER_GEN_CFG), ///< ram_corrected:ana_ac_frer_gen_cfg for instance ana_ac_eacl_rew_wrap of structure from ENET
     RAS_ERR_ID_ENET_ANA_AC_EACL_REW_WRAP_RAM_CORRECTED_ANA_AC_FRER_GEN_STA = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_ANA_AC_EACL_REW_WRAP, ENET_ANA_AC_EACL_REW_WRAP_RAM_CORRECTED_ANA_AC_FRER_GEN_STA), ///< ram_corrected:ana_ac_frer_gen_sta for instance ana_ac_eacl_rew_wrap of structure from ENET
     RAS_ERR_ID_ENET_ANA_AC_EACL_REW_WRAP_RAM_CORRECTED_ANA_AC_LOGIC_AGGR = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_ANA_AC_EACL_REW_WRAP, ENET_ANA_AC_EACL_REW_WRAP_RAM_CORRECTED_ANA_AC_LOGIC_AGGR), ///< ram_corrected:ana_ac_logic_aggr for instance ana_ac_eacl_rew_wrap of structure from ENET
@@ -3338,6 +5080,14 @@ typedef enum {
     RAS_ERR_ID_ENET_SQS_RAM_UNCORRECTED_QSYS_MQS_XQS_STAT_X_PORT_STAT_MBIT = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_SQS, ENET_SQS_RAM_UNCORRECTED_QSYS_MQS_XQS_STAT_X_PORT_STAT_MBIT), ///< ram_uncorrected:qsys_mqs_xqs_stat_X_port_stat_mbit for instance sqs of structure from ENET
     RAS_ERR_ID_ENET_SQS_RAM_UNCORRECTED_QSYS_MQS_XQS_STAT_X_SRV_STAT_MBIT = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_SQS, ENET_SQS_RAM_UNCORRECTED_QSYS_MQS_XQS_STAT_X_SRV_STAT_MBIT), ///< ram_uncorrected:qsys_mqs_xqs_stat_X_srv_stat_mbit for instance sqs of structure from ENET
     RAS_ERR_ID_ENET_SQS_RAM_UNCORRECTED_QSYS_PMEM_PKTMEMX_MBIT = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_SQS, ENET_SQS_RAM_UNCORRECTED_QSYS_PMEM_PKTMEMX_MBIT), ///< ram_uncorrected:qsys_pmem_pktmemX_mbit for instance sqs of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_ES0_X = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_ES0_X), ///< ram_corrected:tcam_vcap_es0_X for instance tcam_ecc of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_ES2_X = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_ES2_X), ///< ram_corrected:tcam_vcap_es2_X for instance tcam_ecc of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_IP6PFX = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_IP6PFX), ///< ram_corrected:tcam_vcap_ip6pfx for instance tcam_ecc of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_SUPER_BK_X = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_CORRECTED_TCAM_VCAP_SUPER_BK_X), ///< ram_corrected:tcam_vcap_super_bk_X for instance tcam_ecc of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_ES0_X = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_ES0_X), ///< ram_uncorrected:tcam_vcap_es0_X for instance tcam_ecc of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_ES2_X = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_ES2_X), ///< ram_uncorrected:tcam_vcap_es2_X for instance tcam_ecc of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_IP6PFX = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_IP6PFX), ///< ram_uncorrected:tcam_vcap_ip6pfx for instance tcam_ecc of structure from ENET
+    RAS_ERR_ID_ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_SUPER_BK_X = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_TCAM_ECC, ENET_TCAM_ECC_RAM_UNCORRECTED_TCAM_VCAP_SUPER_BK_X), ///< ram_uncorrected:tcam_vcap_super_bk_X for instance tcam_ecc of structure from ENET
     RAS_ERR_ID_ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XA_AR_Y = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_VCAP_SUPER, ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XA_AR_Y), ///< ram_corrected:vcap_super_def_Xa_AR_Y for instance vcap_super of structure from ENET
     RAS_ERR_ID_ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XA_CNTR = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_VCAP_SUPER, ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XA_CNTR), ///< ram_corrected:vcap_super_def_Xa_cntr for instance vcap_super of structure from ENET
     RAS_ERR_ID_ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XB_AR_Y = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_VCAP_SUPER, ENET_VCAP_SUPER_RAM_CORRECTED_VCAP_SUPER_DEF_XB_AR_Y), ///< ram_corrected:vcap_super_def_Xb_AR_Y for instance vcap_super of structure from ENET
@@ -3356,6 +5106,282 @@ typedef enum {
     RAS_ERR_ID_ENET_VCAP_SUPER_RAM_UNCORRECTED_VCAP_SUPER_ECC_PAR_RAM = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_VCAP_SUPER, ENET_VCAP_SUPER_RAM_UNCORRECTED_VCAP_SUPER_ECC_PAR_RAM), ///< ram_uncorrected:vcap_super_ecc_par_ram for instance vcap_super of structure from ENET
     RAS_ERR_ID_ENET_VCAP_SUPER_RAM_UNCORRECTED_VCAP_SUPER_SL_X_AR_Y = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_VCAP_SUPER, ENET_VCAP_SUPER_RAM_UNCORRECTED_VCAP_SUPER_SL_X_AR_Y), ///< ram_uncorrected:vcap_super_sl_X_AR_Y for instance vcap_super of structure from ENET
     RAS_ERR_ID_ENET_VCAP_SUPER_RAM_UNCORRECTED_VCAP_SUPER_SL_X_CNTR = RAS_ERROR_ENCODE(ENET, ENET_STRUCT_VCAP_SUPER, ENET_VCAP_SUPER_RAM_UNCORRECTED_VCAP_SUPER_SL_X_CNTR), ///< ram_uncorrected:vcap_super_sl_X_cntr for instance vcap_super of structure from ENET
+    RAS_ERR_ID_ENET_EP_CORE_ASF_CSR_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_ASF_CSR_ERR), ///< asf:csr_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_ASF_DAP_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_ASF_DAP_ERR), ///< asf:dap_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_ASF_INTEGRITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_ASF_INTEGRITY_ERR), ///< asf:integrity_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_ASF_PROTOCOL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_ASF_PROTOCOL_ERR), ///< asf:protocol_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_ASF_SRAM_CORR_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_ASF_SRAM_CORR_ERR), ///< asf:sram_corr_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_ASF_SRAM_UNCORR_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_ASF_SRAM_UNCORR_ERR), ///< asf:sram_uncorr_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_ASF_TRANS_TO_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_ASF_TRANS_TO_ERR), ///< asf:trans_to_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_IOB_BUF_FULL = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_IOB_BUF_FULL), ///< iob:buf_full for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_IOB_DTC_WDG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_IOB_DTC_WDG), ///< iob:dtc_wdg for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_IOB_PMP_FAIL = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_IOB_PMP_FAIL), ///< iob:pmp_fail for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_MMSL_FR_COUNT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_MMSL_FR_COUNT_ERR), ///< mmsl:fr_count_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_MMSL_RCV_R_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_MMSL_RCV_R_ERR), ///< mmsl:rcv_r_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_MMSL_RCV_V_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_MMSL_RCV_V_ERR), ///< mmsl:rcv_v_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_MMSL_SMD_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_MMSL_SMD_ERR), ///< mmsl:smd_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_MMSL_SMDC_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_MMSL_SMDC_ERR), ///< mmsl:smdc_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_CORE_MMSL_SMDS_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_CORE, ENET_EP_CORE_MMSL_SMDS_ERR), ///< mmsl:smds_err for instance core of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_GROUP_BAD_CONFIG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_GROUP_BAD_CONFIG), ///< group:group_bad_config for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_LAT_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_LAT_RST_OVERFLOW), ///< group:n_group_async_lat_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_RCVY_OVERFLOW), ///< group:n_group_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_ASYNC_RST_OVERFLOW), ///< group:n_group_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR), ///< group:n_group_latent_error for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR_DROP_SAT = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR_DROP_SAT), ///< group:n_group_latent_error_drop_sat for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR_PASS_SAT = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_LATENT_ERROR_PASS_SAT), ///< group:n_group_latent_error_pass_sat for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_OVERFLOW), ///< group:n_group_port0_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_RCVY_OVERFLOW), ///< group:n_group_port0_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_ASYNC_RST_OVERFLOW), ///< group:n_group_port0_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_BAD_RTAG), ///< group:n_group_port0_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_FRAME_FIFO_OVERFLOW), ///< group:n_group_port0_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_FRAME_FIFO_UNDERFLOW), ///< group:n_group_port0_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_MISSING_EOP), ///< group:n_group_port0_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_MISSING_SOP), ///< group:n_group_port0_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_NO_RTAG), ///< group:n_group_port0_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_RTAG_STATE), ///< group:n_group_port0_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT0_STATUS_FIFO_OVERFLOW), ///< group:n_group_port0_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_OVERFLOW), ///< group:n_group_port1_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_RCVY_OVERFLOW), ///< group:n_group_port1_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_ASYNC_RST_OVERFLOW), ///< group:n_group_port1_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_BAD_RTAG), ///< group:n_group_port1_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_FRAME_FIFO_OVERFLOW), ///< group:n_group_port1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_FRAME_FIFO_UNDERFLOW), ///< group:n_group_port1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_MISSING_EOP), ///< group:n_group_port1_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_MISSING_SOP), ///< group:n_group_port1_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_NO_RTAG), ///< group:n_group_port1_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_RTAG_STATE), ///< group:n_group_port1_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT1_STATUS_FIFO_OVERFLOW), ///< group:n_group_port1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_OVERFLOW), ///< group:n_group_port2_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_RCVY_OVERFLOW), ///< group:n_group_port2_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_ASYNC_RST_OVERFLOW), ///< group:n_group_port2_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_BAD_RTAG), ///< group:n_group_port2_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_FRAME_FIFO_OVERFLOW), ///< group:n_group_port2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_FRAME_FIFO_UNDERFLOW), ///< group:n_group_port2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_MISSING_EOP), ///< group:n_group_port2_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_MISSING_SOP), ///< group:n_group_port2_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_NO_RTAG), ///< group:n_group_port2_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_RTAG_STATE), ///< group:n_group_port2_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT2_STATUS_FIFO_OVERFLOW), ///< group:n_group_port2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_OVERFLOW), ///< group:n_group_port3_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_RCVY_OVERFLOW), ///< group:n_group_port3_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_ASYNC_RST_OVERFLOW), ///< group:n_group_port3_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_BAD_RTAG), ///< group:n_group_port3_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_FRAME_FIFO_OVERFLOW), ///< group:n_group_port3_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_FRAME_FIFO_UNDERFLOW), ///< group:n_group_port3_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_MISSING_EOP), ///< group:n_group_port3_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_MISSING_SOP), ///< group:n_group_port3_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_NO_RTAG), ///< group:n_group_port3_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_RTAG_STATE), ///< group:n_group_port3_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_PORT3_STATUS_FIFO_OVERFLOW), ///< group:n_group_port3_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_R1_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_R1_FRAME_FIFO_OVERFLOW), ///< group:n_group_r1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_R1_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_R1_FRAME_FIFO_UNDERFLOW), ///< group:n_group_r1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_R1_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_R1_STATUS_FIFO_OVERFLOW), ///< group:n_group_r1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_R2_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_R2_FRAME_FIFO_OVERFLOW), ///< group:n_group_r2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_R2_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_R2_FRAME_FIFO_UNDERFLOW), ///< group:n_group_r2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_N_GROUP_R2_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_N_GROUP_R2_STATUS_FIFO_OVERFLOW), ///< group:n_group_r2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_LAT_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_LAT_RST_OVERFLOW), ///< group:w_group_async_lat_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_RCVY_OVERFLOW), ///< group:w_group_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_ASYNC_RST_OVERFLOW), ///< group:w_group_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR), ///< group:w_group_latent_error for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR_DROP_SAT = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR_DROP_SAT), ///< group:w_group_latent_error_drop_sat for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR_PASS_SAT = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_LATENT_ERROR_PASS_SAT), ///< group:w_group_latent_error_pass_sat for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_OVERFLOW), ///< group:w_group_port0_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_RCVY_OVERFLOW), ///< group:w_group_port0_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_ASYNC_RST_OVERFLOW), ///< group:w_group_port0_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_BAD_RTAG), ///< group:w_group_port0_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_FRAME_FIFO_OVERFLOW), ///< group:w_group_port0_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_FRAME_FIFO_UNDERFLOW), ///< group:w_group_port0_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_MISSING_EOP), ///< group:w_group_port0_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_MISSING_SOP), ///< group:w_group_port0_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_NO_RTAG), ///< group:w_group_port0_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_RTAG_STATE), ///< group:w_group_port0_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT0_STATUS_FIFO_OVERFLOW), ///< group:w_group_port0_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_OVERFLOW), ///< group:w_group_port1_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_RCVY_OVERFLOW), ///< group:w_group_port1_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_ASYNC_RST_OVERFLOW), ///< group:w_group_port1_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_BAD_RTAG), ///< group:w_group_port1_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_FRAME_FIFO_OVERFLOW), ///< group:w_group_port1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_FRAME_FIFO_UNDERFLOW), ///< group:w_group_port1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_MISSING_EOP), ///< group:w_group_port1_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_MISSING_SOP), ///< group:w_group_port1_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_NO_RTAG), ///< group:w_group_port1_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_RTAG_STATE), ///< group:w_group_port1_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT1_STATUS_FIFO_OVERFLOW), ///< group:w_group_port1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_OVERFLOW), ///< group:w_group_port2_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_RCVY_OVERFLOW), ///< group:w_group_port2_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_ASYNC_RST_OVERFLOW), ///< group:w_group_port2_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_BAD_RTAG), ///< group:w_group_port2_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_FRAME_FIFO_OVERFLOW), ///< group:w_group_port2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_FRAME_FIFO_UNDERFLOW), ///< group:w_group_port2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_MISSING_EOP), ///< group:w_group_port2_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_MISSING_SOP), ///< group:w_group_port2_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_NO_RTAG), ///< group:w_group_port2_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_RTAG_STATE), ///< group:w_group_port2_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT2_STATUS_FIFO_OVERFLOW), ///< group:w_group_port2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_OVERFLOW), ///< group:w_group_port3_async_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_RCVY_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_RCVY_OVERFLOW), ///< group:w_group_port3_async_rcvy_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_RST_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_ASYNC_RST_OVERFLOW), ///< group:w_group_port3_async_rst_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_BAD_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_BAD_RTAG), ///< group:w_group_port3_bad_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_FRAME_FIFO_OVERFLOW), ///< group:w_group_port3_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_FRAME_FIFO_UNDERFLOW), ///< group:w_group_port3_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_MISSING_EOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_MISSING_EOP), ///< group:w_group_port3_missing_eop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_MISSING_SOP = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_MISSING_SOP), ///< group:w_group_port3_missing_sop for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_NO_RTAG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_NO_RTAG), ///< group:w_group_port3_no_rtag for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_RTAG_STATE = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_RTAG_STATE), ///< group:w_group_port3_rtag_state for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_PORT3_STATUS_FIFO_OVERFLOW), ///< group:w_group_port3_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_R1_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_R1_FRAME_FIFO_OVERFLOW), ///< group:w_group_r1_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_R1_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_R1_FRAME_FIFO_UNDERFLOW), ///< group:w_group_r1_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_R1_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_R1_STATUS_FIFO_OVERFLOW), ///< group:w_group_r1_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_R2_FRAME_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_R2_FRAME_FIFO_OVERFLOW), ///< group:w_group_r2_frame_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_R2_FRAME_FIFO_UNDERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_R2_FRAME_FIFO_UNDERFLOW), ///< group:w_group_r2_frame_fifo_underflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_RX_GROUP_W_GROUP_R2_STATUS_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_RX, ENET_EP_FRER_RX_GROUP_W_GROUP_R2_STATUS_FIFO_OVERFLOW), ///< group:w_group_r2_status_fifo_overflow for instance frer_rx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_GROUP_BAD_CONFIG = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_GROUP_BAD_CONFIG), ///< group:group_bad_config for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_N_AXI_GROUP_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_N_AXI_GROUP_PMON_FIFO_OVERFLOW), ///< group:n_axi_group_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_N_DMA_PORT0_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_N_DMA_PORT0_PMON_FIFO_OVERFLOW), ///< group:n_dma_port0_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_N_DMA_PORT1_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_N_DMA_PORT1_PMON_FIFO_OVERFLOW), ///< group:n_dma_port1_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_N_DMA_PORT2_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_N_DMA_PORT2_PMON_FIFO_OVERFLOW), ///< group:n_dma_port2_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_N_DMA_PORT3_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_N_DMA_PORT3_PMON_FIFO_OVERFLOW), ///< group:n_dma_port3_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_W_AXI_GROUP_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_W_AXI_GROUP_PMON_FIFO_OVERFLOW), ///< group:w_axi_group_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_W_DMA_PORT0_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_W_DMA_PORT0_PMON_FIFO_OVERFLOW), ///< group:w_dma_port0_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_W_DMA_PORT1_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_W_DMA_PORT1_PMON_FIFO_OVERFLOW), ///< group:w_dma_port1_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_W_DMA_PORT2_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_W_DMA_PORT2_PMON_FIFO_OVERFLOW), ///< group:w_dma_port2_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_FRER_TX_GROUP_W_DMA_PORT3_PMON_FIFO_OVERFLOW = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_FRER_TX, ENET_EP_FRER_TX_GROUP_W_DMA_PORT3_PMON_FIFO_OVERFLOW), ///< group:w_dma_port3_pmon_fifo_overflow for instance frer_tx of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_APB_RDATA_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_APB_RDATA_PARITY_ERR), ///< error:ep0_apb_rdata_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_AXI_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_AXI_PARITY_ERR), ///< error:ep0_axi_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_MII_LPBK_FIFO_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_MII_LPBK_FIFO_OVFL_ERR), ///< error:ep0_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_MII_LPBK_FIFO_UNFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_MII_LPBK_FIFO_UNFL_ERR), ///< error:ep0_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_N_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_N_PMON_RX_OVFL_ERR), ///< error:ep0_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_N_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_N_PMON_TX_OVFL_ERR), ///< error:ep0_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_N_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_N_RX_RAM_ECC_SBIT_ERR), ///< error:ep0_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_N_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_N_STREAM_GATE_CLOSE_ERR), ///< error:ep0_n_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_N_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_N_STREAM_GATE_OPEN_ERR), ///< error:ep0_n_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_N_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_N_TX_RAM_ECC_SBIT_ERR), ///< error:ep0_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_W_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_W_PMON_RX_OVFL_ERR), ///< error:ep0_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_W_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_W_PMON_TX_OVFL_ERR), ///< error:ep0_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_W_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_W_RX_RAM_ECC_SBIT_ERR), ///< error:ep0_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_W_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_W_STREAM_GATE_CLOSE_ERR), ///< error:ep0_w_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_W_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_W_STREAM_GATE_OPEN_ERR), ///< error:ep0_w_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP0_W_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP0_W_TX_RAM_ECC_SBIT_ERR), ///< error:ep0_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_APB_RDATA_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_APB_RDATA_PARITY_ERR), ///< error:ep1_apb_rdata_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_AXI_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_AXI_PARITY_ERR), ///< error:ep1_axi_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_MII_LPBK_FIFO_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_MII_LPBK_FIFO_OVFL_ERR), ///< error:ep1_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_MII_LPBK_FIFO_UNFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_MII_LPBK_FIFO_UNFL_ERR), ///< error:ep1_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_N_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_N_PMON_RX_OVFL_ERR), ///< error:ep1_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_N_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_N_PMON_TX_OVFL_ERR), ///< error:ep1_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_N_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_N_RX_RAM_ECC_SBIT_ERR), ///< error:ep1_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_N_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_N_STREAM_GATE_CLOSE_ERR), ///< error:ep1_n_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_N_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_N_STREAM_GATE_OPEN_ERR), ///< error:ep1_n_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_N_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_N_TX_RAM_ECC_SBIT_ERR), ///< error:ep1_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_W_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_W_PMON_RX_OVFL_ERR), ///< error:ep1_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_W_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_W_PMON_TX_OVFL_ERR), ///< error:ep1_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_W_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_W_RX_RAM_ECC_SBIT_ERR), ///< error:ep1_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_W_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_W_STREAM_GATE_CLOSE_ERR), ///< error:ep1_w_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_W_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_W_STREAM_GATE_OPEN_ERR), ///< error:ep1_w_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP1_W_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP1_W_TX_RAM_ECC_SBIT_ERR), ///< error:ep1_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_APB_RDATA_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_APB_RDATA_PARITY_ERR), ///< error:ep2_apb_rdata_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_AXI_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_AXI_PARITY_ERR), ///< error:ep2_axi_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_MII_LPBK_FIFO_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_MII_LPBK_FIFO_OVFL_ERR), ///< error:ep2_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_MII_LPBK_FIFO_UNFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_MII_LPBK_FIFO_UNFL_ERR), ///< error:ep2_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_N_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_N_PMON_RX_OVFL_ERR), ///< error:ep2_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_N_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_N_PMON_TX_OVFL_ERR), ///< error:ep2_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_N_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_N_RX_RAM_ECC_SBIT_ERR), ///< error:ep2_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_N_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_N_STREAM_GATE_CLOSE_ERR), ///< error:ep2_n_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_N_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_N_STREAM_GATE_OPEN_ERR), ///< error:ep2_n_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_N_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_N_TX_RAM_ECC_SBIT_ERR), ///< error:ep2_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_W_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_W_PMON_RX_OVFL_ERR), ///< error:ep2_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_W_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_W_PMON_TX_OVFL_ERR), ///< error:ep2_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_W_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_W_RX_RAM_ECC_SBIT_ERR), ///< error:ep2_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_W_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_W_STREAM_GATE_CLOSE_ERR), ///< error:ep2_w_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_W_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_W_STREAM_GATE_OPEN_ERR), ///< error:ep2_w_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP2_W_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP2_W_TX_RAM_ECC_SBIT_ERR), ///< error:ep2_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_APB_RDATA_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_APB_RDATA_PARITY_ERR), ///< error:ep3_apb_rdata_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_AXI_PARITY_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_AXI_PARITY_ERR), ///< error:ep3_axi_parity_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_MII_LPBK_FIFO_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_MII_LPBK_FIFO_OVFL_ERR), ///< error:ep3_mii_lpbk_fifo_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_MII_LPBK_FIFO_UNFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_MII_LPBK_FIFO_UNFL_ERR), ///< error:ep3_mii_lpbk_fifo_unfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_N_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_N_PMON_RX_OVFL_ERR), ///< error:ep3_n_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_N_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_N_PMON_TX_OVFL_ERR), ///< error:ep3_n_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_N_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_N_RX_RAM_ECC_SBIT_ERR), ///< error:ep3_n_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_N_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_N_STREAM_GATE_CLOSE_ERR), ///< error:ep3_n_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_N_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_N_STREAM_GATE_OPEN_ERR), ///< error:ep3_n_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_N_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_N_TX_RAM_ECC_SBIT_ERR), ///< error:ep3_n_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_W_PMON_RX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_W_PMON_RX_OVFL_ERR), ///< error:ep3_w_pmon_rx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_W_PMON_TX_OVFL_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_W_PMON_TX_OVFL_ERR), ///< error:ep3_w_pmon_tx_ovfl_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_W_RX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_W_RX_RAM_ECC_SBIT_ERR), ///< error:ep3_w_rx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_W_STREAM_GATE_CLOSE_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_W_STREAM_GATE_CLOSE_ERR), ///< error:ep3_w_stream_gate_close_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_W_STREAM_GATE_OPEN_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_W_STREAM_GATE_OPEN_ERR), ///< error:ep3_w_stream_gate_open_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_EP3_W_TX_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_EP3_W_TX_RAM_ECC_SBIT_ERR), ///< error:ep3_w_tx_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_frm_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_frm_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP2_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP2_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_frm_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP3_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_FRM_EP3_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_frm_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_FRM_RPL0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_FRM_RPL0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_frm_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_FRM_RPL1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_FRM_RPL1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_frm_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_stat_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_stat_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP2_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP2_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_stat_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP3_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_STAT_EP3_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_stat_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_STAT_RPL0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_STAT_RPL0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_stat_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_N_STAT_RPL1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_N_STAT_RPL1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_n_stat_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_frm_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_frm_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP2_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP2_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_frm_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP3_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_FRM_EP3_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_frm_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_FRM_RPL0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_FRM_RPL0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_frm_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_FRM_RPL1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_FRM_RPL1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_frm_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_stat_ep0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_stat_ep1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP2_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP2_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_stat_ep2_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP3_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_STAT_EP3_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_stat_ep3_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_STAT_RPL0_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_STAT_RPL0_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_stat_rpl0_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_ERROR_FRER_RX_W_STAT_RPL1_RAM_ECC_SBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_ERROR_FRER_RX_W_STAT_RPL1_RAM_ECC_SBIT_ERR), ///< error:frer_rx_w_stat_rpl1_ram_ecc_sbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP0_AXI_RESP_ERR_DATA = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP0_AXI_RESP_ERR_DATA), ///< fatal:ep0_axi_resp_err_data for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP0_AXI_RESP_ERR_DESC = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP0_AXI_RESP_ERR_DESC), ///< fatal:ep0_axi_resp_err_desc for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP0_N_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP0_N_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep0_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP0_N_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP0_N_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep0_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP0_W_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP0_W_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep0_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP0_W_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP0_W_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep0_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP1_AXI_RESP_ERR_DATA = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP1_AXI_RESP_ERR_DATA), ///< fatal:ep1_axi_resp_err_data for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP1_AXI_RESP_ERR_DESC = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP1_AXI_RESP_ERR_DESC), ///< fatal:ep1_axi_resp_err_desc for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP1_N_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP1_N_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep1_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP1_N_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP1_N_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep1_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP1_W_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP1_W_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep1_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP1_W_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP1_W_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep1_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP2_AXI_RESP_ERR_DATA = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP2_AXI_RESP_ERR_DATA), ///< fatal:ep2_axi_resp_err_data for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP2_AXI_RESP_ERR_DESC = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP2_AXI_RESP_ERR_DESC), ///< fatal:ep2_axi_resp_err_desc for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP2_N_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP2_N_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep2_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP2_N_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP2_N_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep2_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP2_W_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP2_W_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep2_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP2_W_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP2_W_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep2_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP3_AXI_RESP_ERR_DATA = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP3_AXI_RESP_ERR_DATA), ///< fatal:ep3_axi_resp_err_data for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP3_AXI_RESP_ERR_DESC = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP3_AXI_RESP_ERR_DESC), ///< fatal:ep3_axi_resp_err_desc for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP3_N_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP3_N_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep3_n_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP3_N_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP3_N_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep3_n_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP3_W_RX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP3_W_RX_RAM_ECC_MBIT_ERR), ///< fatal:ep3_w_rx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_EP3_W_TX_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_EP3_W_TX_RAM_ECC_MBIT_ERR), ///< fatal:ep3_w_tx_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_frm_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_frm_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP2_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP2_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_frm_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP3_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_FRM_EP3_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_frm_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_FRM_RPL0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_FRM_RPL0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_frm_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_FRM_RPL1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_FRM_RPL1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_frm_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_stat_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_stat_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP2_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP2_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_stat_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP3_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_STAT_EP3_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_stat_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_STAT_RPL0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_STAT_RPL0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_stat_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_N_STAT_RPL1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_N_STAT_RPL1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_n_stat_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_frm_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_frm_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP2_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP2_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_frm_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP3_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_FRM_EP3_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_frm_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_FRM_RPL0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_FRM_RPL0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_frm_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_FRM_RPL1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_FRM_RPL1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_frm_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_stat_ep0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_stat_ep1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP2_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP2_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_stat_ep2_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP3_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_STAT_EP3_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_stat_ep3_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_STAT_RPL0_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_STAT_RPL0_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_stat_rpl0_ram_ecc_mbit_err for instance sb of structure from ENET_EP
+    RAS_ERR_ID_ENET_EP_SB_FATAL_FRER_RX_W_STAT_RPL1_RAM_ECC_MBIT_ERR = RAS_ERROR_ENCODE(ENET_EP, ENET_EP_STRUCT_SB, ENET_EP_SB_FATAL_FRER_RX_W_STAT_RPL1_RAM_ECC_MBIT_ERR), ///< fatal:frer_rx_w_stat_rpl1_ram_ecc_mbit_err for instance sb of structure from ENET_EP
     RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_CORRECTED_NAND_M_COR_ERR_B_PARITY = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_CORRECTED_NAND_M_COR_ERR_B_PARITY), ///< bus_ecc_corrected:nand_m_cor_err_b_parity for instance nand_ctrl of structure from NVM
     RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_CORRECTED_NAND_M_COR_ERR_R_PARITY = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_CORRECTED_NAND_M_COR_ERR_R_PARITY), ///< bus_ecc_corrected:nand_m_cor_err_r_parity for instance nand_ctrl of structure from NVM
     RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_CORRECTED_NAND_M_COR_ERR_RDATA_PARITY = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_CORRECTED_NAND_M_COR_ERR_RDATA_PARITY), ///< bus_ecc_corrected:nand_m_cor_err_rdata_parity for instance nand_ctrl of structure from NVM
@@ -3373,7 +5399,7 @@ typedef enum {
     RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_AW_A_PARITY = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_AW_A_PARITY), ///< bus_ecc_uncorrected:nand_s_uncor_err_aw_a_parity for instance nand_ctrl of structure from NVM
     RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_AW_C_PARITY = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_AW_C_PARITY), ///< bus_ecc_uncorrected:nand_s_uncor_err_aw_c_parity for instance nand_ctrl of structure from NVM
     RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_W_PARITY = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_W_PARITY), ///< bus_ecc_uncorrected:nand_s_uncor_err_w_parity for instance nand_ctrl of structure from NVM
-    RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_WDATA_PARIT = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_WDATA_PARIT), ///< bus_ecc_uncorrected:nand_s_uncor_err_wdata_parit for instance nand_ctrl of structure from NVM
+    RAS_ERR_ID_NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_WDATA_PARITY = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_BUS_ECC_UNCORRECTED_NAND_S_UNCOR_ERR_WDATA_PARITY), ///< bus_ecc_uncorrected:nand_s_uncor_err_wdata_parity for instance nand_ctrl of structure from NVM
     RAS_ERR_ID_NVM_NAND_CTRL_RAM_CORRECTED_DESC_CTXT_MEM_ERR_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_RAM_CORRECTED_DESC_CTXT_MEM_ERR_COR), ///< ram_corrected:desc_ctxt_mem_err_cor for instance nand_ctrl of structure from NVM
     RAS_ERR_ID_NVM_NAND_CTRL_RAM_CORRECTED_ECC_BUF_0_ERR_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_RAM_CORRECTED_ECC_BUF_0_ERR_COR), ///< ram_corrected:ecc_buf_0_err_cor for instance nand_ctrl of structure from NVM
     RAS_ERR_ID_NVM_NAND_CTRL_RAM_CORRECTED_ECC_BUF_1_ERR_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NAND_CTRL, NVM_NAND_CTRL_RAM_CORRECTED_ECC_BUF_1_ERR_COR), ///< ram_corrected:ecc_buf_1_err_cor for instance nand_ctrl of structure from NVM
@@ -3470,13 +5496,13 @@ typedef enum {
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL), ///< emon_corrected:emon_stat_buf_full for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW), ///< emon_corrected:emon_stat_buf_ovrflw for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL), ///< emon_corrected:emon_uncor_buf_full for instance nvm_edac of structure from NVM
-    RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THRHLD = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THRHLD), ///< emon_corrected:emon_uncor_buf_high_thrhld for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW), ///< emon_corrected:emon_uncor_buf_ovrflw for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_PATROL_SCRUB_COMPLETE = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_PATROL_SCRUB_COMPLETE), ///< emon_corrected:patrol_scrub_complete for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_SCRUB_DONE = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_SCRUB_DONE), ///< emon_corrected:scrub_done for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_CORRECTED_SCRUB_REQ = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_CORRECTED_SCRUB_REQ), ///< emon_corrected:scrub_req for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR), ///< emon_uncorrected:emon_addr_err for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_UNCOR), ///< emon_uncorrected:emon_uncor for instance nvm_edac of structure from NVM
+    RAS_ERR_ID_NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THRHLD = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THRHLD), ///< emon_uncorrected:emon_uncor_buf_high_thrhld for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_FAULT_BUF_FSM_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_FAULT_BUF_FSM_ERR), ///< fault:buf_fsm_err for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_FAULT_DEMAND_READ_RAM_DSCR_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_FAULT_DEMAND_READ_RAM_DSCR_ERR), ///< fault:demand_read_ram_dscr_err for instance nvm_edac of structure from NVM
     RAS_ERR_ID_NVM_NVM_EDAC_FAULT_ENC_ADDR_PARITY_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_NVM_EDAC, NVM_NVM_EDAC_FAULT_ENC_ADDR_PARITY_ERR), ///< fault:enc_addr_parity_err for instance nvm_edac of structure from NVM
@@ -3608,23 +5634,26 @@ typedef enum {
     RAS_ERR_ID_NVM_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL), ///< emon_corrected:emon_stat_buf_full for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW), ///< emon_corrected:emon_stat_buf_ovrflw for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL), ///< emon_corrected:emon_uncor_buf_full for instance sram_edac of structure from NVM
-    RAS_ERR_ID_NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THLD = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_HIGH_THLD), ///< emon_corrected:emon_uncor_buf_high_thld for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW), ///< emon_corrected:emon_uncor_buf_ovrflw for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR), ///< emon_uncorrected:emon_addr_err for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION), ///< emon_uncorrected:emon_invalid_extraction for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR), ///< emon_uncorrected:emon_uncor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD), ///< emon_uncorrected:emon_uncor_buf_high_thld for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_DEC_ADDR_PARITY_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_DEC_ADDR_PARITY_ERR), ///< fault:dec_addr_parity_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_ENC_ADDR_PARITY_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_ENC_ADDR_PARITY_ERR), ///< fault:enc_addr_parity_err for instance sram_edac of structure from NVM
-    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_ENC_DATA_PARITY_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_ENC_DATA_PARITY_ERR), ///< fault:enc_data_parity_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_ENC_FSM_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_ENC_FSM_ERR), ///< fault:enc_fsm_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_ERR_REMOVE_READ_COH = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_ERR_REMOVE_READ_COH), ///< fault:err_remove_read_coh for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_ERR_REMOVE_WRITE_COH = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_ERR_REMOVE_WRITE_COH), ///< fault:err_remove_write_coh for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_PATROL_SCRUB_FSM_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_PATROL_SCRUB_FSM_ERR), ///< fault:patrol_scrub_fsm_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RARB_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RARB_ERR), ///< fault:rarb_err for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RD_WR_ARB_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RD_WR_ARB_ERR), ///< fault:rd_wr_arb_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RDCAP_CTX_OVERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RDCAP_CTX_OVERFLOW), ///< fault:rdcap_ctx_overflow for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RDCAP_CTX_UNDERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RDCAP_CTX_UNDERFLOW), ///< fault:rdcap_ctx_underflow for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RDGEN_CTX_OVERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RDGEN_CTX_OVERFLOW), ///< fault:rdgen_ctx_overflow for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RDGEN_CTX_UNDERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RDGEN_CTX_UNDERFLOW), ///< fault:rdgen_ctx_underflow for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RMW_CTX_OVERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RMW_CTX_OVERFLOW), ///< fault:rmw_ctx_overflow for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RMW_CTX_UNDERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RMW_CTX_UNDERFLOW), ///< fault:rmw_ctx_underflow for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RMW_RD_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RMW_RD_ERR), ///< fault:rmw_rd_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RMW_RDCAP_OVERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RMW_RDCAP_OVERFLOW), ///< fault:rmw_rdcap_overflow for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_RMW_RDCAP_UNDERFLOW = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_RMW_RDCAP_UNDERFLOW), ///< fault:rmw_rdcap_underflow for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_WARB_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_WARB_ERR), ///< fault:warb_err for instance sram_edac of structure from NVM
@@ -3639,6 +5668,10 @@ typedef enum {
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_BCH_ENC_BUS_ECC_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_BCH_ENC_BUS_ECC_COR), ///< fault_corrected:bch_enc_bus_ecc_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_RCMD_BUS_ECC_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_RCMD_BUS_ECC_COR), ///< fault_corrected:rcmd_bus_ecc_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_RDCAP_BUS_ECC_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_RDCAP_BUS_ECC_COR), ///< fault_corrected:rdcap_bus_ecc_cor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_0_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_0_COR), ///< fault_corrected:rmw_bus_ecc_0_cor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_1_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_1_COR), ///< fault_corrected:rmw_bus_ecc_1_cor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_2_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_2_COR), ///< fault_corrected:rmw_bus_ecc_2_cor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_3_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_RMW_BUS_ECC_3_COR), ///< fault_corrected:rmw_bus_ecc_3_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_SECDED_ENC_BUS_ECC_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_SECDED_ENC_BUS_ECC_COR), ///< fault_corrected:secded_enc_bus_ecc_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_WCMD_CAP_BUS_ECC_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_WCMD_CAP_BUS_ECC_COR), ///< fault_corrected:wcmd_cap_bus_ecc_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_FAULT_CORRECTED_WCMD_GEN_BUS_ECC_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_FAULT_CORRECTED_WCMD_GEN_BUS_ECC_COR), ///< fault_corrected:wcmd_gen_bus_ecc_cor for instance sram_edac of structure from NVM
@@ -3651,9 +5684,11 @@ typedef enum {
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_EMON_UNCOR_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_EMON_UNCOR_RAM_COR), ///< ram_corrected:emon_uncor_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_ENC_DATA_RAM_COR_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_ENC_DATA_RAM_COR_ERR), ///< ram_corrected:enc_data_ram_cor_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_RDCAP_CTX_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_RDCAP_CTX_RAM_COR), ///< ram_corrected:rdcap_ctx_ram_cor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_RDGEN_CTX_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_RDGEN_CTX_RAM_COR), ///< ram_corrected:rdgen_ctx_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_RMW_CTX_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_RMW_CTX_RAM_COR), ///< ram_corrected:rmw_ctx_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_RMW_DATA_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_RMW_DATA_RAM_COR), ///< ram_corrected:rmw_data_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_WDCAP_CTX_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_WDCAP_CTX_RAM_COR), ///< ram_corrected:wdcap_ctx_ram_cor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_WDCAP_DATA_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_WDCAP_DATA_RAM_COR), ///< ram_corrected:wdcap_data_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_WDGEN_CTX_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_WDGEN_CTX_RAM_COR), ///< ram_corrected:wdgen_ctx_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_CORRECTED_WDRESP_CTX_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_CORRECTED_WDRESP_CTX_RAM_COR), ///< ram_corrected:wdresp_ctx_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_DEC_DATA_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_DEC_DATA_RAM_UNCOR_ERR), ///< ram_uncorrected:dec_data_ram_uncor_err for instance sram_edac of structure from NVM
@@ -3662,12 +5697,10 @@ typedef enum {
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_EMON_UNCOR_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_EMON_UNCOR_RAM_UNCOR_ERR), ///< ram_uncorrected:emon_uncor_ram_uncor_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_ENC_DATA_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_ENC_DATA_RAM_UNCOR_ERR), ///< ram_uncorrected:enc_data_ram_uncor_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_RDCAP_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_RDCAP_CTX_RAM_UNCOR), ///< ram_uncorrected:rdcap_ctx_ram_uncor for instance sram_edac of structure from NVM
-    RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_COR), ///< ram_uncorrected:rdgen_ctx_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_UNCOR), ///< ram_uncorrected:rdgen_ctx_ram_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_RMW_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_RMW_CTX_RAM_UNCOR), ///< ram_uncorrected:rmw_ctx_ram_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_RMW_DATA_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_RMW_DATA_RAM_UNCOR), ///< ram_uncorrected:rmw_data_ram_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_CTX_RAM_UNCOR), ///< ram_uncorrected:wdcap_ctx_ram_uncor for instance sram_edac of structure from NVM
-    RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_COR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_COR), ///< ram_uncorrected:wdcap_data_ram_cor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_UNCOR), ///< ram_uncorrected:wdcap_data_ram_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_WDGEN_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_WDGEN_CTX_RAM_UNCOR), ///< ram_uncorrected:wdgen_ctx_ram_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_RAM_UNCORRECTED_WDRESP_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_RAM_UNCORRECTED_WDRESP_CTX_RAM_UNCOR), ///< ram_uncorrected:wdresp_ctx_ram_uncor for instance sram_edac of structure from NVM
@@ -3678,6 +5711,10 @@ typedef enum {
     RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RCMD_DROP_TRANS = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RCMD_DROP_TRANS), ///< trans_drop:rcmd_drop_trans for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RDCAP_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RDCAP_BUS_ECC_UNCOR), ///< trans_drop:rdcap_bus_ecc_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RDCAP_DROP_TRANS = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RDCAP_DROP_TRANS), ///< trans_drop:rdcap_drop_trans for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_UNCOR), ///< trans_drop:rmw_bus_ecc_0_uncor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_UNCOR), ///< trans_drop:rmw_bus_ecc_1_uncor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_UNCOR), ///< trans_drop:rmw_bus_ecc_2_uncor for instance sram_edac of structure from NVM
+    RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_UNCOR), ///< trans_drop:rmw_bus_ecc_3_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_RMW_CMD_CTX_ERR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_RMW_CMD_CTX_ERR), ///< trans_drop:rmw_cmd_ctx_err for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_SECDED_ENC_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_SECDED_ENC_BUS_ECC_UNCOR), ///< trans_drop:secded_enc_bus_ecc_uncor for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_TRANS_DROP_WCMD_CAP_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_TRANS_DROP_WCMD_CAP_BUS_ECC_UNCOR), ///< trans_drop:wcmd_cap_bus_ecc_uncor for instance sram_edac of structure from NVM
@@ -3692,6 +5729,315 @@ typedef enum {
     RAS_ERR_ID_NVM_SRAM_EDAC_WRITE_TIMEOUT_WCMD_TIMEOUT = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_WRITE_TIMEOUT_WCMD_TIMEOUT), ///< write_timeout:wcmd_timeout for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_WRITE_TIMEOUT_WDGEN_TIMEOUT = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_WRITE_TIMEOUT_WDGEN_TIMEOUT), ///< write_timeout:wdgen_timeout for instance sram_edac of structure from NVM
     RAS_ERR_ID_NVM_SRAM_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT = RAS_ERROR_ENCODE(NVM, NVM_STRUCT_SRAM_EDAC, NVM_SRAM_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT), ///< write_timeout:wdresp_timeout for instance sram_edac of structure from NVM
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_A2P_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_A2P_ECC_CORR_ERR), ///< ecc_corr:ctrl0_bridge_a2p_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_DMA_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_DMA_ECC_CORR_ERR), ///< ecc_corr:ctrl0_bridge_dma_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_P2A_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_BRIDGE_P2A_ECC_CORR_ERR), ///< ecc_corr:ctrl0_bridge_p2a_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_PL_LLRB_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_PL_LLRB_ECC_CORR_ERR), ///< ecc_corr:ctrl0_pl_llrb_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_DATA_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_DATA_ECC_CORR_ERR), ///< ecc_corr:ctrl0_rx_cxl_cache_data_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_REQ_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_REQ_ECC_CORR_ERR), ///< ecc_corr:ctrl0_rx_cxl_cache_req_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_RSP_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_CACHE_RSP_ECC_CORR_ERR), ///< ecc_corr:ctrl0_rx_cxl_cache_rsp_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_MEM_DATA_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_MEM_DATA_ECC_CORR_ERR), ///< ecc_corr:ctrl0_rx_cxl_mem_data_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_MEM_REQ_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_RX_CXL_MEM_REQ_ECC_CORR_ERR), ///< ecc_corr:ctrl0_rx_cxl_mem_req_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_DATA_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_DATA_ECC_CORR_ERR), ///< ecc_corr:ctrl0_tx_cxl_cache_data_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_DATAHDR_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_DATAHDR_ECC_CORR_ERR), ///< ecc_corr:ctrl0_tx_cxl_cache_datahdr_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_REQ_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_REQ_ECC_CORR_ERR), ///< ecc_corr:ctrl0_tx_cxl_cache_req_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_RSP_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_CACHE_RSP_ECC_CORR_ERR), ///< ecc_corr:ctrl0_tx_cxl_cache_rsp_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_DATA_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_DATA_ECC_CORR_ERR), ///< ecc_corr:ctrl0_tx_cxl_mem_data_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_DATAHDR_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_DATAHDR_ECC_CORR_ERR), ///< ecc_corr:ctrl0_tx_cxl_mem_datahdr_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_REQ_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_TX_CXL_MEM_REQ_ECC_CORR_ERR), ///< ecc_corr:ctrl0_tx_cxl_mem_req_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_NP_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_NP_ECC_CORR_ERR), ///< ecc_corr:ctrl0_xpressrich_np_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_RX_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_RX_ECC_CORR_ERR), ///< ecc_corr:ctrl0_xpressrich_rx_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_TX_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL0_XPRESSRICH_TX_ECC_CORR_ERR), ///< ecc_corr:ctrl0_xpressrich_tx_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_A2P_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_A2P_ECC_CORR_ERR), ///< ecc_corr:ctrl1_bridge_a2p_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_DMA_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_DMA_ECC_CORR_ERR), ///< ecc_corr:ctrl1_bridge_dma_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_P2A_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL1_BRIDGE_P2A_ECC_CORR_ERR), ///< ecc_corr:ctrl1_bridge_p2a_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL1_PL_LLRB_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL1_PL_LLRB_ECC_CORR_ERR), ///< ecc_corr:ctrl1_pl_llrb_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_NP_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_NP_ECC_CORR_ERR), ///< ecc_corr:ctrl1_xpressrich_np_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_RX_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_RX_ECC_CORR_ERR), ///< ecc_corr:ctrl1_xpressrich_rx_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_TX_ECC_CORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_CORR_CTRL1_XPRESSRICH_TX_ECC_CORR_ERR), ///< ecc_corr:ctrl1_xpressrich_tx_ecc_corr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_A2P_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_A2P_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_bridge_a2p_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_DMA_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_DMA_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_bridge_dma_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_P2A_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_BRIDGE_P2A_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_bridge_p2a_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_PL_LLRB_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_PL_LLRB_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_pl_llrb_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_DATA_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_DATA_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_rx_cxl_cache_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_REQ_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_REQ_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_rx_cxl_cache_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_RSP_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_CACHE_RSP_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_rx_cxl_cache_rsp_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_MEM_DATA_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_MEM_DATA_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_rx_cxl_mem_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_MEM_REQ_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_RX_CXL_MEM_REQ_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_rx_cxl_mem_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_DATA_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_DATA_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_tx_cxl_cache_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_DATAHDR_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_DATAHDR_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_tx_cxl_cache_datahdr_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_REQ_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_REQ_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_tx_cxl_cache_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_RSP_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_CACHE_RSP_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_tx_cxl_cache_rsp_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_DATA_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_DATA_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_tx_cxl_mem_data_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_DATAHDR_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_DATAHDR_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_tx_cxl_mem_datahdr_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_REQ_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_TX_CXL_MEM_REQ_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_tx_cxl_mem_req_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_NP_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_NP_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_xpressrich_np_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_RX_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_RX_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_xpressrich_rx_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_TX_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL0_XPRESSRICH_TX_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl0_xpressrich_tx_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_A2P_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_A2P_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl1_bridge_a2p_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_DMA_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_DMA_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl1_bridge_dma_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_P2A_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL1_BRIDGE_P2A_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl1_bridge_p2a_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL1_PL_LLRB_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL1_PL_LLRB_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl1_pl_llrb_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_NP_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_NP_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl1_xpressrich_np_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_RX_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_RX_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl1_xpressrich_rx_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_TX_ECC_UNCORR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_CTRL, PCXL_CTRL_ECC_UNCORR_CTRL1_XPRESSRICH_TX_ECC_UNCORR_ERR), ///< ecc_uncorr:ctrl1_xpressrich_tx_ecc_uncorr_err for instance ctrl of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_A2F_D2H_DATAPOISON = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_A2F_D2H_DATAPOISON), ///< fatal:a2f_d2h_datapoison for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_A2F_D2H_FATAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_A2F_D2H_FATAL), ///< fatal:a2f_d2h_fatal for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_A2F_D2H_VIRAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_A2F_D2H_VIRAL), ///< fatal:a2f_d2h_viral for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_A2F_S2M_DATAPOISON = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_A2F_S2M_DATAPOISON), ///< fatal:a2f_s2m_datapoison for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_A2F_S2M_FATAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_A2F_S2M_FATAL), ///< fatal:a2f_s2m_fatal for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_A2F_S2M_VIRAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_A2F_S2M_VIRAL), ///< fatal:a2f_s2m_viral for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_ATS_INVALIDATION_RESP_TIMEOUT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_ATS_INVALIDATION_RESP_TIMEOUT), ///< fatal:ats_invalidation_resp_timeout for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_ATS_TRANSLATION_FAULT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_ATS_TRANSLATION_FAULT), ///< fatal:ats_translation_fault for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_AXI_M0_ARUSER = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_AXI_M0_ARUSER), ///< fatal:axi_m0_aruser for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_AXI_M0_AWUSER = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_AXI_M0_AWUSER), ///< fatal:axi_m0_awuser for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_AXI_M0_BRESP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_AXI_M0_BRESP), ///< fatal:axi_m0_bresp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_AXI_M0_RRESP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_AXI_M0_RRESP), ///< fatal:axi_m0_rresp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_AXI_S0_RUSER = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_AXI_S0_RUSER), ///< fatal:axi_s0_ruser for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_CM_TX_VIRAL_ENTERED = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_CM_TX_VIRAL_ENTERED), ///< fatal:cm_tx_viral_entered for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_F2A_H2D_DATAPOISON = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_F2A_H2D_DATAPOISON), ///< fatal:f2a_h2d_datapoison for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_F2A_H2D_FATAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_F2A_H2D_FATAL), ///< fatal:f2a_h2d_fatal for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_F2A_H2D_VIRAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_F2A_H2D_VIRAL), ///< fatal:f2a_h2d_viral for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_F2A_M2S_DATAPOISON = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_F2A_M2S_DATAPOISON), ///< fatal:f2a_m2s_datapoison for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_F2A_M2S_FATAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_F2A_M2S_FATAL), ///< fatal:f2a_m2s_fatal for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_F2A_M2S_VIRAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_F2A_M2S_VIRAL), ///< fatal:f2a_m2s_viral for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_LOCAL_INTERRUPT_AER_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_LOCAL_INTERRUPT_AER_ERR), ///< fatal:local_interrupt_aer_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_LOCAL_INTERRUPT_SYS_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_LOCAL_INTERRUPT_SYS_ERR), ///< fatal:local_interrupt_sys_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_DISCARD_ERR), ///< fatal:test_out_adt_axi_slave0_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_FETCH_ERR), ///< fatal:test_out_adt_axi_slave0_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE0_POST_ERR), ///< fatal:test_out_adt_axi_slave0_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_DISCARD_ERR), ///< fatal:test_out_adt_axi_slave1_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_FETCH_ERR), ///< fatal:test_out_adt_axi_slave1_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_AXI_SLAVE1_POST_ERR), ///< fatal:test_out_adt_axi_slave1_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_FETCH_ERR), ///< fatal:test_out_adt_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_PCIE_POST_ERR), ///< fatal:test_out_adt_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_slave0_tbl0_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_FETCH_ERR), ///< fatal:test_out_adt_slave0_tbl0_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_POST_ERR), ///< fatal:test_out_adt_slave0_tbl0_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_slave0_tbl1_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_FETCH_ERR), ///< fatal:test_out_adt_slave0_tbl1_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_POST_ERR), ///< fatal:test_out_adt_slave0_tbl1_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_slave0_tbl2_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_FETCH_ERR), ///< fatal:test_out_adt_slave0_tbl2_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_POST_ERR), ///< fatal:test_out_adt_slave0_tbl2_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_slave0_tbl3_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_FETCH_ERR), ///< fatal:test_out_adt_slave0_tbl3_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_POST_ERR), ///< fatal:test_out_adt_slave0_tbl3_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_slave1_tbl0_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_FETCH_ERR), ///< fatal:test_out_adt_slave1_tbl0_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_POST_ERR), ///< fatal:test_out_adt_slave1_tbl0_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_win0_tbl0_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_FETCH_ERR), ///< fatal:test_out_adt_win0_tbl0_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_POST_ERR), ///< fatal:test_out_adt_win0_tbl0_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_win0_tbl1_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_FETCH_ERR), ///< fatal:test_out_adt_win0_tbl1_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_POST_ERR), ///< fatal:test_out_adt_win0_tbl1_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_win0_tbl2_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_FETCH_ERR), ///< fatal:test_out_adt_win0_tbl2_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_POST_ERR), ///< fatal:test_out_adt_win0_tbl2_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_DISCARD_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_DISCARD_ERR), ///< fatal:test_out_adt_win0_tbl3_pcie_discard_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_FETCH_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_FETCH_ERR), ///< fatal:test_out_adt_win0_tbl3_pcie_fetch_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_POST_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_POST_ERR), ///< fatal:test_out_adt_win0_tbl3_pcie_post_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_AER_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_AER_ERR), ///< fatal:test_out_bridge_aer_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_DPC_INT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_DPC_INT), ///< fatal:test_out_bridge_dpc_int for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_DRS_EVENT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_DRS_EVENT), ///< fatal:test_out_bridge_drs_event for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_FRS_MSG_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_FRS_MSG_OVFL), ///< fatal:test_out_bridge_frs_msg_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_HOTPLUG_EVENT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_HOTPLUG_EVENT), ///< fatal:test_out_bridge_hotplug_event for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_L2_STATUS = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_L2_STATUS), ///< fatal:test_out_bridge_l2_status for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_AUTO_BW = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_AUTO_BW), ///< fatal:test_out_bridge_link_auto_bw for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_BW_MGMT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_BW_MGMT), ///< fatal:test_out_bridge_link_bw_mgmt for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_EQ_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_LINK_EQ_REQ), ///< fatal:test_out_bridge_link_eq_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_PM_EVENT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_PM_EVENT), ///< fatal:test_out_bridge_pm_event for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_BRIDGE_SYS_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_BRIDGE_SYS_ERR), ///< fatal:test_out_bridge_sys_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_DATA_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_DATA_FIFO_OVFL), ///< fatal:test_out_cm_cache_data_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_REQ_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_REQ_FIFO_OVFL), ///< fatal:test_out_cm_cache_req_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_RSP_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_CACHE_RSP_FIFO_OVFL), ///< fatal:test_out_cm_cache_rsp_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_MEM_DATA_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_MEM_DATA_FIFO_OVFL), ///< fatal:test_out_cm_mem_data_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_MEM_REQ_RSP_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_MEM_REQ_RSP_FIFO_OVFL), ///< fatal:test_out_cm_mem_req_rsp_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_HDR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_HDR_ERR), ///< fatal:test_out_cm_rx_cache_hdr_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_MSG_RCV_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_MSG_RCV_ERR), ///< fatal:test_out_cm_rx_cache_msg_rcv_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_POISON = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_CACHE_POISON), ///< fatal:test_out_cm_rx_cache_poison for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_CRC_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_CRC_ERR), ///< fatal:test_out_cm_rx_crc_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_HDR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_HDR_ERR), ///< fatal:test_out_cm_rx_mem_hdr_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_MSG_RCV_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_MSG_RCV_ERR), ///< fatal:test_out_cm_rx_mem_msg_rcv_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_POISON = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_MEM_POISON), ///< fatal:test_out_cm_rx_mem_poison for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_PHY_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_PHY_ERR), ///< fatal:test_out_cm_rx_phy_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_RESERVED_ENCODE_FLIT_HDR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_RESERVED_ENCODE_FLIT_HDR), ///< fatal:test_out_cm_rx_reserved_encode_flit_hdr for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_RX_VIRAL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_RX_VIRAL), ///< fatal:test_out_cm_rx_viral for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_DATA_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_DATA_FIFO_OVFL), ///< fatal:test_out_cm_tx_cache_data_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_DATA_HDR_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_DATA_HDR_FIFO_OVFL), ///< fatal:test_out_cm_tx_cache_data_hdr_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_REQ_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_REQ_FIFO_OVFL), ///< fatal:test_out_cm_tx_cache_req_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_RSP_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_CACHE_RSP_FIFO_OVFL), ///< fatal:test_out_cm_tx_cache_rsp_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_RETRY_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_RETRY_ERR), ///< fatal:test_out_cm_tx_llrb_retry_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_SRAM_PARITY_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_SRAM_PARITY_ERR), ///< fatal:test_out_cm_tx_llrb_sram_parity_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_SRAM_UECC_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_LLRB_SRAM_UECC_ERR), ///< fatal:test_out_cm_tx_llrb_sram_uecc_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_DATA_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_DATA_FIFO_OVFL), ///< fatal:test_out_cm_tx_mem_data_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_DATA_HDR_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_DATA_HDR_FIFO_OVFL), ///< fatal:test_out_cm_tx_mem_data_hdr_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_REQ_RSP_FIFO_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_CM_TX_MEM_REQ_RSP_FIFO_OVFL), ///< fatal:test_out_cm_tx_mem_req_rsp_fifo_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_ACK_NAK_SEQ_NUM_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_ACK_NAK_SEQ_NUM_ERR), ///< fatal:test_out_pcie_ack_nak_seq_num_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_DESKEW_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_DESKEW_ERR), ///< fatal:test_out_pcie_deskew_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_ENCODING_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_ENCODING_ERR), ///< fatal:test_out_pcie_encoding_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FLIT_FRAMING_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FLIT_FRAMING_ERR), ///< fatal:test_out_pcie_flit_framing_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FLOW_CTRL_PROTO_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FLOW_CTRL_PROTO_ERR), ///< fatal:test_out_pcie_flow_ctrl_proto_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FLOW_CTRL_TIMEOUT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FLOW_CTRL_TIMEOUT), ///< fatal:test_out_pcie_flow_ctrl_timeout for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR), ///< fatal:test_out_pcie_framing_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_STP_EDS = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_STP_EDS), ///< fatal:test_out_pcie_framing_err_128b_stp_eds for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_SYNC = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_SYNC), ///< fatal:test_out_pcie_framing_err_128b_sync for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_UNEXPECTED_EDS = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_UNEXPECTED_EDS), ///< fatal:test_out_pcie_framing_err_128b_unexpected_eds for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_UNEXPECTED_SYMBOL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_FRAMING_ERR_128B_UNEXPECTED_SYMBOL), ///< fatal:test_out_pcie_framing_err_128b_unexpected_symbol for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_LTSSM_TIMEOUT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_LTSSM_TIMEOUT), ///< fatal:test_out_pcie_ltssm_timeout for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_PHY_STATUS_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_PHY_STATUS_ERR), ///< fatal:test_out_pcie_phy_status_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_BAD_DLLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_BAD_DLLP), ///< fatal:test_out_pcie_rcvd_bad_dllp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_BAD_TLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_BAD_TLP), ///< fatal:test_out_pcie_rcvd_bad_tlp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_DUPLICATE_TLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_DUPLICATE_TLP), ///< fatal:test_out_pcie_rcvd_duplicate_tlp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_NULLIFIED_TLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_NULLIFIED_TLP), ///< fatal:test_out_pcie_rcvd_nullified_tlp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_TLP_LCRC_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_RCVD_TLP_LCRC_ERR), ///< fatal:test_out_pcie_rcvd_tlp_lcrc_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_BUF_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_BUF_OVFL), ///< fatal:test_out_pcie_replay_buf_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_NUM_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_NUM_ERR), ///< fatal:test_out_pcie_replay_num_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_TIMER_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_REPLAY_TIMER_ERR), ///< fatal:test_out_pcie_replay_timer_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_RX_BUF_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_RX_BUF_OVFL), ///< fatal:test_out_pcie_rx_buf_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_TX_BUF_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_TX_BUF_OVFL), ///< fatal:test_out_pcie_tx_buf_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ACS_VIOLATION = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ACS_VIOLATION), ///< fatal:test_out_pcie_uncorr_acs_violation for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ATOMICOP_EGRESS_BLOCKED = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ATOMICOP_EGRESS_BLOCKED), ///< fatal:test_out_pcie_uncorr_atomicop_egress_blocked for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_CPL_ABORT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_CPL_ABORT), ///< fatal:test_out_pcie_uncorr_cpl_abort for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_CPL_TIMEOUT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_CPL_TIMEOUT), ///< fatal:test_out_pcie_uncorr_cpl_timeout for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_DATA_LINK_PROTO = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_DATA_LINK_PROTO), ///< fatal:test_out_pcie_uncorr_data_link_proto for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ECRC_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_ECRC_ERR), ///< fatal:test_out_pcie_uncorr_ecrc_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_FLOW_CTRL_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_FLOW_CTRL_ERR), ///< fatal:test_out_pcie_uncorr_flow_ctrl_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_INTERNAL_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_INTERNAL_ERR), ///< fatal:test_out_pcie_uncorr_internal_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_MALFORMED_TLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_MALFORMED_TLP), ///< fatal:test_out_pcie_uncorr_malformed_tlp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_MC_BLOCKED_TLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_MC_BLOCKED_TLP), ///< fatal:test_out_pcie_uncorr_mc_blocked_tlp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_POISONED_TLP_EGRESS_BLOCKED = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_POISONED_TLP_EGRESS_BLOCKED), ///< fatal:test_out_pcie_uncorr_poisoned_tlp_egress_blocked for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_POISONED_TLP_RCVD = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_POISONED_TLP_RCVD), ///< fatal:test_out_pcie_uncorr_poisoned_tlp_rcvd for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_RCVR_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_RCVR_OVFL), ///< fatal:test_out_pcie_uncorr_rcvr_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_SURPRISE_DOWN = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_SURPRISE_DOWN), ///< fatal:test_out_pcie_uncorr_surprise_down for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_TLP_PREFIX_BLOCKED = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_TLP_PREFIX_BLOCKED), ///< fatal:test_out_pcie_uncorr_tlp_prefix_blocked for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_UNEXPECTED_CPL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_UNEXPECTED_CPL), ///< fatal:test_out_pcie_uncorr_unexpected_cpl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_UNSUPPORTED_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_FATAL_TEST_OUT_PCIE_UNCORR_UNSUPPORTED_REQ), ///< fatal:test_out_pcie_uncorr_unsupported_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_A2F_D2H_TXCONREQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_A2F_D2H_TXCONREQ), ///< non_fatal:a2f_d2h_txconreq for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_A2F_S2M_TXCONREQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_A2F_S2M_TXCONREQ), ///< non_fatal:a2f_s2m_txconreq for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_ATS_INVALID_CPL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_ATS_INVALID_CPL), ///< non_fatal:ats_invalid_cpl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_ATS_INVALID_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_ATS_INVALID_REQ), ///< non_fatal:ats_invalid_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_ATS_PAGE_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_ATS_PAGE_REQ), ///< non_fatal:ats_page_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_ATS_PAGE_RESP_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_ATS_PAGE_RESP_ACK), ///< non_fatal:ats_page_resp_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_ATS_SYNC_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_ATS_SYNC_ACK), ///< non_fatal:ats_sync_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_ATS_TRANS_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_ATS_TRANS_REQ), ///< non_fatal:ats_trans_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_ATS_TRANS_RESP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_ATS_TRANS_RESP), ///< non_fatal:ats_trans_resp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_F2A_H2D_TXCONREQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_F2A_H2D_TXCONREQ), ///< non_fatal:f2a_h2d_txconreq for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_F2A_M2S_TXCONREQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_F2A_M2S_TXCONREQ), ///< non_fatal:f2a_m2s_txconreq for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_MSI_RCVD = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_MSI_RCVD), ///< non_fatal:local_int_msi_rcvd for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_0 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_0), ///< non_fatal:local_int_out_0 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_1 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_1), ///< non_fatal:local_int_out_1 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_10 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_10), ///< non_fatal:local_int_out_10 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_11 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_11), ///< non_fatal:local_int_out_11 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_12 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_12), ///< non_fatal:local_int_out_12 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_13 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_13), ///< non_fatal:local_int_out_13 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_14 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_14), ///< non_fatal:local_int_out_14 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_15 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_15), ///< non_fatal:local_int_out_15 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_16 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_16), ///< non_fatal:local_int_out_16 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_17 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_17), ///< non_fatal:local_int_out_17 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_18 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_18), ///< non_fatal:local_int_out_18 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_19 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_19), ///< non_fatal:local_int_out_19 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_2 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_2), ///< non_fatal:local_int_out_2 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_20 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_20), ///< non_fatal:local_int_out_20 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_21 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_21), ///< non_fatal:local_int_out_21 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_22 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_22), ///< non_fatal:local_int_out_22 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_23 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_23), ///< non_fatal:local_int_out_23 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_3 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_3), ///< non_fatal:local_int_out_3 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_4 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_4), ///< non_fatal:local_int_out_4 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_5 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_5), ///< non_fatal:local_int_out_5 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_6 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_6), ///< non_fatal:local_int_out_6 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_7 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_7), ///< non_fatal:local_int_out_7 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_8 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_8), ///< non_fatal:local_int_out_8 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_9 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_OUT_9), ///< non_fatal:local_int_out_9 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_A = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_A), ///< non_fatal:local_int_pci_a for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_B = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_B), ///< non_fatal:local_int_pci_b for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_C = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_C), ///< non_fatal:local_int_pci_c for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_D = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_PCI_D), ///< non_fatal:local_int_pci_d for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_LOCAL_INT_PM_HOTPLUG = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_LOCAL_INT_PM_HOTPLUG), ///< non_fatal:local_int_pm_hotplug for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_AXI_SLAVE0_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_AXI_SLAVE0_DOORBELL), ///< non_fatal:test_out_adt_axi_slave0_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_AXI_SLAVE1_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_AXI_SLAVE1_DOORBELL), ///< non_fatal:test_out_adt_axi_slave1_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_PCIE_DOORBELL), ///< non_fatal:test_out_adt_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL0_PCIE_DOORBELL), ///< non_fatal:test_out_adt_slave0_tbl0_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL1_PCIE_DOORBELL), ///< non_fatal:test_out_adt_slave0_tbl1_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL2_PCIE_DOORBELL), ///< non_fatal:test_out_adt_slave0_tbl2_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE0_TBL3_PCIE_DOORBELL), ///< non_fatal:test_out_adt_slave0_tbl3_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_SLAVE1_TBL0_PCIE_DOORBELL), ///< non_fatal:test_out_adt_slave1_tbl0_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL0_PCIE_DOORBELL), ///< non_fatal:test_out_adt_win0_tbl0_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL1_PCIE_DOORBELL), ///< non_fatal:test_out_adt_win0_tbl1_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL2_PCIE_DOORBELL), ///< non_fatal:test_out_adt_win0_tbl2_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_DOORBELL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_ADT_WIN0_TBL3_PCIE_DOORBELL), ///< non_fatal:test_out_adt_win0_tbl3_pcie_doorbell for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_CPL_RX = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_CPL_RX), ///< non_fatal:test_out_bridge_cpl_rx for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_CPL_TX = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_CPL_TX), ///< non_fatal:test_out_bridge_cpl_tx for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_RD_RX = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_RD_RX), ///< non_fatal:test_out_bridge_mem_rd_rx for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_RD_TX = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_RD_TX), ///< non_fatal:test_out_bridge_mem_rd_tx for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_WR_RX = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_WR_RX), ///< non_fatal:test_out_bridge_mem_wr_rx for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_WR_TX = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_BRIDGE_MEM_WR_TX), ///< non_fatal:test_out_bridge_mem_wr_tx for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_DATA), ///< non_fatal:test_out_cm_cpi_tx_ovr_flow_cache_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_REQ), ///< non_fatal:test_out_cm_cpi_tx_ovr_flow_cache_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_CACHE_RSP), ///< non_fatal:test_out_cm_cpi_tx_ovr_flow_cache_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_MEM_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_MEM_DATA), ///< non_fatal:test_out_cm_cpi_tx_ovr_flow_mem_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_MEM_REQ_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_CPI_TX_OVR_FLOW_MEM_REQ_RSP), ///< non_fatal:test_out_cm_cpi_tx_ovr_flow_mem_req_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_LL_RESET_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_LL_RESET_ACK), ///< non_fatal:test_out_cm_ll_reset_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CACHE_DATA_POISON_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CACHE_DATA_POISON_ACK), ///< non_fatal:test_out_cm_rx_cache_data_poison_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CRC_ERR_INJ_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CRC_ERR_INJ_ACK), ///< non_fatal:test_out_cm_rx_crc_err_inj_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CRC_ERR_TIME_THRESH = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CRC_ERR_TIME_THRESH), ///< non_fatal:test_out_cm_rx_crc_err_time_thresh for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_DATA), ///< non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_cache_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_REQ), ///< non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_cache_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_CACHE_RSP), ///< non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_cache_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_MEM_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_MEM_DATA), ///< non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_mem_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_MEM_REQ_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_OVR_FLOW_MEM_REQ_RSP), ///< non_fatal:test_out_cm_rx_cxl_credit_ovr_flow_mem_req_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_DATA), ///< non_fatal:test_out_cm_rx_cxl_credit_udr_flow_cache_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_REQ), ///< non_fatal:test_out_cm_rx_cxl_credit_udr_flow_cache_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_CACHE_RSP), ///< non_fatal:test_out_cm_rx_cxl_credit_udr_flow_cache_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_MEM_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_MEM_DATA), ///< non_fatal:test_out_cm_rx_cxl_credit_udr_flow_mem_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_MEM_REQ_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_CXL_CREDIT_UDR_FLOW_MEM_REQ_RSP), ///< non_fatal:test_out_cm_rx_cxl_credit_udr_flow_mem_req_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_MEM_DATA_POISON_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_MEM_DATA_POISON_ACK), ///< non_fatal:test_out_cm_rx_mem_data_poison_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_PHY_REINIT_TIME_THRESH = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_PHY_REINIT_TIME_THRESH), ///< non_fatal:test_out_cm_rx_phy_reinit_time_thresh for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_REPLAY_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_REPLAY_REQ), ///< non_fatal:test_out_cm_rx_replay_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_RETRY_TIME_THRESH = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_RX_RETRY_TIME_THRESH), ///< non_fatal:test_out_cm_rx_retry_time_thresh for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CACHE_DATA_POISON_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CACHE_DATA_POISON_ACK), ///< non_fatal:test_out_cm_tx_cache_data_poison_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CRC_ERR_INJ_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CRC_ERR_INJ_ACK), ///< non_fatal:test_out_cm_tx_crc_err_inj_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_DATA), ///< non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_cache_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_REQ = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_REQ), ///< non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_cache_req for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_CACHE_RSP), ///< non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_cache_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_MEM_DATA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_MEM_DATA), ///< non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_mem_data for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_MEM_REQ_RSP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_CXL_CREDIT_OVR_FLOW_MEM_REQ_RSP), ///< non_fatal:test_out_cm_tx_cxl_credit_ovr_flow_mem_req_rsp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_MEM_DATA_POISON_ACK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_CM_TX_MEM_DATA_POISON_ACK), ///< non_fatal:test_out_cm_tx_mem_data_poison_ack for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_ADVISORY_NF = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_ADVISORY_NF), ///< non_fatal:test_out_pcie_corr_advisory_nf for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_BAD_DLLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_BAD_DLLP), ///< non_fatal:test_out_pcie_corr_bad_dllp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_BAD_TLP = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_BAD_TLP), ///< non_fatal:test_out_pcie_corr_bad_tlp for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_HDR_LOG_OVFL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_HDR_LOG_OVFL), ///< non_fatal:test_out_pcie_corr_hdr_log_ovfl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_INTERNAL_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_INTERNAL_ERR), ///< non_fatal:test_out_pcie_corr_internal_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_RCVR_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_RCVR_ERR), ///< non_fatal:test_out_pcie_corr_rcvr_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_REPLAY_ROLLOVER = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_REPLAY_ROLLOVER), ///< non_fatal:test_out_pcie_corr_replay_rollover for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_REPLAY_TO = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CORR_REPLAY_TO), ///< non_fatal:test_out_pcie_corr_replay_to for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CPL_CA = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CPL_CA), ///< non_fatal:test_out_pcie_cpl_ca for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CPL_UR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_CPL_UR), ///< non_fatal:test_out_pcie_cpl_ur for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_DPC_ACTIVE = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_DPC_ACTIVE), ///< non_fatal:test_out_pcie_dpc_active for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L0S = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L0S), ///< non_fatal:test_out_pcie_ltssm_l0s for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L1 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L1), ///< non_fatal:test_out_pcie_ltssm_l1 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L2 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_LTSSM_L2), ///< non_fatal:test_out_pcie_ltssm_l2 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_4KB_BOUNDARY = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_4KB_BOUNDARY), ///< non_fatal:test_out_pcie_tlp_4kb_boundary for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_ACS_VIOLATION = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_ACS_VIOLATION), ///< non_fatal:test_out_pcie_tlp_acs_violation for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_ADDR_NOT_IN_BAR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_ADDR_NOT_IN_BAR), ///< non_fatal:test_out_pcie_tlp_addr_not_in_bar for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_FBE_LBE_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_FBE_LBE_ERR), ///< non_fatal:test_out_pcie_tlp_fbe_lbe_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_HDR_RECEIVED = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_HDR_RECEIVED), ///< non_fatal:test_out_pcie_tlp_hdr_received for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_ATOMIC = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_ATOMIC), ///< non_fatal:test_out_pcie_tlp_malformed_atomic for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_CPL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_CPL), ///< non_fatal:test_out_pcie_tlp_malformed_cpl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_IO_CFG = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_IO_CFG), ///< non_fatal:test_out_pcie_tlp_malformed_io_cfg for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_MEMRDLK = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_MEMRDLK), ///< non_fatal:test_out_pcie_tlp_malformed_memrdlk for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_MSG = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_MALFORMED_MSG), ///< non_fatal:test_out_pcie_tlp_malformed_msg for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_PAYLOAD_SIZE_ERR = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_PAYLOAD_SIZE_ERR), ///< non_fatal:test_out_pcie_tlp_payload_size_err for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNEXPECTED_CPL = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNEXPECTED_CPL), ///< non_fatal:test_out_pcie_tlp_unexpected_cpl for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNKNOWN_TYPE = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNKNOWN_TYPE), ///< non_fatal:test_out_pcie_tlp_unknown_type for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNSUPPORTED = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TEST_OUT_PCIE_TLP_UNSUPPORTED), ///< non_fatal:test_out_pcie_tlp_unsupported for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_PHASE1 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_PHASE1), ///< non_fatal:tl_cxl_status_gpf_phase1 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_PHASE2 = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_PHASE2), ///< non_fatal:tl_cxl_status_gpf_phase2 for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_TIMEOUT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TL_CXL_STATUS_GPF_TIMEOUT), ///< non_fatal:tl_cxl_status_gpf_timeout for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TL_CXL_STATUS_RESETPREP_PENDING = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TL_CXL_STATUS_RESETPREP_PENDING), ///< non_fatal:tl_cxl_status_resetprep_pending for instance link of structure from PCXL
+    RAS_ERR_ID_PCXL_LINK_NON_FATAL_TL_CXL_STATUS_RESETPREP_TIMEOUT = RAS_ERROR_ENCODE(PCXL, PCXL_STRUCT_LINK, PCXL_LINK_NON_FATAL_TL_CXL_STATUS_RESETPREP_TIMEOUT), ///< non_fatal:tl_cxl_status_resetprep_timeout for instance link of structure from PCXL
     RAS_ERR_ID_SEC_ANA_MON_MONITOR_ERROR_OPEN_PACKAGE = RAS_ERROR_ENCODE(SEC, SEC_STRUCT_ANA_MON, SEC_ANA_MON_MONITOR_ERROR_OPEN_PACKAGE), ///< monitor_error:open_package for instance ana_mon of structure from SEC
     RAS_ERR_ID_SEC_ANA_MON_MONITOR_ERROR_POWER_GLITCH = RAS_ERROR_ENCODE(SEC, SEC_STRUCT_ANA_MON, SEC_ANA_MON_MONITOR_ERROR_POWER_GLITCH), ///< monitor_error:power_glitch for instance ana_mon of structure from SEC
     RAS_ERR_ID_SEC_ANA_MON_MONITOR_ERROR_VDD1P8_BROWNOUT = RAS_ERROR_ENCODE(SEC, SEC_STRUCT_ANA_MON, SEC_ANA_MON_MONITOR_ERROR_VDD1P8_BROWNOUT), ///< monitor_error:vdd1p8_brownout for instance ana_mon of structure from SEC
@@ -3844,6 +6190,78 @@ typedef enum {
     RAS_ERR_ID_SEC_WDOG_STATE_RESET_PENDING = RAS_ERROR_ENCODE(SEC, SEC_STRUCT_WDOG, SEC_WDOG_STATE_RESET_PENDING), ///< state:reset_pending for instance wdog of structure from SEC
     RAS_ERR_ID_SEC_WDOG_STATE_RESET_REQUESTED = RAS_ERROR_ENCODE(SEC, SEC_STRUCT_WDOG, SEC_WDOG_STATE_RESET_REQUESTED), ///< state:reset_requested for instance wdog of structure from SEC
     RAS_ERR_ID_SEC_WDOG_STATE_SECOND_WINDOW = RAS_ERROR_ENCODE(SEC, SEC_STRUCT_WDOG, SEC_WDOG_STATE_SECOND_WINDOW), ///< state:second_window for instance wdog of structure from SEC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER), ///< packet_validity_fault:packet_wordnumber for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT), ///< timeout_fault:latent_timeout for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_INITIATORS, SVC_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT), ///< timeout_fault:major_timeout for instance initiators of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER), ///< packet_validity_fault:packet_wordnumber for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TARGETS, SVC_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance targets of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_TOP = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TOP_FAULT_AGG, SVC_NOC_TOP_FAULT_AGG_FSM_FAULT_INTERNAL_FSM_TOP), ///< fsm_fault:internal_fsm_top for instance top_fault_agg of structure from SVC_NOC
+    RAS_ERR_ID_SVC_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY = RAS_ERROR_ENCODE(SVC_NOC, SVC_NOC_STRUCT_TOP_FAULT_AGG, SVC_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CONTROL_PARITY), ///< register_parity_fault:power_main_fault_control_parity for instance top_fault_agg of structure from SVC_NOC
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF1_ARCH_PROT_ARREADY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF1_ARCH_PROT_ARREADY), ///< bus_parity_err:mxif1_arch_prot_arready for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF1_AWCH_PROT_AWREADY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF1_AWCH_PROT_AWREADY), ///< bus_parity_err:mxif1_awch_prot_awready for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF1_BCH_PROT_BVALID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF1_BCH_PROT_BVALID), ///< bus_parity_err:mxif1_bch_prot_bvalid for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF1_RCH_PROT_RVALID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF1_RCH_PROT_RVALID), ///< bus_parity_err:mxif1_rch_prot_rvalid for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF1_WCH_PROT_WREADY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF1_WCH_PROT_WREADY), ///< bus_parity_err:mxif1_wch_prot_wready for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF2_ARCH_PROT_ARREADY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF2_ARCH_PROT_ARREADY), ///< bus_parity_err:mxif2_arch_prot_arready for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF2_AWCH_PROT_AWREADY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF2_AWCH_PROT_AWREADY), ///< bus_parity_err:mxif2_awch_prot_awready for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF2_BCH_PROT_BVALID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF2_BCH_PROT_BVALID), ///< bus_parity_err:mxif2_bch_prot_bvalid for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF2_RCH_PROT_RVALID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF2_RCH_PROT_RVALID), ///< bus_parity_err:mxif2_rch_prot_rvalid for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_MXIF2_WCH_PROT_WREADY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_MXIF2_WCH_PROT_WREADY), ///< bus_parity_err:mxif2_wch_prot_wready for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_SLVIF_ADDRPARITY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_SLVIF_ADDRPARITY), ///< bus_parity_err:slvif_addrparity for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_SLVIF_COMMONREG_ADDRPARITY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_SLVIF_COMMONREG_ADDRPARITY), ///< bus_parity_err:slvif_commonreg_addrparity for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_SLVIF_COMMONREG_WRPARITY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_SLVIF_COMMONREG_WRPARITY), ///< bus_parity_err:slvif_commonreg_wrparity for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_BUS_PARITY_ERR_SLVIF_WRPARITY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_BUS_PARITY_ERR_SLVIF_WRPARITY), ///< bus_parity_err:slvif_wrparity for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_FIFO_MEM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_FIFO_MEM), ///< corrected:fifo_mem for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_MXIF1_BCH_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_MXIF1_BCH_PROT), ///< corrected:mxif1_bch_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_MXIF1_RCH0_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_MXIF1_RCH0_PROT), ///< corrected:mxif1_rch0_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_MXIF1_RCH1_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_MXIF1_RCH1_PROT), ///< corrected:mxif1_rch1_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_MXIF2_BCH_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_MXIF2_BCH_PROT), ///< corrected:mxif2_bch_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_MXIF2_RCH0_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_MXIF2_RCH0_PROT), ///< corrected:mxif2_rch0_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_MXIF2_RCH1_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_MXIF2_RCH1_PROT), ///< corrected:mxif2_rch1_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_CORRECTED_UID_MEM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_CORRECTED_UID_MEM), ///< corrected:uid_mem for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_DECODE_ERR_DST_DEC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_DECODE_ERR_DST_DEC), ///< decode_err:dst_dec for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_DECODE_ERR_LLI_RD_DEC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_DECODE_ERR_LLI_RD_DEC), ///< decode_err:lli_rd_dec for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_DECODE_ERR_LLI_WR_DEC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_DECODE_ERR_LLI_WR_DEC), ///< decode_err:lli_wr_dec for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_DECODE_ERR_SLVIF_COMMONREG_DEC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_DECODE_ERR_SLVIF_COMMONREG_DEC), ///< decode_err:slvif_commonreg_dec for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_DECODE_ERR_SLVIF_DEC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_DECODE_ERR_SLVIF_DEC), ///< decode_err:slvif_dec for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_DECODE_ERR_SLVIF_UNDEFINEDREG = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_DECODE_ERR_SLVIF_UNDEFINEDREG), ///< decode_err:slvif_undefinedreg for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_DECODE_ERR_SRC_DEC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_DECODE_ERR_SRC_DEC), ///< decode_err:src_dec for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SHADOWREG_OR_LLI_INVALID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SHADOWREG_OR_LLI_INVALID), ///< invalid_access:shadowreg_or_lli_invalid for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_RD2WO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_RD2WO), ///< invalid_access:slvif_commonreg_rd2wo for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_WR2RO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_WR2RO), ///< invalid_access:slvif_commonreg_wr2ro for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_WRONHOLD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_COMMONREG_WRONHOLD), ///< invalid_access:slvif_commonreg_wronhold for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_MULTIBLKTYPE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_MULTIBLKTYPE), ///< invalid_access:slvif_multiblktype for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_RD2RWO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_RD2RWO), ///< invalid_access:slvif_rd2rwo for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_SHADOWREG_WRON_VALID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_SHADOWREG_WRON_VALID), ///< invalid_access:slvif_shadowreg_wron_valid for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_WR2RO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_WR2RO), ///< invalid_access:slvif_wr2ro for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_WRONCHEN = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_WRONCHEN), ///< invalid_access:slvif_wronchen for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_INVALID_ACCESS_SLVIF_WRONHOLD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_INVALID_ACCESS_SLVIF_WRONHOLD), ///< invalid_access:slvif_wronhold for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_SUBORDINATE_ERR_DST_SLV = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_SUBORDINATE_ERR_DST_SLV), ///< subordinate_err:dst_slv for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_SUBORDINATE_ERR_LLI_RD_SLV = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_SUBORDINATE_ERR_LLI_RD_SLV), ///< subordinate_err:lli_rd_slv for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_SUBORDINATE_ERR_LLI_WR_SLV = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_SUBORDINATE_ERR_LLI_WR_SLV), ///< subordinate_err:lli_wr_slv for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_SUBORDINATE_ERR_SRC_SLV = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_SUBORDINATE_ERR_SRC_SLV), ///< subordinate_err:src_slv for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_FIFO_MEM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_FIFO_MEM), ///< uncorrected:fifo_mem for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_MXIF1_BCH_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_MXIF1_BCH_PROT), ///< uncorrected:mxif1_bch_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_MXIF1_RCH0_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_MXIF1_RCH0_PROT), ///< uncorrected:mxif1_rch0_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_MXIF1_RCH1_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_MXIF1_RCH1_PROT), ///< uncorrected:mxif1_rch1_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_MXIF2_BCH_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_MXIF2_BCH_PROT), ///< uncorrected:mxif2_bch_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_MXIF2_RCH0_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_MXIF2_RCH0_PROT), ///< uncorrected:mxif2_rch0_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_MXIF2_RCH1_PROT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_MXIF2_RCH1_PROT), ///< uncorrected:mxif2_rch1_prot for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_DMA_UNCORRECTED_UID_MEM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_DMA, SYS_DMA_UNCORRECTED_UID_MEM), ///< uncorrected:uid_mem for instance dma of structure from SYS
+    RAS_ERR_ID_SYS_HPT_UNCORRECTED_ELT_COUNT_ECC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_HPT, SYS_HPT_UNCORRECTED_ELT_COUNT_ECC), ///< uncorrected:elt_count_ecc for instance hpt of structure from SYS
     RAS_ERR_ID_SYS_OCR_BACK_PRESSURE_THRESHOLD_REACHED = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_OCR, SYS_OCR_BACK_PRESSURE_THRESHOLD_REACHED), ///< back_pressure:threshold_reached for instance ocr of structure from SYS
     RAS_ERR_ID_SYS_OCR_CORRECTED_READ = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_OCR, SYS_OCR_CORRECTED_READ), ///< corrected:read for instance ocr of structure from SYS
     RAS_ERR_ID_SYS_OCR_CORRECTED_WRITE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_OCR, SYS_OCR_CORRECTED_WRITE), ///< corrected:write for instance ocr of structure from SYS
@@ -3857,19 +6275,236 @@ typedef enum {
     RAS_ERR_ID_SYS_OCR_INVALID_ACCESS_UNAVAILABLE_ACCESS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_OCR, SYS_OCR_INVALID_ACCESS_UNAVAILABLE_ACCESS), ///< invalid_access:unavailable_access for instance ocr of structure from SYS
     RAS_ERR_ID_SYS_OCR_UNCORRECTED_READ = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_OCR, SYS_OCR_UNCORRECTED_READ), ///< uncorrected:read for instance ocr of structure from SYS
     RAS_ERR_ID_SYS_OCR_UNCORRECTED_WRITE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_OCR, SYS_OCR_UNCORRECTED_WRITE), ///< uncorrected:write for instance ocr of structure from SYS
-    RAS_ERR_ID_SYS_S7_D_CACHE_CORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_D_CACHE_CORRECTABLE), ///< d_cache:correctable for instance s7 of structure from SYS
-    RAS_ERR_ID_SYS_S7_D_CACHE_UNCORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_D_CACHE_UNCORRECTABLE), ///< d_cache:uncorrectable for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_CORRECTED_APPC_ERR_TIMESTAMP_FIFO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_CORRECTED_APPC_ERR_TIMESTAMP_FIFO), ///< corrected:appc_err_timestamp_fifo for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_CORRECTED_TIMESTAMP_FIFO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_CORRECTED_TIMESTAMP_FIFO), ///< corrected:timestamp_fifo for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_CORRECTED_TRACE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_CORRECTED_TRACE), ///< corrected:trace for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_DTIM_CORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_DTIM_CORRECTABLE), ///< dtim:correctable for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_DTIM_UNCORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_DTIM_UNCORRECTABLE), ///< dtim:uncorrectable for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_FIFO_OVERFLOW_APPC_ERR_TIMESTAMP_FIFO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_FIFO_OVERFLOW_APPC_ERR_TIMESTAMP_FIFO), ///< fifo_overflow:appc_err_timestamp_fifo for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_FIFO_OVERFLOW_TIMESTAMP_FIFO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_FIFO_OVERFLOW_TIMESTAMP_FIFO), ///< fifo_overflow:timestamp_fifo for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_FW_EXEC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_FW_EXEC), ///< fw:exec for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_I_CACHE_BUS_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_I_CACHE_BUS_ERROR), ///< i_cache:bus_error for instance s7 of structure from SYS
-    RAS_ERR_ID_SYS_S7_I_CACHE_CORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_I_CACHE_CORRECTABLE), ///< i_cache:correctable for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_I_CACHE_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_I_CACHE_ERROR), ///< i_cache:error for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_INTERRUPT_STORM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_INTERRUPT_STORM), ///< interrupt:storm for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_ITIM_CORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_ITIM_CORRECTABLE), ///< itim:correctable for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_ITIM_UNCORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_ITIM_UNCORRECTABLE), ///< itim:uncorrectable for instance s7 of structure from SYS
     RAS_ERR_ID_SYS_S7_TX_BUS_ERROR_LOAD_STORE_PTW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_TX_BUS_ERROR_LOAD_STORE_PTW), ///< tx_bus_error:load_store_ptw for instance s7 of structure from SYS
-    RAS_ERR_ID_LAST
+    RAS_ERR_ID_SYS_S7_UNCORRECTED_APPC_ERR_TIMESTAMP_FIFO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_UNCORRECTED_APPC_ERR_TIMESTAMP_FIFO), ///< uncorrected:appc_err_timestamp_fifo for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_UNCORRECTED_TIMESTAMP_FIFO = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_UNCORRECTED_TIMESTAMP_FIFO), ///< uncorrected:timestamp_fifo for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_S7_UNCORRECTED_TRACE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_S7, SYS_S7_UNCORRECTED_TRACE), ///< uncorrected:trace for instance s7 of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_BUS_ERR_M = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_BUS_ERR_M), ///< acmd_mode_err:bus_err_m for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_BUS_ERR_S = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_BUS_ERR_S), ///< acmd_mode_err:bus_err_s for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_CMD_IGNORED = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_CMD_IGNORED), ///< acmd_mode_err:cmd_ignored for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD0_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD0_ERROR), ///< acmd_mode_err:trd0_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD1_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD1_ERROR), ///< acmd_mode_err:trd1_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD2_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD2_ERROR), ///< acmd_mode_err:trd2_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD3_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD3_ERROR), ///< acmd_mode_err:trd3_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD4_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD4_ERROR), ///< acmd_mode_err:trd4_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD5_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD5_ERROR), ///< acmd_mode_err:trd5_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD6_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD6_ERROR), ///< acmd_mode_err:trd6_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_ACMD_MODE_ERR_TRD7_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_ACMD_MODE_ERR_TRD7_ERROR), ///< acmd_mode_err:trd7_error for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_CORRECTED_CONTEXT_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_CORRECTED_CONTEXT_RAM), ///< corrected:context_ram for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_CORRECTED_DEVICE_ECC_CORRECTED = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_CORRECTED_DEVICE_ECC_CORRECTED), ///< corrected:device_ecc_corrected for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_CORRECTED_FLASH_DATA_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_CORRECTED_FLASH_DATA_RAM), ///< corrected:flash_data_ram for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_DIRECT_MODE_ERR_CMD_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_DIRECT_MODE_ERR_CMD_ERR), ///< direct_mode_err:cmd_err for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_DIRECT_MODE_ERR_CRC_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_DIRECT_MODE_ERR_CRC_ERR), ///< direct_mode_err:crc_err for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_DIRECT_MODE_ERR_DEVICE_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_DIRECT_MODE_ERR_DEVICE_ERR), ///< direct_mode_err:device_err for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_DIRECT_MODE_ERR_DQS_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_DIRECT_MODE_ERR_DQS_ERR), ///< direct_mode_err:dqs_err for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_STIG_MODE_ERR_BUS_ERR_S = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_STIG_MODE_ERR_BUS_ERR_S), ///< stig_mode_err:bus_err_s for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_STIG_MODE_ERR_CMD_IGNORED = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_STIG_MODE_ERR_CMD_IGNORED), ///< stig_mode_err:cmd_ignored for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_UNCORRECTED_CONTEXT_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_UNCORRECTED_CONTEXT_RAM), ///< uncorrected:context_ram for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPI_CTRL_UNCORRECTED_FLASH_DATA_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPI_CTRL, SYS_SPI_CTRL_UNCORRECTED_FLASH_DATA_RAM), ///< uncorrected:flash_data_ram for instance spi_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_CORRECTED_RMAP_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_CORRECTED_RMAP_RAM), ///< corrected:rmap_ram for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_CORRECTED_RX_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_CORRECTED_RX_RAM), ///< corrected:rx_ram for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_CORRECTED_TX_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_CORRECTED_TX_RAM), ///< corrected:tx_ram for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_LINK_ERR_CRERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_LINK_ERR_CRERR), ///< link_err:crerr for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_LINK_ERR_DISERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_LINK_ERR_DISERR), ///< link_err:diserr for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_LINK_ERR_ESCERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_LINK_ERR_ESCERR), ///< link_err:escerr for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_LINK_ERR_LINKABORT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_LINK_ERR_LINKABORT), ///< link_err:linkabort for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_LINK_ERR_PARERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_LINK_ERR_PARERR), ///< link_err:parerr for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_PACKET_ERR_LINK_DISCARD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_PACKET_ERR_LINK_DISCARD), ///< packet_err:link_discard for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_PACKET_ERR_LINK_EEPREC = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_PACKET_ERR_LINK_EEPREC), ///< packet_err:link_eeprec for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_PACKET_ERR_LINK_EEPTRANS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_PACKET_ERR_LINK_EEPTRANS), ///< packet_err:link_eeptrans for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_PACKET_ERR_RX_DISCARD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_PACKET_ERR_RX_DISCARD), ///< packet_err:rx_discard for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_PACKET_ERR_RX_EEP = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_PACKET_ERR_RX_EEP), ///< packet_err:rx_eep for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_PACKET_ERR_TX_EEP = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_PACKET_ERR_TX_EEP), ///< packet_err:tx_eep for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_TIME_CODE_ERR_EARLYWD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_TIME_CODE_ERR_EARLYWD), ///< time_code_err:earlywd for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_TIME_CODE_ERR_LATEWD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_TIME_CODE_ERR_LATEWD), ///< time_code_err:latewd for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_UNCORRECTED_RMAP_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_UNCORRECTED_RMAP_RAM), ///< uncorrected:rmap_ram for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_UNCORRECTED_RX_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_UNCORRECTED_RX_RAM), ///< uncorrected:rx_ram for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SPW_CTRL_UNCORRECTED_TX_RAM = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SPW_CTRL, SYS_SPW_CTRL_UNCORRECTED_TX_RAM), ///< uncorrected:tx_ram for instance spw_ctrl of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_DATA_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_DATA_ERROR), ///< app:bist_data_error for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_FINISHED = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_FINISHED), ///< app:bist_finished for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_PARITY_ERROR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_PARITY_ERROR), ///< app:bist_parity_error for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_TBL_0_CORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_TBL_0_CORRECTABLE), ///< app:bist_tbl_0_correctable for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_TBL_0_UNCORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_TBL_0_UNCORRECTABLE), ///< app:bist_tbl_0_uncorrectable for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_TBL_1_CORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_TBL_1_CORRECTABLE), ///< app:bist_tbl_1_correctable for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_TBL_1_UNCORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_TBL_1_UNCORRECTABLE), ///< app:bist_tbl_1_uncorrectable for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_TBL_2_CORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_TBL_2_CORRECTABLE), ///< app:bist_tbl_2_correctable for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_BIST_TBL_2_UNCORRECTABLE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_BIST_TBL_2_UNCORRECTABLE), ///< app:bist_tbl_2_uncorrectable for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_APP_PATROL_SCRUB_COMPLETE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_APP_PATROL_SCRUB_COMPLETE), ///< app:patrol_scrub_complete for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_BRESP_SEL = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_BRESP_SEL), ///< dmr_corrected:dmr_s0_bresp_sel for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_CORR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_CORR), ///< dmr_corrected:dmr_s0_corr for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_DROP_BRESP = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_DROP_BRESP), ///< dmr_corrected:dmr_s0_drop_bresp for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_DROP_R = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_DROP_R), ///< dmr_corrected:dmr_s0_drop_r for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_RDATA_SEL = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S0_RDATA_SEL), ///< dmr_corrected:dmr_s0_rdata_sel for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_BRESP_SEL = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_BRESP_SEL), ///< dmr_corrected:dmr_s1_bresp_sel for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_CORR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_CORR), ///< dmr_corrected:dmr_s1_corr for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_DROP_BRESP = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_DROP_BRESP), ///< dmr_corrected:dmr_s1_drop_bresp for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_DROP_R = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_DROP_R), ///< dmr_corrected:dmr_s1_drop_r for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_RDATA_SEL = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S1_RDATA_SEL), ///< dmr_corrected:dmr_s1_rdata_sel for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S_RPARITY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_S_RPARITY), ///< dmr_corrected:dmr_s_rparity for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_CORRECTED_DMR_SUBS_MM_STATUS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_CORRECTED_DMR_SUBS_MM_STATUS), ///< dmr_corrected:dmr_subs_mm_status for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_BID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_BID), ///< dmr_uncorrected:dmr_mm_bid for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_BRESP = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_BRESP), ///< dmr_uncorrected:dmr_mm_bresp for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_EXOKAY = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_EXOKAY), ///< dmr_uncorrected:dmr_mm_exokay for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RDATA = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RDATA), ///< dmr_uncorrected:dmr_mm_rdata for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RID = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RID), ///< dmr_uncorrected:dmr_mm_rid for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RRESP = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_MM_RRESP), ///< dmr_uncorrected:dmr_mm_rresp for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S0_STUCK = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S0_STUCK), ///< dmr_uncorrected:dmr_s0_stuck for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S0_UNCORR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S0_UNCORR), ///< dmr_uncorrected:dmr_s0_uncorr for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S1_STUCK = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S1_STUCK), ///< dmr_uncorrected:dmr_s1_stuck for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S1_UNCORR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_S1_UNCORR), ///< dmr_uncorrected:dmr_s1_uncorr for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_SUBS_UNCORR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_DMR_UNCORRECTED_DMR_SUBS_UNCORR), ///< dmr_uncorrected:dmr_subs_uncorr for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR), ///< emon_corrected:emon_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_FULL = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_FULL), ///< emon_corrected:emon_cor_buf_full for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_HIGH_THLD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_HIGH_THLD), ///< emon_corrected:emon_cor_buf_high_thld for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_OVRFLW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_COR_BUF_OVRFLW), ///< emon_corrected:emon_cor_buf_ovrflw for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_FSM_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_FSM_ERR), ///< emon_corrected:emon_fsm_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_FULL), ///< emon_corrected:emon_stat_buf_full for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_STAT_BUF_OVRFLW), ///< emon_corrected:emon_stat_buf_ovrflw for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_FULL), ///< emon_corrected:emon_uncor_buf_full for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_CORRECTED_EMON_UNCOR_BUF_OVRFLW), ///< emon_corrected:emon_uncor_buf_ovrflw for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_ADDR_ERR), ///< emon_uncorrected:emon_addr_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_INVALID_EXTRACTION), ///< emon_uncorrected:emon_invalid_extraction for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR), ///< emon_uncorrected:emon_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_EMON_UNCORRECTED_EMON_UNCOR_BUF_HIGH_THLD), ///< emon_uncorrected:emon_uncor_buf_high_thld for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_DEC_ADDR_PARITY_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_DEC_ADDR_PARITY_ERR), ///< fault:dec_addr_parity_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_ENC_ADDR_PARITY_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_ENC_ADDR_PARITY_ERR), ///< fault:enc_addr_parity_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_ENC_FSM_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_ENC_FSM_ERR), ///< fault:enc_fsm_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_ERR_REMOVE_READ_COH = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_ERR_REMOVE_READ_COH), ///< fault:err_remove_read_coh for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_ERR_REMOVE_WRITE_COH = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_ERR_REMOVE_WRITE_COH), ///< fault:err_remove_write_coh for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_PATROL_SCRUB_FSM_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_PATROL_SCRUB_FSM_ERR), ///< fault:patrol_scrub_fsm_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RARB_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RARB_ERR), ///< fault:rarb_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RD_WR_ARB_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RD_WR_ARB_ERR), ///< fault:rd_wr_arb_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RDCAP_CTX_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RDCAP_CTX_OVERFLOW), ///< fault:rdcap_ctx_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RDCAP_CTX_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RDCAP_CTX_UNDERFLOW), ///< fault:rdcap_ctx_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RDGEN_CTX_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RDGEN_CTX_OVERFLOW), ///< fault:rdgen_ctx_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RDGEN_CTX_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RDGEN_CTX_UNDERFLOW), ///< fault:rdgen_ctx_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RMW_CTX_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RMW_CTX_OVERFLOW), ///< fault:rmw_ctx_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RMW_CTX_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RMW_CTX_UNDERFLOW), ///< fault:rmw_ctx_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RMW_RD_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RMW_RD_ERR), ///< fault:rmw_rd_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RMW_RDCAP_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RMW_RDCAP_OVERFLOW), ///< fault:rmw_rdcap_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_RMW_RDCAP_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_RMW_RDCAP_UNDERFLOW), ///< fault:rmw_rdcap_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WARB_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WARB_ERR), ///< fault:warb_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDCAP_CTX_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDCAP_CTX_OVERFLOW), ///< fault:wdcap_ctx_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDCAP_CTX_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDCAP_CTX_UNDERFLOW), ///< fault:wdcap_ctx_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDCAP_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDCAP_OVERFLOW), ///< fault:wdcap_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDCAP_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDCAP_UNDERFLOW), ///< fault:wdcap_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDGEN_CTX_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDGEN_CTX_OVERFLOW), ///< fault:wdgen_ctx_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDGEN_CTX_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDGEN_CTX_UNDERFLOW), ///< fault:wdgen_ctx_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDRESP_CTX_OVERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDRESP_CTX_OVERFLOW), ///< fault:wdresp_ctx_overflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_WDRESP_CTX_UNDERFLOW = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_WDRESP_CTX_UNDERFLOW), ///< fault:wdresp_ctx_underflow for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_BCH_ENC_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_BCH_ENC_BUS_ECC_COR), ///< fault_corrected:bch_enc_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_RCMD_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_RCMD_BUS_ECC_COR), ///< fault_corrected:rcmd_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_RDCAP_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_RDCAP_BUS_ECC_COR), ///< fault_corrected:rdcap_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_SECDED_ENC_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_SECDED_ENC_BUS_ECC_COR), ///< fault_corrected:secded_enc_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_WCMD_CAP_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_WCMD_CAP_BUS_ECC_COR), ///< fault_corrected:wcmd_cap_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_WCMD_GEN_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_WCMD_GEN_BUS_ECC_COR), ///< fault_corrected:wcmd_gen_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_WDCAP_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_WDCAP_BUS_ECC_COR), ///< fault_corrected:wdcap_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_WDGEN_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_WDGEN_BUS_ECC_COR), ///< fault_corrected:wdgen_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_FAULT_CORRECTED_WDRESP_BUS_ECC_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_FAULT_CORRECTED_WDRESP_BUS_ECC_COR), ///< fault_corrected:wdresp_bus_ecc_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_DEC_DATA_RAM_COR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_DEC_DATA_RAM_COR_ERR), ///< ram_corrected:dec_data_ram_cor_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_EMON_COR_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_EMON_COR_RAM_COR), ///< ram_corrected:emon_cor_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_EMON_STAT_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_EMON_STAT_RAM_COR), ///< ram_corrected:emon_stat_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_EMON_UNCOR_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_EMON_UNCOR_RAM_COR), ///< ram_corrected:emon_uncor_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_ENC_DATA_RAM_COR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_ENC_DATA_RAM_COR_ERR), ///< ram_corrected:enc_data_ram_cor_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_RDCAP_CTX_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_RDCAP_CTX_RAM_COR), ///< ram_corrected:rdcap_ctx_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_RDGEN_CTX_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_RDGEN_CTX_RAM_COR), ///< ram_corrected:rdgen_ctx_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_RMW_CTX_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_RMW_CTX_RAM_COR), ///< ram_corrected:rmw_ctx_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_RMW_DATA_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_RMW_DATA_RAM_COR), ///< ram_corrected:rmw_data_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_WDCAP_CTX_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_WDCAP_CTX_RAM_COR), ///< ram_corrected:wdcap_ctx_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_WDCAP_DATA_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_WDCAP_DATA_RAM_COR), ///< ram_corrected:wdcap_data_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_WDGEN_CTX_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_WDGEN_CTX_RAM_COR), ///< ram_corrected:wdgen_ctx_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_CORRECTED_WDRESP_CTX_RAM_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_CORRECTED_WDRESP_CTX_RAM_COR), ///< ram_corrected:wdresp_ctx_ram_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_DEC_DATA_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_DEC_DATA_RAM_UNCOR_ERR), ///< ram_uncorrected:dec_data_ram_uncor_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_COR_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_COR_RAM_UNCOR_ERR), ///< ram_uncorrected:emon_cor_ram_uncor_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_STAT_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_STAT_RAM_UNCOR_ERR), ///< ram_uncorrected:emon_stat_ram_uncor_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_UNCOR_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_EMON_UNCOR_RAM_UNCOR_ERR), ///< ram_uncorrected:emon_uncor_ram_uncor_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_ENC_DATA_RAM_UNCOR_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_ENC_DATA_RAM_UNCOR_ERR), ///< ram_uncorrected:enc_data_ram_uncor_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_RDCAP_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_RDCAP_CTX_RAM_UNCOR), ///< ram_uncorrected:rdcap_ctx_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_RDGEN_CTX_RAM_UNCOR), ///< ram_uncorrected:rdgen_ctx_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_RMW_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_RMW_CTX_RAM_UNCOR), ///< ram_uncorrected:rmw_ctx_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_RMW_DATA_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_RMW_DATA_RAM_UNCOR), ///< ram_uncorrected:rmw_data_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_CTX_RAM_UNCOR), ///< ram_uncorrected:wdcap_ctx_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_WDCAP_DATA_RAM_UNCOR), ///< ram_uncorrected:wdcap_data_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_WDGEN_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_WDGEN_CTX_RAM_UNCOR), ///< ram_uncorrected:wdgen_ctx_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_RAM_UNCORRECTED_WDRESP_CTX_RAM_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_RAM_UNCORRECTED_WDRESP_CTX_RAM_UNCOR), ///< ram_uncorrected:wdresp_ctx_ram_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_READ_TIMEOUT_RCMD_TIMEOUT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_READ_TIMEOUT_RCMD_TIMEOUT), ///< read_timeout:rcmd_timeout for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_READ_TIMEOUT_RDCAP_TIMEOUT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_READ_TIMEOUT_RDCAP_TIMEOUT), ///< read_timeout:rdcap_timeout for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_BCH_ENC_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_BCH_ENC_BUS_ECC_UNCOR), ///< trans_drop:bch_enc_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RCMD_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RCMD_BUS_ECC_UNCOR), ///< trans_drop:rcmd_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RCMD_DROP_TRANS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RCMD_DROP_TRANS), ///< trans_drop:rcmd_drop_trans for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RDCAP_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RDCAP_BUS_ECC_UNCOR), ///< trans_drop:rdcap_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RDCAP_DROP_TRANS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RDCAP_DROP_TRANS), ///< trans_drop:rdcap_drop_trans for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_COR), ///< trans_drop:rmw_bus_ecc_0_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_0_UNCOR), ///< trans_drop:rmw_bus_ecc_0_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_COR), ///< trans_drop:rmw_bus_ecc_1_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_1_UNCOR), ///< trans_drop:rmw_bus_ecc_1_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_COR), ///< trans_drop:rmw_bus_ecc_2_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_2_UNCOR), ///< trans_drop:rmw_bus_ecc_2_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_COR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_COR), ///< trans_drop:rmw_bus_ecc_3_cor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_BUS_ECC_3_UNCOR), ///< trans_drop:rmw_bus_ecc_3_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_RMW_CMD_CTX_ERR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_RMW_CMD_CTX_ERR), ///< trans_drop:rmw_cmd_ctx_err for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_SECDED_ENC_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_SECDED_ENC_BUS_ECC_UNCOR), ///< trans_drop:secded_enc_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WCMD_CAP_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WCMD_CAP_BUS_ECC_UNCOR), ///< trans_drop:wcmd_cap_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WCMD_DROP_TRANS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WCMD_DROP_TRANS), ///< trans_drop:wcmd_drop_trans for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WCMD_GEN_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WCMD_GEN_BUS_ECC_UNCOR), ///< trans_drop:wcmd_gen_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WDCAP_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WDCAP_BUS_ECC_UNCOR), ///< trans_drop:wdcap_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WDCAP_SPARSE_WRITE = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WDCAP_SPARSE_WRITE), ///< trans_drop:wdcap_sparse_write for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WDGEN_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WDGEN_BUS_ECC_UNCOR), ///< trans_drop:wdgen_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WDGEN_DROP_TRANS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WDGEN_DROP_TRANS), ///< trans_drop:wdgen_drop_trans for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WDRESP_BUS_ECC_UNCOR = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WDRESP_BUS_ECC_UNCOR), ///< trans_drop:wdresp_bus_ecc_uncor for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_TRANS_DROP_WDRESP_DROP_TRANS = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_TRANS_DROP_WDRESP_DROP_TRANS), ///< trans_drop:wdresp_drop_trans for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_WRITE_TIMEOUT_WCMD_TIMEOUT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_WRITE_TIMEOUT_WCMD_TIMEOUT), ///< write_timeout:wcmd_timeout for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_WRITE_TIMEOUT_WDGEN_TIMEOUT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_WRITE_TIMEOUT_WDGEN_TIMEOUT), ///< write_timeout:wdgen_timeout for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_SRAM_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT = RAS_ERROR_ENCODE(SYS, SYS_STRUCT_SRAM_EDAC, SYS_SRAM_EDAC_WRITE_TIMEOUT_WDRESP_TIMEOUT), ///< write_timeout:wdresp_timeout for instance sram_edac of structure from SYS
+    RAS_ERR_ID_SYS_NOC_DTP_LN_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_DTP_LN, SYS_NOC_DTP_LN_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance dtp_ln of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_DTP_LN_PACKET_PROTECTION_FAULT_LN_DTP_FLT_SECDED_CORR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_DTP_LN, SYS_NOC_DTP_LN_PACKET_PROTECTION_FAULT_LN_DTP_FLT_SECDED_CORR), ///< packet_protection_fault:ln_dtp_flt_secded_corr for instance dtp_ln of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_DTP_LN_PACKET_PROTECTION_FAULT_LN_DTP_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_DTP_LN, SYS_NOC_DTP_LN_PACKET_PROTECTION_FAULT_LN_DTP_FLT_SECDED_UNCORR), ///< packet_protection_fault:ln_dtp_flt_secded_uncorr for instance dtp_ln of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_DTP_LN_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_DTP_LN, SYS_NOC_DTP_LN_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance dtp_ln of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_TIMEOUT_FAULT_LATENT_TIMEOUT), ///< timeout_fault:latent_timeout for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_INITIATORS, SYS_NOC_INITIATORS_TIMEOUT_FAULT_MAJOR_TIMEOUT), ///< timeout_fault:major_timeout for instance initiators of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_OBSERVER_ERROR_PACKET_DEC_ERR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, SYS_NOC_OBSERVER_ERROR_PACKET_DEC_ERR), ///< error_packet:dec_err for instance observer of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_OBSERVER_ERROR_PACKET_DISC_ERR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, SYS_NOC_OBSERVER_ERROR_PACKET_DISC_ERR), ///< error_packet:disc_err for instance observer of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, SYS_NOC_OBSERVER_ERROR_PACKET_HIDE_ERR), ///< error_packet:hide_err for instance observer of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_OBSERVER_ERROR_PACKET_SEC_ERR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, SYS_NOC_OBSERVER_ERROR_PACKET_SEC_ERR), ///< error_packet:sec_err for instance observer of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_OBSERVER_ERROR_PACKET_SLV_ERR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, SYS_NOC_OBSERVER_ERROR_PACKET_SLV_ERR), ///< error_packet:slv_err for instance observer of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_OBSERVER_ERROR_PACKET_TMO_ERR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, SYS_NOC_OBSERVER_ERROR_PACKET_TMO_ERR), ///< error_packet:tmo_err for instance observer of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_OBSERVER_ERROR_PACKET_UNS_ERR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_OBSERVER, SYS_NOC_OBSERVER_ERROR_PACKET_UNS_ERR), ///< error_packet:uns_err for instance observer of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_FSM_FAULT_INTERNAL_FSM), ///< fsm_fault:internal_fsm for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_CORR), ///< packet_protection_fault:flt_secded_corr for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_PACKET_PROTECTION_FAULT_FLT_SECDED_UNCORR), ///< packet_protection_fault:flt_secded_uncorr for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_HANDSHAKE_RETRACTION), ///< packet_validity_fault:handshake_retraction for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_FRAMING), ///< packet_validity_fault:packet_framing for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WORDNUMBER), ///< packet_validity_fault:packet_wordnumber for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_PACKET_VALIDITY_FAULT_PACKET_WRONGPATH), ///< packet_validity_fault:packet_wrongpath for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TARGETS, SYS_NOC_TARGETS_REGISTER_PARITY_FAULT_JUMPER_PARITY), ///< register_parity_fault:jumper_parity for instance targets of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TOP_FAULT_AGG, SYS_NOC_TOP_FAULT_AGG_FAULT_FROM_BOTTOM_PWRDIS_LNDTP_FLT), ///< fault_from_bottom:pwrDis_lnDtp_flt for instance top_fault_agg of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TOP_FAULT_AGG_FSM_FAULT_TOP_INTERNAL_FSM = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TOP_FAULT_AGG, SYS_NOC_TOP_FAULT_AGG_FSM_FAULT_TOP_INTERNAL_FSM), ///< fsm_fault:top_internal_fsm for instance top_fault_agg of structure from SYS_NOC
+    RAS_ERR_ID_SYS_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CTRL_PAR = RAS_ERROR_ENCODE(SYS_NOC, SYS_NOC_STRUCT_TOP_FAULT_AGG, SYS_NOC_TOP_FAULT_AGG_REGISTER_PARITY_FAULT_POWER_MAIN_FAULT_CTRL_PAR), ///< register_parity_fault:power_main_fault_ctrl_par for instance top_fault_agg of structure from SYS_NOC
 } p64h_ras_err_id_t;
+
+///< @brief Total RAS error event nums
+#define P64H_RAS_ERR_ID_NUM 2266UL
+
 
 typedef struct __attribute__((packed)) {
     uint32_t err_evt:RAS_ERR_PACK_EVT_ID_LEN; ///< Error event ID

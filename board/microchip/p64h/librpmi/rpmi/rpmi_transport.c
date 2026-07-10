@@ -176,7 +176,7 @@ enum rpmi_error rpmi_transport_dequeue(struct rpmi_transport* trans, enum rpmi_q
     return rc;
 }
 
-bool p64h_sysc_rpmi_slot_size_validate(const rpmi_uint32_t slot_size)
+bool p64h_sysc_rpmi_slot_size_validate(const rpmi_uint32_t slot_size, const rpmi_uint32_t align_require)
 {
     if (0u == slot_size) {
         return false;
@@ -184,7 +184,7 @@ bool p64h_sysc_rpmi_slot_size_validate(const rpmi_uint32_t slot_size)
     if (slot_size < RPMI_SLOT_SIZE_MIN) {
         return false;
     }
-    if (ALIGN(slot_size, 0x1000) != slot_size) {
+    if (ALIGN(slot_size, align_require) != slot_size) {
         return false;
     }
     return true;
@@ -196,29 +196,29 @@ bool p64h_sysc_rpmi_queue_sizes_validate(const p64h_sysc_rpmi_tr_cfg_t* tr_ptr, 
         return false;
     }
     if (tr_ptr->p2a_queue_size > 0u) {
-        if ((tr_ptr->a2p_queue_size & (tr_ptr->slot_size - 1u)) != 0u) {
+        if ((tr_ptr->a2p_queue_size & (tr_ptr->a2p_slot_size - 1u)) != 0u) {
             return false;
         }
-        if ((tr_ptr->p2a_queue_size & (tr_ptr->slot_size - 1u)) != 0u) {
+        if ((tr_ptr->p2a_queue_size & (tr_ptr->p2a_slot_size - 1u)) != 0u) {
             return false;
         }
-        if (tr_ptr->a2p_queue_size < LIBRPMI_TRANSPORT_SHMEM_QUEUE_MIN_SIZE(tr_ptr->slot_size)) {
+        if (tr_ptr->a2p_queue_size < LIBRPMI_TRANSPORT_SHMEM_QUEUE_MIN_SIZE(tr_ptr->a2p_slot_size)) {
             return false;
         }
-        if (tr_ptr->p2a_queue_size < LIBRPMI_TRANSPORT_SHMEM_QUEUE_MIN_SIZE(tr_ptr->slot_size)) {
+        if (tr_ptr->p2a_queue_size < LIBRPMI_TRANSPORT_SHMEM_QUEUE_MIN_SIZE(tr_ptr->p2a_slot_size)) {
             return false;
         }
-        if (rpmi_shmem_size(shmem_ptr) < (2u * (tr_ptr->a2p_queue_size + tr_ptr->p2a_queue_size))) {
+        if (rpmi_shmem_size(shmem_ptr) < (RPMI_QUEUE_MIN * (tr_ptr->a2p_queue_size + tr_ptr->p2a_queue_size))) {
             return false;
         }
     } else {
-        if ((tr_ptr->a2p_queue_size & (tr_ptr->slot_size - 1u)) != 0u) {
+        if ((tr_ptr->a2p_queue_size & (tr_ptr->a2p_slot_size - 1u)) != 0u) {
             return false;
         }
-        if (tr_ptr->a2p_queue_size < LIBRPMI_TRANSPORT_SHMEM_QUEUE_MIN_SIZE(tr_ptr->slot_size)) {
+        if (tr_ptr->a2p_queue_size < LIBRPMI_TRANSPORT_SHMEM_QUEUE_MIN_SIZE(tr_ptr->a2p_slot_size)) {
             return false;
         }
-        if (rpmi_shmem_size(shmem_ptr) < (2u * (tr_ptr->a2p_queue_size))) {
+        if (rpmi_shmem_size(shmem_ptr) < (RPMI_QUEUE_MIN * (tr_ptr->a2p_queue_size))) {
             return false;
         }
     }
@@ -237,10 +237,10 @@ bool p64h_sysc_rpmi_queues_init(struct rpmi_transport_common* common_ptr, const 
         queue_ptr->queue_size = 0u;
         if ((RPMI_QUEUE_A2P_REQ == i) || (RPMI_QUEUE_P2A_ACK == i)) {
             queue_ptr->queue_size = tr_ptr->a2p_queue_size;
-            queue_ptr->data_slots = (tr_ptr->a2p_queue_size / tr_ptr->slot_size) - 2;
+            queue_ptr->data_slots = (tr_ptr->a2p_queue_size / tr_ptr->a2p_slot_size) - RPMI_SLOTS_RESERVED;
         } else if (tr_ptr->p2a_queue_size != 0u) {
             queue_ptr->queue_size = tr_ptr->p2a_queue_size;
-            queue_ptr->data_slots = (tr_ptr->p2a_queue_size / tr_ptr->slot_size) - 2;
+            queue_ptr->data_slots = (tr_ptr->p2a_queue_size / tr_ptr->p2a_slot_size) - RPMI_SLOTS_RESERVED;
         }
 
         if (0u == i) {

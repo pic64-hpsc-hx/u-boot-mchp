@@ -20,6 +20,21 @@
 
 /* Public Structs and Enums --------------------------------------- */
 
+/// @brief Struct to pack the values for error injection (without severity)
+typedef struct __attribute__((packed)) {
+    uint32_t err_evt : RAS_ERR_PACK_EVT_ID_LEN;            ///< Error event ID
+    uint32_t : RAS_ERR_PACK_SEV_ID_LEN;                    ///< Reserved (no severity for injection)
+    uint32_t struc_inst : RAS_ERR_PACK_STRUCT_INST_ID_LEN; ///< Structure instance
+    uint32_t struc : RAS_ERR_PACK_STRUCT_ID_LEN;           ///< Structure ID
+    uint32_t src : RAS_ERR_PACK_SRC_ID_LEN;                ///< Error source ID
+} p64h_sysc_ras_einj_pack_t;
+
+/// @brief Union to facilitate reading a unique RAS error injection code (without severity)
+typedef union {
+    uint32_t                  w; ///< Word access
+    p64h_sysc_ras_einj_pack_t b; ///< Bitfield access
+} p64h_sysc_ras_einj_code_t;
+
 /// Description of attributes for a specific error injection
 typedef struct {
     uint32_t placeholder; ///< Placeholder variable for an error injection

@@ -36,33 +36,6 @@
 #define OPTNONE
 #endif
 
-/**
- * @brief Null pointer check
- *
- * This macro checks if a pointer is NULL, returning the appropriate error
- * in such a case.
- *
- */
-#define CHECK_PTR(ptr)                                                                                                                               \
-    do {                                                                                                                                             \
-        if (NULL == ptr)                                                                                                                             \
-            return P64H_ERR_LIB_API_NULL_POINTER;                                                                                                    \
-    } while (0)
-
-/**
- * @brief Pointer size check
- *
- * This macro checks if a pointer is NULL and if a given size if zero.
- *
- */
-#define CHECK_PTR_SIZE(ptr, size)                                                                                                                    \
-    do {                                                                                                                                             \
-        if (NULL == ptr)                                                                                                                             \
-            return P64H_ERR_LIB_API_NULL_POINTER;                                                                                                    \
-        if (0 == size)                                                                                                                               \
-            return P64H_ERR_LIB_API_BAD_SIZE;                                                                                                        \
-    } while (0)
-
 /* Private Variables ---------------------------------------------- */
 uint8_t req_buf[RPMI_MAX_SLOT_SIZE];  ///< RPMI request buffer
 uint8_t resp_buf[RPMI_MAX_SLOT_SIZE]; ///< RPMI response buffer
@@ -138,6 +111,10 @@ static inline p64h_err_t rpmi_to_p64h_sysc_err(int rpmi_err)
             return P64H_ERR_LIB_API_EXTENSION;
         case RPMI_P64H_ERR_CHECKSUM_MISMATCH:
             return P64H_ERR_LIB_API_CHECKSUM_MISMATCH;
+        case RPMI_P64H_ERR_HEADER_CORRUPT:
+            return P64H_ERR_LIB_API_HEADER_CORRUPT;
+        case RPMI_P64H_ERR_TIMEOUT_DATA_DROPPED:
+            return P64H_ERR_LIB_API_TIMEOUT_DATA_DROPPED;
         default:
             return P64H_ERR_LIB_API_NOT_SUPPORTED;
     }
@@ -175,6 +152,11 @@ static inline uint32_t __long_hi(uint64_t value)
 static inline uint64_t __long_construct(uint32_t msb, uint32_t lsb)
 {
     return (uint64_t)((((uint64_t)msb << LONG_HI_SHIFT) & LONG_HI_MASK) | (((uint64_t)lsb) & LONG_LO_MASK));
+}
+
+static inline bool __is_xfer_error(p64h_err_t rc)
+{
+    return ((P64H_ERR_LIB_API_TIMEOUT_DATA_DROPPED == rc) || (P64H_ERR_LIB_API_CHECKSUM_MISMATCH == rc) || (P64H_ERR_LIB_API_HEADER_CORRUPT == rc));
 }
 
 /**
@@ -238,7 +220,9 @@ static rpmi_req_message_t* rpmi_msg_pack(const p64h_sysc_handle_t* handle_ptr, c
         return NULL;
     }
     msg_ptr = rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
-
+    if (!msg_ptr) {
+        return NULL;
+    }
     if ((NULL != data_ptr) && (data_size > 0u)) {
         memcpy(&msg_ptr->data, data_ptr, data_size);
     }
@@ -273,7 +257,10 @@ static rpmi_log_req_message_t* rpmi_log_req_msg_pack(const p64h_sysc_handle_t* h
     if (msg_total_size > sizeof(req_buf)) {
         return NULL;
     }
-    msg_ptr                                = (rpmi_log_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    msg_ptr = (rpmi_log_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    if (!msg_ptr) {
+        return NULL;
+    }
     msg_ptr->log_metadata.req_start_off_lo = __long_lo(req_start_off);
     msg_ptr->log_metadata.req_start_off_hi = __long_hi(req_start_off);
     msg_ptr->log_metadata.max_num_entries  = max_num_entries;
@@ -320,7 +307,10 @@ static rpmi_data_pull_req_message_t* rpmi_data_pull_req_msg_pack(const p64h_sysc
     if (msg_total_size > sizeof(req_buf)) {
         return NULL;
     }
-    msg_ptr                      = (rpmi_data_pull_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    msg_ptr = (rpmi_data_pull_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    if (!msg_ptr) {
+        return NULL;
+    }
     msg_ptr->metadata.offset     = (rpmi_uint32_t)data_offset;
     msg_ptr->metadata.remaining  = remaining_buf_size;
     msg_ptr->metadata.shmem_xfer = shmem_xfer;
@@ -377,11 +367,15 @@ static rpmi_data_push_req_message_t* rpmi_data_push_req_msg_pack(const p64h_sysc
 
     rpmi_data_push_req_message_t* msg_ptr;
     if (msg_total_size > sizeof(req_buf)) {
-        printf("handle_ptr->trans_io.trans_common.trans.slot_size %zu", handle_ptr->trans_io.trans_common.trans.slot_size);
+        printf("handle_ptr->trans_io.trans_common.trans.a2p_slot_size %zu p2a_slot_size %zu", handle_ptr->trans_io.trans_common.trans.a2p_slot_size,
+               handle_ptr->trans_io.trans_common.trans.p2a_slot_size);
         printf("trying to send %zu bytes in buffer of size %zu\n", msg_total_size, sizeof(req_buf));
         return NULL;
     }
-    msg_ptr                      = (rpmi_data_push_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    msg_ptr = (rpmi_data_push_req_message_t*)rpmi_common_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, data_len);
+    if (!msg_ptr) {
+        return NULL;
+    }
     msg_ptr->metadata.offset     = (rpmi_uint32_t)data_offset;
     msg_ptr->metadata.sent       = (rpmi_uint32_t)data_size;
     msg_ptr->metadata.remaining  = (rpmi_uint32_t)remaining;
@@ -427,8 +421,8 @@ static p64h_err_t rpmi_shmem_send(const p64h_sysc_handle_t* handle_ptr, rpmi_mes
             p64h_ipc_msg_buf_t ipc_msg;
             ipc_msg.buf[0] = handle_ptr->ctxt.cid;
             ipc_msg.buf[1] = RPMI_QUEUE_A2P_REQ;
-            if (handle_ptr->ctxt.ops.ipc_msg_send) {
-                int ret = handle_ptr->ctxt.ops.ipc_msg_send((const uint32_t)handle_ptr->ctxt.ipc_channel, ipc_msg.buf, 2);
+            if (handle_ptr->ipc_ops.ipc_msg_send) {
+                int ret = handle_ptr->ipc_ops.ipc_msg_send((const uint32_t)handle_ptr->ctxt.ipc_channel, ipc_msg.buf, 2);
                 if (0 != ret) {
                     rpmi_err = RPMI_ERR_FAILED;
                 }
@@ -461,8 +455,8 @@ rpmi_error_t rpmi_shmem_recv(const p64h_sysc_handle_t* handle_ptr, rpmi_message_
             p64h_ipc_msg_buf_t ipc_msg   = { 0 };
             uint32_t           recv_size = 0;
             // check if a received IPC message
-            if (handle_ptr->ctxt.ops.ipc_msg_get) {
-                int ret = handle_ptr->ctxt.ops.ipc_msg_get((const uint32_t)handle_ptr->ctxt.ipc_channel, ipc_msg.buf, &recv_size);
+            if (handle_ptr->ipc_ops.ipc_msg_get) {
+                int ret = handle_ptr->ipc_ops.ipc_msg_get((const uint32_t)handle_ptr->ctxt.ipc_channel, ipc_msg.buf, &recv_size);
                 if (0 == ret) {
                     if (0 < recv_size) {
                         rpmi_err = rpmi_transport_dequeue((struct rpmi_transport*)&handle_ptr->trans_shmem.trans_common.trans, RPMI_QUEUE_P2A_ACK,
@@ -525,6 +519,7 @@ rpmi_error_t rpmi_remote_recv(const p64h_sysc_handle_t* handle_ptr, rpmi_message
     } else {
         rpmi_err = rpmi_transport_dequeue((struct rpmi_transport*)&handle_ptr->trans_io.trans_common.trans, RPMI_QUEUE_P2A_ACK, msg_ptr);
     }
+
     return rpmi_err;
 }
 
@@ -643,48 +638,65 @@ static inline p64h_err_t rpmi_req_with_data_internal(const p64h_sysc_handle_t* h
                                                      const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_data_ptr,
                                                      const size_t req_size, const void* buf_ptr, size_t entry_size, size_t buf_size, bool shmem_xfer)
 {
-    p64h_err_t      rc            = P64H_ERR_OK;
-    rpmi_message_t* msg_ptr       = NULL;
-    bool            tx_complete   = false;
-    size_t          curr_buf_sent = 0UL;
-    size_t          buf_byte_left = (buf_size * entry_size);
-    size_t          max_data_size;
-    if (P64H_SYSC_RPMI_REMOTE(handle_ptr)) {
-        max_data_size = (sizeof(req_buf) - sizeof(rpmi_data_push_req_message_t) - req_size);
+    p64h_err_t rc                = P64H_ERR_OK;
+    size_t     tot_bytes_to_send = (buf_size * entry_size);
+
+    if (RPMI_RPMI_IO_PORT_TYPE_TCP == handle_ptr->io.port.type) {
+        return P64H_ERR_LIB_API_NOT_YET_IMPLEMENTED;
     } else {
-        max_data_size = (sizeof(req_buf) - sizeof(rpmi_data_push_req_message_t) - req_size);
-    }
-    size_t      max_num_entries   = max_data_size / entry_size;
-    const void* curr_buf_data_ptr = buf_ptr;
-
-    while (!tx_complete) {
-        size_t next_tx_size = 0;
-        size_t data_offset  = curr_buf_sent / entry_size; // In number of entries
-        if (buf_byte_left <= max_data_size) {
-            next_tx_size = buf_byte_left;
-            tx_complete  = true;
+        rpmi_req_message_t*  req_msg_ptr     = NULL;
+        rpmi_resp_message_t* resp_msg_ptr    = NULL;
+        bool                 tx_complete     = false;
+        size_t               curr_bytes_sent = 0UL;
+        size_t               max_data_size;
+        if (P64H_SYSC_RPMI_REMOTE(handle_ptr)) {
+            max_data_size = (sizeof(req_buf) - sizeof(rpmi_data_push_req_message_t) - req_size);
         } else {
-            next_tx_size = (max_num_entries * entry_size);
+            max_data_size = (sizeof(req_buf) - sizeof(rpmi_data_push_req_message_t) - req_size);
         }
-        buf_byte_left -= next_tx_size;
-
-        msg_ptr        = (rpmi_message_t*)rpmi_data_push_req_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size,
-                                                                      curr_buf_data_ptr, next_tx_size, data_offset, buf_byte_left, shmem_xfer);
-        rc             = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)msg_ptr);
-        if (P64H_ERR_OK != rc) {
-            break;
+        size_t  max_num_entries    = max_data_size / entry_size;
+        uint8_t send_attempt_count = 0;
+        while (!tx_complete) {
+            size_t      next_tx_size       = 0;
+            const void* curr_buf_data_ptr  = buf_ptr + curr_bytes_sent;
+            size_t      data_offset        = curr_bytes_sent / entry_size; // In number of entries
+            size_t      bytes_left_to_send = tot_bytes_to_send - curr_bytes_sent;
+            size_t      curr_pkg_bytes_left;
+            if (bytes_left_to_send <= max_data_size) {
+                next_tx_size = bytes_left_to_send;
+            } else {
+                next_tx_size = (max_num_entries * entry_size);
+            }
+            curr_pkg_bytes_left = bytes_left_to_send - next_tx_size;
+            req_msg_ptr
+                = (rpmi_req_message_t*)rpmi_data_push_req_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size,
+                                                                   curr_buf_data_ptr, next_tx_size, data_offset, curr_pkg_bytes_left, shmem_xfer);
+            rc = rpmi_req_internal(handle_ptr, req_msg_ptr);
+            if (P64H_ERR_OK != rc) {
+                break;
+            }
+            resp_msg_ptr = (rpmi_resp_message_t*)&resp_buf[0];
+            rc           = rpmi_resp_internal(handle_ptr, false, resp_msg_ptr);
+            if (__is_xfer_error(rc)) {
+                if (send_attempt_count++ > P64H_RPMI_RETRY_COUNT) {
+                    printf("%s: Failed to send request after %u tries\n", __FUNCTION__, P64H_RPMI_RETRY_COUNT);
+                    break;
+                } else {
+                    printf("\nFailed to get rpmi resp from sysc for data offset %zu, trying again, attempt #%u\n", data_offset, send_attempt_count);
+                    continue;
+                }
+            }
+            if (P64H_ERR_OK == rc) {
+                send_attempt_count  = 0;
+                curr_bytes_sent    += next_tx_size;
+                if (curr_bytes_sent == tot_bytes_to_send) {
+                    tx_complete = true;
+                }
+            } else {
+                break;
+            }
         }
-
-        msg_ptr = (rpmi_message_t*)&resp_buf[0];
-        rc      = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)msg_ptr);
-        if (P64H_ERR_OK != rc) {
-            break;
-        }
-
-        curr_buf_sent     += next_tx_size;
-        curr_buf_data_ptr  = (const void*)((uint64_t)(curr_buf_data_ptr) + next_tx_size);
     }
-
     // convert resp->status;
     return rc;
 }
@@ -717,46 +729,97 @@ static inline p64h_err_t rpmi_resp_with_data_internal(const p64h_sysc_handle_t* 
                                                       const uint32_t id0, const uint32_t id1, const uint32_t id2, const void* req_data_ptr,
                                                       const size_t req_size, void* buf_ptr, size_t entry_size, size_t buf_size, bool shmem_xfer)
 {
-    p64h_err_t rc                = P64H_ERR_OK;
-    bool       rx_complete       = false;
-    size_t     curr_buf_fill     = 0UL;
-    size_t     buf_byte_size     = (buf_size * entry_size);
-    void*      curr_buf_data_ptr = buf_ptr;
-    size_t     mem_tx_size       = 0UL;
+    p64h_err_t rc            = P64H_ERR_OK;
+    size_t     buf_byte_size = (buf_size * entry_size);
 
-    while (!rx_complete) {
-        uint32_t                      data_offset        = (uint32_t)(curr_buf_fill / entry_size);
-        uint32_t                      remaining_buf_size = (uint32_t)(buf_byte_size - curr_buf_fill) / entry_size;
-        rpmi_data_pull_req_message_t* rpmi_req_msg       = rpmi_data_pull_req_msg_pack(
-            handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size, remaining_buf_size, data_offset, shmem_xfer, curr_buf_data_ptr);
-        rc = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)rpmi_req_msg);
-        if (P64H_ERR_OK != rc) {
-            return rc;
-        }
+    if (RPMI_RPMI_IO_PORT_TYPE_TCP == handle_ptr->io.port.type) {
+        return P64H_ERR_LIB_API_NOT_YET_IMPLEMENTED;
+    } else {
+        bool    rx_complete        = false;
+        size_t  curr_buf_fill      = 0UL;
+        void*   curr_buf_data_ptr  = buf_ptr;
+        size_t  mem_tx_size        = 0UL;
+        uint8_t send_attempt_count = 0;
 
-        rpmi_data_pull_resp_message_t* rpmi_resp_msg = (rpmi_data_pull_resp_message_t*)&resp_buf[0];
-        rc                                           = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)rpmi_resp_msg);
-        if (P64H_ERR_OK != rc) {
-            return rc;
-        }
+        while (!rx_complete) {
+            uint32_t                      data_offset        = (uint32_t)(curr_buf_fill / entry_size);
+            uint32_t                      remaining_buf_size = (uint32_t)(buf_byte_size - curr_buf_fill) / entry_size;
+            rpmi_data_pull_req_message_t* rpmi_req_msg       = rpmi_data_pull_req_msg_pack(
+                handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size, remaining_buf_size, data_offset, shmem_xfer,
+                curr_buf_data_ptr); // TODO: verify sysc doesn't have an internal state, and only depends on these paremeters
+            rc = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)rpmi_req_msg);
+            if (P64H_ERR_OK != rc) {
+                break;
+            }
 
-        // unpack fragment
-        rx_complete = rpmi_resp_msg->metadata.remaining == 0UL ? true : false;
-        if ((0UL != buf_size) && ((curr_buf_fill + (entry_size * rpmi_resp_msg->metadata.returned)) >= buf_byte_size)) {
-            rx_complete = true;
-            mem_tx_size = (buf_byte_size - curr_buf_fill);
-        } else {
-            mem_tx_size = (entry_size * rpmi_resp_msg->metadata.returned);
-        }
+            rpmi_data_pull_resp_message_t* rpmi_resp_msg = (rpmi_data_pull_resp_message_t*)&resp_buf[0];
+            rc                                           = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)rpmi_resp_msg);
 
-        if (!shmem_xfer) {
-            memcpy(curr_buf_data_ptr, rpmi_resp_msg->data, mem_tx_size);
+            if (__is_xfer_error(rc)) {
+                // buf_byte_left += next_tx_size; why does it hang with this? should just send the same thing over and over...
+                if (send_attempt_count++ > P64H_RPMI_RETRY_COUNT) {
+                    printf("%s: Failed to send request after %u tries\n", __FUNCTION__, P64H_RPMI_RETRY_COUNT);
+                    break;
+                } else {
+                    printf("\nFailed to get rpmi resp from sysc, trying again, attemp #%u\n", send_attempt_count);
+                    continue;
+                }
+            }
+
+            if (P64H_ERR_OK != rc) {
+                break;
+            }
+
+            send_attempt_count = 0U;
+            // unpack fragment
+            rx_complete = rpmi_resp_msg->metadata.remaining == 0UL ? true : false;
+            if ((0UL != buf_size) && ((curr_buf_fill + (entry_size * rpmi_resp_msg->metadata.returned)) >= buf_byte_size)) {
+                rx_complete = true;
+                mem_tx_size = (buf_byte_size - curr_buf_fill);
+            } else {
+                mem_tx_size = (entry_size * rpmi_resp_msg->metadata.returned);
+            }
+
+            if (!shmem_xfer) {
+                memcpy(curr_buf_data_ptr, rpmi_resp_msg->data, mem_tx_size);
+            }
+            curr_buf_fill     += mem_tx_size;
+            curr_buf_data_ptr  = (void*)((uint64_t)(curr_buf_data_ptr) + mem_tx_size);
         }
-        curr_buf_fill     += mem_tx_size;
-        curr_buf_data_ptr  = (void*)((uint64_t)(curr_buf_data_ptr) + mem_tx_size);
     }
 
     // convert resp->status;
+    return rc;
+}
+
+/**
+ * @brief Function for receiving a fixed-size list response through RPMI.
+ *
+ * @param[in] handle_ptr Pointer to the RPMI system controller context.
+ * @param[in] svc_grp_id ID to the service group on the P64H System Controller.
+ * @param[in] svc_id ID of the service to be used for the respective group.
+ * @param[in] id0 Request ID 0.
+ * @param[in] id1 Request ID 1.
+ * @param[in] id2 Request ID 2.
+ * @param[out] list_ptr Pointer to response list buffer.
+ * @param[in] list_num Number of list entries expected.
+ * @param[in] entry_size Size of each entry in bytes.
+ * @param[in] shmem_xfer Shared-memory transfer mode for non-TCP transport.
+ *
+ * @return p64h_err_t. P64H_ERR_OK on success, error otherwise.
+ */
+static inline p64h_err_t rpmi_resp_list_internal(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
+                                                 const uint32_t id0, const uint32_t id1, const uint32_t id2, void* list_ptr, uint32_t list_num,
+                                                 size_t entry_size, bool shmem_xfer)
+{
+    p64h_err_t rc = P64H_ERR_OK;
+
+    if (RPMI_RPMI_IO_PORT_TYPE_TCP == handle_ptr->io.port.type) {
+        return P64H_ERR_LIB_API_NOT_YET_IMPLEMENTED;
+    } else {
+        rc = rpmi_resp_with_data_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, NULL, 0x0UL, list_ptr, entry_size, list_num, shmem_xfer);
+    }
+
     return rc;
 }
 
@@ -784,35 +847,57 @@ static inline p64h_err_t rpmi_req_resp_internal(const p64h_sysc_handle_t* handle
 {
     p64h_err_t           rc = P64H_ERR_OK;
     rpmi_resp_message_t* msg_ptr;
-    rpmi_req_message_t*  rpmi_req_msg = rpmi_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size);
+    rpmi_req_message_t*  rpmi_req_msg       = rpmi_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size);
+    uint8_t              send_attempt_count = 0;
+    bool                 rx_complete        = false;
 
     if (handle_ptr->ctxt.req_posted) {
         rc = rpmi_req_state_check(handle_ptr, svc_grp_id, svc_id);
     }
 
-    if (P64H_ERR_OK == rc) {
-        rc = rpmi_req_internal(handle_ptr, rpmi_req_msg);
+    if (RPMI_RPMI_IO_PORT_TYPE_TCP == handle_ptr->io.port.type) {
+        return P64H_ERR_LIB_API_NOT_YET_IMPLEMENTED;
+    } else {
+        rpmi_req_msg = rpmi_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, req_data_ptr, req_size);
     }
 
-    if (P64H_ERR_OK == rc || (handle_ptr->ctxt.req_posted && (P64H_ERR_LIB_API_RESP_PENDING == rc))) {
-        msg_ptr = (rpmi_resp_message_t*)&resp_buf[0];
-        rc      = rpmi_resp_internal(handle_ptr, true, msg_ptr);
-        if (P64H_ERR_LIB_API_TIMEOUT == rc) {
-            if (handle_ptr->ctxt.req_posted) {
-                rc = P64H_ERR_LIB_API_RESP_PENDING;
-            }
-        }
+    if (P64H_ERR_OK == rc) {
+        do {
+            rc = rpmi_req_internal(handle_ptr, rpmi_req_msg);
 
-        if (P64H_ERR_OK == rc) {
-            if (msg_ptr->header.datalen != sizeof(rpmi_resp_metadata_t) + resp_size) {
-                rc = P64H_ERR_LIB_API_BAD_SIZE;
-            } else {
-                // unpack response
-                if (0x0u != resp_size) {
-                    memcpy(resp_data_ptr, &msg_ptr->data, resp_size);
+            if (P64H_ERR_OK == rc || (handle_ptr->ctxt.req_posted && (P64H_ERR_LIB_API_RESP_PENDING == rc))) {
+                msg_ptr = (rpmi_resp_message_t*)&resp_buf[0];
+                rc      = rpmi_resp_internal(handle_ptr, true, msg_ptr);
+                if (P64H_ERR_LIB_API_TIMEOUT == rc) {
+                    if (handle_ptr->ctxt.req_posted) {
+                        rc = P64H_ERR_LIB_API_RESP_PENDING;
+                    }
+                }
+
+                if (P64H_ERR_OK == rc) {
+                    if (msg_ptr->header.datalen != sizeof(rpmi_resp_metadata_t) + resp_size) {
+                        rc = P64H_ERR_LIB_API_BAD_SIZE;
+                    } else {
+                        // unpack response
+                        if (0x0u != resp_size) {
+                            memcpy(resp_data_ptr, &msg_ptr->data, resp_size);
+                        }
+                        rx_complete = true;
+                    }
                 }
             }
-        }
+
+            if (__is_xfer_error(rc)) {
+                if (send_attempt_count++ < P64H_RPMI_RETRY_COUNT) {
+                    printf("\nFailed to get rpmi resp from sysc, trying again, attemp #%u\n", send_attempt_count);
+                } else {
+                    printf("%s: Failed to send request after %u tries\n", __FUNCTION__, P64H_RPMI_RETRY_COUNT);
+                    break;
+                }
+            } else {
+                break;
+            }
+        } while (!rx_complete);
     }
 
     if (handle_ptr->ctxt.req_posted) {
@@ -848,49 +933,59 @@ static p64h_err_t OPTNONE rpmi_req_log_internal(const p64h_sysc_handle_t* handle
                                                 const uint32_t id0, const uint32_t id1, const uint32_t id2, p64h_sysc_log_cfg_t* log_cfg_ptr,
                                                 uint64_t* resp_start_off, uint32_t* num_returned, uint64_t* entries_left)
 {
+    p64h_err_t rc = P64H_ERR_OK;
 
-    p64h_err_t rc                 = P64H_ERR_OK;
-    bool       rx_complete        = false;
-    uint32_t   buf_fill_left      = log_cfg_ptr->num_entries;
-    void*      curr_buf_data_ptr  = log_cfg_ptr->log_ptr;
-    size_t     mem_tx_size        = 0UL;
-    uint32_t   local_num_returned = 0U;
-    uint64_t   curr_req_start_off = log_cfg_ptr->req_start_off; // Initial value does not matter if last_log_tail_valid if false
-    uint64_t   local_entries_left = 0U;
+    if (RPMI_RPMI_IO_PORT_TYPE_TCP == handle_ptr->io.port.type) {
+        return P64H_ERR_LIB_API_NOT_YET_IMPLEMENTED;
+    } else {
+        bool     rx_complete        = false;
+        uint32_t buf_fill_left      = log_cfg_ptr->num_entries;
+        void*    curr_buf_data_ptr  = log_cfg_ptr->log_ptr;
+        uint32_t local_num_returned = 0U;
+        uint64_t curr_req_start_off = log_cfg_ptr->req_start_off;
+        uint64_t local_entries_left = 0U;
+        uint8_t  send_attempt_count = 0U;
 
-    while (!rx_complete) {
-        if (buf_fill_left > 0U) {
-            rpmi_log_req_message_t* rpmi_req_msg
-                = rpmi_log_req_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, curr_req_start_off, buf_fill_left);
-            rc = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)rpmi_req_msg);
-            if (P64H_ERR_OK == rc) {
-                rpmi_log_resp_message_t* rpmi_resp_msg = (rpmi_log_resp_message_t*)&resp_buf[0];
-                rc                                     = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)rpmi_resp_msg);
+        while (!rx_complete) {
+            if (buf_fill_left > 0U) {
+                rpmi_log_req_message_t* rpmi_req_msg
+                    = rpmi_log_req_msg_pack(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, curr_req_start_off, buf_fill_left);
+                rc = rpmi_req_internal(handle_ptr, (rpmi_req_message_t*)rpmi_req_msg);
                 if (P64H_ERR_OK == rc) {
-                    // unpack fragment
-                    uint64_t resp_returned = rpmi_resp_msg->log_metadata.returned;
-                    local_entries_left = __long_construct(rpmi_resp_msg->log_metadata.entries_left_hi, rpmi_resp_msg->log_metadata.entries_left_lo);
-                    if (0UL != resp_returned) {
-                        if (buf_fill_left < resp_returned) {
-                            rc          = P64H_ERR_LIB_API_TOO_MANY_ENTRIES_RETURNED;
-                            rx_complete = true;
-                        } else {
-                            mem_tx_size = (log_cfg_ptr->entry_size * resp_returned);
-                            if (mem_tx_size > (buf_fill_left * log_cfg_ptr->entry_size)) {
-                                rc          = P64H_ERR_LIB_API_INVALID_ENTRIES_RETURNED;
+                    rpmi_log_resp_message_t* rpmi_resp_msg = (rpmi_log_resp_message_t*)&resp_buf[0];
+                    rc                                     = rpmi_resp_internal(handle_ptr, false, (rpmi_resp_message_t*)rpmi_resp_msg);
+                    if (P64H_ERR_OK == rc) {
+                        send_attempt_count = 0U;
+                        // unpack fragment
+                        uint64_t resp_returned = rpmi_resp_msg->log_metadata.returned;
+                        local_entries_left
+                            = __long_construct(rpmi_resp_msg->log_metadata.entries_left_hi, rpmi_resp_msg->log_metadata.entries_left_lo);
+                        if (0UL != resp_returned) {
+                            if (buf_fill_left < resp_returned) {
+                                rc          = P64H_ERR_LIB_API_TOO_MANY_ENTRIES_RETURNED;
                                 rx_complete = true;
                             } else {
-                                memcpy(curr_buf_data_ptr, rpmi_resp_msg->data, mem_tx_size);
-                                curr_buf_data_ptr   = (void*)((uint64_t)(curr_buf_data_ptr) + mem_tx_size);
-                                local_num_returned += resp_returned;
-                                buf_fill_left      -= resp_returned;
-                                curr_req_start_off
-                                    = __long_construct(rpmi_resp_msg->log_metadata.resp_start_off_hi, rpmi_resp_msg->log_metadata.resp_start_off_lo)
-                                      + resp_returned;
+                                size_t mem_tx_size = (log_cfg_ptr->entry_size * resp_returned);
+                                if (mem_tx_size > (buf_fill_left * log_cfg_ptr->entry_size)) {
+                                    rc          = P64H_ERR_LIB_API_INVALID_ENTRIES_RETURNED;
+                                    rx_complete = true;
+                                } else {
+                                    memcpy(curr_buf_data_ptr, rpmi_resp_msg->data, mem_tx_size);
+                                    curr_buf_data_ptr   = (void*)((uint64_t)(curr_buf_data_ptr) + mem_tx_size);
+                                    local_num_returned += resp_returned;
+                                    buf_fill_left      -= resp_returned;
+                                    curr_req_start_off  = __long_construct(rpmi_resp_msg->log_metadata.resp_start_off_hi,
+                                                                           rpmi_resp_msg->log_metadata.resp_start_off_lo)
+                                                         + resp_returned;
+                                }
                             }
                         }
-                    }
-                    if (0UL == local_entries_left) {
+                        if (0UL == local_entries_left) {
+                            rx_complete = true;
+                        }
+                    } else if (__is_xfer_error(rc) && (send_attempt_count++ < P64H_RPMI_RETRY_COUNT)) {
+                        printf("\nFailed to get rpmi resp from sysc, trying again, attemp #%u\n", send_attempt_count);
+                    } else {
                         rx_complete = true;
                     }
                 } else {
@@ -899,14 +994,12 @@ static p64h_err_t OPTNONE rpmi_req_log_internal(const p64h_sysc_handle_t* handle
             } else {
                 rx_complete = true;
             }
-        } else {
-            rx_complete = true;
         }
-    }
-    if (P64H_ERR_OK == rc) {
-        *resp_start_off = curr_req_start_off - local_num_returned;
-        *num_returned   = local_num_returned;
-        *entries_left   = local_entries_left;
+        if (P64H_ERR_OK == rc) {
+            *resp_start_off = curr_req_start_off - local_num_returned;
+            *num_returned   = local_num_returned;
+            *entries_left   = local_entries_left;
+        }
     }
 
     // convert resp->status;
@@ -930,7 +1023,11 @@ static p64h_err_t OPTNONE rpmi_req_log_internal(const p64h_sysc_handle_t* handle
 static inline p64h_err_t rpmi_check_ids(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
                                         const uint32_t id1, const uint32_t id2)
 {
-    CHECK_PTR(handle_ptr);
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_NULL_HANDLE);
+    P64H_SYSC_ASSERT(handle_ptr->init, P64H_ERR_LIB_API_NOT_INITIALIZED);
+    P64H_SYSC_ASSERT(handle_ptr->ctxt.cid >= P64H_SYSC_RPMI_CID_APPC_M_0 && handle_ptr->ctxt.cid < LAST_P64H_SYSC_RPMI_CID,
+                     P64H_ERR_LIB_API_NOT_INITIALIZED);
+    P64H_SYSC_ASSERT(p64h_sysc_rpmi_handle_valid(handle_ptr), P64H_ERR_INVALID_HANDLE);
 
     // to be implemented
     (void)svc_grp_id;
@@ -938,6 +1035,7 @@ static inline p64h_err_t rpmi_check_ids(const p64h_sysc_handle_t* handle_ptr, co
     (void)id0;
     (void)id1;
     (void)id2;
+
     return P64H_ERR_OK;
 }
 
@@ -954,7 +1052,7 @@ static inline p64h_err_t rpmi_check_ids(const p64h_sysc_handle_t* handle_ptr, co
  */
 static inline p64h_err_t rpmi_req_state_check(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id)
 {
-    CHECK_PTR(handle_ptr);
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
     p64h_err_t           rc                = P64H_ERR_OK;
     rpmi_request_info_t* rpmi_req_info_ptr = (rpmi_request_info_t*)&handle_ptr->req_info;
 
@@ -995,7 +1093,6 @@ static inline p64h_err_t rpmi_req_state_check(const p64h_sysc_handle_t* handle_p
  */
 static inline p64h_err_t rpmi_req_info_clean(const p64h_sysc_handle_t* handle_ptr)
 {
-    CHECK_PTR(handle_ptr);
     rpmi_request_info_t* rpmi_req_info_ptr = (rpmi_request_info_t*)&handle_ptr->req_info;
 
     rpmi_env_lock((void*)&handle_ptr->lock);
@@ -1022,10 +1119,11 @@ static inline p64h_err_t rpmi_req_info_clean(const p64h_sysc_handle_t* handle_pt
  * @param id0 Request ID 0
  * @param id1 Request ID 1
  * @param id2 Request ID 2
- * @param req_data_ptr Pointer to the request data. If req_data_ptr is set to NULL and req_size is set to 0, it means there is no request parameter.
+ * @param req_data_ptr Pointer to the request data. If req_data_ptr is set to NULL and req_size is set to 0, it means there is no request
+ * parameter.
  * @param req_size Size of the request data.
- * @param resp_data_ptr Pointer to the buffer where the response data will be stored. If resp_data_ptr is set to NULL and resp_size is set 0, it means
- * there is no response data to be returned.
+ * @param resp_data_ptr Pointer to the buffer where the response data will be stored. If resp_data_ptr is set to NULL and resp_size is set 0, it
+ * means there is no response data to be returned.
  * @param resp_size Size of the response data buffer.
  *
  * @return p64h_err_t Error code indicating the result of the request-response operation.
@@ -1034,6 +1132,8 @@ p64h_err_t p64h_sysc_rpmi_req_resp(const p64h_sysc_handle_t* handle_ptr, const u
                                    const uint32_t id1, const uint32_t id2, const void* req_data_ptr, const size_t req_size, void* resp_data_ptr,
                                    const size_t resp_size)
 {
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(p64h_sysc_rpmi_handle_valid(handle_ptr), P64H_ERR_INVALID_HANDLE);
     if ((req_data_ptr == NULL && req_size != 0) || (req_data_ptr != NULL && req_size == 0) || (resp_data_ptr == NULL && resp_size != 0)
         || (resp_data_ptr != NULL && resp_size == 0)) {
         return P64H_ERR_LIB_API_INVALID_PARAM;
@@ -1058,6 +1158,7 @@ p64h_err_t p64h_sysc_rpmi_req_resp(const p64h_sysc_handle_t* handle_ptr, const u
  * @param id1 Second ID to be processed.
  * @param id2 Third ID to be processed.
  * @param list_ptr Pointer to the list where results will be stored.
+ * @param list_num Number of entries in the list.
  * @param entry_size Size of each entry in the list.
  * @param shmem_xfer false: the data will be transferred thru RPMI channel
                          true: data stored at given ptr will be directly accessed by sysc (this pointer needs to be accessible by the sysc)
@@ -1067,12 +1168,16 @@ p64h_err_t p64h_sysc_rpmi_req_resp(const p64h_sysc_handle_t* handle_ptr, const u
  *         - Other error codes indicate specific failure conditions.
  */
 p64h_err_t p64h_sysc_rpmi_resp_list(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
-                                    const uint32_t id1, const uint32_t id2, void* list_ptr, size_t entry_size, bool shmem_xfer)
+                                    const uint32_t id1, const uint32_t id2, void* list_ptr, uint32_t list_num, size_t entry_size, bool shmem_xfer)
 {
-    CHECK_PTR_SIZE(list_ptr, entry_size);
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(p64h_sysc_rpmi_handle_valid(handle_ptr), P64H_ERR_INVALID_HANDLE);
+    P64H_SYSC_ASSERT(list_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(list_num > 0, P64H_ERR_LIB_API_INVALID_PARAM);
+    P64H_SYSC_ASSERT(entry_size > 0, P64H_ERR_LIB_API_BAD_SIZE);
     p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, id1, id2);
     if (P64H_ERR_OK == rc) {
-        rc = rpmi_resp_with_data_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, NULL, 0x0UL, list_ptr, entry_size, 0UL, shmem_xfer);
+        rc = rpmi_resp_list_internal(handle_ptr, svc_grp_id, svc_id, id0, id1, id2, list_ptr, list_num, entry_size, shmem_xfer);
     }
     return rc;
 }
@@ -1100,7 +1205,10 @@ p64h_err_t p64h_sysc_rpmi_resp_list(const p64h_sysc_handle_t* handle_ptr, const 
 p64h_err_t p64h_sysc_rpmi_req_with_data(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id,
                                         const void* req_data_ptr, const size_t req_size, const void* buf_ptr, const size_t buf_size, bool shmem_xfer)
 {
-    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(p64h_sysc_rpmi_handle_valid(handle_ptr), P64H_ERR_INVALID_HANDLE);
+    P64H_SYSC_ASSERT(buf_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(buf_size > 0, P64H_ERR_LIB_API_BAD_SIZE);
     if ((req_data_ptr == NULL && req_size != 0) || (req_data_ptr != NULL && req_size == 0)) {
         return P64H_ERR_LIB_API_INVALID_PARAM;
     }
@@ -1138,7 +1246,11 @@ p64h_err_t p64h_sysc_rpmi_resp_with_data(const p64h_sysc_handle_t* handle_ptr, c
                                          const uint32_t id1, const uint32_t id2, const void* req_data_ptr, const size_t req_size, void* buf_ptr,
                                          size_t buf_size, bool shmem_xfer)
 {
-    CHECK_PTR_SIZE(buf_ptr, buf_size);
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(p64h_sysc_rpmi_handle_valid(handle_ptr), P64H_ERR_INVALID_HANDLE);
+    P64H_SYSC_ASSERT(buf_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(buf_size > 0, P64H_ERR_LIB_API_BAD_SIZE);
+
     if ((req_data_ptr == NULL && req_size != 0) || (req_data_ptr != NULL && req_size == 0)) {
         return P64H_ERR_LIB_API_INVALID_PARAM;
     }
@@ -1171,8 +1283,18 @@ p64h_err_t p64h_sysc_rpmi_resp_with_data(const p64h_sysc_handle_t* handle_ptr, c
 p64h_err_t p64h_sysc_rpmi_log(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, p64h_sysc_log_cfg_t* log_cfg_ptr,
                               uint64_t* resp_start_off, uint32_t* num_returned, uint64_t* entries_left)
 {
-    CHECK_PTR_SIZE(log_cfg_ptr->log_ptr, log_cfg_ptr->num_entries);
-    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0, 0, 0);
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(p64h_sysc_rpmi_handle_valid(handle_ptr), P64H_ERR_INVALID_HANDLE);
+    P64H_SYSC_ASSERT((log_cfg_ptr != NULL) && (resp_start_off != NULL) && (num_returned != NULL) && (entries_left != NULL),
+                     P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(log_cfg_ptr->log_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(log_cfg_ptr->num_entries > 0, P64H_ERR_LIB_API_BAD_SIZE);
+    p64h_err_t rc = P64H_ERR_OK;
+
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, 0, 0, 0);
+    }
+
     if (P64H_ERR_OK == rc) {
         rc = rpmi_req_log_internal(handle_ptr, svc_grp_id, svc_id, 0, 0, 0, log_cfg_ptr, resp_start_off, num_returned, entries_left);
     }
@@ -1200,8 +1322,18 @@ p64h_err_t p64h_sysc_rpmi_log(const p64h_sysc_handle_t* handle_ptr, const uint16
 p64h_err_t p64h_sysc_rpmi_log_id(const p64h_sysc_handle_t* handle_ptr, const uint16_t svc_grp_id, const uint8_t svc_id, const uint32_t id0,
                                  p64h_sysc_log_cfg_t* log_cfg_ptr, uint64_t* resp_start_off, uint32_t* num_returned, uint64_t* entries_left)
 {
-    CHECK_PTR_SIZE(log_cfg_ptr->log_ptr, log_cfg_ptr->num_entries);
-    p64h_err_t rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, 0, 0);
+    P64H_SYSC_ASSERT(handle_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(p64h_sysc_rpmi_handle_valid(handle_ptr), P64H_ERR_INVALID_HANDLE);
+    P64H_SYSC_ASSERT((log_cfg_ptr != NULL) && (resp_start_off != NULL) && (num_returned != NULL) && (entries_left != NULL),
+                     P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(log_cfg_ptr->log_ptr != NULL, P64H_ERR_LIB_API_NULL_POINTER);
+    P64H_SYSC_ASSERT(log_cfg_ptr->num_entries > 0, P64H_ERR_LIB_API_BAD_SIZE);
+    p64h_err_t rc = P64H_ERR_OK;
+
+    if (P64H_ERR_OK == rc) {
+        rc = rpmi_check_ids(handle_ptr, svc_grp_id, svc_id, id0, 0, 0);
+    }
+
     if (P64H_ERR_OK == rc) {
         rc = rpmi_req_log_internal(handle_ptr, svc_grp_id, svc_id, id0, 0, 0, log_cfg_ptr, resp_start_off, num_returned, entries_left);
     }
