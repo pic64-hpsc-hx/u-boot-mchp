@@ -662,7 +662,7 @@ static inline p64h_err_t rpmi_req_with_data_internal(const p64h_sysc_handle_t* h
             size_t      data_offset        = curr_bytes_sent / entry_size; // In number of entries
             size_t      bytes_left_to_send = tot_bytes_to_send - curr_bytes_sent;
             size_t      curr_pkg_bytes_left;
-            if (bytes_left_to_send <= max_data_size) {
+            if (shmem_xfer || bytes_left_to_send <= max_data_size) {
                 next_tx_size = bytes_left_to_send;
             } else {
                 next_tx_size = (max_num_entries * entry_size);
