@@ -79,6 +79,9 @@ static int p64h_rpmi_fwu_cmd(struct cmd_tbl *cmdtp,
     cfg.uncompressed_pkg_size = data_size;
     cfg.pkg_size = data_size;
 
+    ulong start_time = get_timer(0);
+    printf("rpmi_fwu: start\n");
+
     printf("Upgrade firmware command: ");
     ret = p64h_sysc_sys_fw_pkg_upgrade_upload(handle_ptr, &cfg, data, data_size, true);
     if (P64H_ERR_OK != ret) {
@@ -94,6 +97,9 @@ static int p64h_rpmi_fwu_cmd(struct cmd_tbl *cmdtp,
         return CMD_RET_FAILURE;
     }
     printf("\b done\nFirmware upgraded\n");
+
+    ulong elapsed = get_timer(start_time);
+    printf("rpmi_fwu: done in %lu ms (%lu.%03lu s)\n", elapsed, elapsed / 1000, elapsed % 1000);
 
     return CMD_RET_SUCCESS;
 }
