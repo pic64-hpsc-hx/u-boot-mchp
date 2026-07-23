@@ -10,6 +10,7 @@
  */
 #include <env/p64h_sysc_os_specific.h>
 
+#include <generated/p64h_sysc_rpmi_defs.h>
 #include <rpmi/librpmi.h>
 #include <rpmi/librpmi_sysc.h>
 
@@ -22,6 +23,9 @@
  * @note Value set to 1 second
  */
 #define TX_TIMEOUT    (uint32_t)(10000000u)
+
+
+#define FW_UPGRADE_APPLY_RX_RETRY_COUNT (300u) //< timeout for fw upgrade apply response
 
 #define LONG_LO_MASK  (0x00000000FFFFFFFFULL) ///< Mask for LSB of 64bit value
 #define LONG_HI_MASK  (0xFFFFFFFF00000000ULL) ///< Mask for MSB of 64bit value
@@ -868,6 +872,12 @@ static inline p64h_err_t rpmi_req_resp_internal(const p64h_sysc_handle_t* handle
             if (P64H_ERR_OK == rc || (handle_ptr->ctxt.req_posted && (P64H_ERR_LIB_API_RESP_PENDING == rc))) {
                 msg_ptr = (rpmi_resp_message_t*)&resp_buf[0];
                 rc      = rpmi_resp_internal(handle_ptr, true, msg_ptr);
+                if (P64H_ERR_LIB_API_TIMEOUT == rc && !handle_ptr->ctxt.req_posted && P64H_RPMI_SRVGRP_SYSTEM == svc_grp_id
+                    && P64H_SYS_FW_PKG_UPGRADE_APPLY == svc_id) {
+                    for (uint32_t retry_count = 0; retry_count < FW_UPGRADE_APPLY_RX_RETRY_COUNT && P64H_ERR_LIB_API_TIMEOUT == rc; retry_count++) {
+                        rc = rpmi_resp_internal(handle_ptr, true, msg_ptr);
+                    }
+                }
                 if (P64H_ERR_LIB_API_TIMEOUT == rc) {
                     if (handle_ptr->ctxt.req_posted) {
                         rc = P64H_ERR_LIB_API_RESP_PENDING;
