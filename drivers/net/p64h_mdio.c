@@ -154,7 +154,8 @@ static int p64h_mdio_probe(struct udevice *dev)
 }
 
 static const struct udevice_id p64h_mdio_of_ids[] = {
-	{ .compatible = "microchip,p64h-mdio" },
+	{ .compatible = "microchip,pic64hpsc-mdio" },
+	{ .compatible = "microchip,p64h-mdio" }, /* deprecated */
 	{ /* sentinel */ }
 };
 
