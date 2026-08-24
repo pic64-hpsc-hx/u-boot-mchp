@@ -1547,7 +1547,7 @@ int __weak macb_late_eth_of_to_plat(struct udevice *dev)
 static int macb_eth_of_to_plat(struct udevice *dev)
 {
 	struct eth_pdata *pdata = dev_get_plat(dev);
-	
+
 #ifndef CONFIG_PHYLIB
 	struct macb_device *macb = dev_get_priv(dev);
 	void *blob = (void *)gd->fdt_blob;
@@ -1649,8 +1649,10 @@ static const struct udevice_id macb_eth_ids[] = {
 	{ .compatible = "cdns,zynq-gem" },
 	{ .compatible = "sifive,fu540-c000-gem",
 	  .data = (ulong)&sifive_config },
-	{ .compatible = "microchip,p64h-gem",
+	{ .compatible = "microchip,pic64hpsc-gem",
 	  .data = (ulong)&p64h_config },
+	{ .compatible = "microchip,p64h-gem",
+	  .data = (ulong)&p64h_config }, /* deprecated */
 	{ }
 };
 
