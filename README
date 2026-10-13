@@ -1,5 +1,37 @@
  # SPDX-License-Identifier: GPL-2.0+
-=======
+
+U-Boot for HPSC
+===============
+
+Export some environment variables:
+
+	export ARCH=riscv
+	export CROSS_COMPILE=riscv64-unknown-linux-
+
+Build for cluster 0 with:
+
+	make microchip_p64h_defconfig
+	make -j$(nproc)
+
+Build for cluster 1 with:
+
+	make microchip_p64h_defconfig cluster1.config
+	make -j$(nproc)
+
+Build for cluster 0 in M-mode with:
+
+	make microchip_p64h_machine_mode_defconfig default_machine.config
+	make -j$(nproc)
+
+Build for cluster 1 in M-mode with:
+
+	make microchip_p64h_machine_mode_defconfig cluster1_machine.config
+	make -j$(nproc)
+
+NOTE: When building for cluster 1, you might need to edit `CONFIG_TEXT_BASE`,
+`CONFIG_SYS_LOAD_ADDR`, `CONFIG_CUSTOM_SYS_INIT_SP_ADDR` based on your AMP
+configuration.
+
 AT91 U-Boot Repository
 ======================
 
