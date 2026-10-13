@@ -1,5 +1,23 @@
  # SPDX-License-Identifier: GPL-2.0+
-=======
+
+U-Boot for HPSC
+===============
+
+Export some environment variables:
+
+	export ARCH=riscv
+	export CROSS_COMPILE=riscv64-unknown-linux-
+
+Build for cluster 0 with:
+
+	make microchip_p64h_defconfig
+	make -j$(nproc)
+
+Build for cluster 1 with:
+
+	make microchip_p64h_defconfig cluster1.config
+	make -j$(nproc)
+
 AT91 U-Boot Repository
 ======================
 
