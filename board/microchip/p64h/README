@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: GPL-2.0+
+#
+# Copyright (C) 2025 Microchip Technology Inc.
+# Romain Caritey <romain.caritey@microchip.com>
+#
+
+Microchip P64H board
+
+-- Directory structure --
+
+├── include
+│   ├── env
+│   │   ├── p64h_sysc_os_specific.h
+│   │   └── specific
+│   │       ├── assert.h
+│   │       ├── stdint.h
+│   │       └── unistd.h
+│   └── p64h-board.h
+|
+├── Kconfig
+|
+├── librpmi
+│   ├── api
+│   ├── generated
+│   ├── include
+│   │   ├── ba
+│   │   ├── generated
+│   │   ├── ras
+│   │   ├── rpmi
+│   │   ├── types
+│   │   └── zsbl
+│   ├── Makefile
+│   └── rpmi
+│      
+├── librpmi-env
+│   ├── Makefile
+│   ├── p64h_sysc_rpmi_env.c
+|
+├── MAINTAINERS
+├── Makefile
+├── p64h-board.c
+├── p64h-cmd-fwu.c
+└── README
+
+-- File Ownership --
+All files listed above are part of the Microchip P64H U-Boot project.
+Any additional files not shown in this structure belong to the SysC RPMI repository.
+
+-- Directory Roles --
+include    : Contains the P64H board header file.
+include/env: Provides libc adaptations for compatibility with U-Boot 
+             header files.
+librpmi    : Contains header and source files from the SysC RPMI library
+             (see -- SysC RPMI Library Update --) 
+librpmi-env: Implements the environment callback for the RPMI library.
+
+-- SysC RPMI Library Update --
+To update the SysC RPMI library, simply copy the required files from the SysC
+repository into the librpmi directory. Do not copy the CMakefiles, but update
+the 'Makefile' files.

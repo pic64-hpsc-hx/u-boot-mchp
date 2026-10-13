@@ -1,0 +1,7 @@
+Microchip PIC64-HPSC/HX
+M:	Charles Perry <charles.perry@microchip.com>
+M:	Romain Caritey <romain.caritey@microchip.com>
+S:	Maintained
+F:	board/microchip/p64h/
+F:	include/configs/microchip_p64h.h
+F:	configs/microchip_p64h_*_defconfig
