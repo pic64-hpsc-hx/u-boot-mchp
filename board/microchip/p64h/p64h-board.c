@@ -4,7 +4,7 @@
  * Romain Caritey <romain.caritey@microchip.com>
  */
 
-#include <common.h>
+
 #include <fdtdec.h>
 #include <virtio_types.h>
 #include <virtio.h>
@@ -124,13 +124,16 @@ int board_late_init(void)
     return 0;
 }
 
-void *board_fdt_blob_setup(int *err)
+int board_fdt_blob_setup(void **fdtp)
 {
-    *err = 0;
-    if (IS_ENABLED(CONFIG_OF_SEPARATE) || IS_ENABLED(CONFIG_OF_BOARD)) {
-        if (gd->arch.firmware_fdt_addr)
-            return (ulong *)(uintptr_t)gd->arch.firmware_fdt_addr;
-    }
+	if (IS_ENABLED(CONFIG_OF_SEPARATE) || IS_ENABLED(CONFIG_OF_BOARD)) {
+		if (fdt_magic((uintptr_t)gd->arch.firmware_fdt_addr) ==
+			FDT_MAGIC) {
+			*fdtp = (void *)(ulong)gd->arch.firmware_fdt_addr;
 
-    return (ulong *)_end;
+			return 0;
+		}
+	}
+
+	return -EINVAL;
 }
