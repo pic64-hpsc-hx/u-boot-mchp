@@ -7,12 +7,12 @@
 #include <init.h>
 #include <linux/sizes.h>
 
-int dram_init(void)
+__attribute__((weak)) int dram_init(void)
 {
 	return fdtdec_setup_mem_size_base();
 }
 
-int dram_init_banksize(void)
+__attribute__((weak)) int dram_init_banksize(void)
 {
 	return fdtdec_setup_memory_banksize();
 }
