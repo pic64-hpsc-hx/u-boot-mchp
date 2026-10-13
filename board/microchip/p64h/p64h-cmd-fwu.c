@@ -4,12 +4,12 @@
  * Romain Caritey <romain.caritey@microchip.com>
  */
 
-#include <common.h>
 #include <command.h>
 #include <linux/libfdt.h>
 #include <linux/ctype.h>
 #include <fdt_support.h>
 #include <asm/global_data.h>
+#include <time.h>
 
 #include <p64h-board.h>
 
