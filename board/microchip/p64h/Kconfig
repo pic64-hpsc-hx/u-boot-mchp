@@ -1,0 +1,34 @@
+if TARGET_MICROCHIP_P64H
+
+config SYS_BOARD
+	default "p64h"
+
+config SYS_VENDOR
+	default "microchip"
+
+config SYS_CPU
+	default "generic"
+
+config SYS_CONFIG_NAME
+	default "microchip_p64h"
+
+config TEXT_BASE
+	default 0x4000000000 if !RISCV_SMODE
+	default 0x4000200000 if RISCV_SMODE
+
+config BOARD_SPECIFIC_OPTIONS
+	def_bool y
+	select GENERIC_RISCV
+	imply SMP
+	imply BOARD_LATE_INIT
+	imply SYS_NS16550
+
+config P64H_NO_DDR
+	bool "No DDR mode for P64H"
+	default n
+	help
+	  Choose this option to enable the No DDR mode of P64H. This cause U-Boot
+	  to ignore the /memory node of the device tree and force itself into
+	  OCR 0 and 1 (1 MiB)
+
+endif
