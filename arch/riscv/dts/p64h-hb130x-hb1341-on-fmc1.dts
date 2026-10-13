@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/* (c) 2026 Microchip Technology Inc. */
+
+#include "p64h-hb130x.dts"
+
+&mdio1 {
+	phy1_2: ethernet-phy@2 {
+		reg = <2>;
+	};
+
+	phy1_3: ethernet-phy@3 {
+		reg = <3>;
+	};
+};
+
+&gem0 {
+	status = "okay";
+	phy-handle = <&phy1_2>;
+	phy-mode = "sgmii";
+};
+
+&gem1 {
+	status = "okay";
+	phy-handle = <&phy1_3>;
+	phy-mode = "sgmii";
+};
