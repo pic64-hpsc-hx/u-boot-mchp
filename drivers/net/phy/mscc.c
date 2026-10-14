@@ -1133,7 +1133,14 @@ static int mscc_startup(struct phy_device *phydev)
 	if (retval)
 		return retval;
 
-	return mscc_parse_status(phydev);
+	retval = mscc_parse_status(phydev);
+	if (retval)
+		return retval;
+
+	// Without this delay, sometimes the first packet is lost.
+	mdelay(300);
+
+	return 0;
 }
 
 static int mscc_phy_soft_reset(struct phy_device *phydev)
