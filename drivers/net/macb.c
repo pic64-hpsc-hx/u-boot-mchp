@@ -380,7 +380,10 @@ static int _macb_send(struct macb_device *macb, const char *name, void *packet,
 		if (ctrl & MACB_BIT(TX_BUF_EXHAUSTED))
 			printf("%s: TX buffers exhausted in mid frame\n", name);
 	} else {
-		printf("%s: TX timeout\n", name);
+		printf("%s: TX timeout: 0x%lx\n", name, ctrl);
+		printf("%s: TSR=0x%x\n", name, macb_readl(macb, TSR));
+		printf("%s: RSR=0x%x\n", name, macb_readl(macb, RSR));
+		printf("%s: NSR=0x%x\n", name, macb_readl(macb, NSR));
 	}
 
 	/* No one cares anyway */
