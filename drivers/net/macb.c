@@ -667,7 +667,7 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 		if (IS_ENABLED(CONFIG_DM_MDIO)) {
 			macb->phydev = dm_eth_phy_connect(dev);
 		}
-		if (!macb->phydev) {
+		if (!macb->phydev && macb->bus) {
 			/* Auto-detect phy_addr */
 			ret = macb_phy_find(macb, name);
 			if (ret)
@@ -1259,17 +1259,19 @@ static int macb_eth_probe(struct udevice *dev)
 
 	_macb_eth_initialize(macb);
 
-	macb->bus = mdio_alloc();
-	if (!macb->bus)
-		return -ENOMEM;
-	strlcpy(macb->bus->name, dev->name, MDIO_NAME_LEN);
-	macb->bus->read = macb_miiphy_read;
-	macb->bus->write = macb_miiphy_write;
+	if (!(macb->config->caps & MACB_CAPS_NO_MDIO)) {
+		macb->bus = mdio_alloc();
+		if (!macb->bus)
+			return -ENOMEM;
+		strlcpy(macb->bus->name, dev->name, MDIO_NAME_LEN);
+		macb->bus->read = macb_miiphy_read;
+		macb->bus->write = macb_miiphy_write;
 
-	ret = mdio_register(macb->bus);
-	if (ret < 0)
-		return ret;
-	macb->bus = miiphy_get_dev_by_name(dev->name);
+		ret = mdio_register(macb->bus);
+		if (ret < 0)
+			return ret;
+		macb->bus = miiphy_get_dev_by_name(dev->name);
+	}
 
 	return 0;
 }
@@ -1374,6 +1376,7 @@ static const struct macb_config sama7g5_emac_config = {
 };
 
 static const struct macb_config p64h_config = {
+	.caps = MACB_CAPS_NO_MDIO,
 	.dma_burst_length = 16,
 	.hw_dma_cap = HW_DMA_CAP_64B,
 };
