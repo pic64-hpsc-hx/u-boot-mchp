@@ -658,7 +658,6 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 {
 	struct macb_device *macb = dev_get_priv(dev);
 	u32 ncfgr;
-	u16 phy_id;
 	int speed, duplex;
 	int ret;
 
@@ -669,13 +668,6 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 		ret = macb_phy_find(macb, name);
 		if (ret)
 			return ret;
-
-		/* Check if the PHY is up to snuff... */
-		phy_id = macb_mdio_read(macb, macb->phy_addr, MII_PHYSID1);
-		if (phy_id == 0xffff) {
-			printf("%s: No PHY present\n", name);
-			return -ENODEV;
-		}
 
 		macb->phydev = phy_connect(macb->bus, macb->phy_addr, dev,
 				     macb->phy_interface);
