@@ -726,7 +726,11 @@ static int macb_phy_init(struct udevice *dev, const char *name)
 			macb->phydev->advertising = macb->phydev->supported;
 		}
 
-		phy_config(macb->phydev);
+		ret = phy_config(macb->phydev);
+		if (ret) {
+			printf("%s: phy_config() failed: %d\n", name, ret);
+			return ret;
+		}
 
 		status = macb_mdio_read(macb, macb->phy_addr, MII_BMSR);
 		if (!(status & BMSR_LSTATUS)) {
